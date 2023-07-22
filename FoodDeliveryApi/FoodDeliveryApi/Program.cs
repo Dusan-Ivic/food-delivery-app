@@ -1,4 +1,10 @@
+using AutoMapper;
 using FoodDeliveryApi.Data;
+using FoodDeliveryApi.Interfaces.Repositories;
+using FoodDeliveryApi.Interfaces.Services;
+using FoodDeliveryApi.Mapping;
+using FoodDeliveryApi.Repositories;
+using FoodDeliveryApi.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
@@ -11,7 +17,17 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddScoped<IAdminService, AdminService>();
+builder.Services.AddScoped<IAdminRepository, AdminRepository>();
+
 builder.Services.AddDbContext<FoodDeliveryDbContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("FoodDeliveryDbConnectionString")));
+
+MapperConfiguration mapperConfig = new MapperConfiguration(config =>
+{
+    config.AddProfile(new AdminProfile());
+});
+
+builder.Services.AddSingleton(mapperConfig.CreateMapper());
 
 var app = builder.Build();
 
