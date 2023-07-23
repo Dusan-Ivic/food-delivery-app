@@ -24,11 +24,15 @@ builder.Services.AddScoped<IAdminService, AdminService>();
 builder.Services.AddScoped<IAdminRepository, AdminRepository>();
 builder.Services.AddScoped<IValidator<Admin>, AdminValidator>();
 
+builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IAuthRepository, AuthRepository>();
+
 builder.Services.AddDbContext<FoodDeliveryDbContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("FoodDeliveryDbConnectionString")));
 
 MapperConfiguration mapperConfig = new MapperConfiguration(config =>
 {
     config.AddProfile(new AdminProfile());
+    config.AddProfile(new AuthProfile());
 });
 
 builder.Services.AddSingleton(mapperConfig.CreateMapper());
