@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using FoodDeliveryApi.Dto.Admin;
+using FoodDeliveryApi.Exceptions;
 using FoodDeliveryApi.Interfaces.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -25,9 +26,13 @@ namespace FoodDeliveryApi.Controllers
             {
                 responseDto = await _adminService.RegisterAdmin(requestDto);
             }
-            catch (ValidationException ve)
+            catch (ValidationException ex)
             {
-                return BadRequest(ve.Errors.Select(err => err.ErrorMessage));
+                return BadRequest(ex.Errors.Select(err => err.ErrorMessage));
+            }
+            catch (UserAlreadyExistsException ex)
+            {
+                return Conflict(ex.Message);
             }
 
             return Ok(responseDto);

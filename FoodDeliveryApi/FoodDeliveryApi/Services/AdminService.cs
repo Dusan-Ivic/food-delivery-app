@@ -2,6 +2,7 @@
 using FluentValidation;
 using FluentValidation.Results;
 using FoodDeliveryApi.Dto.Admin;
+using FoodDeliveryApi.Exceptions;
 using FoodDeliveryApi.Interfaces.Repositories;
 using FoodDeliveryApi.Interfaces.Services;
 using FoodDeliveryApi.Models;
@@ -30,6 +31,16 @@ namespace FoodDeliveryApi.Services
             if (!validationResult.IsValid)
             {
                 throw new ValidationException(validationResult.Errors);
+            }
+
+            if (await _adminRepository.IsEmailTaken(admin.Email))
+            {
+                throw new UserAlreadyExistsException("User with this email already exists");
+            }
+
+            if (await _adminRepository.IsUsernameTaken(admin.Username))
+            {
+                throw new UserAlreadyExistsException("User with this username already exists");
             }
 
             // Hash password
