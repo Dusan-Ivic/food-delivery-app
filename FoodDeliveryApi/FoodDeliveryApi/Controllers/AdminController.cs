@@ -2,7 +2,9 @@
 using FoodDeliveryApi.Dto.Admin;
 using FoodDeliveryApi.Exceptions;
 using FoodDeliveryApi.Interfaces.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace FoodDeliveryApi.Controllers
 {
@@ -39,8 +41,17 @@ namespace FoodDeliveryApi.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> UpdateAdmin(long id, [FromBody] UpdateAdminRequestDto requestDto)
         {
+            Claim? idClaim = User.Claims.FirstOrDefault(x => x.Type == "UserId");
+            long userId = long.Parse(idClaim!.Value);
+
+            if (userId != id)
+            {
+                return StatusCode(StatusCodes.Status403Forbidden, "Users can't update information of other users. Access is restricted.");
+            }
+
             UpdateAdminResponseDto responseDto;
 
             try
