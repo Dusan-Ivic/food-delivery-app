@@ -1,10 +1,13 @@
 using AutoMapper;
+using FluentValidation;
 using FoodDeliveryApi.Data;
 using FoodDeliveryApi.Interfaces.Repositories;
 using FoodDeliveryApi.Interfaces.Services;
 using FoodDeliveryApi.Mapping;
+using FoodDeliveryApi.Models;
 using FoodDeliveryApi.Repositories;
 using FoodDeliveryApi.Services;
+using FoodDeliveryApi.Validators;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
@@ -19,6 +22,7 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<IAdminService, AdminService>();
 builder.Services.AddScoped<IAdminRepository, AdminRepository>();
+builder.Services.AddScoped<IValidator<Admin>, AdminValidator>();
 
 builder.Services.AddDbContext<FoodDeliveryDbContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("FoodDeliveryDbConnectionString")));
 

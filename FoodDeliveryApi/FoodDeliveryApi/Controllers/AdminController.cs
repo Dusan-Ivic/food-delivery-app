@@ -1,4 +1,5 @@
-﻿using FoodDeliveryApi.Dto.Admin;
+﻿using FluentValidation;
+using FoodDeliveryApi.Dto.Admin;
 using FoodDeliveryApi.Interfaces.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -24,9 +25,9 @@ namespace FoodDeliveryApi.Controllers
             {
                 responseDto = await _adminService.RegisterAdmin(requestDto);
             }
-            catch (Exception)
+            catch (ValidationException ve)
             {
-                throw;
+                return BadRequest(ve.Errors.Select(err => err.ErrorMessage));
             }
 
             return Ok(responseDto);
