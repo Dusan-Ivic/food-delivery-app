@@ -2,6 +2,7 @@
 using FluentValidation;
 using FluentValidation.Results;
 using FoodDeliveryApi.Dto.Auth;
+using FoodDeliveryApi.Enums;
 using FoodDeliveryApi.Exceptions;
 using FoodDeliveryApi.Interfaces.Repositories;
 using FoodDeliveryApi.Interfaces.Services;
@@ -43,7 +44,7 @@ namespace FoodDeliveryApi.Services
                 throw new ValidationException(validationResult.Errors);
             }
 
-            User? existingUser = await _authRepository.GetUser(user.Username, requestDto.UserType);
+            User? existingUser = await _authRepository.GetUserByUsername(user.Username, requestDto.UserType);
 
             if (existingUser == null)
             {
@@ -58,7 +59,6 @@ namespace FoodDeliveryApi.Services
             LoginUserResponseDto responseDto = _mapper.Map<LoginUserResponseDto>(existingUser);
             responseDto.UserType = requestDto.UserType;
 
-            // TODO - Create JSON Web Token
             List<Claim> claims = new List<Claim>
             {
                 new Claim("UserId", existingUser.Id.ToString()),
@@ -82,6 +82,47 @@ namespace FoodDeliveryApi.Services
             responseDto.Token = new JwtSecurityTokenHandler().WriteToken(securityToken);
 
             return responseDto;
+        }
+
+        public async Task ChangePassword(long id, UserType userType, ChangePasswordRequestDto requestDto)
+        {
+            User user = _mapper.Map<User>(requestDto);
+
+            ValidationResult validationResult = _validator.Validate(user, options =>
+            {
+                options.IncludeProperties(x => x.Password);
+            });
+
+            if (!validationResult.IsValid)
+            {
+                throw new ValidationException(validationResult.Errors);
+            }
+
+            User? existingUser = await _authRepository.GetUserById(id, userType);
+
+            if (existingUser == null)
+            {
+                throw new ResourceNotFoundException("User with this id doesn't exist");
+            }
+
+            if (!BCrypt.Net.BCrypt.Verify(requestDto.OldPassword, existingUser.Password))
+            {
+                throw new IncorrectLoginCredentialsException("Incorrect password");
+            }
+
+            string salt = BCrypt.Net.BCrypt.GenerateSalt();
+            existingUser.Password = BCrypt.Net.BCrypt.HashPassword(requestDto.NewPassword, salt);
+
+            try
+            {
+                existingUser = await _authRepository.UpdateUser(existingUser);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+            return;
         }
     }
 }

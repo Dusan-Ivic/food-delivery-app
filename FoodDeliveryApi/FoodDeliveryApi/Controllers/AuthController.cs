@@ -1,9 +1,13 @@
 ﻿using FluentValidation;
 using FoodDeliveryApi.Dto.Auth;
+using FoodDeliveryApi.Enums;
 using FoodDeliveryApi.Exceptions;
 using FoodDeliveryApi.Interfaces.Services;
 using FoodDeliveryApi.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Linq;
+using System.Security.Claims;
 
 namespace FoodDeliveryApi.Controllers
 {
@@ -37,6 +41,32 @@ namespace FoodDeliveryApi.Controllers
             }
 
             return Ok(responseDto);
+        }
+
+        [HttpPut("password")]
+        [Authorize]
+        public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordRequestDto requestDto)
+        {
+            Claim? idClaim = User.Claims.FirstOrDefault(x => x.Type == "UserId");
+            long userId = long.Parse(idClaim!.Value);
+
+            Claim? roleClaim = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Role);
+            UserType userType = (UserType)Enum.Parse(typeof(UserType), roleClaim!.Value);
+
+            try
+            {
+                await _authService.ChangePassword(userId, userType, requestDto);
+            }
+            catch (IncorrectLoginCredentialsException ex)
+            {
+                return Unauthorized(ex.Message);
+            }
+            catch (ValidationException ex)
+            {
+                return BadRequest(ex.Errors.Select(err => err.ErrorMessage));
+            }
+
+            return Ok("Password successfully changed");
         }
     }
 }

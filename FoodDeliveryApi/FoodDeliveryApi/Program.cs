@@ -4,11 +4,13 @@ using FoodDeliveryApi.Data;
 using FoodDeliveryApi.Interfaces.Repositories;
 using FoodDeliveryApi.Interfaces.Services;
 using FoodDeliveryApi.Mapping;
+using FoodDeliveryApi.Middleware;
 using FoodDeliveryApi.Models;
 using FoodDeliveryApi.Repositories;
 using FoodDeliveryApi.Services;
 using FoodDeliveryApi.Validators;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -68,6 +70,8 @@ builder.Services.AddAuthentication(options =>
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWTSettings:SecretKey"]))
     };
 });
+
+builder.Services.AddSingleton<IAuthorizationMiddlewareResultHandler, CustomAuthMiddlewareResultHandler>();
 
 builder.Services.AddScoped<IAdminService, AdminService>();
 builder.Services.AddScoped<IAdminRepository, AdminRepository>();

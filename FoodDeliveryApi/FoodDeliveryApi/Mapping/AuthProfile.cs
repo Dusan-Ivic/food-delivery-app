@@ -10,6 +10,8 @@ namespace FoodDeliveryApi.Mapping
         {
             CreateMap<LoginUserRequestDto, User>();
             CreateMap<User, LoginUserResponseDto>();
+
+            CreateMap<ChangePasswordRequestDto, User>().ForMember(dest => dest.Password, opt => opt.MapFrom(src => src.OldPassword));
         }
     }
 }
