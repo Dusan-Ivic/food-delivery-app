@@ -10,6 +10,9 @@ namespace FoodDeliveryApi.Mapping
         {
             CreateMap<RegisterAdminRequestDto, Admin>();
             CreateMap<Admin, RegisterAdminResponseDto>();
+
+            CreateMap<UpdateAdminRequestDto, Admin>();
+            CreateMap<Admin, UpdateAdminResponseDto>();
         }
     }
 }

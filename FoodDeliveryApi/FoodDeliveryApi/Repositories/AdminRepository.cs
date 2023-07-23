@@ -38,11 +38,30 @@ namespace FoodDeliveryApi.Repositories
             }
         }
 
+        public async Task<Admin?> GetAdminById(long id)
+        {
+            return await _dbContext.Admins.FindAsync(id);
+        }
+
         public async Task<Admin> RegisterAdmin(Admin admin)
         {
             try
             {
                 await _dbContext.Admins.AddAsync(admin);
+                await _dbContext.SaveChangesAsync();
+                return admin;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public async Task<Admin> UpdateAdmin(Admin admin)
+        {
+            try
+            {
+                _dbContext.Entry(admin).State = EntityState.Modified;
                 await _dbContext.SaveChangesAsync();
                 return admin;
             }

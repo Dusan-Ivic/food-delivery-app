@@ -58,5 +58,52 @@ namespace FoodDeliveryApi.Services
 
             return _mapper.Map<RegisterAdminResponseDto>(admin);
         }
+
+        public async Task<UpdateAdminResponseDto> UpdateAdmin(long id, UpdateAdminRequestDto requestDto)
+        {
+            Admin? admin = await _adminRepository.GetAdminById(id);
+
+            if (admin == null)
+            {
+                throw new ResourceNotFoundException("Admin with this id doesn't exist");
+            }
+
+            Admin updatedAdmin = _mapper.Map<Admin>(requestDto);
+
+            ValidationResult validationResult = _validator.Validate(updatedAdmin, options =>
+            {
+                options.IncludeProperties(x => x.Username);
+                options.IncludeProperties(x => x.Email);
+                options.IncludeProperties(x => x.FirstName);
+                options.IncludeProperties(x => x.LastName);
+            });
+
+            if (!validationResult.IsValid)
+            {
+                throw new ValidationException(validationResult.Errors);
+            }
+
+            if (await _adminRepository.IsEmailTaken(updatedAdmin.Email) && updatedAdmin.Email != admin.Email)
+            {
+                throw new UserAlreadyExistsException("User with this email already exists");
+            }
+
+            if (await _adminRepository.IsUsernameTaken(updatedAdmin.Username) && updatedAdmin.Username != admin.Username)
+            {
+                throw new UserAlreadyExistsException("User with this username already exists");
+            }
+
+            try
+            {
+                _mapper.Map(requestDto, admin);
+                admin = await _adminRepository.UpdateAdmin(admin);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+            return _mapper.Map<UpdateAdminResponseDto>(admin);
+        }
     }
 }

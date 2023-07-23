@@ -37,5 +37,30 @@ namespace FoodDeliveryApi.Controllers
 
             return Ok(responseDto);
         }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateAdmin(long id, [FromBody] UpdateAdminRequestDto requestDto)
+        {
+            UpdateAdminResponseDto responseDto;
+
+            try
+            {
+                responseDto = await _adminService.UpdateAdmin(id, requestDto);
+            }
+            catch (ResourceNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (ValidationException ex)
+            {
+                return BadRequest(ex.Errors.Select(err => err.ErrorMessage));
+            }
+            catch (UserAlreadyExistsException ex)
+            {
+                return Conflict(ex.Message);
+            }
+
+            return Ok(responseDto);
+        }
     }
 }
