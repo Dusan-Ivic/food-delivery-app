@@ -8,6 +8,7 @@ namespace FoodDeliveryApi.Mapping
     {
         public AuthProfile()
         {
+            CreateMap<LoginUserRequestDto, User>();
             CreateMap<User, LoginUserResponseDto>();
         }
     }
