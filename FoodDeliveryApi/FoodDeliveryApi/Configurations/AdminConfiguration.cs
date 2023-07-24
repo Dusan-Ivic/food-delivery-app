@@ -3,9 +3,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace FoodDeliveryApi.Configurations
 {
-    public class AdminConfiguration : UserConfiguration
+    public class AdminConfiguration : UserConfiguration<Admin>
     {
-        public override void Configure(EntityTypeBuilder<User> builder)
+        public override void Configure(EntityTypeBuilder<Admin> builder)
         {
             base.Configure(builder);
         }

@@ -6,6 +6,7 @@ namespace FoodDeliveryApi.Data
     public class FoodDeliveryDbContext : DbContext
     {
         public DbSet<Admin> Admins { get; set; }
+        public DbSet<Partner> Partners { get; set; }
 
         public FoodDeliveryDbContext(DbContextOptions options) : base(options)
         {
@@ -17,7 +18,8 @@ namespace FoodDeliveryApi.Data
 
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(FoodDeliveryDbContext).Assembly);
 
-            modelBuilder.Entity<User>().UseTpcMappingStrategy();
+            modelBuilder.Entity<Admin>().ToTable("Admins");
+            modelBuilder.Entity<Partner>().ToTable("Partners");
         }
     }
 }
