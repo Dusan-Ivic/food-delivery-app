@@ -15,6 +15,8 @@ namespace FoodDeliveryApi.Mapping
 
             CreateMap<UpdatePartnerRequestDto, Partner>();
             CreateMap<Partner, UpdatePartnerResponseDto>();
+
+            CreateMap<Partner, DeletePartnerResponseDto>();
         }
     }
 }

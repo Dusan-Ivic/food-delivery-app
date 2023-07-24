@@ -144,5 +144,26 @@ namespace FoodDeliveryApi.Services
 
             return _mapper.Map<UpdatePartnerResponseDto>(partner);
         }
+
+        public async Task<DeletePartnerResponseDto> DeletePartner(long id)
+        {
+            Partner? partner = await _partnerRepository.GetPartnerById(id);
+
+            if (partner == null)
+            {
+                throw new ResourceNotFoundException("Partner with this id doesn't exist");
+            }
+
+            try
+            {
+                await _partnerRepository.DeletePartner(partner);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+            return _mapper.Map<DeletePartnerResponseDto>(partner);
+        }
     }
 }

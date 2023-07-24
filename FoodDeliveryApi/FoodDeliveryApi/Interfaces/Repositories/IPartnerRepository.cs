@@ -12,5 +12,6 @@ namespace FoodDeliveryApi.Interfaces.Repositories
         public Task<Partner?> GetPartnerById(long id);
         public Task<Partner> RegisterPartner(Partner partner);
         public Task<Partner> UpdatePartner(Partner partner);
+        public Task DeletePartner(Partner partner);
     }
 }
