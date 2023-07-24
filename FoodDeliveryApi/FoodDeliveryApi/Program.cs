@@ -77,6 +77,10 @@ builder.Services.AddScoped<IAdminService, AdminService>();
 builder.Services.AddScoped<IAdminRepository, AdminRepository>();
 builder.Services.AddScoped<IValidator<Admin>, AdminValidator>();
 
+builder.Services.AddScoped<IPartnerService, PartnerService>();
+builder.Services.AddScoped<IPartnerRepository, PartnerRepository>();
+builder.Services.AddScoped<IValidator<Partner>, PartnerValidator>();
+
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IAuthRepository, AuthRepository>();
 builder.Services.AddScoped<IValidator<User>, UserValidator>();
@@ -86,6 +90,7 @@ builder.Services.AddDbContext<FoodDeliveryDbContext>(options => options.UseNpgsq
 MapperConfiguration mapperConfig = new MapperConfiguration(config =>
 {
     config.AddProfile(new AdminProfile());
+    config.AddProfile(new PartnerProfile());
     config.AddProfile(new AuthProfile());
 });
 
