@@ -1,11 +1,9 @@
-﻿namespace FoodDeliveryApi.Dto.Admin
+﻿using FoodDeliveryApi.Dto.User;
+
+namespace FoodDeliveryApi.Dto.Admin
 {
-    public class RegisterAdminResponseDto
+    public class RegisterAdminResponseDto : RegisterUserResponseDto
     {
-        public long Id { get; set; }
-        public string Username { get; set; } = string.Empty;
-        public string Email { get; set; } = string.Empty;
-        public string FirstName { get; set; } = string.Empty;
-        public string LastName { get; set; } = string.Empty;
+        
     }
 }
