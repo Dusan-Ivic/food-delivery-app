@@ -81,6 +81,10 @@ builder.Services.AddScoped<IPartnerService, PartnerService>();
 builder.Services.AddScoped<IPartnerRepository, PartnerRepository>();
 builder.Services.AddScoped<IValidator<Partner>, PartnerValidator>();
 
+builder.Services.AddScoped<ICustomerService, CustomerService>();
+builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
+builder.Services.AddScoped<IValidator<Customer>, CustomerValidator>();
+
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IAuthRepository, AuthRepository>();
 builder.Services.AddScoped<IValidator<User>, UserValidator>();
@@ -91,6 +95,7 @@ MapperConfiguration mapperConfig = new MapperConfiguration(config =>
 {
     config.AddProfile(new AdminProfile());
     config.AddProfile(new PartnerProfile());
+    config.AddProfile(new CustomerProfile());
     config.AddProfile(new AuthProfile());
 });
 
