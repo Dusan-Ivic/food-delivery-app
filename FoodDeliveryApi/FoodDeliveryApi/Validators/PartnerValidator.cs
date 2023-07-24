@@ -8,6 +8,7 @@ namespace FoodDeliveryApi.Validators
         public PartnerValidator()
         {
             Include(new UserValidator());
+            RuleFor(x => x.Status).IsInEnum().WithMessage("Status is not valid");
         }
     }
 }

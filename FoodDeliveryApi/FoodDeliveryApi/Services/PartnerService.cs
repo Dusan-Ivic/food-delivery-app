@@ -165,5 +165,35 @@ namespace FoodDeliveryApi.Services
 
             return _mapper.Map<DeletePartnerResponseDto>(partner);
         }
+
+        public async Task<UpdatePartnerResponseDto> VerifyPartner(long id, VerifyPartnerRequestDto requestDto)
+        {
+            Partner? partner = await _partnerRepository.GetPartnerById(id);
+
+            if (partner == null)
+            {
+                throw new ResourceNotFoundException("Partner with this id doesn't exist");
+            }
+
+            _mapper.Map(requestDto, partner);
+
+            ValidationResult validationResult = _validator.Validate(partner);
+
+            if (!validationResult.IsValid)
+            {
+                throw new ValidationException(validationResult.Errors);
+            }
+
+            try
+            {
+                partner = await _partnerRepository.UpdatePartner(partner);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+            return _mapper.Map<UpdatePartnerResponseDto>(partner);
+        }
     }
 }

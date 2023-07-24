@@ -129,5 +129,27 @@ namespace FoodDeliveryApi.Controllers
 
             return Ok(responseDto);
         }
+
+        [HttpPut("{id}/status")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> VerifyPartner(long id, [FromBody] VerifyPartnerRequestDto requestDto)
+        {
+            UpdatePartnerResponseDto responseDto;
+
+            try
+            {
+                responseDto = await _partnerService.VerifyPartner(id, requestDto);
+            }
+            catch (ResourceNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (ValidationException ex)
+            {
+                return BadRequest(ex.Errors.Select(err => err.ErrorMessage));
+            }
+
+            return Ok(responseDto);
+        }
     }
 }
