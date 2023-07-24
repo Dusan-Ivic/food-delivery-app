@@ -2,7 +2,10 @@
 using FoodDeliveryApi.Dto.Customer;
 using FoodDeliveryApi.Exceptions;
 using FoodDeliveryApi.Interfaces.Services;
+using FoodDeliveryApi.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Data;
 
 namespace FoodDeliveryApi.Controllers
 {
@@ -15,6 +18,33 @@ namespace FoodDeliveryApi.Controllers
         public CustomerController(ICustomerService customerService)
         {
             _customerService = customerService;
+        }
+
+        [HttpGet]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> GetCustomers()
+        {
+            List<GetCustomerResponseDto> responseDto = await _customerService.GetCustomers();
+
+            return Ok(responseDto);
+        }
+
+        [HttpGet("{id}")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> GetCustomer(long id)
+        {
+            GetCustomerResponseDto responseDto;
+
+            try
+            {
+                responseDto = await _customerService.GetCustomer(id);
+            }
+            catch (ResourceNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+
+            return Ok(responseDto);
         }
 
         [HttpPost]

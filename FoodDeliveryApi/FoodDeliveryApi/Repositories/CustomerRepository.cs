@@ -14,6 +14,16 @@ namespace FoodDeliveryApi.Repositories
             _dbContext = dbContext;
         }
 
+        public async Task<List<Customer>> GetAllCustomers()
+        {
+            return await _dbContext.Customers.ToListAsync();
+        }
+
+        public async Task<Customer?> GetCustomerById(long id)
+        {
+            return await _dbContext.Customers.FindAsync(id);
+        }
+
         public async Task<bool> IsEmailTaken(string email)
         {
             try

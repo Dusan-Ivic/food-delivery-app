@@ -31,7 +31,7 @@ namespace FoodDeliveryApi.Services
 
             if (partner == null)
             {
-                throw new ResourceNotFoundException("Admin with this id doesn't exist");
+                throw new ResourceNotFoundException("Partner with this id doesn't exist");
             }
 
             return _mapper.Map<GetPartnerResponseDto>(partner);
