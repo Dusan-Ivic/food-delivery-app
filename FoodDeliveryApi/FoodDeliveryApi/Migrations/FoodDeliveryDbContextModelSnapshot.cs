@@ -21,16 +21,13 @@ namespace FoodDeliveryApi.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.HasSequence("UserSequence");
-
-            modelBuilder.Entity("FoodDeliveryApi.Models.User", b =>
+            modelBuilder.Entity("FoodDeliveryApi.Models.Admin", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasDefaultValueSql("nextval('\"UserSequence\"')");
+                        .HasColumnType("bigint");
 
-                    NpgsqlPropertyBuilderExtensions.UseSequence(b.Property<long>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -65,16 +62,55 @@ namespace FoodDeliveryApi.Migrations
                     b.HasIndex("Username")
                         .IsUnique();
 
-                    b.ToTable((string)null);
-
-                    b.UseTpcMappingStrategy();
+                    b.ToTable("Admins", (string)null);
                 });
 
-            modelBuilder.Entity("FoodDeliveryApi.Models.Admin", b =>
+            modelBuilder.Entity("FoodDeliveryApi.Models.Partner", b =>
                 {
-                    b.HasBaseType("FoodDeliveryApi.Models.User");
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
 
-                    b.ToTable("Admins");
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(254)
+                        .HasColumnType("character varying(254)");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasMaxLength(60)
+                        .HasColumnType("character varying(60)");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Email")
+                        .IsUnique();
+
+                    b.HasIndex("Username")
+                        .IsUnique();
+
+                    b.ToTable("Partners", (string)null);
                 });
 #pragma warning restore 612, 618
         }

@@ -35,12 +35,12 @@ namespace FoodDeliveryApi.Services
 
             if (await _adminRepository.IsEmailTaken(admin.Email))
             {
-                throw new UserAlreadyExistsException("User with this email already exists");
+                throw new UserAlreadyExistsException("Admin with this email already exists");
             }
 
             if (await _adminRepository.IsUsernameTaken(admin.Username))
             {
-                throw new UserAlreadyExistsException("User with this username already exists");
+                throw new UserAlreadyExistsException("Admin with this username already exists");
             }
 
             // Hash password
@@ -85,12 +85,12 @@ namespace FoodDeliveryApi.Services
 
             if (await _adminRepository.IsEmailTaken(updatedAdmin.Email) && updatedAdmin.Email != admin.Email)
             {
-                throw new UserAlreadyExistsException("User with this email already exists");
+                throw new UserAlreadyExistsException("Admin with this email already exists");
             }
 
             if (await _adminRepository.IsUsernameTaken(updatedAdmin.Username) && updatedAdmin.Username != admin.Username)
             {
-                throw new UserAlreadyExistsException("User with this username already exists");
+                throw new UserAlreadyExistsException("Admin with this username already exists");
             }
 
             try

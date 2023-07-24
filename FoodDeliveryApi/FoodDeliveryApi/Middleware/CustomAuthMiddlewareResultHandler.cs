@@ -20,6 +20,14 @@ namespace FoodDeliveryApi.Middleware
                     await context.Response.WriteAsync("{\"error\": \"Authentication is required to access this resource. Please provide a valid token or credentials.\"}");
                     return;
                 }
+
+                if (policy.Requirements.Any(req => req is RolesAuthorizationRequirement))
+                {
+                    context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                    context.Response.ContentType = "application/json";
+                    await context.Response.WriteAsync("{\"error\": \"You do not have the required role to access this resource.\"}");
+                    return;
+                }
             }
 
             await defaultHandler.HandleAsync(next, context, policy, authorizeResult);

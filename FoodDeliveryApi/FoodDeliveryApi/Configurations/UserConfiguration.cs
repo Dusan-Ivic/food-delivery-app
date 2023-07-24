@@ -4,9 +4,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace FoodDeliveryApi.Configurations
 {
-    public class UserConfiguration : IEntityTypeConfiguration<User>
+    public class UserConfiguration<T> : IEntityTypeConfiguration<T> where T : User
     {
-        public virtual void Configure(EntityTypeBuilder<User> builder)
+        public virtual void Configure(EntityTypeBuilder<T> builder)
         {
             builder.HasKey(x => x.Id);
             builder.Property(x => x.Id).ValueGeneratedOnAdd();
