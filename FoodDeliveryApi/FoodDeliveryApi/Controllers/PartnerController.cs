@@ -3,8 +3,10 @@ using FoodDeliveryApi.Dto.Partner;
 using FoodDeliveryApi.Enums;
 using FoodDeliveryApi.Exceptions;
 using FoodDeliveryApi.Interfaces.Services;
+using FoodDeliveryApi.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace FoodDeliveryApi.Controllers
 {
@@ -63,6 +65,40 @@ namespace FoodDeliveryApi.Controllers
             try
             {
                 responseDto = await _partnerService.RegisterPartner(requestDto);
+            }
+            catch (ValidationException ex)
+            {
+                return BadRequest(ex.Errors.Select(err => err.ErrorMessage));
+            }
+            catch (UserAlreadyExistsException ex)
+            {
+                return Conflict(ex.Message);
+            }
+
+            return Ok(responseDto);
+        }
+
+        [HttpPut("{id}")]
+        [Authorize(Roles = "Partner")]
+        public async Task<IActionResult> UpdatePartner(long id, [FromBody] UpdatePartnerRequestDto requestDto)
+        {
+            Claim? idClaim = User.Claims.FirstOrDefault(x => x.Type == "UserId");
+            long userId = long.Parse(idClaim!.Value);
+
+            if (userId != id)
+            {
+                return StatusCode(StatusCodes.Status403Forbidden, "Users can't update information of other users. Access is restricted.");
+            }
+
+            UpdatePartnerResponseDto responseDto;
+
+            try
+            {
+                responseDto = await _partnerService.UpdatePartner(id, requestDto);
+            }
+            catch (ResourceNotFoundException ex)
+            {
+                return NotFound(ex.Message);
             }
             catch (ValidationException ex)
             {

@@ -74,12 +74,12 @@ namespace FoodDeliveryApi.Services
 
             if (await _partnerRepository.IsEmailTaken(partner.Email))
             {
-                throw new UserAlreadyExistsException("User with this email already exists");
+                throw new UserAlreadyExistsException("Partner with this email already exists");
             }
 
             if (await _partnerRepository.IsUsernameTaken(partner.Username))
             {
-                throw new UserAlreadyExistsException("User with this username already exists");
+                throw new UserAlreadyExistsException("Partner with this username already exists");
             }
 
             // Hash password
@@ -96,6 +96,53 @@ namespace FoodDeliveryApi.Services
             }
 
             return _mapper.Map<RegisterPartnerResponseDto>(partner);
+        }
+
+        public async Task<UpdatePartnerResponseDto> UpdatePartner(long id, UpdatePartnerRequestDto requestDto)
+        {
+            Partner? partner = await _partnerRepository.GetPartnerById(id);
+
+            if (partner == null)
+            {
+                throw new ResourceNotFoundException("Partner with this id doesn't exist");
+            }
+
+            Partner updatedPartner = _mapper.Map<Partner>(requestDto);
+
+            ValidationResult validationResult = _validator.Validate(updatedPartner, options =>
+            {
+                options.IncludeProperties(x => x.Username);
+                options.IncludeProperties(x => x.Email);
+                options.IncludeProperties(x => x.FirstName);
+                options.IncludeProperties(x => x.LastName);
+            });
+
+            if (!validationResult.IsValid)
+            {
+                throw new ValidationException(validationResult.Errors);
+            }
+
+            if (await _partnerRepository.IsEmailTaken(partner.Email) && updatedPartner.Email != partner.Email)
+            {
+                throw new UserAlreadyExistsException("Partner with this email already exists");
+            }
+
+            if (await _partnerRepository.IsUsernameTaken(partner.Username) && updatedPartner.Username != partner.Username)
+            {
+                throw new UserAlreadyExistsException("Partner with this username already exists");
+            }
+
+            try
+            {
+                _mapper.Map(requestDto, partner);
+                partner = await _partnerRepository.UpdatePartner(partner);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+            return _mapper.Map<UpdatePartnerResponseDto>(partner);
         }
     }
 }

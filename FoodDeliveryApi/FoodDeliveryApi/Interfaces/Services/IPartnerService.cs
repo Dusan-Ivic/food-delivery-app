@@ -7,5 +7,6 @@ namespace FoodDeliveryApi.Interfaces.Services
         public Task<List<GetPartnerResponseDto>> GetPartners(string status);
         public Task<GetPartnerResponseDto> GetPartner(long id);
         public Task<RegisterPartnerResponseDto> RegisterPartner(RegisterPartnerRequestDto requestDto);
+        public Task<UpdatePartnerResponseDto> UpdatePartner(long id, UpdatePartnerRequestDto requestDto);
     }
 }
