@@ -3,6 +3,7 @@ using FoodDeliveryApi.Dto.Partner;
 using FoodDeliveryApi.Enums;
 using FoodDeliveryApi.Exceptions;
 using FoodDeliveryApi.Interfaces.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FoodDeliveryApi.Controllers
@@ -19,6 +20,7 @@ namespace FoodDeliveryApi.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetPartners([FromQuery] string? status = null)
         {
             List<GetPartnerResponseDto> responseDto;
@@ -30,6 +32,24 @@ namespace FoodDeliveryApi.Controllers
             catch (ArgumentException ex)
             {
                 return BadRequest(ex.Message);
+            }
+
+            return Ok(responseDto);
+        }
+
+        [HttpGet("{id}")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> GetPartner(long id)
+        {
+            GetPartnerResponseDto responseDto;
+
+            try
+            {
+                responseDto = await _partnerService.GetPartner(id);
+            }
+            catch (ResourceNotFoundException ex)
+            {
+                return NotFound(ex.Message);
             }
 
             return Ok(responseDto);

@@ -20,6 +20,11 @@ namespace FoodDeliveryApi.Repositories
             return await _dbContext.Partners.ToListAsync();
         }
 
+        public async Task<Partner?> GetPartnerById(long id)
+        {
+            return await _dbContext.Partners.FindAsync(id);
+        }
+
         public async Task<List<Partner>> GetPartnersByStatus(PartnerStatus status)
         {
             return await _dbContext.Partners.Where(x => x.Status == status).ToListAsync();

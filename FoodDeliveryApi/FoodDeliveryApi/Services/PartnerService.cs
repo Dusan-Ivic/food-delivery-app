@@ -25,6 +25,18 @@ namespace FoodDeliveryApi.Services
             _mapper = mapper;
         }
 
+        public async Task<GetPartnerResponseDto> GetPartner(long id)
+        {
+            Partner? partner = await _partnerRepository.GetPartnerById(id);
+
+            if (partner == null)
+            {
+                throw new ResourceNotFoundException("Admin with this id doesn't exist");
+            }
+
+            return _mapper.Map<GetPartnerResponseDto>(partner);
+        }
+
         public async Task<List<GetPartnerResponseDto>> GetPartners(string status)
         {
             List<Partner> partners = new List<Partner>();
