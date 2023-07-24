@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using FoodDeliveryApi.Dto.Partner;
+using FoodDeliveryApi.Enums;
 using FoodDeliveryApi.Exceptions;
 using FoodDeliveryApi.Interfaces.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -15,6 +16,23 @@ namespace FoodDeliveryApi.Controllers
         public PartnerController(IPartnerService partnerService)
         {
             _partnerService = partnerService;
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetPartners([FromQuery] string? status = null)
+        {
+            List<GetPartnerResponseDto> responseDto;
+
+            try
+            {
+                responseDto = await _partnerService.GetPartners(status);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
+            return Ok(responseDto);
         }
 
         [HttpPost]

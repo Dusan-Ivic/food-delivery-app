@@ -25,6 +25,29 @@ namespace FoodDeliveryApi.Services
             _mapper = mapper;
         }
 
+        public async Task<List<GetPartnerResponseDto>> GetPartners(string status)
+        {
+            List<Partner> partners = new List<Partner>();
+
+            if (string.IsNullOrEmpty(status))
+            {
+                partners = await _partnerRepository.GetAllPartners();
+            }
+            else
+            {
+                PartnerStatus partnerStatus;
+
+                if (!Enum.TryParse(status, out partnerStatus))
+                {
+                    throw new ArgumentException("Invalid status. Status must be one of the following: " + string.Join(", ", Enum.GetNames(typeof(PartnerStatus))));
+                }
+
+                partners = await _partnerRepository.GetPartnersByStatus(partnerStatus);
+            }
+
+            return _mapper.Map<List<GetPartnerResponseDto>>(partners);
+        }
+
         public async Task<RegisterPartnerResponseDto> RegisterPartner(RegisterPartnerRequestDto requestDto)
         {
             Partner partner = _mapper.Map<Partner>(requestDto);

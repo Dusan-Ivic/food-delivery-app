@@ -1,4 +1,5 @@
-﻿using FoodDeliveryApi.Models;
+﻿using FoodDeliveryApi.Enums;
+using FoodDeliveryApi.Models;
 
 namespace FoodDeliveryApi.Interfaces.Repositories
 {
@@ -6,6 +7,8 @@ namespace FoodDeliveryApi.Interfaces.Repositories
     {
         public Task<bool> IsEmailTaken(string email);
         public Task<bool> IsUsernameTaken(string username);
+        public Task<List<Partner>> GetAllPartners();
+        public Task<List<Partner>> GetPartnersByStatus(PartnerStatus status);
         public Task<Partner> RegisterPartner(Partner partner);
     }
 }

@@ -1,4 +1,5 @@
 ﻿using FoodDeliveryApi.Data;
+using FoodDeliveryApi.Enums;
 using FoodDeliveryApi.Interfaces.Repositories;
 using FoodDeliveryApi.Models;
 using Microsoft.EntityFrameworkCore;
@@ -12,6 +13,16 @@ namespace FoodDeliveryApi.Repositories
         public PartnerRepository(FoodDeliveryDbContext dbContext)
         {
             _dbContext = dbContext;
+        }
+
+        public async Task<List<Partner>> GetAllPartners()
+        {
+            return await _dbContext.Partners.ToListAsync();
+        }
+
+        public async Task<List<Partner>> GetPartnersByStatus(PartnerStatus status)
+        {
+            return await _dbContext.Partners.Where(x => x.Status == status).ToListAsync();
         }
 
         public async Task<bool> IsEmailTaken(string email)
