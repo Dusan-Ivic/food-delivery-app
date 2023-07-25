@@ -78,5 +78,55 @@ namespace FoodDeliveryApi.Services
 
             return _mapper.Map<RegisterCustomerResponseDto>(customer);
         }
+
+        public async Task<UpdateCustomerResponseDto> UpdateCustomer(long id, UpdateCustomerRequestDto requestDto)
+        {
+            Customer? customer = await _customerRepository.GetCustomerById(id);
+
+            if (customer == null)
+            {
+                throw new ResourceNotFoundException("Customer with this id doesn't exist");
+            }
+
+            Customer updatedCustomer = _mapper.Map<Customer>(requestDto);
+
+            ValidationResult validationResult = _validator.Validate(updatedCustomer, options =>
+            {
+                options.IncludeProperties(x => x.Username);
+                options.IncludeProperties(x => x.Email);
+                options.IncludeProperties(x => x.FirstName);
+                options.IncludeProperties(x => x.LastName);
+                options.IncludeProperties(x => x.Address);
+                options.IncludeProperties(x => x.City);
+                options.IncludeProperties(x => x.PostalCode);
+            });
+
+            if (!validationResult.IsValid)
+            {
+                throw new ValidationException(validationResult.Errors);
+            }
+
+            if (await _customerRepository.IsEmailTaken(customer.Email) && updatedCustomer.Email != customer.Email)
+            {
+                throw new UserAlreadyExistsException("Customer with this email already exists");
+            }
+
+            if (await _customerRepository.IsUsernameTaken(customer.Username) && updatedCustomer.Username != customer.Username)
+            {
+                throw new UserAlreadyExistsException("Customer with this username already exists");
+            }
+
+            try
+            {
+                _mapper.Map(requestDto, customer);
+                customer = await _customerRepository.UpdateCustomer(customer);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+            return _mapper.Map<UpdateCustomerResponseDto>(customer);
+        }
     }
 }

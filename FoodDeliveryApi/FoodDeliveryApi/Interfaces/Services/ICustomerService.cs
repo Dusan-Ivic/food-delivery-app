@@ -7,5 +7,6 @@ namespace FoodDeliveryApi.Interfaces.Services
         public Task<List<GetCustomerResponseDto>> GetCustomers();
         public Task<GetCustomerResponseDto> GetCustomer(long id);
         public Task<RegisterCustomerResponseDto> RegisterCustomer(RegisterCustomerRequestDto requestDto);
+        public Task<UpdateCustomerResponseDto> UpdateCustomer(long id, UpdateCustomerRequestDto requestDto);
     }
 }

@@ -9,5 +9,6 @@ namespace FoodDeliveryApi.Interfaces.Repositories
         public Task<List<Customer>> GetAllCustomers();
         public Task<Customer?> GetCustomerById(long id);
         public Task<Customer> RegisterCustomer(Customer customer);
+        public Task<Customer> UpdateCustomer(Customer customer);
     }
 }

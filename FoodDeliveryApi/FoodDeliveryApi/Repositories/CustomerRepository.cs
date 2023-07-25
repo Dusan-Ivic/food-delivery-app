@@ -61,5 +61,19 @@ namespace FoodDeliveryApi.Repositories
                 throw;
             }
         }
+
+        public async Task<Customer> UpdateCustomer(Customer customer)
+        {
+            try
+            {
+                _dbContext.Entry(customer).State = EntityState.Modified;
+                await _dbContext.SaveChangesAsync();
+                return customer;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
     }
 }
