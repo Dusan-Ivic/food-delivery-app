@@ -109,5 +109,26 @@ namespace FoodDeliveryApi.Services
 
             return _mapper.Map<UpdateStoreResponseDto>(store);
         }
+
+        public async Task<DeleteStoreResponseDto> DeleteStore(long id)
+        {
+            Store? store = await _storeRepository.GetStoreById(id);
+
+            if (store == null)
+            {
+                throw new ResourceNotFoundException("Store with this id doesn't exist");
+            }
+
+            try
+            {
+                await _storeRepository.DeleteStore(store);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+            return _mapper.Map<DeleteStoreResponseDto>(store);
+        }
     }
 }

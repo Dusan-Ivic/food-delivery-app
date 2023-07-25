@@ -51,5 +51,19 @@ namespace FoodDeliveryApi.Repositories
                 throw;
             }
         }
+
+        public async Task DeleteStore(Store store)
+        {
+            try
+            {
+                _dbContext.Stores.Remove(store);
+                await _dbContext.SaveChangesAsync();
+                return;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
     }
 }
