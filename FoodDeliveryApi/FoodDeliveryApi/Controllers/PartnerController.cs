@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using FoodDeliveryApi.Dto.Error;
 using FoodDeliveryApi.Dto.Partner;
 using FoodDeliveryApi.Enums;
 using FoodDeliveryApi.Exceptions;
@@ -33,7 +34,7 @@ namespace FoodDeliveryApi.Controllers
             }
             catch (ArgumentException ex)
             {
-                return BadRequest(ex.Message);
+                return BadRequest(new ErrorResponseDto() { Message = ex.Message });
             }
 
             return Ok(responseDto);
@@ -51,7 +52,7 @@ namespace FoodDeliveryApi.Controllers
             }
             catch (ResourceNotFoundException ex)
             {
-                return NotFound(ex.Message);
+                return NotFound(new ErrorResponseDto() { Message = ex.Message });
             }
 
             return Ok(responseDto);
@@ -68,11 +69,15 @@ namespace FoodDeliveryApi.Controllers
             }
             catch (ValidationException ex)
             {
-                return BadRequest(ex.Errors.Select(err => err.ErrorMessage));
+                return BadRequest(new ErrorResponseDto()
+                {
+                    Message = "One or more validation errors occurred. See the 'Errors' for details.",
+                    Errors = ex.Errors.Select(err => err.ErrorMessage).ToList()
+                });
             }
             catch (UserAlreadyExistsException ex)
             {
-                return Conflict(ex.Message);
+                return Conflict(new ErrorResponseDto() { Message = ex.Message });
             }
 
             return Ok(responseDto);
@@ -87,7 +92,10 @@ namespace FoodDeliveryApi.Controllers
 
             if (userId != id)
             {
-                return StatusCode(StatusCodes.Status403Forbidden, "Users can't update information of other users. Access is restricted.");
+                return StatusCode(StatusCodes.Status403Forbidden, new ErrorResponseDto()
+                {
+                    Message = "Users can't update information of other users. Access is restricted."
+                });
             }
 
             UpdatePartnerResponseDto responseDto;
@@ -98,15 +106,19 @@ namespace FoodDeliveryApi.Controllers
             }
             catch (ResourceNotFoundException ex)
             {
-                return NotFound(ex.Message);
+                return NotFound(new ErrorResponseDto() { Message = ex.Message });
             }
             catch (ValidationException ex)
             {
-                return BadRequest(ex.Errors.Select(err => err.ErrorMessage));
+                return BadRequest(new ErrorResponseDto()
+                {
+                    Message = "One or more validation errors occurred. See the 'Errors' for details.",
+                    Errors = ex.Errors.Select(err => err.ErrorMessage).ToList()
+                });
             }
             catch (UserAlreadyExistsException ex)
             {
-                return Conflict(ex.Message);
+                return Conflict(new ErrorResponseDto() { Message = ex.Message });
             }
 
             return Ok(responseDto);
@@ -124,7 +136,7 @@ namespace FoodDeliveryApi.Controllers
             }
             catch (ResourceNotFoundException ex)
             {
-                return NotFound(ex.Message);
+                return NotFound(new ErrorResponseDto() { Message = ex.Message });
             }
 
             return Ok(responseDto);
@@ -142,11 +154,15 @@ namespace FoodDeliveryApi.Controllers
             }
             catch (ResourceNotFoundException ex)
             {
-                return NotFound(ex.Message);
+                return NotFound(new ErrorResponseDto() { Message = ex.Message });
             }
             catch (ValidationException ex)
             {
-                return BadRequest(ex.Errors.Select(err => err.ErrorMessage));
+                return BadRequest(new ErrorResponseDto()
+                {
+                    Message = "One or more validation errors occurred. See the 'Errors' for details.",
+                    Errors = ex.Errors.Select(err => err.ErrorMessage).ToList()
+                });
             }
 
             return Ok(responseDto);

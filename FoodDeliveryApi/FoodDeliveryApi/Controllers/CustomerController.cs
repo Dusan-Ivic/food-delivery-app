@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using FoodDeliveryApi.Dto.Customer;
+using FoodDeliveryApi.Dto.Error;
 using FoodDeliveryApi.Exceptions;
 using FoodDeliveryApi.Interfaces.Services;
 using FoodDeliveryApi.Services;
@@ -42,7 +43,7 @@ namespace FoodDeliveryApi.Controllers
             }
             catch (ResourceNotFoundException ex)
             {
-                return NotFound(ex.Message);
+                return NotFound(new ErrorResponseDto() { Message = ex.Message });
             }
 
             return Ok(responseDto);
@@ -63,7 +64,7 @@ namespace FoodDeliveryApi.Controllers
             }
             catch (UserAlreadyExistsException ex)
             {
-                return Conflict(ex.Message);
+                return Conflict(new ErrorResponseDto() { Message = ex.Message });
             }
 
             return Ok(responseDto);
@@ -78,7 +79,10 @@ namespace FoodDeliveryApi.Controllers
 
             if (userId != id)
             {
-                return StatusCode(StatusCodes.Status403Forbidden, "Users can't update information of other users. Access is restricted.");
+                return StatusCode(StatusCodes.Status403Forbidden, new ErrorResponseDto()
+                {
+                    Message = "Users can't update information of other users. Access is restricted."
+                });
             }
 
             UpdateCustomerResponseDto responseDto;
@@ -89,15 +93,19 @@ namespace FoodDeliveryApi.Controllers
             }
             catch (ResourceNotFoundException ex)
             {
-                return NotFound(ex.Message);
+                return NotFound(new ErrorResponseDto() { Message = ex.Message });
             }
             catch (ValidationException ex)
             {
-                return BadRequest(ex.Errors.Select(err => err.ErrorMessage));
+                return BadRequest(new ErrorResponseDto()
+                {
+                    Message = "One or more validation errors occurred. See the 'Errors' for details.",
+                    Errors = ex.Errors.Select(err => err.ErrorMessage).ToList()
+                });
             }
             catch (UserAlreadyExistsException ex)
             {
-                return Conflict(ex.Message);
+                return Conflict(new ErrorResponseDto() { Message = ex.Message });
             }
 
             return Ok(responseDto);
@@ -115,7 +123,7 @@ namespace FoodDeliveryApi.Controllers
             }
             catch (ResourceNotFoundException ex)
             {
-                return NotFound(ex.Message);
+                return NotFound(new ErrorResponseDto() { Message = ex.Message });
             }
 
             return Ok(responseDto);
