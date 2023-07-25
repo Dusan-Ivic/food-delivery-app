@@ -1,6 +1,7 @@
 ﻿using FoodDeliveryApi.Data;
 using FoodDeliveryApi.Interfaces.Repositories;
 using FoodDeliveryApi.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace FoodDeliveryApi.Repositories
 {
@@ -11,6 +12,16 @@ namespace FoodDeliveryApi.Repositories
         public StoreRepository(FoodDeliveryDbContext dbContext)
         {
             _dbContext = dbContext;
+        }
+
+        public async Task<List<Store>> GetAllStores()
+        {
+            return await _dbContext.Stores.ToListAsync();
+        }
+
+        public async Task<Store?> GetStoreById(long id)
+        {
+            return await _dbContext.Stores.FindAsync(id);
         }
 
         public async Task<Store> CreateStore(Store store)

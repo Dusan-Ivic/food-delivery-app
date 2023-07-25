@@ -1,6 +1,7 @@
 ﻿using FluentValidation;
 using FoodDeliveryApi.Dto.Error;
 using FoodDeliveryApi.Dto.Store;
+using FoodDeliveryApi.Exceptions;
 using FoodDeliveryApi.Interfaces.Services;
 using FoodDeliveryApi.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -18,6 +19,32 @@ namespace FoodDeliveryApi.Controllers
         public StoreController(IStoreService storeService)
         {
             _storeService = storeService;
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetStores()
+        {
+            List<GetStoreResponseDto> responseDto = await _storeService.GetStores();
+
+            return Ok(responseDto);
+        }
+
+        [HttpGet]
+        [Route("{id}")]
+        public async Task<IActionResult> GetStore(long id)
+        {
+            GetStoreResponseDto responseDto;
+
+            try
+            {
+                responseDto = await _storeService.GetStore(id);
+            }
+            catch (ResourceNotFoundException ex)
+            {
+                return NotFound(new ErrorResponseDto() { Message = ex.Message });
+            }
+
+            return Ok(responseDto);
         }
 
         [HttpPost]

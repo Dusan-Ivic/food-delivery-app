@@ -10,6 +10,8 @@ namespace FoodDeliveryApi.Mapping
         {
             CreateMap<CreateStoreRequestDto, Store>();
             CreateMap<Store, CreateStoreResponseDto>();
+
+            CreateMap<Store, GetStoreResponseDto>();
         }
     }
 }
