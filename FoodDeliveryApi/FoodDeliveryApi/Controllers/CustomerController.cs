@@ -102,5 +102,23 @@ namespace FoodDeliveryApi.Controllers
 
             return Ok(responseDto);
         }
+
+        [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> DeleteCustomer(long id)
+        {
+            DeleteCustomerResponseDto responseDto;
+
+            try
+            {
+                responseDto = await _customerService.DeleteCustomer(id);
+            }
+            catch (ResourceNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+
+            return Ok(responseDto);
+        }
     }
 }

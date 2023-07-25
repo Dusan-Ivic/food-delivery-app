@@ -128,5 +128,26 @@ namespace FoodDeliveryApi.Services
 
             return _mapper.Map<UpdateCustomerResponseDto>(customer);
         }
+
+        public async Task<DeleteCustomerResponseDto> DeleteCustomer(long id)
+        {
+            Customer? customer = await _customerRepository.GetCustomerById(id);
+
+            if (customer == null)
+            {
+                throw new ResourceNotFoundException("Customer with this id doesn't exist");
+            }
+
+            try
+            {
+                await _customerRepository.DeleteCustomer(customer);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+            return _mapper.Map<DeleteCustomerResponseDto>(customer);
+        }
     }
 }
