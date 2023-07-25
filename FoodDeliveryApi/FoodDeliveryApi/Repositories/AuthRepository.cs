@@ -20,7 +20,7 @@ namespace FoodDeliveryApi.Repositories
             switch (userType)
             {
                 case UserType.Customer:
-                    return null;
+                    return await _dbContext.Customers.FindAsync(id);
                 case UserType.Partner:
                     return await _dbContext.Partners.FindAsync(id);
                 case UserType.Admin:
@@ -35,7 +35,7 @@ namespace FoodDeliveryApi.Repositories
             switch(userType)
             {
                 case UserType.Customer:
-                    return null;
+                    return await _dbContext.Customers.Where(x => x.Username == username).FirstOrDefaultAsync();
                 case UserType.Partner:
                     return await _dbContext.Partners.Where(x => x.Username == username).FirstOrDefaultAsync();
                 case UserType.Admin:
