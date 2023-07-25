@@ -21,7 +21,7 @@ namespace FoodDeliveryApi.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "Partner")]
+        [Authorize(Roles = "Partner", Policy = "VerifiedPartner")]
         public async Task<IActionResult> CreateStore([FromBody] CreateStoreRequestDto requestDto)
         {
             Claim? idClaim = User.Claims.FirstOrDefault(x => x.Type == "UserId");

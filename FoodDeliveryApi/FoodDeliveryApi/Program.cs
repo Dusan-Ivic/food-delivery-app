@@ -71,6 +71,11 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("VerifiedPartner", policy => policy.RequireClaim("Status", "Accepted"));
+});
+
 builder.Services.AddSingleton<IAuthorizationMiddlewareResultHandler, CustomAuthMiddlewareResultHandler>();
 
 builder.Services.AddScoped<IAdminService, AdminService>();
