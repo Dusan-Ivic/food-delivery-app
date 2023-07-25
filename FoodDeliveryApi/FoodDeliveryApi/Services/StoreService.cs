@@ -65,5 +65,49 @@ namespace FoodDeliveryApi.Services
 
             return _mapper.Map<CreateStoreResponseDto>(store);
         }
+
+        public async Task<UpdateStoreResponseDto> UpdateStore(long id, long partnerId, UpdateStoreRequestDto requestDto)
+        {
+            Store? store = await _storeRepository.GetStoreById(id);
+
+            if (store == null)
+            {
+                throw new ResourceNotFoundException("Store with this id doesn't exist");
+            }
+
+            if (store.PartnerId != partnerId)
+            {
+                throw new ActionNotAllowedException("Unauthorized to update this store. Only the creator can modify details.");
+            }
+
+            Store updatedStore = _mapper.Map<Store>(requestDto);
+
+            ValidationResult validationResult = _validator.Validate(updatedStore, options =>
+            {
+                options.IncludeProperties(x => x.Name);
+                options.IncludeProperties(x => x.Description);
+                options.IncludeProperties(x => x.Address);
+                options.IncludeProperties(x => x.City);
+                options.IncludeProperties(x => x.PostalCode);
+                options.IncludeProperties(x => x.Phone);
+            });
+
+            if (!validationResult.IsValid)
+            {
+                throw new ValidationException(validationResult.Errors);
+            }
+
+            try
+            {
+                _mapper.Map(requestDto, store);
+                store = await _storeRepository.UpdateStore(store);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+            return _mapper.Map<UpdateStoreResponseDto>(store);
+        }
     }
 }

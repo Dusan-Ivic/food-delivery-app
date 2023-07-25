@@ -37,5 +37,19 @@ namespace FoodDeliveryApi.Repositories
                 throw;
             }
         }
+
+        public async Task<Store> UpdateStore(Store store)
+        {
+            try
+            {
+                _dbContext.Entry(store).State = EntityState.Modified;
+                await _dbContext.SaveChangesAsync();
+                return store;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
     }
 }

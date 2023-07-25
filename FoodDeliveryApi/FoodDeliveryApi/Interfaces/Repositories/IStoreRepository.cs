@@ -7,5 +7,6 @@ namespace FoodDeliveryApi.Interfaces.Repositories
         public Task<List<Store>> GetAllStores();
         public Task<Store?> GetStoreById(long id);
         public Task<Store> CreateStore(Store store);
+        public Task<Store> UpdateStore(Store store);
     }
 }
