@@ -11,5 +11,6 @@
         public string Phone { get; set; } = string.Empty;
         public long PartnerId { get; set; }
         public Partner Partner { get; set; } = default!;
+        public List<Product> Products { get; set; } = new List<Product>();
     }
 }
