@@ -24,6 +24,8 @@ namespace FoodDeliveryApi.Configurations
             builder.Property(x => x.Phone).IsRequired().HasMaxLength(20);
 
             builder.HasOne(x => x.Partner).WithMany(x => x.Stores).HasForeignKey(x => x.PartnerId);
+
+            builder.Property(x => x.DeliveryOptions).HasColumnType("json");
         }
     }
 }
