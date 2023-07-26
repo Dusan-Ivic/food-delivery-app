@@ -25,6 +25,25 @@ namespace FoodDeliveryApi.Services
             _mapper = mapper;
         }
 
+        public async Task<List<GetProductResponseDto>> GetProducts()
+        {
+            List<Product> products = await _productRepository.GetAllProducts();
+
+            return _mapper.Map<List<GetProductResponseDto>>(products);
+        }
+
+        public async Task<GetProductResponseDto> GetProduct(long id)
+        {
+            Product? product = await _productRepository.GetProductById(id);
+
+            if (product == null)
+            {
+                throw new ResourceNotFoundException("Product with this id doesn't exist");
+            }
+
+            return _mapper.Map<GetProductResponseDto>(product);
+        }
+
         public async Task<CreateProductResponseDto> CreateProduct(long partnerId, CreateProductRequestDto requestDto)
         {
             Product product = _mapper.Map<Product>(requestDto);
