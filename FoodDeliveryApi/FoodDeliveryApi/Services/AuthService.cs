@@ -65,6 +65,13 @@ namespace FoodDeliveryApi.Services
                 new Claim(ClaimTypes.Role, responseDto.UserType.ToString())
             };
 
+            Partner? possiblePartner = existingUser as Partner;
+
+            if (possiblePartner != null)
+            {
+                claims.Add(new Claim("Status", possiblePartner.Status.ToString()));
+            }
+
             string jwtSecretKey = _jwtSettings.GetValue<string>("SecretKey");
             string jwtIssuer = _jwtSettings.GetValue<string>("Issuer");
 
