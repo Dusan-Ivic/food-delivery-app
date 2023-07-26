@@ -1,4 +1,6 @@
-﻿namespace FoodDeliveryApi.Dto.Store
+﻿using FoodDeliveryApi.Models;
+
+namespace FoodDeliveryApi.Dto.Store
 {
     public class BaseStoreDto
     {
@@ -8,5 +10,6 @@
         public string City { get; set; } = string.Empty;
         public string PostalCode { get; set; } = string.Empty;
         public string Phone { get; set; } = string.Empty;
+        public DeliveryOptions DeliveryOptions { get; set; } = default!;
     }
 }

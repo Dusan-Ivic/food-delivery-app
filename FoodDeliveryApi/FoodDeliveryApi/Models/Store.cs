@@ -1,5 +1,12 @@
 ﻿namespace FoodDeliveryApi.Models
 {
+    public class DeliveryOptions
+    {
+        public int DeliveryTimeInMinutes { get; set; }
+        public decimal DeliveryFee { get; set; } = decimal.Zero;
+        public decimal MinimumOrderAmount { get; set; } = decimal.Zero;
+    }
+
     public class Store
     {
         public long Id { get; set; }
@@ -12,5 +19,6 @@
         public long PartnerId { get; set; }
         public Partner Partner { get; set; } = default!;
         public List<Product> Products { get; set; } = new List<Product>();
+        public DeliveryOptions DeliveryOptions { get; set; } = default!;
     }
 }
