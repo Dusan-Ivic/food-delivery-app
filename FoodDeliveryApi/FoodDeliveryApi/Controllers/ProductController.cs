@@ -7,6 +7,7 @@ using FoodDeliveryApi.Models;
 using FoodDeliveryApi.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Metadata;
 using System.Security.Claims;
 
 namespace FoodDeliveryApi.Controllers
@@ -23,9 +24,9 @@ namespace FoodDeliveryApi.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetProducts()
+        public async Task<IActionResult> GetProducts([FromQuery] long? storeId)
         {
-            List<GetProductResponseDto> responseDto = await _productService.GetProducts();
+            List<GetProductResponseDto> responseDto = await _productService.GetProducts(storeId ?? null);
 
             return Ok(responseDto);
         }

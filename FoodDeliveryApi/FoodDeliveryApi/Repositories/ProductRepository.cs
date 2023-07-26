@@ -19,6 +19,11 @@ namespace FoodDeliveryApi.Repositories
             return await _dbContext.Products.ToListAsync();
         }
 
+        public async Task<List<Product>> GetProductsByStore(long storeId)
+        {
+            return await _dbContext.Products.Where(x => x.StoreId == storeId).ToListAsync();
+        }
+
         public async Task<Product?> GetProductById(long id)
         {
             return await _dbContext.Products.FindAsync(id);
