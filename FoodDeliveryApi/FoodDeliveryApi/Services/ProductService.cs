@@ -87,5 +87,47 @@ namespace FoodDeliveryApi.Services
 
             return _mapper.Map<CreateProductResponseDto>(product);
         }
+
+        public async Task<UpdateProductResponseDto> UpdateProduct(long id, long partnerId, UpdateProductRequestDto requestDto)
+        {
+            Product? product = await _productRepository.GetProductById(id, true);
+
+            if (product == null)
+            {
+                throw new ResourceNotFoundException("Product with this id doesn't exist");
+            }
+
+            if (product.Store.PartnerId != partnerId)
+            {
+                throw new ActionNotAllowedException("Unauthorized to update this product. Only the creator can modify details.");
+            }
+
+            Product updatedProduct = _mapper.Map<Product>(requestDto);
+
+            ValidationResult validationResult = _validator.Validate(updatedProduct, options =>
+            {
+                options.IncludeProperties(x => x.Name);
+                options.IncludeProperties(x => x.Description);
+                options.IncludeProperties(x => x.Price);
+                options.IncludeProperties(x => x.Quantity);
+            });
+
+            if (!validationResult.IsValid)
+            {
+                throw new ValidationException(validationResult.Errors);
+            }
+
+            try
+            {
+                _mapper.Map(requestDto, product);
+                product = await _productRepository.UpdateProduct(product);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+            return _mapper.Map<UpdateProductResponseDto>(product);
+        }
     }
 }

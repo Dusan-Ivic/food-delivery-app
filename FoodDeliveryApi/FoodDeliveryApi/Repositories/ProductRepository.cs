@@ -24,9 +24,9 @@ namespace FoodDeliveryApi.Repositories
             return await _dbContext.Products.Where(x => x.StoreId == storeId).ToListAsync();
         }
 
-        public async Task<Product?> GetProductById(long id)
+        public async Task<Product?> GetProductById(long id, bool includeStore)
         {
-            return await _dbContext.Products.FindAsync(id);
+            return await _dbContext.Products.Include(x => includeStore ? x.Store : null).FirstOrDefaultAsync(x => x.Id == id);
         }
 
         public async Task<Product> CreateProduct(Product product)
@@ -34,6 +34,20 @@ namespace FoodDeliveryApi.Repositories
             try
             {
                 await _dbContext.Products.AddAsync(product);
+                await _dbContext.SaveChangesAsync();
+                return product;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public async Task<Product> UpdateProduct(Product product)
+        {
+            try
+            {
+                _dbContext.Entry(product).State = EntityState.Modified;
                 await _dbContext.SaveChangesAsync();
                 return product;
             }

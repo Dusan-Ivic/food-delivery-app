@@ -83,5 +83,41 @@ namespace FoodDeliveryApi.Controllers
 
             return Ok(responseDto);
         }
+
+        [HttpPut("{id}")]
+        [Authorize(Roles = "Partner", Policy = "VerifiedPartner")]
+        public async Task<IActionResult> UpdateProduct(long id, [FromBody] UpdateProductRequestDto requestDto)
+        {
+            Claim? idClaim = User.Claims.FirstOrDefault(x => x.Type == "UserId");
+            long userId = long.Parse(idClaim!.Value);
+
+            UpdateProductResponseDto responseDto;
+
+            try
+            {
+                responseDto = await _productService.UpdateProduct(id, userId, requestDto);
+            }
+            catch (ResourceNotFoundException ex)
+            {
+                return NotFound(new ErrorResponseDto() { Message = ex.Message });
+            }
+            catch (ValidationException ex)
+            {
+                return BadRequest(new ErrorResponseDto()
+                {
+                    Message = "One or more validation errors occurred. See the 'Errors' for details.",
+                    Errors = ex.Errors.Select(err => err.ErrorMessage).ToList()
+                });
+            }
+            catch (ActionNotAllowedException ex)
+            {
+                return StatusCode(StatusCodes.Status403Forbidden, new ErrorResponseDto()
+                {
+                    Message = ex.Message
+                });
+            }
+
+            return Ok(responseDto);
+        }
     }
 }
