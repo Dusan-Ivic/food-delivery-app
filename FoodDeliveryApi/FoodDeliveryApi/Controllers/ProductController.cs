@@ -7,7 +7,6 @@ using FoodDeliveryApi.Models;
 using FoodDeliveryApi.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Metadata;
 using System.Security.Claims;
 
 namespace FoodDeliveryApi.Controllers
@@ -108,6 +107,34 @@ namespace FoodDeliveryApi.Controllers
                     Message = "One or more validation errors occurred. See the 'Errors' for details.",
                     Errors = ex.Errors.Select(err => err.ErrorMessage).ToList()
                 });
+            }
+            catch (ActionNotAllowedException ex)
+            {
+                return StatusCode(StatusCodes.Status403Forbidden, new ErrorResponseDto()
+                {
+                    Message = ex.Message
+                });
+            }
+
+            return Ok(responseDto);
+        }
+
+        [HttpDelete("{id}")]
+        [Authorize(Roles = "Partner", Policy = "VerifiedPartner")]
+        public async Task<IActionResult> DeleteProduct(long id)
+        {
+            Claim? idClaim = User.Claims.FirstOrDefault(x => x.Type == "UserId");
+            long userId = long.Parse(idClaim!.Value);
+
+            DeleteProductResponseDto responseDto;
+
+            try
+            {
+                responseDto = await _productService.DeleteProduct(id, userId);
+            }
+            catch (ResourceNotFoundException ex)
+            {
+                return NotFound(new ErrorResponseDto() { Message = ex.Message });
             }
             catch (ActionNotAllowedException ex)
             {

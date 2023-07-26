@@ -77,7 +77,7 @@ namespace FoodDeliveryApi.Services
 
             if (store.PartnerId != partnerId)
             {
-                throw new ActionNotAllowedException("Unauthorized to update this store. Only the creator can modify details.");
+                throw new ActionNotAllowedException("Unauthorized to update this store. Only the creator can perform this action.");
             }
 
             Store updatedStore = _mapper.Map<Store>(requestDto);

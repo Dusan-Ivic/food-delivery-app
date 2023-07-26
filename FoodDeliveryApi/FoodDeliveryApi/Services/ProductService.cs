@@ -73,7 +73,7 @@ namespace FoodDeliveryApi.Services
 
             if (store.PartnerId != partnerId)
             {
-                throw new ActionNotAllowedException("Unauthorized to add products to this store. Only the creator can modify details.");
+                throw new ActionNotAllowedException("Unauthorized to add products to this store. Only the creator can perform this action.");
             }
 
             try
@@ -99,7 +99,7 @@ namespace FoodDeliveryApi.Services
 
             if (product.Store.PartnerId != partnerId)
             {
-                throw new ActionNotAllowedException("Unauthorized to update this product. Only the creator can modify details.");
+                throw new ActionNotAllowedException("Unauthorized to update this product. Only the creator can perform this action.");
             }
 
             Product updatedProduct = _mapper.Map<Product>(requestDto);
@@ -128,6 +128,32 @@ namespace FoodDeliveryApi.Services
             }
 
             return _mapper.Map<UpdateProductResponseDto>(product);
+        }
+
+        public async Task<DeleteProductResponseDto> DeleteProduct(long id, long partnerId)
+        {
+            Product? product = await _productRepository.GetProductById(id, true);
+
+            if (product == null)
+            {
+                throw new ResourceNotFoundException("Product with this id doesn't exist");
+            }
+
+            if (product.Store.PartnerId != partnerId)
+            {
+                throw new ActionNotAllowedException("Unauthorized to delete this product. Only the creator can perform this action.");
+            }
+
+            try
+            {
+                await _productRepository.DeleteProduct(product);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+            return _mapper.Map<DeleteProductResponseDto>(product);
         }
     }
 }
