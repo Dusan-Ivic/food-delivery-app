@@ -26,7 +26,14 @@ namespace FoodDeliveryApi.Repositories
 
         public async Task<Product?> GetProductById(long id, bool includeStore)
         {
-            return await _dbContext.Products.Include(x => includeStore ? x.Store : null).FirstOrDefaultAsync(x => x.Id == id);
+            IQueryable<Product> products = _dbContext.Products;
+
+            if (includeStore)
+            {
+                products.Include(x => x.Store);
+            }
+
+            return await products.FirstOrDefaultAsync(x => x.Id == id);
         }
 
         public async Task<Product> CreateProduct(Product product)
