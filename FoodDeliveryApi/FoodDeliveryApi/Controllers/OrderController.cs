@@ -78,6 +78,10 @@ namespace FoodDeliveryApi.Controllers
             {
                 return Conflict(new ErrorResponseDto() { Message = ex.Message });
             }
+            catch (IncompatibleItemsError ex)
+            {
+                return BadRequest(new ErrorResponseDto() { Message = ex.Message });
+            }
 
             return Ok(responseDto);
         }
