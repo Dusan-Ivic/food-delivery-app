@@ -102,6 +102,10 @@ builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IValidator<Product>, ProductValidator>();
 
+builder.Services.AddScoped<IOrderService, OrderService>();
+builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+builder.Services.AddScoped<IValidator<Order>, OrderValidator>();
+
 builder.Services.AddDbContext<FoodDeliveryDbContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("FoodDeliveryDbConnectionString")));
 
 MapperConfiguration mapperConfig = new MapperConfiguration(config =>
@@ -112,6 +116,7 @@ MapperConfiguration mapperConfig = new MapperConfiguration(config =>
     config.AddProfile(new AuthProfile());
     config.AddProfile(new StoreProfile());
     config.AddProfile(new ProductProfile());
+    config.AddProfile(new OrderProfile());
 });
 
 builder.Services.AddSingleton(mapperConfig.CreateMapper());

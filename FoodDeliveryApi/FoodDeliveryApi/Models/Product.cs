@@ -9,6 +9,7 @@
         public int Quantity { get; set; }
         public long StoreId { get; set; }
         public Store Store { get; set; } = default!;
+        public List<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
 
     }
 }

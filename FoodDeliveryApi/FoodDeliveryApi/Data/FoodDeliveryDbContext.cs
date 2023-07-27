@@ -10,6 +10,8 @@ namespace FoodDeliveryApi.Data
         public DbSet<Customer> Customers { get; set; }
         public DbSet<Store> Stores { get; set; }
         public DbSet<Product> Products { get; set; }
+        public DbSet<Order> Orders { get; set; }
+        public DbSet<OrderItem> OrderItems { get; set; }
 
         public FoodDeliveryDbContext(DbContextOptions options) : base(options)
         {
@@ -26,6 +28,8 @@ namespace FoodDeliveryApi.Data
             modelBuilder.Entity<Customer>().ToTable("Customers");
             modelBuilder.Entity<Store>().ToTable("Stores");
             modelBuilder.Entity<Product>().ToTable("Products");
+            modelBuilder.Entity<Order>().ToTable("Orders");
+            modelBuilder.Entity<OrderItem>().ToTable("OrderItems");
         }
     }
 }
