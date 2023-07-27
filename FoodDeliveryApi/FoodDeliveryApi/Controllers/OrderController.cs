@@ -74,6 +74,10 @@ namespace FoodDeliveryApi.Controllers
             {
                 return NotFound(new ErrorResponseDto() { Message = ex.Message });
             }
+            catch (InsufficientQuantityException ex)
+            {
+                return Conflict(new ErrorResponseDto() { Message = ex.Message });
+            }
 
             return Ok(responseDto);
         }
