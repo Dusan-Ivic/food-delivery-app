@@ -14,5 +14,6 @@
     public class OrderItemResponseDto : BaseOrderItemDto
     {
         public decimal TotalPrice { get; set; }
+        public long OrderId { get; set; }
     }
 }

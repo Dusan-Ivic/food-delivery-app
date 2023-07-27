@@ -37,6 +37,18 @@ namespace FoodDeliveryApi.Controllers
             return Ok(responseDto);
         }
 
+        [HttpGet("items")]
+        [Authorize(Roles = "Partner", Policy = "VerifiedPartner")]
+        public async Task<IActionResult> GetOrderItems([FromQuery] long? storeId = null)
+        {
+            Claim? idClaim = User.Claims.FirstOrDefault(x => x.Type == "UserId");
+            long userId = long.Parse(idClaim!.Value);
+
+            List<GetOrderItemResponseDto> responseDto = await _orderService.GetOrderItems(userId, storeId ?? null);
+
+            return Ok(responseDto);
+        }
+
         [HttpPost]
         [Authorize(Roles = "Customer")]
         public async Task<IActionResult> CreateOrder([FromBody] CreateOrderRequestDto requestDto)

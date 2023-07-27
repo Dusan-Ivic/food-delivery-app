@@ -42,6 +42,22 @@ namespace FoodDeliveryApi.Services
             return _mapper.Map<List<GetOrderResponseDto>>(orders);
         }
 
+        public async Task<List<GetOrderItemResponseDto>> GetOrderItems(long partnerId, long? storeId)
+        {
+            List<OrderItem> orderItems = new List<OrderItem>();
+
+            if (storeId == null)
+            {
+                orderItems = await _orderRepository.GetOrderItemsByPartner(partnerId);
+            }
+            else
+            {
+                orderItems = await _orderRepository.GetOrderItemsByStore(storeId.Value);
+            }
+
+            return _mapper.Map<List<GetOrderItemResponseDto>>(orderItems);
+        }
+
         public async Task<CreateOrderResponseDto> CreateOrder(long customerId, CreateOrderRequestDto requestDto)
         {
             Order order = _mapper.Map<Order>(requestDto);
