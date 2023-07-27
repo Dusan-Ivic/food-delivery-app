@@ -19,6 +19,7 @@
         public long PartnerId { get; set; }
         public Partner Partner { get; set; } = default!;
         public List<Product> Products { get; set; } = new List<Product>();
+        public List<Order> Orders { get; set; } = new List<Order>();
         public DeliveryOptions DeliveryOptions { get; set; } = default!;
     }
 }

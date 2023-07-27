@@ -1,4 +1,6 @@
-﻿namespace FoodDeliveryApi.Models
+﻿using System.Diagnostics.Eventing.Reader;
+
+namespace FoodDeliveryApi.Models
 {
     public class Order
     {
@@ -8,5 +10,7 @@
         public Customer Customer { get; set; } = default!;
         public List<OrderItem> Items { get; set; } = new List<OrderItem>();
         public decimal TotalPrice { get; set; }
+        public long StoreId { get; set; }
+        public Store Store { get; set; } = default!;
     }
 }
