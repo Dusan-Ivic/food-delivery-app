@@ -7,7 +7,22 @@ namespace FoodDeliveryApi.Validators
     {
         public OrderValidator()
         {
-            // TODO - Add validations
+            RuleFor(x => x.Items)
+                .NotEmpty().WithMessage("The 'Items' list shouldn't be empty")
+                .ForEach(x => x.SetValidator(new OrderItemValidator()));
+        }
+    }
+
+    public class OrderItemValidator : AbstractValidator<OrderItem>
+    {
+        public OrderItemValidator()
+        {
+            RuleFor(x => x.ProductId)
+                .NotEmpty().WithMessage("Product Id is required");
+
+            RuleFor(x => x.Quantity)
+                .NotNull().WithMessage("Quantity is required")
+                .GreaterThan(0).WithMessage("Quantity must be greater than zero");
         }
     }
 }
