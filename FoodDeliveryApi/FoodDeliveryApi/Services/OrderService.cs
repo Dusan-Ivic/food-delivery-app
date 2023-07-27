@@ -72,12 +72,17 @@ namespace FoodDeliveryApi.Services
 
             foreach (OrderItem orderItem in order.Items)
             {
-                Product? product = await _productRepository.GetProductById(orderItem.ProductId);
+                Product? product = await _productRepository.GetProductById(orderItem.ProductId, true);
 
                 if (product == null)
                 {
                     // Should it throw exception and stop the order or just ignore this order item?
                     throw new ResourceNotFoundException($"Product with this id ({orderItem.ProductId}) doesn't exist");
+                }
+
+                if (product.StoreId != order.StoreId)
+                {
+                    throw new IncompatibleItemsError("All items in one order must be from the same store");
                 }
 
                 if (product.Quantity < orderItem.Quantity)

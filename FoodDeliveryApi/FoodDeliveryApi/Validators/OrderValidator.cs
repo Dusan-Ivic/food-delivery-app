@@ -7,6 +7,9 @@ namespace FoodDeliveryApi.Validators
     {
         public OrderValidator()
         {
+            RuleFor(x => x.StoreId)
+                .NotEmpty().WithMessage("Store Id is required");
+
             RuleFor(x => x.Items)
                 .NotEmpty().WithMessage("The 'Items' list shouldn't be empty")
                 .ForEach(x => x.SetValidator(new OrderItemValidator()));
