@@ -8,5 +8,6 @@ namespace FoodDeliveryApi.Dto.Auth
         public long Id { get; set; }
         public UserType UserType { get; set; }
         public string Token { get; set; } = string.Empty;
+        public PartnerStatus? PartnerStatus { get; set; } = null;
     }
 }
