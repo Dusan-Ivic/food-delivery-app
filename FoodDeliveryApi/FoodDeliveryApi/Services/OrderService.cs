@@ -80,7 +80,13 @@ namespace FoodDeliveryApi.Services
                     throw new ResourceNotFoundException($"Product with this id ({orderItem.ProductId}) doesn't exist");
                 }
 
+                if (product.Quantity < orderItem.Quantity)
+                {
+                    throw new InsufficientQuantityException($"Not enough products available. Available quantity: {product.Quantity}");
+                }
+
                 orderItem.TotalPrice = orderItem.Quantity * product.Price;
+                product.Quantity -= orderItem.Quantity;
             }
 
             order.TotalPrice = order.Items.Aggregate(0m, (total, item) => total + item.TotalPrice);
