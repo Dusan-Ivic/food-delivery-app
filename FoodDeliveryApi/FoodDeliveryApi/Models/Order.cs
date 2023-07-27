@@ -4,8 +4,6 @@
     {
         public long ProductId { get; set; }
         public Product Product { get; set; } = default!;
-        public long OrderId { get; set; }
-        public Order Order { get; set; } = default!;
         public int Quantity { get; set; }
         public decimal TotalPrice { get; set; }
     }
@@ -17,5 +15,6 @@
         public long CustomerId { get; set; }
         public Customer Customer { get; set; } = default!;
         public List<OrderItem> Items { get; set; } = new List<OrderItem>();
+        public decimal TotalPrice { get; set; }
     }
 }

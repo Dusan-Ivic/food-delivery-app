@@ -11,11 +11,13 @@ namespace FoodDeliveryApi.Configurations
             builder.HasKey(x => x.Id);
             builder.Property(x => x.Id).ValueGeneratedOnAdd();
 
-            builder.Property(x => x.CreatedAt).HasDefaultValue(DateTime.UtcNow);
+            builder.Property(x => x.CreatedAt).IsRequired();
 
             builder.HasOne(x => x.Customer).WithMany(x => x.Orders).HasForeignKey(x => x.CustomerId);
 
             builder.Property(x => x.Items).HasColumnType("json[]");
+
+            builder.Property(x => x.TotalPrice).IsRequired();
         }
     }
 }
