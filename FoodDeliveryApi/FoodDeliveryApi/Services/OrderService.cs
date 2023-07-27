@@ -2,6 +2,7 @@
 using FluentValidation;
 using FluentValidation.Results;
 using FoodDeliveryApi.Dto.Order;
+using FoodDeliveryApi.Enums;
 using FoodDeliveryApi.Exceptions;
 using FoodDeliveryApi.Interfaces.Repositories;
 using FoodDeliveryApi.Interfaces.Services;
@@ -22,6 +23,23 @@ namespace FoodDeliveryApi.Services
             _productRepository = productRepository;
             _validator = validator;
             _mapper = mapper;
+        }
+
+        public async Task<List<GetOrderResponseDto>> GetOrders(long userId, UserType userType)
+        {
+            List<Order> orders = new List<Order>();
+
+            switch (userType)
+            {
+                case UserType.Customer:
+                    orders = await _orderRepository.GetOrdersByCustomer(userId);
+                    break;
+                case UserType.Admin:
+                    orders = await _orderRepository.GetAllOrders();
+                    break;
+            }
+
+            return _mapper.Map<List<GetOrderResponseDto>>(orders);
         }
 
         public async Task<CreateOrderResponseDto> CreateOrder(long customerId, CreateOrderRequestDto requestDto)

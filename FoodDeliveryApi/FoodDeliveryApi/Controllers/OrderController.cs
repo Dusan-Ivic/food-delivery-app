@@ -1,6 +1,7 @@
 ﻿using FluentValidation;
 using FoodDeliveryApi.Dto.Error;
 using FoodDeliveryApi.Dto.Order;
+using FoodDeliveryApi.Enums;
 using FoodDeliveryApi.Exceptions;
 using FoodDeliveryApi.Interfaces.Services;
 using FoodDeliveryApi.Services;
@@ -19,6 +20,21 @@ namespace FoodDeliveryApi.Controllers
         public OrderController(IOrderService orderService)
         {
             _orderService = orderService;
+        }
+
+        [HttpGet]
+        [Authorize(Roles = "Customer,Admin")]
+        public async Task<IActionResult> GetOrders()
+        {
+            Claim? idClaim = User.Claims.FirstOrDefault(x => x.Type == "UserId");
+            long userId = long.Parse(idClaim!.Value);
+
+            Claim? roleClaim = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Role);
+            UserType userType = (UserType)Enum.Parse(typeof(UserType), roleClaim!.Value);
+
+            List<GetOrderResponseDto> responseDto = await _orderService.GetOrders(userId, userType);
+
+            return Ok(responseDto);
         }
 
         [HttpPost]
