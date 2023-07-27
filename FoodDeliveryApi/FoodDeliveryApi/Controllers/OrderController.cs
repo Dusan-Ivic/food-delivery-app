@@ -46,13 +46,6 @@ namespace FoodDeliveryApi.Controllers
             {
                 return NotFound(new ErrorResponseDto() { Message = ex.Message });
             }
-            catch (ActionNotAllowedException ex)
-            {
-                return StatusCode(StatusCodes.Status403Forbidden, new ErrorResponseDto()
-                {
-                    Message = ex.Message
-                });
-            }
 
             return Ok(responseDto);
         }
