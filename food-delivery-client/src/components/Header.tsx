@@ -1,9 +1,18 @@
 import { Navbar, Nav, Container } from "react-bootstrap";
 import { NavLink } from "react-router-dom";
-import { useAppSelector } from "../app/hooks";
+import { logout } from "../features/auth/authSlice";
+import { useAppDispatch, useAppSelector } from "../app/hooks";
+import { useNavigate } from "react-router-dom";
 
 export function Header() {
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
   const { user } = useAppSelector((state) => state.auth);
+
+  const handleLogout = () => {
+    dispatch(logout());
+    navigate("/login");
+  };
 
   return (
     <Navbar sticky="top" className="bg-white shadow-sm mb-3">
@@ -19,7 +28,7 @@ export function Header() {
         <Nav>
           {user ? (
             <>
-              <Nav.Link>Logout</Nav.Link>
+              <Nav.Link onClick={handleLogout}>Logout</Nav.Link>
             </>
           ) : (
             <>
