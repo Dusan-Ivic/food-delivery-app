@@ -23,17 +23,28 @@ namespace FoodDeliveryApi.Services
             _mapper = mapper;
         }
 
-        public async Task<List<GetStoreResponseDto>> GetStores(string? category)
+        public async Task<List<GetStoreResponseDto>> GetStores(string? category, string? city)
         {
             List<Store> stores = new List<Store>();
+            
+            // TODO - Fix this mess
 
-            if (string.IsNullOrEmpty(category))
+            if (string.IsNullOrEmpty(category) && string.IsNullOrEmpty(city))
             {
                 stores = await _storeRepository.GetAllStores();
             }
-            else
+            else if (!string.IsNullOrEmpty(category) && string.IsNullOrEmpty(city))
             {
                 stores = await _storeRepository.GetStoresByCategory(category);
+            }
+            else if (!string.IsNullOrEmpty(city) && string.IsNullOrEmpty(category))
+            {
+                stores = await _storeRepository.GetStoresByCity(city);
+            }
+            else
+            {
+                stores = await _storeRepository.GetStoresByCategory(category!);
+                stores = stores.Where(x => x.City.ToLower() == city!.ToLower()).ToList();
             }
 
             return _mapper.Map<List<GetStoreResponseDto>>(stores);

@@ -26,6 +26,11 @@ namespace FoodDeliveryApi.Repositories
             return allStores.Where(x => x.Categories.Any(x => x.ToLower() == category.ToLower())).ToList();
         }
 
+        public async Task<List<Store>> GetStoresByCity(string city)
+        {
+            return await _dbContext.Stores.Where(x => x.City.ToLower() == city.ToLower()).ToListAsync();
+        }
+
         public async Task<Store?> GetStoreById(long id)
         {
             return await _dbContext.Stores.FindAsync(id);
