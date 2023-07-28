@@ -104,6 +104,12 @@ namespace FoodDeliveryApi.Services
             }
 
             order.ItemsPrice = order.Items.Aggregate(0m, (total, item) => total + item.TotalPrice);
+
+            if (order.ItemsPrice < store.DeliveryOptions.MinimumOrderAmount)
+            {
+                throw new MinimumOrderAmountException($"The minimum order amount is ${store.DeliveryOptions.MinimumOrderAmount}. Please add more items to meet the minimum requirement.");
+            }
+
             order.DeliveryFee = store.DeliveryOptions.DeliveryFee;
             order.TotalPrice = order.ItemsPrice + order.DeliveryFee;
             order.CreatedAt = DateTime.UtcNow;
