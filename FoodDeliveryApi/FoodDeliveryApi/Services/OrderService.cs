@@ -14,13 +14,15 @@ namespace FoodDeliveryApi.Services
     {
         private readonly IOrderRepository _orderRepository;
         private readonly IProductRepository _productRepository;
+        private readonly IStoreRepository _storeRepository;
         private readonly IValidator<Order> _validator;
         private readonly IMapper _mapper;
 
-        public OrderService(IOrderRepository orderRepository, IProductRepository productRepository, IValidator<Order> validator, IMapper mapper)
+        public OrderService(IOrderRepository orderRepository, IProductRepository productRepository, IStoreRepository storeRepository, IValidator<Order> validator, IMapper mapper)
         {
             _orderRepository = orderRepository;
             _productRepository = productRepository;
+            _storeRepository = storeRepository;
             _validator = validator;
             _mapper = mapper;
         }
@@ -70,9 +72,16 @@ namespace FoodDeliveryApi.Services
                 throw new ValidationException(validationResult.Errors);
             }
 
+            Store? store = await _storeRepository.GetStoreById(order.StoreId);
+
+            if (store == null)
+            {
+                throw new ResourceNotFoundException($"Store with this id doesn't exist");
+            }
+
             foreach (OrderItem orderItem in order.Items)
             {
-                Product? product = await _productRepository.GetProductById(orderItem.ProductId, true);
+                Product? product = await _productRepository.GetProductById(orderItem.ProductId);
 
                 if (product == null)
                 {
@@ -80,7 +89,7 @@ namespace FoodDeliveryApi.Services
                     throw new ResourceNotFoundException($"Product with this id ({orderItem.ProductId}) doesn't exist");
                 }
 
-                if (product.StoreId != order.StoreId)
+                if (product.StoreId != store.Id)
                 {
                     throw new IncompatibleItemsError("All items in one order must be from the same store");
                 }
@@ -94,7 +103,9 @@ namespace FoodDeliveryApi.Services
                 product.Quantity -= orderItem.Quantity;
             }
 
-            order.TotalPrice = order.Items.Aggregate(0m, (total, item) => total + item.TotalPrice);
+            order.ItemsPrice = order.Items.Aggregate(0m, (total, item) => total + item.TotalPrice);
+            order.DeliveryFee = store.DeliveryOptions.DeliveryFee;
+            order.TotalPrice = order.ItemsPrice + order.DeliveryFee;
             order.CreatedAt = DateTime.UtcNow;
 
             try
