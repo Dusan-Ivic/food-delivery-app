@@ -11,8 +11,12 @@ interface LoginFormProps {
 
 export function LoginForm({ onSubmit }: LoginFormProps) {
   const validationSchema = Yup.object().shape({
-    username: Yup.string().required("Username is required"),
-    password: Yup.string().required("Password is required"),
+    username: Yup.string()
+      .required("Username is required")
+      .min(6, "Username must be at least 6 characters long"),
+    password: Yup.string()
+      .required("Password is required")
+      .min(8, "Password must be at least 8 characters long"),
     userType: Yup.number()
       .required("User type is required")
       .oneOf(Object.values(UserType) as number[], "User type is not valid"),
