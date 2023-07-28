@@ -14,7 +14,9 @@ export function Header() {
           </Nav.Link>
         </Nav>
         <Nav>
-          <Nav.Link>Login</Nav.Link>
+          <Nav.Link to="/login" as={NavLink}>
+            Login
+          </Nav.Link>
           <Nav.Link>Register</Nav.Link>
         </Nav>
       </Container>
