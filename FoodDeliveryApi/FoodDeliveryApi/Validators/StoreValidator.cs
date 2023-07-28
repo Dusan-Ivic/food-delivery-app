@@ -33,6 +33,10 @@ namespace FoodDeliveryApi.Validators
             RuleFor(x => x.DeliveryOptions)
                 .NotNull().WithMessage("Delivery options are required")
                 .SetValidator(new DeliveryOptionsValidator());
+
+            RuleFor(x => x.Categories)
+                .NotEmpty().WithMessage("Store must have at least one category")
+                .ForEach(x => x.NotEmpty().WithMessage("Category can't be an empty string"));
         }
     }
 
