@@ -21,5 +21,6 @@
         public List<Product> Products { get; set; } = new List<Product>();
         public List<Order> Orders { get; set; } = new List<Order>();
         public DeliveryOptions DeliveryOptions { get; set; } = default!;
+        public List<string> Categories { get; set; } = new List<string>();
     }
 }

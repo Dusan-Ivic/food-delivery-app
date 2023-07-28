@@ -1,5 +1,6 @@
 ﻿using FoodDeliveryApi.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace FoodDeliveryApi.Configurations
@@ -26,6 +27,16 @@ namespace FoodDeliveryApi.Configurations
             builder.HasOne(x => x.Partner).WithMany(x => x.Stores).HasForeignKey(x => x.PartnerId);
 
             builder.Property(x => x.DeliveryOptions).HasColumnType("json");
+
+            builder.Property(x => x.Categories)
+                .IsRequired()
+                .HasConversion(
+                    ctg => string.Join(",", ctg),
+                    ctg => ctg.Split(',', StringSplitOptions.RemoveEmptyEntries).ToList(),
+                    new ValueComparer<List<string>>(
+                        (c1, c2) => c1 != null && c2 != null && c1.SequenceEqual(c2),
+                        c => c.Aggregate(0, (a, v) => HashCode.Combine(a, v.GetHashCode())),
+                        c => c.ToList()));
         }
     }
 }
