@@ -15,6 +15,10 @@ namespace FoodDeliveryApi.Configurations
 
             builder.HasOne(x => x.Customer).WithMany(x => x.Orders).HasForeignKey(x => x.CustomerId);
 
+            builder.Property(x => x.ItemsPrice).IsRequired();
+
+            builder.Property(x => x.DeliveryFee).IsRequired();
+
             builder.Property(x => x.TotalPrice).IsRequired();
 
             builder.HasOne(x => x.Store).WithMany(x => x.Orders).HasForeignKey(x => x.StoreId);

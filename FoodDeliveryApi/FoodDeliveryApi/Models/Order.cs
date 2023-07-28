@@ -9,6 +9,8 @@ namespace FoodDeliveryApi.Models
         public long CustomerId { get; set; }
         public Customer Customer { get; set; } = default!;
         public List<OrderItem> Items { get; set; } = new List<OrderItem>();
+        public decimal ItemsPrice { get; set; }
+        public decimal DeliveryFee { get; set; }
         public decimal TotalPrice { get; set; }
         public long StoreId { get; set; }
         public Store Store { get; set; } = default!;

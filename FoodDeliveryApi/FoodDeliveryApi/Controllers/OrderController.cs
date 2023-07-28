@@ -82,6 +82,10 @@ namespace FoodDeliveryApi.Controllers
             {
                 return BadRequest(new ErrorResponseDto() { Message = ex.Message });
             }
+            catch (MinimumOrderAmountException ex)
+            {
+                return BadRequest(new ErrorResponseDto() { Message = ex.Message });
+            }
 
             return Ok(responseDto);
         }
