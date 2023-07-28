@@ -71,6 +71,22 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: builder.Configuration["CorsSettings:Name"], corsBuilder =>
+    {
+        var clientSettings = builder.Configuration.GetSection("ClientSettings");
+        var clientAddress = clientSettings.GetValue<string>("Address");
+        var clientPort = clientSettings.GetValue<int>("Port");
+
+        corsBuilder
+            .WithOrigins($"{clientAddress}:{clientPort}")
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials();
+    });
+});
+
 builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("VerifiedPartner", policy => policy.RequireClaim("Status", "Accepted"));
@@ -131,6 +147,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseCors(builder.Configuration["CorsSettings:Name"]);
 
 app.UseAuthentication();
 app.UseAuthorization();
