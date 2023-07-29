@@ -1,0 +1,82 @@
+[
+  {
+    "id": 1,
+    "partnerId": 101,
+    "name": "Delicious Pizza",
+    "description": "Authentic Italian pizza made with love. Classic and adventurous toppings available.",
+    "address": "123 Main Street",
+    "city": "Pizza Town",
+    "postalCode": "12345",
+    "phone": "555-1234",
+    "deliveryOptions": {
+      "deliveryTimeInMinutes": 30,
+      "deliveryFee": 100,
+      "minimumOrderAmount": 20
+    },
+    "categories": ["Pizza"]
+  },
+  {
+    "id": 2,
+    "partnerId": 102,
+    "name": "Veggie Delight",
+    "description": "Mouthwatering plant-based dishes for compassionate dining.",
+    "address": "456 Green Avenue",
+    "city": "Healthyville",
+    "postalCode": "67890",
+    "phone": "555-5678",
+    "deliveryOptions": {
+      "deliveryTimeInMinutes": 40,
+      "deliveryFee": 120,
+      "minimumOrderAmount": 25
+    },
+    "categories": ["Vegan"]
+  },
+  {
+    "id": 3,
+    "partnerId": 103,
+    "name": "Tasty Burgers",
+    "description": "Juicy burgers with a range of toppings and mouthwatering sauces.",
+    "address": "789 Burger Street",
+    "city": "Burger City",
+    "postalCode": "24680",
+    "phone": "555-9876",
+    "deliveryOptions": {
+      "deliveryTimeInMinutes": 35,
+      "deliveryFee": 110,
+      "minimumOrderAmount": 22
+    },
+    "categories": ["Burgers"]
+  },
+  {
+    "id": 4,
+    "partnerId": 104,
+    "name": "Sushi Galore",
+    "description": "Exquisite sushi rolls and sashimi, a journey of culinary excellence.",
+    "address": "1 Sushi Lane",
+    "city": "Sushi Town",
+    "postalCode": "13579",
+    "phone": "555-2468",
+    "deliveryOptions": {
+      "deliveryTimeInMinutes": 50,
+      "deliveryFee": 150,
+      "minimumOrderAmount": 30
+    },
+    "categories": ["Sushi"]
+  },
+  {
+    "id": 5,
+    "partnerId": 105,
+    "name": "Taco Fiesta",
+    "description": "Authentic Mexican tacos with handcrafted tortillas and zesty salsas.",
+    "address": "2 Taco Street",
+    "city": "Taco City",
+    "postalCode": "97531",
+    "phone": "555-1357",
+    "deliveryOptions": {
+      "deliveryTimeInMinutes": 25,
+      "deliveryFee": 90,
+      "minimumOrderAmount": 15
+    },
+    "categories": ["Mexican"]
+  }
+]
