@@ -1,4 +1,4 @@
-import { UserType } from "./user";
+import { PartnerStatus, UserType } from "./user";
 
 export interface LoginFormData {
   username: string;
@@ -14,5 +14,5 @@ export interface LoginResponseDto {
   lastName: string;
   userType: UserType;
   token: string;
-  partnerStatus?: number;
+  partnerStatus?: PartnerStatus;
 }

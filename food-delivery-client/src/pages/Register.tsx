@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Col, Row } from "react-bootstrap";
 import {
   RegisterCustomerFormData,
@@ -7,15 +7,48 @@ import {
 import { Link } from "react-router-dom";
 import { AllowedUserType } from "../interfaces/user";
 import { SetUserTypeScreen, RegisterFormScreen } from "./screens";
+import {
+  registerCustomer,
+  registerPartner,
+  reset,
+} from "../features/auth/authSlice";
+import { useAppDispatch, useAppSelector } from "../app/hooks";
+import { useNavigate } from "react-router-dom";
+import { StateStatus } from "../interfaces/state";
 
 export function Register() {
   const [userType, setUserType] = useState<AllowedUserType | null>(null);
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+  const { status, message } = useAppSelector((state) => state.auth);
 
   const onSubmit = (
     data: RegisterCustomerFormData | RegisterPartnerFormData
   ) => {
-    console.log(data);
+    switch (userType) {
+      case AllowedUserType.Customer:
+        dispatch(registerCustomer(data as RegisterCustomerFormData));
+        break;
+      case AllowedUserType.Partner:
+        dispatch(registerPartner(data as RegisterPartnerFormData));
+        break;
+    }
   };
+
+  useEffect(() => {
+    if (status == StateStatus.Error) {
+      console.error(message);
+    }
+
+    if (status == StateStatus.Success) {
+      console.log(message);
+      navigate("/login");
+    }
+
+    return () => {
+      dispatch(reset());
+    };
+  }, [status, message]);
 
   return (
     <Row className="d-flex justify-content-center">

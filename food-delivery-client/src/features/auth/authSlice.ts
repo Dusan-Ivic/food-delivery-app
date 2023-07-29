@@ -4,6 +4,10 @@ import authService from "./authService";
 import { User } from "../../interfaces/user";
 import { StateStatus } from "../../interfaces/state";
 import { LoginFormData } from "../../interfaces/login";
+import {
+  RegisterCustomerFormData,
+  RegisterPartnerFormData,
+} from "../../interfaces/register";
 
 interface AuthState {
   user: User | null;
@@ -24,6 +28,36 @@ export const loginUser = createAsyncThunk(
   async (loginData: LoginFormData, thunkAPI) => {
     try {
       return await authService.loginUser(loginData);
+    } catch (error: unknown) {
+      let message: string = "";
+      if (error instanceof Error) {
+        message = error.message;
+      }
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+export const registerCustomer = createAsyncThunk(
+  "auth/register-customer",
+  async (registerData: RegisterCustomerFormData, thunkAPI) => {
+    try {
+      return await authService.registerCustomer(registerData);
+    } catch (error: unknown) {
+      let message: string = "";
+      if (error instanceof Error) {
+        message = error.message;
+      }
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+export const registerPartner = createAsyncThunk(
+  "auth/register-partner",
+  async (registerData: RegisterPartnerFormData, thunkAPI) => {
+    try {
+      return await authService.registerPartner(registerData);
     } catch (error: unknown) {
       let message: string = "";
       if (error instanceof Error) {
@@ -71,6 +105,28 @@ export const authSlice = createSlice({
           userType: action.payload.userType,
         };
         state.token = action.payload.token;
+      })
+      .addCase(registerCustomer.pending, (state) => {
+        state.status = StateStatus.Loading;
+      })
+      .addCase(registerCustomer.rejected, (state, action) => {
+        state.status = StateStatus.Error;
+        state.message = action.payload as string;
+      })
+      .addCase(registerCustomer.fulfilled, (state, action) => {
+        state.status = StateStatus.Success;
+        state.message = `Customer ${action.payload.username} successfully registered`;
+      })
+      .addCase(registerPartner.pending, (state) => {
+        state.status = StateStatus.Loading;
+      })
+      .addCase(registerPartner.rejected, (state, action) => {
+        state.status = StateStatus.Error;
+        state.message = action.payload as string;
+      })
+      .addCase(registerPartner.fulfilled, (state, action) => {
+        state.status = StateStatus.Success;
+        state.message = `Partner ${action.payload.username} successfully registered`;
       });
   },
 });
