@@ -14,5 +14,5 @@ export interface RegisterPartnerRequestDto extends PartnerBase {
 
 export interface RegisterPartnerResponseDto extends PartnerBase {
   id: number;
-  partnerStatus: PartnerStatus;
+  status: PartnerStatus;
 }
