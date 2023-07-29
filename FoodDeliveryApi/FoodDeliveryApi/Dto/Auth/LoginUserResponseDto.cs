@@ -3,11 +3,9 @@ using FoodDeliveryApi.Enums;
 
 namespace FoodDeliveryApi.Dto.Auth
 {
-    public class LoginUserResponseDto : BaseUserDto
+    public class LoginUserResponseDto
     {
-        public long Id { get; set; }
-        public UserType UserType { get; set; }
+        public UserResponseDto User { get; set; } = default!;
         public string Token { get; set; } = string.Empty;
-        public PartnerStatus? PartnerStatus { get; set; } = null;
     }
 }

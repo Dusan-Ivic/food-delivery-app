@@ -2,6 +2,8 @@
 using FluentValidation;
 using FluentValidation.Results;
 using FoodDeliveryApi.Dto.Auth;
+using FoodDeliveryApi.Dto.Customer;
+using FoodDeliveryApi.Dto.User;
 using FoodDeliveryApi.Enums;
 using FoodDeliveryApi.Exceptions;
 using FoodDeliveryApi.Interfaces.Repositories;
@@ -56,19 +58,20 @@ namespace FoodDeliveryApi.Services
                 throw new IncorrectLoginCredentialsException("Incorrect password");
             }
 
-            LoginUserResponseDto responseDto = _mapper.Map<LoginUserResponseDto>(existingUser);
-            responseDto.UserType = requestDto.UserType;
+            UserResponseDto userDto = _mapper.Map<UserResponseDto>(existingUser);
+            userDto.UserType = requestDto.UserType;
 
             List<Claim> claims = new List<Claim>
             {
                 new Claim("UserId", existingUser.Id.ToString()),
-                new Claim(ClaimTypes.Role, responseDto.UserType.ToString())
+                new Claim(ClaimTypes.Role, userDto.UserType.ToString())
             };
 
             if (existingUser is Partner possiblePartner)
             {
                 claims.Add(new Claim("Status", possiblePartner.Status.ToString()));
-                responseDto.PartnerStatus = possiblePartner.Status;
+                // TODO
+                //responseDto.PartnerStatus = possiblePartner.Status;
             }
 
             string jwtSecretKey = _jwtSettings.GetValue<string>("SecretKey");
@@ -85,7 +88,11 @@ namespace FoodDeliveryApi.Services
                 signingCredentials: signingCredentials
             );
 
-            responseDto.Token = new JwtSecurityTokenHandler().WriteToken(securityToken);
+            LoginUserResponseDto responseDto = new LoginUserResponseDto()
+            {
+                User = userDto,
+                Token = new JwtSecurityTokenHandler().WriteToken(securityToken)
+            };
 
             return responseDto;
         }

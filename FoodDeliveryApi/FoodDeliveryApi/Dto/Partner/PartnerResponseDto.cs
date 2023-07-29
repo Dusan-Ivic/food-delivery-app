@@ -3,7 +3,8 @@ using FoodDeliveryApi.Enums;
 
 namespace FoodDeliveryApi.Dto.Partner
 {
-    public class RegisterPartnerResponseDto : PartnerResponseDto
+    public class PartnerResponseDto : UserResponseDto
     {
+        public PartnerStatus Status { get; set; }
     }
 }

@@ -2,7 +2,7 @@
 
 namespace FoodDeliveryApi.Dto.Admin
 {
-    public class UpdateAdminResponseDto : UpdateUserResponseDto
+    public class UpdateAdminResponseDto : AdminResponseDto
     {
         
     }
