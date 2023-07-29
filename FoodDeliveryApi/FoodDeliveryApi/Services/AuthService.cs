@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
 using FluentValidation;
 using FluentValidation.Results;
+using FoodDeliveryApi.Dto.Admin;
 using FoodDeliveryApi.Dto.Auth;
 using FoodDeliveryApi.Dto.Customer;
+using FoodDeliveryApi.Dto.Partner;
 using FoodDeliveryApi.Dto.User;
 using FoodDeliveryApi.Enums;
 using FoodDeliveryApi.Exceptions;
@@ -58,7 +60,24 @@ namespace FoodDeliveryApi.Services
                 throw new IncorrectLoginCredentialsException("Incorrect password");
             }
 
-            UserResponseDto userDto = _mapper.Map<UserResponseDto>(existingUser);
+            UserResponseDto userDto;
+
+            switch (requestDto.UserType)
+            {
+                case UserType.Customer:
+                    userDto = _mapper.Map<CustomerResponseDto>(existingUser);
+                    break;
+                case UserType.Partner:
+                    userDto = _mapper.Map<PartnerResponseDto>(existingUser);
+                    break;
+                case UserType.Admin:
+                    userDto = _mapper.Map<AdminResponseDto>(existingUser);
+                    break;
+                default:
+                    userDto = _mapper.Map<UserResponseDto>(existingUser);
+                    break;
+            }
+
             userDto.UserType = requestDto.UserType;
 
             List<Claim> claims = new List<Claim>

@@ -1,7 +1,10 @@
-﻿using FoodDeliveryApi.Enums;
+﻿using FoodDeliveryApi.Converters;
+using FoodDeliveryApi.Enums;
+using System.Text.Json.Serialization;
 
 namespace FoodDeliveryApi.Dto.User
 {
+    [JsonConverter(typeof(UserResponseDtoConverter))]
     public class UserResponseDto
     {
         public long Id { get; set; }
