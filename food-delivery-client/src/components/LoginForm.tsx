@@ -25,8 +25,9 @@ export function LoginForm({ onSubmit }: LoginFormProps) {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, touchedFields },
   } = useForm<LoginFormData>({
+    mode: "all",
     resolver: yupResolver(validationSchema),
   });
 
@@ -37,6 +38,7 @@ export function LoginForm({ onSubmit }: LoginFormProps) {
         <Form.Control
           type="text"
           {...register("username")}
+          isValid={touchedFields.username && !errors.username}
           placeholder="example"
         />
         <div className="text-danger">{errors.username?.message}</div>
@@ -47,6 +49,7 @@ export function LoginForm({ onSubmit }: LoginFormProps) {
         <Form.Control
           type="password"
           {...register("password")}
+          isValid={touchedFields.password && !errors.password}
           placeholder="min. 8 characters"
         />
         <div className="text-danger">{errors.password?.message}</div>

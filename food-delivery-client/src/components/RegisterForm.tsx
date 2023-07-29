@@ -46,7 +46,7 @@ export function RegisterForm({ onSubmit }: RegisterFormProps) {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, touchedFields },
   } = useForm<RegisterFormData>({
     mode: "all",
     resolver: yupResolver(validationSchema),
@@ -61,6 +61,7 @@ export function RegisterForm({ onSubmit }: RegisterFormProps) {
             <Form.Control
               type="text"
               {...register("username")}
+              isValid={touchedFields.username && !errors.username}
               placeholder="example"
             />
             <div className="text-danger">{errors.username?.message}</div>
@@ -72,6 +73,7 @@ export function RegisterForm({ onSubmit }: RegisterFormProps) {
             <Form.Control
               type="email"
               {...register("email")}
+              isValid={touchedFields.email && !errors.email}
               placeholder="example@example.com"
             />
             <div className="text-danger">{errors.email?.message}</div>
@@ -86,6 +88,7 @@ export function RegisterForm({ onSubmit }: RegisterFormProps) {
             <Form.Control
               type="password"
               {...register("password")}
+              isValid={touchedFields.password && !errors.password}
               placeholder="min. 8 characters"
             />
             <div className="text-danger">{errors.password?.message}</div>
@@ -97,6 +100,7 @@ export function RegisterForm({ onSubmit }: RegisterFormProps) {
             <Form.Control
               type="password"
               {...register("confirmPassword")}
+              isValid={touchedFields.confirmPassword && !errors.confirmPassword}
               placeholder="repeat your password"
             />
             <div className="text-danger">{errors.confirmPassword?.message}</div>
@@ -111,6 +115,7 @@ export function RegisterForm({ onSubmit }: RegisterFormProps) {
             <Form.Control
               type="text"
               {...register("firstName")}
+              isValid={touchedFields.firstName && !errors.firstName}
               placeholder="John"
             />
             <div className="text-danger">{errors.firstName?.message}</div>
@@ -122,6 +127,7 @@ export function RegisterForm({ onSubmit }: RegisterFormProps) {
             <Form.Control
               type="text"
               {...register("lastName")}
+              isValid={touchedFields.lastName && !errors.lastName}
               placeholder="Doe"
             />
             <div className="text-danger">{errors.lastName?.message}</div>
@@ -136,6 +142,7 @@ export function RegisterForm({ onSubmit }: RegisterFormProps) {
             <Form.Control
               type="text"
               {...register("address")}
+              isValid={touchedFields.address && !errors.address}
               placeholder="Example Address 100"
             />
             <div className="text-danger">{errors.address?.message}</div>
@@ -150,6 +157,7 @@ export function RegisterForm({ onSubmit }: RegisterFormProps) {
             <Form.Control
               type="text"
               {...register("city")}
+              isValid={touchedFields.city && !errors.city}
               placeholder="Example City"
             />
             <div className="text-danger">{errors.city?.message}</div>
@@ -161,6 +169,7 @@ export function RegisterForm({ onSubmit }: RegisterFormProps) {
             <Form.Control
               type="text"
               {...register("postalCode")}
+              isValid={touchedFields.postalCode && !errors.postalCode}
               placeholder="12345"
             />
             <div className="text-danger">{errors.postalCode?.message}</div>
