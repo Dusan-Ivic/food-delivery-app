@@ -6,6 +6,7 @@ import { loginUser, reset } from "../features/auth/authSlice";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { useNavigate } from "react-router-dom";
 import { StateStatus } from "../interfaces/state";
+import { Link } from "react-router-dom";
 
 export function Login() {
   const navigate = useNavigate();
@@ -34,8 +35,16 @@ export function Login() {
     <Row className="d-flex justify-content-center">
       <Col xs={10} sm={12} md={10} lg={7} xl={6}>
         <h1 className="text-center mt-3 mb-4">Login</h1>
+        <p className="text-center mt-4">
+          Sign in with data you entered during registration
+        </p>
         <LoginForm onSubmit={onSubmit} />
-        <p className="text-center mt-4">Don't have an account? Sign up</p>
+        <p className="text-center mt-4">
+          Don't have an account?{" "}
+          <Link to="/register" className="text-decoration-none">
+            Sign up
+          </Link>
+        </p>
       </Col>
     </Row>
   );

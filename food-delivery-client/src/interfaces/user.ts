@@ -4,6 +4,11 @@ export enum UserType {
   Admin = 2,
 }
 
+export enum AllowedUserType {
+  Customer = 0,
+  Partner = 1,
+}
+
 export interface User {
   id: number;
   username: string;
