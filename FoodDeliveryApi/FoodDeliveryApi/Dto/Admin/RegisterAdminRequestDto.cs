@@ -2,8 +2,8 @@
 
 namespace FoodDeliveryApi.Dto.Admin
 {
-    public class RegisterAdminRequestDto : RegisterUserRequestDto
+    public class RegisterAdminRequestDto : AdminRequestDto
     {
-        
+        public string Password { get; set; } = string.Empty;
     }
 }

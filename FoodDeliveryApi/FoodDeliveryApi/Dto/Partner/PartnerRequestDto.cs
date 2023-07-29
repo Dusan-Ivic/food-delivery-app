@@ -2,7 +2,7 @@
 
 namespace FoodDeliveryApi.Dto.Partner
 {
-    public class UpdatePartnerRequestDto : PartnerRequestDto
+    public class PartnerRequestDto : UserRequestDto
     {
     }
 }

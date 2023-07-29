@@ -2,8 +2,7 @@
 
 namespace FoodDeliveryApi.Dto.Admin
 {
-    public class RegisterAdminResponseDto : AdminResponseDto
+    public class AdminRequestDto : UserRequestDto
     {
-        
     }
 }
