@@ -28,6 +28,9 @@ export function Header() {
         <Nav>
           {user ? (
             <>
+              <Nav.Link to="/profile" as={NavLink}>
+                Profile
+              </Nav.Link>
               <Nav.Link onClick={handleLogout}>Logout</Nav.Link>
             </>
           ) : (

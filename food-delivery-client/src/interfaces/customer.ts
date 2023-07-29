@@ -8,14 +8,7 @@ export interface CustomerBase {
   postalCode: string;
 }
 
-export interface RegisterCustomerRequestDto {
-  username: string;
-  email: string;
-  firstName: string;
-  lastName: string;
-  address: string;
-  city: string;
-  postalCode: string;
+export interface RegisterCustomerRequestDto extends CustomerBase {
   password: string;
   confirmPassword: string;
 }
