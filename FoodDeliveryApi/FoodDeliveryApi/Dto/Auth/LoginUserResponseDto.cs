@@ -1,5 +1,6 @@
 ﻿using FoodDeliveryApi.Dto.User;
 using FoodDeliveryApi.Enums;
+using System.Text.Json.Serialization;
 
 namespace FoodDeliveryApi.Dto.Auth
 {

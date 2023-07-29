@@ -1,6 +1,8 @@
 import { Col, Row, Form, Button, Card } from "react-bootstrap";
 import { useAppSelector } from "../app/hooks";
 import { UserType } from "../interfaces/user";
+import { Customer } from "../interfaces/user";
+import { AddressDetails } from "../components/AddressDetails";
 
 export function Profile() {
   const { user } = useAppSelector((state) => state.auth);
@@ -93,6 +95,10 @@ export function Profile() {
               </Form.Group>
             </Col>
           </Row>
+
+          {user?.userType == UserType.Customer && (
+            <AddressDetails user={user as Customer} />
+          )}
 
           <Button variant="primary" type="submit" className="w-100">
             Save Profile
