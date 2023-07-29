@@ -12,6 +12,9 @@ export interface Store {
   city: string;
   postalCode: string;
   phone: string;
+  partnerId: number;
   deliveryOptions: DeliveryOptions;
   categories: string[];
 }
+
+export interface GetStoreResponseDto extends Store {}
