@@ -1,21 +1,34 @@
+import { useState } from "react";
 import { Col, Row } from "react-bootstrap";
-import { RegisterForm } from "../components/RegisterForm";
-import { RegisterFormData } from "../interfaces/register";
+import {
+  RegisterCustomerFormData,
+  RegisterPartnerFormData,
+} from "../interfaces/register";
 import { Link } from "react-router-dom";
+import { AllowedUserType } from "../interfaces/user";
+import { SetUserTypeScreen, RegisterFormScreen } from "./screens";
 
 export function Register() {
-  const onSubmit = (data: RegisterFormData) => {
+  const [userType, setUserType] = useState<AllowedUserType | null>(null);
+
+  const onSubmit = (
+    data: RegisterCustomerFormData | RegisterPartnerFormData
+  ) => {
     console.log(data);
   };
 
   return (
     <Row className="d-flex justify-content-center">
       <Col xs={10} sm={12} md={10} lg={7} xl={6}>
-        <h1 className="text-center mt-3 mb-4">Sign up</h1>
-        <p className="text-center mt-4">
-          Create personal account or register as a partner
-        </p>
-        <RegisterForm onSubmit={onSubmit} />
+        {userType != null ? (
+          <RegisterFormScreen
+            onSubmit={onSubmit}
+            userType={userType}
+            onSetType={setUserType}
+          />
+        ) : (
+          <SetUserTypeScreen onSetType={setUserType} />
+        )}
         <p className="text-center mt-4">
           Already have an account?{" "}
           <Link to="/login" className="text-decoration-none">

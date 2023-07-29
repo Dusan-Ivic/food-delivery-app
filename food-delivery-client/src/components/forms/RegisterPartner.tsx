@@ -2,14 +2,13 @@ import { Form, Button, Row, Col } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
-import { RegisterFormData } from "../interfaces/register";
-import { AllowedUserType } from "../interfaces/user";
+import { RegisterPartnerFormData } from "../../interfaces/register";
 
-interface RegisterFormProps {
-  onSubmit: (data: RegisterFormData) => void;
+interface RegisterPartnerProps {
+  onSubmit: (data: RegisterPartnerFormData) => void;
 }
 
-export function RegisterForm({ onSubmit }: RegisterFormProps) {
+export function RegisterPartner({ onSubmit }: RegisterPartnerProps) {
   const validationSchema = Yup.object().shape({
     username: Yup.string()
       .required("Username is required")
@@ -26,28 +25,13 @@ export function RegisterForm({ onSubmit }: RegisterFormProps) {
       .oneOf([Yup.ref("password")], "Passwords don't match"),
     firstName: Yup.string().required("First name is required"),
     lastName: Yup.string().required("Last name is required"),
-    address: Yup.string()
-      .required("Address is required")
-      .max(100, "Address is too long"),
-    city: Yup.string()
-      .required("City is required")
-      .max(50, "City name is too long"),
-    postalCode: Yup.string()
-      .required("Postal code is required")
-      .max(10, "Postal code is too long"),
-    userType: Yup.number()
-      .required("User type is required")
-      .oneOf(
-        Object.values(AllowedUserType) as number[],
-        "User type is not valid"
-      ),
   });
 
   const {
     register,
     handleSubmit,
     formState: { errors, touchedFields },
-  } = useForm<RegisterFormData>({
+  } = useForm<RegisterPartnerFormData>({
     mode: "all",
     resolver: yupResolver(validationSchema),
   });
@@ -134,57 +118,6 @@ export function RegisterForm({ onSubmit }: RegisterFormProps) {
           </Form.Group>
         </Col>
       </Row>
-
-      <Row>
-        <Col>
-          <Form.Group className="mb-3" controlId="address">
-            <Form.Label>Address</Form.Label>
-            <Form.Control
-              type="text"
-              {...register("address")}
-              isValid={touchedFields.address && !errors.address}
-              placeholder="Example Address 100"
-            />
-            <div className="text-danger">{errors.address?.message}</div>
-          </Form.Group>
-        </Col>
-      </Row>
-
-      <Row xs={1} sm={1} md={2}>
-        <Col>
-          <Form.Group className="mb-3" controlId="city">
-            <Form.Label>City</Form.Label>
-            <Form.Control
-              type="text"
-              {...register("city")}
-              isValid={touchedFields.city && !errors.city}
-              placeholder="Example City"
-            />
-            <div className="text-danger">{errors.city?.message}</div>
-          </Form.Group>
-        </Col>
-        <Col>
-          <Form.Group className="mb-3" controlId="postalCode">
-            <Form.Label>Postal code</Form.Label>
-            <Form.Control
-              type="text"
-              {...register("postalCode")}
-              isValid={touchedFields.postalCode && !errors.postalCode}
-              placeholder="12345"
-            />
-            <div className="text-danger">{errors.postalCode?.message}</div>
-          </Form.Group>
-        </Col>
-      </Row>
-
-      <Form.Group className="mb-3" controlId="userType">
-        <Form.Label>Register as</Form.Label>
-        <Form.Select {...register("userType", { valueAsNumber: true })}>
-          <option value="0">Customer</option>
-          <option value="1">Partner</option>
-        </Form.Select>
-        <div className="text-danger">{errors.userType?.message}</div>
-      </Form.Group>
 
       <Button variant="primary" type="submit" className="w-100">
         Register
