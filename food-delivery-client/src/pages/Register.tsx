@@ -1,9 +1,7 @@
 import { useState, useEffect } from "react";
 import { Col, Row } from "react-bootstrap";
-import {
-  RegisterCustomerFormData,
-  RegisterPartnerFormData,
-} from "../interfaces/register";
+import { RegisterCustomerRequestDto as RegisterCustomerFormData } from "../interfaces/customer";
+import { RegisterPartnerRequestDto as RegisterPartnerFormData } from "../interfaces/partner";
 import { Link } from "react-router-dom";
 import { AllowedUserType } from "../interfaces/user";
 import { SetUserTypeScreen, RegisterFormScreen } from "./screens";

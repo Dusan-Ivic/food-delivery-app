@@ -1,9 +1,7 @@
 import { Link } from "react-router-dom";
 import { AllowedUserType } from "../../interfaces/user";
-import {
-  RegisterPartnerFormData,
-  RegisterCustomerFormData,
-} from "../../interfaces/register";
+import { RegisterCustomerRequestDto as RegisterCustomerFormData } from "../../interfaces/customer";
+import { RegisterPartnerRequestDto as RegisterPartnerFormData } from "../../interfaces/partner";
 import {
   RegisterCustomerForm,
   RegisterPartnerForm,

@@ -1,14 +1,16 @@
 import axios from "axios";
-import { LoginFormData, LoginResponseDto } from "../../interfaces/login";
+import { LoginRequestDto, LoginResponseDto } from "../../interfaces/login";
 import {
-  RegisterCustomerFormData,
+  RegisterCustomerRequestDto,
   RegisterCustomerResponseDto,
-  RegisterPartnerFormData,
+} from "../../interfaces/customer";
+import {
+  RegisterPartnerRequestDto,
   RegisterPartnerResponseDto,
-} from "../../interfaces/register";
+} from "../../interfaces/partner";
 
 const loginUser = async (
-  requestDto: LoginFormData
+  requestDto: LoginRequestDto
 ): Promise<LoginResponseDto> => {
   try {
     const response = await axios.post<LoginResponseDto>(
@@ -26,7 +28,7 @@ const loginUser = async (
 };
 
 const registerCustomer = async (
-  requestDto: RegisterCustomerFormData
+  requestDto: RegisterCustomerRequestDto
 ): Promise<RegisterCustomerResponseDto> => {
   try {
     const response = await axios.post<RegisterCustomerResponseDto>(
@@ -44,7 +46,7 @@ const registerCustomer = async (
 };
 
 const registerPartner = async (
-  requestDto: RegisterPartnerFormData
+  requestDto: RegisterPartnerRequestDto
 ): Promise<RegisterPartnerResponseDto> => {
   try {
     const response = await axios.post<RegisterPartnerResponseDto>(

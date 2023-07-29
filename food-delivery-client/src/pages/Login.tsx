@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { Col, Row } from "react-bootstrap";
 import { LoginForm } from "../components/forms/LoginForm";
-import { LoginFormData } from "../interfaces/login";
+import { LoginRequestDto as LoginFormData } from "../interfaces/login";
 import { loginUser, reset } from "../features/auth/authSlice";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { useNavigate } from "react-router-dom";

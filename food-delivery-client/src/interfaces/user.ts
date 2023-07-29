@@ -9,7 +9,7 @@ export enum AllowedUserType {
   Partner = 1,
 }
 
-export interface User {
+interface UserBase {
   id: number;
   username: string;
   email: string;
@@ -17,6 +17,20 @@ export interface User {
   lastName: string;
   userType: UserType;
 }
+
+export interface Partner extends UserBase {
+  partnerStatus: PartnerStatus;
+}
+
+export interface Customer extends UserBase {
+  address: string;
+  city: string;
+  postalCode: string;
+}
+
+export interface Admin extends UserBase {}
+
+export type User = Customer | Partner | Admin;
 
 export enum PartnerStatus {
   Pending = 0,

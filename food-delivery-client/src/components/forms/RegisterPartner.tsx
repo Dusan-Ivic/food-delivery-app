@@ -2,7 +2,7 @@ import { Form, Button, Row, Col } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
-import { RegisterPartnerFormData } from "../../interfaces/register";
+import { RegisterPartnerRequestDto as RegisterPartnerFormData } from "../../interfaces/partner";
 
 interface RegisterPartnerProps {
   onSubmit: (data: RegisterPartnerFormData) => void;

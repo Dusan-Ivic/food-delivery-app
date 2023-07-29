@@ -3,11 +3,9 @@ import { RootState } from "../../app/store";
 import authService from "./authService";
 import { User } from "../../interfaces/user";
 import { StateStatus } from "../../interfaces/state";
-import { LoginFormData } from "../../interfaces/login";
-import {
-  RegisterCustomerFormData,
-  RegisterPartnerFormData,
-} from "../../interfaces/register";
+import { LoginRequestDto } from "../../interfaces/login";
+import { RegisterCustomerRequestDto } from "../../interfaces/customer";
+import { RegisterPartnerRequestDto } from "../../interfaces/partner";
 
 interface AuthState {
   user: User | null;
@@ -25,7 +23,7 @@ const initialState: AuthState = {
 
 export const loginUser = createAsyncThunk(
   "auth/login",
-  async (loginData: LoginFormData, thunkAPI) => {
+  async (loginData: LoginRequestDto, thunkAPI) => {
     try {
       return await authService.loginUser(loginData);
     } catch (error: unknown) {
@@ -40,7 +38,7 @@ export const loginUser = createAsyncThunk(
 
 export const registerCustomer = createAsyncThunk(
   "auth/register-customer",
-  async (registerData: RegisterCustomerFormData, thunkAPI) => {
+  async (registerData: RegisterCustomerRequestDto, thunkAPI) => {
     try {
       return await authService.registerCustomer(registerData);
     } catch (error: unknown) {
@@ -55,7 +53,7 @@ export const registerCustomer = createAsyncThunk(
 
 export const registerPartner = createAsyncThunk(
   "auth/register-partner",
-  async (registerData: RegisterPartnerFormData, thunkAPI) => {
+  async (registerData: RegisterPartnerRequestDto, thunkAPI) => {
     try {
       return await authService.registerPartner(registerData);
     } catch (error: unknown) {
@@ -96,14 +94,7 @@ export const authSlice = createSlice({
       })
       .addCase(loginUser.fulfilled, (state, action) => {
         state.status = StateStatus.Success;
-        state.user = {
-          id: action.payload.id,
-          username: action.payload.username,
-          email: action.payload.email,
-          firstName: action.payload.firstName,
-          lastName: action.payload.lastName,
-          userType: action.payload.userType,
-        };
+        state.user = action.payload.user;
         state.token = action.payload.token;
       })
       .addCase(registerCustomer.pending, (state) => {
