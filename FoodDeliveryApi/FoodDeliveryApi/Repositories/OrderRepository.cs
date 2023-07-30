@@ -24,14 +24,9 @@ namespace FoodDeliveryApi.Repositories
             return await _dbContext.Orders.Include(x => x.Items).Where(x => x.CustomerId == customerId).ToListAsync();
         }
 
-        public async Task<List<OrderItem>> GetOrderItemsByPartner(long partnerId)
+        public async Task<List<Order>> GetOrdersByPartner(long partnerId)
         {
-            return await _dbContext.OrderItems.Include(x => x.Product).ThenInclude(x => x.Store).Where(x => x.Product.Store.PartnerId == partnerId).ToListAsync();
-        }
-
-        public async Task<List<OrderItem>> GetOrderItemsByStore(long storeId)
-        {
-            return await _dbContext.OrderItems.Include(x => x.Product).Where(x => x.Product.StoreId == storeId).ToListAsync();
+            return await _dbContext.Orders.Include(x => x.Store).Where(x => x.Store.PartnerId == partnerId).ToListAsync();
         }
 
         public async Task<Order> CreateOrder(Order order)

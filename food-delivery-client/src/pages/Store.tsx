@@ -16,10 +16,19 @@ import { ShoppingCart } from "../components/ShoppingCart";
 import {
   openCart,
   closeCart,
+  clearCartItems,
   addToCart,
   removeFromCart,
   decreaseQuantity,
 } from "../features/cart/cartSlice";
+import {
+  createOrder,
+  reset as resetOrdersState,
+} from "../features/orders/ordersSlice";
+import { CartItem } from "../interfaces/cart";
+import { CreateOrderRequestDto } from "../interfaces/order";
+import { StateStatus } from "../interfaces/state";
+import { formatCurrency } from "../utils/currencyFormatter";
 
 export function StorePage() {
   const { id } = useParams();
@@ -28,7 +37,10 @@ export function StorePage() {
   const dispatch = useAppDispatch();
   const { stores } = useAppSelector((state) => state.stores);
   const { products } = useAppSelector((state) => state.products);
-  const { storeId, items } = useAppSelector((state) => state.cart);
+  const { status: ordersStatus, message: ordersMessage } = useAppSelector(
+    (state) => state.orders
+  );
+  const { items } = useAppSelector((state) => state.cart);
   const [isCartVisible, setCartVisible] = useState<boolean>(false);
   const totalCartItems = useMemo(
     () => items.reduce((quantity, item) => item.quantity + quantity, 0),
@@ -54,6 +66,7 @@ export function StorePage() {
     return () => {
       dispatch(clearProducts());
       dispatch(closeCart());
+      dispatch(resetOrdersState());
     };
   }, [id]);
 
@@ -63,6 +76,42 @@ export function StorePage() {
       dispatch(openCart(store.id));
     }
   }, [store]);
+
+  useEffect(() => {
+    if (ordersStatus == StateStatus.Error) {
+      console.error(ordersMessage);
+    }
+
+    if (ordersStatus == StateStatus.Success) {
+      dispatch(clearCartItems());
+      setCartVisible(false);
+    }
+  }, [ordersStatus, ordersMessage]);
+
+  const submitOrder = (store: Store, items: CartItem[]) => {
+    const requestDto: CreateOrderRequestDto = {
+      storeId: store.id,
+      items: items.map((item) => ({
+        productId: item.id,
+        quantity: item.quantity,
+      })),
+    };
+
+    const itemsPrice = requestDto.items.reduce((total, cartItem) => {
+      const item = items.find((i) => i.id === cartItem.productId);
+      return total + (item?.price || 0) * cartItem.quantity;
+    }, 0);
+
+    if (itemsPrice < store.deliveryOptions.minimumOrderAmount) {
+      return console.error(
+        `Minimum order amount is ${formatCurrency(
+          store.deliveryOptions.minimumOrderAmount
+        )}. Please add more items to your cart.`
+      );
+    }
+
+    dispatch(createOrder(requestDto));
+  };
 
   return (
     store && (
@@ -99,15 +148,15 @@ export function StorePage() {
           products={products}
           addToCart={(product) => dispatch(addToCart(product))}
         />
-        {storeId && (
-          <ShoppingCart
-            items={items}
-            isOpen={isCartVisible}
-            closeCart={() => setCartVisible(false)}
-            removeFromCart={(itemId) => dispatch(removeFromCart(itemId))}
-            decreaseQuantity={(itemId) => dispatch(decreaseQuantity(itemId))}
-          />
-        )}
+        <ShoppingCart
+          store={store}
+          items={items}
+          isOpen={isCartVisible}
+          closeCart={() => setCartVisible(false)}
+          removeFromCart={(itemId) => dispatch(removeFromCart(itemId))}
+          decreaseQuantity={(itemId) => dispatch(decreaseQuantity(itemId))}
+          submitOrder={(store, items) => submitOrder(store, items)}
+        />
       </>
     )
   );

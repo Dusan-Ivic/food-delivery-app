@@ -23,7 +23,7 @@ namespace FoodDeliveryApi.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = "Customer,Admin")]
+        [Authorize(Roles = "Customer,Partner,Admin")]
         public async Task<IActionResult> GetOrders()
         {
             Claim? idClaim = User.Claims.FirstOrDefault(x => x.Type == "UserId");
@@ -33,18 +33,6 @@ namespace FoodDeliveryApi.Controllers
             UserType userType = (UserType)Enum.Parse(typeof(UserType), roleClaim!.Value);
 
             List<GetOrderResponseDto> responseDto = await _orderService.GetOrders(userId, userType);
-
-            return Ok(responseDto);
-        }
-
-        [HttpGet("items")]
-        [Authorize(Roles = "Partner", Policy = "VerifiedPartner")]
-        public async Task<IActionResult> GetOrderItems([FromQuery] long? storeId = null)
-        {
-            Claim? idClaim = User.Claims.FirstOrDefault(x => x.Type == "UserId");
-            long userId = long.Parse(idClaim!.Value);
-
-            List<GetOrderItemResponseDto> responseDto = await _orderService.GetOrderItems(userId, storeId ?? null);
 
             return Ok(responseDto);
         }

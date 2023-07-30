@@ -36,28 +36,15 @@ namespace FoodDeliveryApi.Services
                 case UserType.Customer:
                     orders = await _orderRepository.GetOrdersByCustomer(userId);
                     break;
+                case UserType.Partner:
+                    orders = await _orderRepository.GetOrdersByPartner(userId);
+                    break;
                 case UserType.Admin:
                     orders = await _orderRepository.GetAllOrders();
                     break;
             }
 
             return _mapper.Map<List<GetOrderResponseDto>>(orders);
-        }
-
-        public async Task<List<GetOrderItemResponseDto>> GetOrderItems(long partnerId, long? storeId)
-        {
-            List<OrderItem> orderItems = new List<OrderItem>();
-
-            if (storeId == null)
-            {
-                orderItems = await _orderRepository.GetOrderItemsByPartner(partnerId);
-            }
-            else
-            {
-                orderItems = await _orderRepository.GetOrderItemsByStore(storeId.Value);
-            }
-
-            return _mapper.Map<List<GetOrderItemResponseDto>>(orderItems);
         }
 
         public async Task<CreateOrderResponseDto> CreateOrder(long customerId, CreateOrderRequestDto requestDto)
