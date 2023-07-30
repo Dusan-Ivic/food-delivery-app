@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { StoreList } from "../components/StoreList";
-import { getStores, clear } from "../features/stores/storesSlice";
+import { getStores, clear, reset } from "../features/stores/storesSlice";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { StateStatus } from "../interfaces/state";
 
@@ -12,7 +12,8 @@ export function Home() {
     dispatch(getStores());
 
     return () => {
-      dispatch(clear());
+      //dispatch(clear());
+      dispatch(reset());
     };
   }, []);
 

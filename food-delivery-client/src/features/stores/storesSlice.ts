@@ -57,7 +57,6 @@ export const storesSlice = createSlice({
       .addCase(getStores.fulfilled, (state, action) => {
         state.status = StateStatus.Success;
         state.stores = action.payload;
-        console.log(state.stores);
       });
   },
 });
