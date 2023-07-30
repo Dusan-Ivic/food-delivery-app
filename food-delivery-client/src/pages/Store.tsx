@@ -9,6 +9,7 @@ import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { Store } from "../interfaces/store";
 import { StoreInfo } from "../components/StoreInfo";
 import { IoArrowBack } from "react-icons/io5";
+import { ProductList } from "../components/ProductList";
 
 export function StorePage() {
   const { id } = useParams();
@@ -51,12 +52,15 @@ export function StorePage() {
 
   return (
     store && (
-      <div>
-        <Link to="/" className="text-reset">
-          <IoArrowBack className="fs-3 mb-3" />
-        </Link>
-        <StoreInfo store={store} />
-      </div>
+      <>
+        <div className="mb-4">
+          <Link to="/" className="text-reset">
+            <IoArrowBack className="fs-3 mb-3" />
+          </Link>
+          <StoreInfo store={store} />
+        </div>
+        <ProductList products={products} />
+      </>
     )
   );
 }
