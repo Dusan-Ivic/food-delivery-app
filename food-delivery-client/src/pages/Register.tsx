@@ -13,6 +13,7 @@ import {
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { useNavigate } from "react-router-dom";
 import { StateStatus } from "../interfaces/state";
+import { toast } from "react-toastify";
 
 export function Register() {
   const [userType, setUserType] = useState<AllowedUserType | null>(null);
@@ -35,11 +36,11 @@ export function Register() {
 
   useEffect(() => {
     if (status == StateStatus.Error) {
-      console.error(message);
+      toast.error(message);
     }
 
     if (status == StateStatus.Success) {
-      console.log(message);
+      toast.success(message);
       navigate("/login");
     }
 

@@ -29,6 +29,7 @@ import { CartItem } from "../interfaces/cart";
 import { CreateOrderRequestDto } from "../interfaces/order";
 import { StateStatus } from "../interfaces/state";
 import { formatCurrency } from "../utils/currencyFormatter";
+import { toast } from "react-toastify";
 
 export function StorePage() {
   const { id } = useParams();
@@ -51,12 +52,12 @@ export function StorePage() {
     const numberId = Number(id);
 
     if (!numberId) {
-      console.error("Invalid  id");
+      toast.error("Invalid store id");
       navigate("/");
     } else {
       const storeData = stores.find((x) => x.id === numberId);
       if (storeData == null) {
-        console.error("Store not found");
+        toast.error("Store not found");
         navigate("/");
       } else {
         setStore(storeData);
@@ -79,7 +80,7 @@ export function StorePage() {
 
   useEffect(() => {
     if (ordersStatus == StateStatus.Error) {
-      console.error(ordersMessage);
+      toast.error(ordersMessage);
     }
 
     if (ordersStatus == StateStatus.Success) {
@@ -103,11 +104,12 @@ export function StorePage() {
     }, 0);
 
     if (itemsPrice < store.deliveryOptions.minimumOrderAmount) {
-      return console.error(
+      toast.error(
         `Minimum order amount is ${formatCurrency(
           store.deliveryOptions.minimumOrderAmount
         )}. Please add more items to your cart.`
       );
+      return;
     }
 
     dispatch(createOrder(requestDto));

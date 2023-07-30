@@ -1,8 +1,9 @@
 import { useEffect } from "react";
 import { StoreList } from "../components/StoreList";
-import { getStores, clear, reset } from "../features/stores/storesSlice";
+import { getStores, reset } from "../features/stores/storesSlice";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { StateStatus } from "../interfaces/state";
+import { toast } from "react-toastify";
 
 export function Home() {
   const dispatch = useAppDispatch();
@@ -12,14 +13,13 @@ export function Home() {
     dispatch(getStores());
 
     return () => {
-      //dispatch(clear());
       dispatch(reset());
     };
   }, []);
 
   useEffect(() => {
     if (status == StateStatus.Error) {
-      console.error(message);
+      toast.error(message);
     }
   }, [status, message]);
 
