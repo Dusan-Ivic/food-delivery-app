@@ -1,7 +1,7 @@
 import { Header } from "./components/Header";
 import { Container } from "react-bootstrap";
 import { Routes, Route } from "react-router-dom";
-import { Home, Login, Profile, Register } from "./pages";
+import { Home, Login, Profile, Register, Store } from "./pages";
 import { PrivateRoute } from "./components/PrivateRoute";
 
 function App() {
@@ -13,6 +13,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/stores/:id" element={<Store />} />
           <Route
             path="/profile"
             element={
