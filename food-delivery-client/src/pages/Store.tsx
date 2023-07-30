@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import {
@@ -30,6 +30,10 @@ export function StorePage() {
   const { products } = useAppSelector((state) => state.products);
   const { storeId, items } = useAppSelector((state) => state.cart);
   const [isCartVisible, setCartVisible] = useState<boolean>(false);
+  const totalCartItems = useMemo(
+    () => items.reduce((quantity, item) => item.quantity + quantity, 0),
+    [items]
+  );
 
   useEffect(() => {
     const numberId = Number(id);
@@ -68,8 +72,25 @@ export function StorePage() {
             <Link to="/" className="text-reset">
               <IoArrowBack className="fs-3" />
             </Link>
-            <Button onClick={() => setCartVisible(true)}>
-              <HiOutlineShoppingCart className="fs-3" />
+            <Button
+              onClick={() => setCartVisible(true)}
+              className="position-relative"
+            >
+              <HiOutlineShoppingCart className="fs-4" />
+              <div
+                className="rounded-circle bg-danger d-flex justify-content-center align-items-center"
+                style={{
+                  color: "white",
+                  width: "1.5rem",
+                  height: "1.5rem",
+                  position: "absolute",
+                  bottom: 0,
+                  right: 0,
+                  transform: "translate(40%, 40%)",
+                }}
+              >
+                {totalCartItems}
+              </div>
             </Button>
           </div>
           <StoreInfo store={store} />
