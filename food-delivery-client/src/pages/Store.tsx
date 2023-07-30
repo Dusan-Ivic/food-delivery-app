@@ -9,7 +9,11 @@ import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { Store } from "../interfaces/store";
 import { StoreInfo } from "../components/StoreInfo";
 import { IoArrowBack } from "react-icons/io5";
+import { HiOutlineShoppingCart } from "react-icons/hi";
 import { ProductList } from "../components/ProductList";
+import { Button } from "react-bootstrap";
+import { ShoppingCart } from "../components/ShoppingCart";
+import { openCart, closeCart } from "../features/cart/cartSlice";
 
 export function StorePage() {
   const { id } = useParams();
@@ -18,6 +22,8 @@ export function StorePage() {
   const dispatch = useAppDispatch();
   const { stores } = useAppSelector((state) => state.stores);
   const { products } = useAppSelector((state) => state.products);
+  const { cart } = useAppSelector((state) => state.cart);
+  const [isCartVisible, setCartVisible] = useState<boolean>(false);
 
   useEffect(() => {
     const numberId = Number(id);
@@ -37,29 +43,40 @@ export function StorePage() {
 
     return () => {
       dispatch(clearProducts());
+      dispatch(closeCart());
     };
   }, [id]);
 
   useEffect(() => {
     if (store) {
       dispatch(getProductsByStore(store.id));
+      dispatch(openCart(store.id));
     }
   }, [store]);
-
-  useEffect(() => {
-    console.log(products);
-  }, [products]);
 
   return (
     store && (
       <>
         <div className="mb-4">
-          <Link to="/" className="text-reset">
-            <IoArrowBack className="fs-3 mb-3" />
-          </Link>
+          <div className="d-flex justify-content-between align-items-center mb-3">
+            <Link to="/" className="text-reset">
+              <IoArrowBack className="fs-3" />
+            </Link>
+            <Button onClick={() => setCartVisible(true)}>
+              <HiOutlineShoppingCart className="fs-3" />
+            </Button>
+          </div>
           <StoreInfo store={store} />
         </div>
         <ProductList products={products} />
+        {cart && (
+          <ShoppingCart
+            items={cart.items}
+            isOpen={isCartVisible}
+            closeCart={() => setCartVisible(false)}
+            createOrder={() => console.log("createOrder")}
+          />
+        )}
       </>
     )
   );
