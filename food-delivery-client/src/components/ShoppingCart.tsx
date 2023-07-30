@@ -4,19 +4,23 @@ import { ShoppingCartItem } from "./ShoppingCartItem";
 import { formatCurrency } from "../utils/currencyFormatter";
 
 interface ShoppingCartProps {
+  storeId: number;
   items: CartItem[];
   isOpen: boolean;
   closeCart: () => void;
   removeFromCart: (itemId: number) => void;
   decreaseQuantity: (itemId: number) => void;
+  submitOrder: (storeId: number, items: CartItem[]) => void;
 }
 
 export function ShoppingCart({
+  storeId,
   items,
   isOpen,
   closeCart,
   removeFromCart,
   decreaseQuantity,
+  submitOrder,
 }: ShoppingCartProps) {
   return (
     <Offcanvas show={isOpen} onHide={closeCart} placement="end">
@@ -43,7 +47,12 @@ export function ShoppingCart({
                 }, 0)
               )}
             </div>
-            <Button className="w-100 mt-3 mb-5">Place an order</Button>
+            <Button
+              onClick={() => submitOrder(storeId, items)}
+              className="w-100 mt-3 mb-5"
+            >
+              Place an order
+            </Button>
           </Stack>
         ) : (
           <p>Your shopping cart is empty. Add some items...</p>

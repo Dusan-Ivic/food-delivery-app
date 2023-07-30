@@ -16,10 +16,18 @@ import { ShoppingCart } from "../components/ShoppingCart";
 import {
   openCart,
   closeCart,
+  clearCartItems,
   addToCart,
   removeFromCart,
   decreaseQuantity,
 } from "../features/cart/cartSlice";
+import {
+  createOrder,
+  reset as resetOrdersState,
+} from "../features/orders/ordersSlice";
+import { CartItem } from "../interfaces/cart";
+import { CreateOrderRequestDto } from "../interfaces/order";
+import { StateStatus } from "../interfaces/state";
 
 export function StorePage() {
   const { id } = useParams();
@@ -28,6 +36,9 @@ export function StorePage() {
   const dispatch = useAppDispatch();
   const { stores } = useAppSelector((state) => state.stores);
   const { products } = useAppSelector((state) => state.products);
+  const { status: ordersStatus, message: ordersMessage } = useAppSelector(
+    (state) => state.orders
+  );
   const { storeId, items } = useAppSelector((state) => state.cart);
   const [isCartVisible, setCartVisible] = useState<boolean>(false);
   const totalCartItems = useMemo(
@@ -54,6 +65,7 @@ export function StorePage() {
     return () => {
       dispatch(clearProducts());
       dispatch(closeCart());
+      dispatch(resetOrdersState());
     };
   }, [id]);
 
@@ -63,6 +75,29 @@ export function StorePage() {
       dispatch(openCart(store.id));
     }
   }, [store]);
+
+  useEffect(() => {
+    if (ordersStatus == StateStatus.Error) {
+      console.error(ordersMessage);
+    }
+
+    if (ordersStatus == StateStatus.Success) {
+      dispatch(clearCartItems());
+      setCartVisible(false);
+    }
+  }, [ordersStatus, ordersMessage]);
+
+  const submitOrder = (storeId: number, items: CartItem[]) => {
+    const requestDto: CreateOrderRequestDto = {
+      storeId: storeId,
+      items: items.map((item) => ({
+        productId: item.id,
+        quantity: item.quantity,
+      })),
+    };
+
+    dispatch(createOrder(requestDto));
+  };
 
   return (
     store && (
@@ -101,11 +136,13 @@ export function StorePage() {
         />
         {storeId && (
           <ShoppingCart
+            storeId={storeId}
             items={items}
             isOpen={isCartVisible}
             closeCart={() => setCartVisible(false)}
             removeFromCart={(itemId) => dispatch(removeFromCart(itemId))}
             decreaseQuantity={(itemId) => dispatch(decreaseQuantity(itemId))}
+            submitOrder={(storeId, items) => submitOrder(storeId, items)}
           />
         )}
       </>

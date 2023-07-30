@@ -21,6 +21,9 @@ export const cartSlice = createSlice({
       state.storeId = action.payload;
       state.items = [];
     },
+    clearCartItems: (state) => {
+      state.items = [];
+    },
     closeCart: (state) => {
       state.storeId = null;
       state.items = [];
@@ -60,6 +63,7 @@ export const cartSelector = (state: RootState) => state.cart;
 export const {
   openCart,
   closeCart,
+  clearCartItems,
   addToCart,
   removeFromCart,
   decreaseQuantity,
