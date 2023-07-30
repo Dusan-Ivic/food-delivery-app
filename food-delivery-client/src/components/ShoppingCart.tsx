@@ -8,6 +8,7 @@ interface ShoppingCartProps {
   isOpen: boolean;
   closeCart: () => void;
   removeFromCart: (itemId: number) => void;
+  decreaseQuantity: (itemId: number) => void;
 }
 
 export function ShoppingCart({
@@ -15,6 +16,7 @@ export function ShoppingCart({
   isOpen,
   closeCart,
   removeFromCart,
+  decreaseQuantity,
 }: ShoppingCartProps) {
   return (
     <Offcanvas show={isOpen} onHide={closeCart} placement="end">
@@ -29,6 +31,7 @@ export function ShoppingCart({
                 key={item.id}
                 item={item}
                 removeFromCart={removeFromCart}
+                decreaseQuantity={decreaseQuantity}
               />
             ))}
             <div className="ms-auto fw-bold fs-5">

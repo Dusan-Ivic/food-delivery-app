@@ -18,6 +18,7 @@ import {
   closeCart,
   addToCart,
   removeFromCart,
+  decreaseQuantity,
 } from "../features/cart/cartSlice";
 
 export function StorePage() {
@@ -83,6 +84,7 @@ export function StorePage() {
             isOpen={isCartVisible}
             closeCart={() => setCartVisible(false)}
             removeFromCart={(itemId) => dispatch(removeFromCart(itemId))}
+            decreaseQuantity={(itemId) => dispatch(decreaseQuantity(itemId))}
           />
         )}
       </>
