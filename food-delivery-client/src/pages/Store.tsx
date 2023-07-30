@@ -28,6 +28,7 @@ import {
 import { CartItem } from "../interfaces/cart";
 import { CreateOrderRequestDto } from "../interfaces/order";
 import { StateStatus } from "../interfaces/state";
+import { formatCurrency } from "../utils/currencyFormatter";
 
 export function StorePage() {
   const { id } = useParams();
@@ -39,7 +40,7 @@ export function StorePage() {
   const { status: ordersStatus, message: ordersMessage } = useAppSelector(
     (state) => state.orders
   );
-  const { storeId, items } = useAppSelector((state) => state.cart);
+  const { items } = useAppSelector((state) => state.cart);
   const [isCartVisible, setCartVisible] = useState<boolean>(false);
   const totalCartItems = useMemo(
     () => items.reduce((quantity, item) => item.quantity + quantity, 0),
@@ -87,14 +88,27 @@ export function StorePage() {
     }
   }, [ordersStatus, ordersMessage]);
 
-  const submitOrder = (storeId: number, items: CartItem[]) => {
+  const submitOrder = (store: Store, items: CartItem[]) => {
     const requestDto: CreateOrderRequestDto = {
-      storeId: storeId,
+      storeId: store.id,
       items: items.map((item) => ({
         productId: item.id,
         quantity: item.quantity,
       })),
     };
+
+    const itemsPrice = requestDto.items.reduce((total, cartItem) => {
+      const item = items.find((i) => i.id === cartItem.productId);
+      return total + (item?.price || 0) * cartItem.quantity;
+    }, 0);
+
+    if (itemsPrice < store.deliveryOptions.minimumOrderAmount) {
+      return console.error(
+        `Minimum order amount is ${formatCurrency(
+          store.deliveryOptions.minimumOrderAmount
+        )}. Please add more items to your cart.`
+      );
+    }
 
     dispatch(createOrder(requestDto));
   };
@@ -134,17 +148,15 @@ export function StorePage() {
           products={products}
           addToCart={(product) => dispatch(addToCart(product))}
         />
-        {storeId && (
-          <ShoppingCart
-            storeId={storeId}
-            items={items}
-            isOpen={isCartVisible}
-            closeCart={() => setCartVisible(false)}
-            removeFromCart={(itemId) => dispatch(removeFromCart(itemId))}
-            decreaseQuantity={(itemId) => dispatch(decreaseQuantity(itemId))}
-            submitOrder={(storeId, items) => submitOrder(storeId, items)}
-          />
-        )}
+        <ShoppingCart
+          store={store}
+          items={items}
+          isOpen={isCartVisible}
+          closeCart={() => setCartVisible(false)}
+          removeFromCart={(itemId) => dispatch(removeFromCart(itemId))}
+          decreaseQuantity={(itemId) => dispatch(decreaseQuantity(itemId))}
+          submitOrder={(store, items) => submitOrder(store, items)}
+        />
       </>
     )
   );
