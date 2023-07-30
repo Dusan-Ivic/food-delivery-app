@@ -4,11 +4,13 @@ import { Routes, Route } from "react-router-dom";
 import { Home, Login, Profile, Register, Store } from "./pages";
 import { PrivateRoute } from "./components/PrivateRoute";
 import { Orders } from "./pages/Orders";
+import { ToastContainer } from "react-toastify";
 
 function App() {
   return (
     <div className="bg-light pb-5" style={{ minHeight: "100vh" }}>
       <Header />
+      <ToastContainer style={{ width: "40%" }} position="top-left" />
       <Container>
         <Routes>
           <Route path="/" element={<Home />} />

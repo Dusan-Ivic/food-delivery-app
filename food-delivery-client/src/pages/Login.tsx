@@ -7,6 +7,7 @@ import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { useNavigate } from "react-router-dom";
 import { StateStatus } from "../interfaces/state";
 import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
 
 export function Login() {
   const navigate = useNavigate();
@@ -19,7 +20,7 @@ export function Login() {
 
   useEffect(() => {
     if (status == StateStatus.Error) {
-      console.error(message);
+      toast.error(message);
     }
 
     if (user) {
