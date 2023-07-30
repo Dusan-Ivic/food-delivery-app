@@ -1,5 +1,31 @@
 import axios from "axios";
-import { OrderRequestDto, OrderResponseDto } from "../../interfaces/order";
+import {
+  GetOrderResponseDto,
+  OrderRequestDto,
+  OrderResponseDto,
+} from "../../interfaces/order";
+
+const getOrders = async (
+  token: string | null
+): Promise<GetOrderResponseDto[]> => {
+  try {
+    const response = await axios.get<GetOrderResponseDto[]>(
+      `${import.meta.env.VITE_API_URL}/api/orders`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw new Error(error.response?.data.message);
+    } else {
+      throw new Error("Unknown error occurred.");
+    }
+  }
+};
 
 const createOrder = async (
   requestDto: OrderRequestDto,
@@ -26,6 +52,7 @@ const createOrder = async (
 };
 
 const ordersService = {
+  getOrders,
   createOrder,
 };
 

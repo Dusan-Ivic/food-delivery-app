@@ -3,6 +3,7 @@ import { Container } from "react-bootstrap";
 import { Routes, Route } from "react-router-dom";
 import { Home, Login, Profile, Register, Store } from "./pages";
 import { PrivateRoute } from "./components/PrivateRoute";
+import { Orders } from "./pages/Orders";
 
 function App() {
   return (
@@ -14,6 +15,14 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/stores/:id" element={<Store />} />
+          <Route
+            path="/orders"
+            element={
+              <PrivateRoute>
+                <Orders />
+              </PrivateRoute>
+            }
+          />
           <Route
             path="/profile"
             element={

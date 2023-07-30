@@ -19,6 +19,19 @@ const initialState: OrdersState = {
   message: "",
 };
 
+export const getOrders = createAsyncThunk("orders/get", async (_, thunkAPI) => {
+  try {
+    const { token } = (thunkAPI.getState() as RootState).auth;
+    return await ordersService.getOrders(token);
+  } catch (error: unknown) {
+    let message: string = "";
+    if (error instanceof Error) {
+      message = error.message;
+    }
+    return thunkAPI.rejectWithValue(message);
+  }
+});
+
 export const createOrder = createAsyncThunk(
   "orders/create",
   async (orderData: CreateOrderRequestDto, thunkAPI) => {
@@ -51,6 +64,17 @@ export const ordersSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+      .addCase(getOrders.pending, (state) => {
+        state.status = StateStatus.Loading;
+      })
+      .addCase(getOrders.rejected, (state, action) => {
+        state.status = StateStatus.Error;
+        state.message = action.payload as string;
+      })
+      .addCase(getOrders.fulfilled, (state, action) => {
+        state.status = StateStatus.Success;
+        state.orders = action.payload;
+      })
       .addCase(createOrder.pending, (state) => {
         state.status = StateStatus.Loading;
       })

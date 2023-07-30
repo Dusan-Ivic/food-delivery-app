@@ -29,3 +29,5 @@ export interface OrderResponseDto {
 export interface CreateOrderRequestDto extends OrderRequestDto {}
 
 export interface CreateOrderResponseDto extends OrderResponseDto {}
+
+export interface GetOrderResponseDto extends OrderResponseDto {}

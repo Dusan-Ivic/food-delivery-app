@@ -28,6 +28,9 @@ export function Header() {
         <Nav>
           {user ? (
             <>
+              <Nav.Link to="/orders" as={NavLink}>
+                Orders
+              </Nav.Link>
               <Nav.Link to="/profile" as={NavLink}>
                 Profile
               </Nav.Link>
