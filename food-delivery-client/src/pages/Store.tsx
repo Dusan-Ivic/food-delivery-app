@@ -13,7 +13,12 @@ import { HiOutlineShoppingCart } from "react-icons/hi";
 import { ProductList } from "../components/ProductList";
 import { Button } from "react-bootstrap";
 import { ShoppingCart } from "../components/ShoppingCart";
-import { openCart, closeCart } from "../features/cart/cartSlice";
+import {
+  openCart,
+  closeCart,
+  addToCart,
+  removeFromCart,
+} from "../features/cart/cartSlice";
 
 export function StorePage() {
   const { id } = useParams();
@@ -22,7 +27,7 @@ export function StorePage() {
   const dispatch = useAppDispatch();
   const { stores } = useAppSelector((state) => state.stores);
   const { products } = useAppSelector((state) => state.products);
-  const { cart } = useAppSelector((state) => state.cart);
+  const { storeId, items } = useAppSelector((state) => state.cart);
   const [isCartVisible, setCartVisible] = useState<boolean>(false);
 
   useEffect(() => {
@@ -68,13 +73,16 @@ export function StorePage() {
           </div>
           <StoreInfo store={store} />
         </div>
-        <ProductList products={products} />
-        {cart && (
+        <ProductList
+          products={products}
+          addToCart={(product) => dispatch(addToCart(product))}
+        />
+        {storeId && (
           <ShoppingCart
-            items={cart.items}
+            items={items}
             isOpen={isCartVisible}
             closeCart={() => setCartVisible(false)}
-            createOrder={() => console.log("createOrder")}
+            removeFromCart={(itemId) => dispatch(removeFromCart(itemId))}
           />
         )}
       </>
