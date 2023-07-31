@@ -95,7 +95,10 @@ namespace FoodDeliveryApi.Services
                 throw;
             }
 
-            return _mapper.Map<RegisterPartnerResponseDto>(partner);
+            RegisterPartnerResponseDto responseDto = _mapper.Map<RegisterPartnerResponseDto>(partner);
+            responseDto.UserType = UserType.Partner;
+
+            return responseDto;
         }
 
         public async Task<UpdatePartnerResponseDto> UpdatePartner(long id, UpdatePartnerRequestDto requestDto)
@@ -122,12 +125,12 @@ namespace FoodDeliveryApi.Services
                 throw new ValidationException(validationResult.Errors);
             }
 
-            if (await _partnerRepository.IsEmailTaken(partner.Email) && updatedPartner.Email != partner.Email)
+            if (await _partnerRepository.IsEmailTaken(updatedPartner.Email) && updatedPartner.Email != partner.Email)
             {
                 throw new UserAlreadyExistsException("Partner with this email already exists");
             }
 
-            if (await _partnerRepository.IsUsernameTaken(partner.Username) && updatedPartner.Username != partner.Username)
+            if (await _partnerRepository.IsUsernameTaken(updatedPartner.Username) && updatedPartner.Username != partner.Username)
             {
                 throw new UserAlreadyExistsException("Partner with this username already exists");
             }
@@ -142,7 +145,10 @@ namespace FoodDeliveryApi.Services
                 throw;
             }
 
-            return _mapper.Map<UpdatePartnerResponseDto>(partner);
+            UpdatePartnerResponseDto responseDto = _mapper.Map<UpdatePartnerResponseDto>(partner);
+            responseDto.UserType = UserType.Partner;
+
+            return responseDto;
         }
 
         public async Task<DeletePartnerResponseDto> DeletePartner(long id)

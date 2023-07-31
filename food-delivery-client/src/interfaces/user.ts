@@ -1,3 +1,6 @@
+import { UpdateCustomerRequestDto } from "./customer";
+import { UpdatePartnerRequestDto } from "./partner";
+
 export enum UserType {
   Customer = 0,
   Partner = 1,
@@ -37,4 +40,17 @@ export enum PartnerStatus {
   Rejected = 1,
   Accepted = 2,
   Suspended = 3,
+}
+
+export interface UserRequestDto {
+  username: string;
+  email: string;
+  firstName: string;
+  lastName: string;
+}
+
+export interface UpdateUserData {
+  data: UpdateCustomerRequestDto | UpdatePartnerRequestDto;
+  userId: number;
+  userType: UserType;
 }

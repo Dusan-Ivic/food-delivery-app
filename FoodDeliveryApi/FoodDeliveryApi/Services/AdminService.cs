@@ -2,6 +2,7 @@
 using FluentValidation;
 using FluentValidation.Results;
 using FoodDeliveryApi.Dto.Admin;
+using FoodDeliveryApi.Enums;
 using FoodDeliveryApi.Exceptions;
 using FoodDeliveryApi.Interfaces.Repositories;
 using FoodDeliveryApi.Interfaces.Services;
@@ -56,7 +57,10 @@ namespace FoodDeliveryApi.Services
                 throw;
             }
 
-            return _mapper.Map<RegisterAdminResponseDto>(admin);
+            RegisterAdminResponseDto responseDto = _mapper.Map<RegisterAdminResponseDto>(admin);
+            responseDto.UserType = UserType.Admin;
+
+            return responseDto;
         }
 
         public async Task<UpdateAdminResponseDto> UpdateAdmin(long id, UpdateAdminRequestDto requestDto)
@@ -103,7 +107,10 @@ namespace FoodDeliveryApi.Services
                 throw;
             }
 
-            return _mapper.Map<UpdateAdminResponseDto>(admin);
+            UpdateAdminResponseDto responseDto = _mapper.Map<UpdateAdminResponseDto>(admin);
+            responseDto.UserType = UserType.Admin;
+
+            return responseDto;
         }
     }
 }

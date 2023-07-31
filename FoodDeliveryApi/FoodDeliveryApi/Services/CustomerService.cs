@@ -2,6 +2,7 @@
 using FluentValidation;
 using FluentValidation.Results;
 using FoodDeliveryApi.Dto.Customer;
+using FoodDeliveryApi.Enums;
 using FoodDeliveryApi.Exceptions;
 using FoodDeliveryApi.Interfaces.Repositories;
 using FoodDeliveryApi.Interfaces.Services;
@@ -76,7 +77,10 @@ namespace FoodDeliveryApi.Services
                 throw;
             }
 
-            return _mapper.Map<RegisterCustomerResponseDto>(customer);
+            RegisterCustomerResponseDto responseDto = _mapper.Map<RegisterCustomerResponseDto>(customer);
+            responseDto.UserType = UserType.Customer;
+
+            return responseDto;
         }
 
         public async Task<UpdateCustomerResponseDto> UpdateCustomer(long id, UpdateCustomerRequestDto requestDto)
@@ -106,12 +110,12 @@ namespace FoodDeliveryApi.Services
                 throw new ValidationException(validationResult.Errors);
             }
 
-            if (await _customerRepository.IsEmailTaken(customer.Email) && updatedCustomer.Email != customer.Email)
+            if (await _customerRepository.IsEmailTaken(updatedCustomer.Email) && updatedCustomer.Email != customer.Email)
             {
                 throw new UserAlreadyExistsException("Customer with this email already exists");
             }
 
-            if (await _customerRepository.IsUsernameTaken(customer.Username) && updatedCustomer.Username != customer.Username)
+            if (await _customerRepository.IsUsernameTaken(updatedCustomer.Username) && updatedCustomer.Username != customer.Username)
             {
                 throw new UserAlreadyExistsException("Customer with this username already exists");
             }
@@ -126,7 +130,10 @@ namespace FoodDeliveryApi.Services
                 throw;
             }
 
-            return _mapper.Map<UpdateCustomerResponseDto>(customer);
+            UpdateCustomerResponseDto responseDto = _mapper.Map<UpdateCustomerResponseDto>(customer);
+            responseDto.UserType = UserType.Customer;
+
+            return responseDto;
         }
 
         public async Task<DeleteCustomerResponseDto> DeleteCustomer(long id)

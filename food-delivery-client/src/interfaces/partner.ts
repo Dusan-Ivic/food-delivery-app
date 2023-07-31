@@ -7,12 +7,14 @@ interface PartnerBase {
   lastName: string;
 }
 
+export interface PartnerResponseDto extends PartnerBase {
+  id: number;
+  status: PartnerStatus;
+}
+
 export interface RegisterPartnerRequestDto extends PartnerBase {
   password: string;
   confirmPassword: string;
 }
 
-export interface RegisterPartnerResponseDto extends PartnerBase {
-  id: number;
-  status: PartnerStatus;
-}
+export interface UpdatePartnerRequestDto extends PartnerBase {}
