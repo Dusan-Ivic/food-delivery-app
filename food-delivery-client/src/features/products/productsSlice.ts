@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { StateStatus } from "../../interfaces/state";
 import { RootState } from "../../app/store";
-import { Product } from "../../interfaces/product";
+import { CreateProductRequestDto, Product } from "../../interfaces/product";
 import productsService from "./productsService";
 
 interface ProductsState {
@@ -21,6 +21,22 @@ export const getProductsByStore = createAsyncThunk(
   async (storeId: number, thunkAPI) => {
     try {
       return await productsService.getProductsByStore(storeId);
+    } catch (error: unknown) {
+      let message: string = "";
+      if (error instanceof Error) {
+        message = error.message;
+      }
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+export const createProduct = createAsyncThunk(
+  "products/create",
+  async (productData: CreateProductRequestDto, thunkAPI) => {
+    try {
+      const { token } = (thunkAPI.getState() as RootState).auth;
+      return await productsService.createProduct(productData, token);
     } catch (error: unknown) {
       let message: string = "";
       if (error instanceof Error) {
@@ -57,6 +73,17 @@ export const productsSlice = createSlice({
       .addCase(getProductsByStore.fulfilled, (state, action) => {
         state.status = StateStatus.Success;
         state.products = action.payload;
+      })
+      .addCase(createProduct.pending, (state) => {
+        state.status = StateStatus.Loading;
+      })
+      .addCase(createProduct.rejected, (state, action) => {
+        state.status = StateStatus.Error;
+        state.message = action.payload as string;
+      })
+      .addCase(createProduct.fulfilled, (state, action) => {
+        state.status = StateStatus.Success;
+        state.products.push(action.payload);
       });
   },
 });

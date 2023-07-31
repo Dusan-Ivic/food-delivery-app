@@ -185,7 +185,7 @@ export function StoreForm({ onSubmit }: StoreFormProps) {
               type="number"
               defaultValue={0}
               min={0}
-              step={0.1}
+              step="any"
               {...register("deliveryOptions.deliveryFee")}
               isValid={
                 touchedFields.deliveryOptions?.deliveryFee &&
