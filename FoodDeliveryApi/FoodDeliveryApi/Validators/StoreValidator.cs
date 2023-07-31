@@ -34,9 +34,8 @@ namespace FoodDeliveryApi.Validators
                 .NotNull().WithMessage("Delivery options are required")
                 .SetValidator(new DeliveryOptionsValidator());
 
-            RuleFor(x => x.Categories)
-                .NotEmpty().WithMessage("Store must have at least one category")
-                .ForEach(x => x.NotEmpty().WithMessage("Category can't be an empty string"));
+            RuleFor(x => x.Category)
+                .NotNull().WithMessage("Category is required");
         }
     }
 
@@ -51,9 +50,6 @@ namespace FoodDeliveryApi.Validators
             RuleFor(x => x.DeliveryFee)
                 .NotNull().WithMessage("Delivery fee is required")
                 .GreaterThanOrEqualTo(0).WithMessage("Delivery fee can't be a negative number");
-
-            RuleFor(x => x.MinimumOrderAmount)
-                .GreaterThanOrEqualTo(0).WithMessage("Minimum order amount can't be a negative number");
         }
     }
 }

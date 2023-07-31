@@ -28,15 +28,7 @@ namespace FoodDeliveryApi.Configurations
 
             builder.Property(x => x.DeliveryOptions).HasColumnType("json");
 
-            builder.Property(x => x.Categories)
-                .IsRequired()
-                .HasConversion(
-                    ctg => string.Join(",", ctg),
-                    ctg => ctg.Split(',', StringSplitOptions.RemoveEmptyEntries).ToList(),
-                    new ValueComparer<List<string>>(
-                        (c1, c2) => c1 != null && c2 != null && c1.SequenceEqual(c2),
-                        c => c.Aggregate(0, (a, v) => HashCode.Combine(a, v.GetHashCode())),
-                        c => c.ToList()));
+            builder.Property(x => x.Category).IsRequired().HasMaxLength(20);
         }
     }
 }

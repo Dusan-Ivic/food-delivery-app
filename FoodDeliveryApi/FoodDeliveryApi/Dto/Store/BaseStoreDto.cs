@@ -11,6 +11,6 @@ namespace FoodDeliveryApi.Dto.Store
         public string PostalCode { get; set; } = string.Empty;
         public string Phone { get; set; } = string.Empty;
         public DeliveryOptions DeliveryOptions { get; set; } = default!;
-        public List<string> Categories { get; set; } = new List<string>();
+        public string Category { get; set; } = string.Empty;
     }
 }
