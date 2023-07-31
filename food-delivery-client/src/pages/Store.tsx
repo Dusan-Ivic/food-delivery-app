@@ -30,12 +30,14 @@ import { CreateOrderRequestDto } from "../interfaces/order";
 import { StateStatus } from "../interfaces/state";
 import { formatCurrency } from "../utils/currencyFormatter";
 import { toast } from "react-toastify";
+import { UserType } from "../interfaces/user";
 
 export function StorePage() {
   const { id } = useParams();
   const [store, setStore] = useState<Store | null>(null);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const { user } = useAppSelector((state) => state.auth);
   const { stores } = useAppSelector((state) => state.stores);
   const { products } = useAppSelector((state) => state.products);
   const { status: ordersStatus, message: ordersMessage } = useAppSelector(
@@ -115,6 +117,14 @@ export function StorePage() {
     dispatch(createOrder(requestDto));
   };
 
+  const canManageCart = useMemo(() => {
+    if (!user) {
+      return false;
+    }
+
+    return user.userType == UserType.Customer;
+  }, [user]);
+
   return (
     store && (
       <>
@@ -123,31 +133,34 @@ export function StorePage() {
             <Link to="/" className="text-reset">
               <IoArrowBack className="fs-3" />
             </Link>
-            <Button
-              onClick={() => setCartVisible(true)}
-              className="position-relative"
-            >
-              <HiOutlineShoppingCart className="fs-4" />
-              <div
-                className="rounded-circle bg-danger d-flex justify-content-center align-items-center"
-                style={{
-                  color: "white",
-                  width: "1.5rem",
-                  height: "1.5rem",
-                  position: "absolute",
-                  bottom: 0,
-                  right: 0,
-                  transform: "translate(40%, 40%)",
-                }}
+            {canManageCart && (
+              <Button
+                onClick={() => setCartVisible(true)}
+                className="position-relative"
               >
-                {totalCartItems}
-              </div>
-            </Button>
+                <HiOutlineShoppingCart className="fs-4" />
+                <div
+                  className="rounded-circle bg-danger d-flex justify-content-center align-items-center"
+                  style={{
+                    color: "white",
+                    width: "1.5rem",
+                    height: "1.5rem",
+                    position: "absolute",
+                    bottom: 0,
+                    right: 0,
+                    transform: "translate(40%, 40%)",
+                  }}
+                >
+                  {totalCartItems}
+                </div>
+              </Button>
+            )}
           </div>
           <StoreInfo store={store} />
         </div>
         <ProductList
           products={products}
+          canAddToCart={canManageCart}
           addToCart={(product) => dispatch(addToCart(product))}
         />
         <ShoppingCart

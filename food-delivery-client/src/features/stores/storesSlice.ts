@@ -18,9 +18,9 @@ const initialState: StoresState = {
 
 export const getStores = createAsyncThunk(
   "stores/get-stores",
-  async (_, thunkAPI) => {
+  async (partnerId: number | null, thunkAPI) => {
     try {
-      return await storesService.getStores();
+      return await storesService.getStores(partnerId ?? null);
     } catch (error: unknown) {
       let message: string = "";
       if (error instanceof Error) {
@@ -39,7 +39,7 @@ export const storesSlice = createSlice({
       state.status = StateStatus.None;
       state.message = "";
     },
-    clear: (state) => {
+    clearStores: (state) => {
       state.stores = [];
       state.status = StateStatus.None;
       state.message = "";
@@ -62,5 +62,5 @@ export const storesSlice = createSlice({
 });
 
 export const storesSelector = (state: RootState) => state.stores;
-export const { reset, clear } = storesSlice.actions;
+export const { reset, clearStores } = storesSlice.actions;
 export default storesSlice.reducer;

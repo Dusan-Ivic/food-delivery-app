@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 import { StateStatus } from "../interfaces/state";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
+import { UserType } from "../interfaces/user";
 
 export function Login() {
   const navigate = useNavigate();
@@ -24,7 +25,11 @@ export function Login() {
     }
 
     if (user) {
-      navigate("/");
+      if (user.userType == UserType.Customer) {
+        navigate("/");
+      } else {
+        navigate("/dashboard");
+      }
     }
 
     return () => {

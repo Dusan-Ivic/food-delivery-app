@@ -5,10 +5,15 @@ import { GrAddCircle } from "react-icons/gr";
 
 interface ProductItemProps {
   product: Product;
+  canAddToCart: boolean;
   addToCart: (product: Product) => void;
 }
 
-export function ProductItem({ product, addToCart }: ProductItemProps) {
+export function ProductItem({
+  product,
+  canAddToCart,
+  addToCart,
+}: ProductItemProps) {
   return (
     <Card className="h-100">
       <div>
@@ -18,19 +23,21 @@ export function ProductItem({ product, addToCart }: ProductItemProps) {
           height="200px"
           style={{ objectFit: "cover" }}
         />
-        <GrAddCircle
-          onClick={() => addToCart(product)}
-          style={{
-            color: "white",
-            width: "1.5rem",
-            height: "1.5rem",
-            position: "absolute",
-            top: 0,
-            right: 0,
-            transform: "translate(-25%, 25%)",
-            cursor: "pointer",
-          }}
-        />
+        {canAddToCart && (
+          <GrAddCircle
+            onClick={() => addToCart(product)}
+            style={{
+              color: "white",
+              width: "1.5rem",
+              height: "1.5rem",
+              position: "absolute",
+              top: 0,
+              right: 0,
+              transform: "translate(-25%, 25%)",
+              cursor: "pointer",
+            }}
+          />
+        )}
       </div>
       <Card.Body className="d-flex flex-column">
         <Card.Title className="d-flex justify-content-between align-items-baseline mb-4">
