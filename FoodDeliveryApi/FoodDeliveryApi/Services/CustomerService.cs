@@ -110,12 +110,12 @@ namespace FoodDeliveryApi.Services
                 throw new ValidationException(validationResult.Errors);
             }
 
-            if (await _customerRepository.IsEmailTaken(customer.Email) && updatedCustomer.Email != customer.Email)
+            if (await _customerRepository.IsEmailTaken(updatedCustomer.Email) && updatedCustomer.Email != customer.Email)
             {
                 throw new UserAlreadyExistsException("Customer with this email already exists");
             }
 
-            if (await _customerRepository.IsUsernameTaken(customer.Username) && updatedCustomer.Username != customer.Username)
+            if (await _customerRepository.IsUsernameTaken(updatedCustomer.Username) && updatedCustomer.Username != customer.Username)
             {
                 throw new UserAlreadyExistsException("Customer with this username already exists");
             }
