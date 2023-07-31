@@ -1,11 +1,11 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { RootState } from "../../app/store";
 import authService from "./authService";
-import { User } from "../../interfaces/user";
+import { Customer, Partner, UpdateUserData, User, UserType } from "../../interfaces/user";
 import { StateStatus } from "../../interfaces/state";
 import { LoginRequestDto } from "../../interfaces/login";
-import { RegisterCustomerRequestDto } from "../../interfaces/customer";
-import { RegisterPartnerRequestDto } from "../../interfaces/partner";
+import { RegisterCustomerRequestDto, UpdateCustomerRequestDto } from "../../interfaces/customer";
+import { RegisterPartnerRequestDto, UpdatePartnerRequestDto } from "../../interfaces/partner";
 
 interface AuthState {
   user: User | null;
@@ -56,6 +56,28 @@ export const registerPartner = createAsyncThunk(
   async (registerData: RegisterPartnerRequestDto, thunkAPI) => {
     try {
       return await authService.registerPartner(registerData);
+    } catch (error: unknown) {
+      let message: string = "";
+      if (error instanceof Error) {
+        message = error.message;
+      }
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+export const updateUser = createAsyncThunk(
+  "auth/update-user",
+  async ({ data, userId, userType }: UpdateUserData, thunkAPI) => {
+    try {
+      const { token } = (thunkAPI.getState() as RootState).auth;
+
+      switch (userType) {
+        case UserType.Customer:
+          return await authService.updateCustomer(userId, data as UpdateCustomerRequestDto, token);
+        case UserType.Partner:
+          return await authService.updatePartner(userId, data as UpdatePartnerRequestDto, token);
+      }
     } catch (error: unknown) {
       let message: string = "";
       if (error instanceof Error) {
@@ -118,6 +140,26 @@ export const authSlice = createSlice({
       .addCase(registerPartner.fulfilled, (state, action) => {
         state.status = StateStatus.Success;
         state.message = `Partner ${action.payload.username} successfully registered`;
+      })
+      .addCase(updateUser.pending, (state) => {
+        state.status = StateStatus.Loading;
+      })
+      .addCase(updateUser.rejected, (state, action) => {
+        state.status = StateStatus.Error;
+        state.user = null;
+        state.token = null;
+        state.message = action.payload as string;
+      })
+      .addCase(updateUser.fulfilled, (state, action) => {
+        state.status = StateStatus.Success;
+        switch (state.user?.userType) {
+          case UserType.Customer:
+            state.user = action.payload as Customer;
+            break;
+          case UserType.Partner:
+            state.user = action.payload as unknown as Partner;
+              break;
+        }
       });
   },
 });

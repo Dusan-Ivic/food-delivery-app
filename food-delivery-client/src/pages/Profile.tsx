@@ -1,21 +1,60 @@
-import { Col, Row, Form, Button, Card } from "react-bootstrap";
-import { useAppSelector } from "../app/hooks";
-import { UserType } from "../interfaces/user";
+import { Col, Row, Card } from "react-bootstrap";
+import { useAppSelector, useAppDispatch } from "../app/hooks";
+import { UpdateUserData, User, UserRequestDto, UserType } from "../interfaces/user";
 import { Customer } from "../interfaces/user";
 import { AddressDetails } from "../components/AddressDetails";
+import { UserDetails } from "../components/UserDetails";
+import { AddressInfo } from "../interfaces/customer";
+import { updateUser, reset } from "../features/auth/authSlice"
+import { useEffect } from "react";
+import { StateStatus } from "../interfaces/state";
+import { toast } from "react-toastify";
 
 export function Profile() {
-  const { user } = useAppSelector((state) => state.auth);
-
-  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-  };
+  const { user, status, message } = useAppSelector((state) => state.auth);
+  const dispatch = useAppDispatch();
 
   const mapUserTypeToColor = {
     [UserType.Customer]: "bg-success",
     [UserType.Partner]: "bg-warning",
     [UserType.Admin]: "bg-danger",
   };
+
+  const handleUpdateDetails = (data: UserRequestDto) => {
+    const updateData: UpdateUserData = {
+      data: {
+        ...user!,
+        ...data,
+      },
+      userId: user!.id,
+      userType: user!.userType,
+    }
+
+    dispatch(updateUser(updateData))
+  }
+
+  const handleUpdateAddress = (data: AddressInfo) => {
+    const updateData: UpdateUserData = {
+      data: {
+        ...user!,
+        ...data,
+      },
+      userId: user!.id,
+      userType: user!.userType,
+    }
+
+    dispatch(updateUser(updateData))
+  }
+
+  useEffect(() => {
+    if (status === StateStatus.Error) {
+      toast.error(message);
+    }
+
+    return () => {
+      dispatch(reset())
+    }
+  }, [status, message])
 
   return (
     <Row className="d-flex justify-content-center">
@@ -45,65 +84,22 @@ export function Profile() {
             </div>
           </Card>
         </div>
-        <Form onSubmit={onSubmit}>
-          <Row xs={1} sm={1} md={2}>
-            <Col>
-              <Form.Group className="mb-3" controlId="username">
-                <Form.Label>Username</Form.Label>
-                <Form.Control
-                  type="text"
-                  placeholder="example"
-                  value={user?.username}
-                  readOnly
-                />
-              </Form.Group>
-            </Col>
-            <Col>
-              <Form.Group className="mb-3" controlId="email">
-                <Form.Label>Email</Form.Label>
-                <Form.Control
-                  type="email"
-                  placeholder="example@example.com"
-                  value={user?.email}
-                  readOnly
-                />
-              </Form.Group>
-            </Col>
-          </Row>
 
-          <Row xs={1} sm={1} md={2}>
-            <Col>
-              <Form.Group className="mb-3" controlId="firstName">
-                <Form.Label>First name</Form.Label>
-                <Form.Control
-                  type="text"
-                  placeholder="John"
-                  value={user?.firstName}
-                  readOnly
-                />
-              </Form.Group>
-            </Col>
-            <Col>
-              <Form.Group className="mb-3" controlId="lastName">
-                <Form.Label>Last name</Form.Label>
-                <Form.Control
-                  type="text"
-                  placeholder="Doe"
-                  value={user?.lastName}
-                  readOnly
-                />
-              </Form.Group>
-            </Col>
-          </Row>
+        <hr />
 
-          {user?.userType == UserType.Customer && (
-            <AddressDetails user={user as Customer} />
-          )}
+        <div className="mt-3">
+          <h1 className="text-center mt-3 mb-4">User Details</h1>
+          <UserDetails user={user as User} onSubmit={(data) => handleUpdateDetails(data)} />
+        </div>
+        
+        <hr />
 
-          <Button variant="primary" type="submit" className="w-100">
-            Save Profile
-          </Button>
-        </Form>
+        {user?.userType == UserType.Customer && (
+          <div className="mt-3">
+            <h1 className="text-center mt-3 mb-4">Address Info</h1>
+            <AddressDetails user={user as Customer} onSubmit={(data) => handleUpdateAddress(data)} />
+          </div>
+        )}
       </Col>
     </Row>
   );

@@ -2,6 +2,7 @@
 using FluentValidation;
 using FluentValidation.Results;
 using FoodDeliveryApi.Dto.Customer;
+using FoodDeliveryApi.Enums;
 using FoodDeliveryApi.Exceptions;
 using FoodDeliveryApi.Interfaces.Repositories;
 using FoodDeliveryApi.Interfaces.Services;
@@ -76,7 +77,10 @@ namespace FoodDeliveryApi.Services
                 throw;
             }
 
-            return _mapper.Map<RegisterCustomerResponseDto>(customer);
+            RegisterCustomerResponseDto responseDto = _mapper.Map<RegisterCustomerResponseDto>(customer);
+            responseDto.UserType = UserType.Customer;
+
+            return responseDto;
         }
 
         public async Task<UpdateCustomerResponseDto> UpdateCustomer(long id, UpdateCustomerRequestDto requestDto)
@@ -126,7 +130,10 @@ namespace FoodDeliveryApi.Services
                 throw;
             }
 
-            return _mapper.Map<UpdateCustomerResponseDto>(customer);
+            UpdateCustomerResponseDto responseDto = _mapper.Map<UpdateCustomerResponseDto>(customer);
+            responseDto.UserType = UserType.Customer;
+
+            return responseDto;
         }
 
         public async Task<DeleteCustomerResponseDto> DeleteCustomer(long id)

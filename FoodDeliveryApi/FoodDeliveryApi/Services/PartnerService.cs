@@ -95,7 +95,10 @@ namespace FoodDeliveryApi.Services
                 throw;
             }
 
-            return _mapper.Map<RegisterPartnerResponseDto>(partner);
+            RegisterPartnerResponseDto responseDto = _mapper.Map<RegisterPartnerResponseDto>(partner);
+            responseDto.UserType = UserType.Partner;
+
+            return responseDto;
         }
 
         public async Task<UpdatePartnerResponseDto> UpdatePartner(long id, UpdatePartnerRequestDto requestDto)
@@ -142,7 +145,10 @@ namespace FoodDeliveryApi.Services
                 throw;
             }
 
-            return _mapper.Map<UpdatePartnerResponseDto>(partner);
+            UpdatePartnerResponseDto responseDto = _mapper.Map<UpdatePartnerResponseDto>(partner);
+            responseDto.UserType = UserType.Partner;
+
+            return responseDto;
         }
 
         public async Task<DeletePartnerResponseDto> DeletePartner(long id)
