@@ -31,7 +31,7 @@ export function UserDetails({ user, onSubmit }: UserDetailsProps) {
       username: user.username,
       email: user.email,
       firstName: user.firstName,
-      lastName: user.lastName
+      lastName: user.lastName,
     },
     resolver: yupResolver(validationSchema),
   });
@@ -96,5 +96,5 @@ export function UserDetails({ user, onSubmit }: UserDetailsProps) {
         Save Changes
       </Button>
     </Form>
-  )
+  );
 }

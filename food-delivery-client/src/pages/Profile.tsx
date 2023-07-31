@@ -1,11 +1,16 @@
 import { Col, Row, Card } from "react-bootstrap";
 import { useAppSelector, useAppDispatch } from "../app/hooks";
-import { UpdateUserData, User, UserRequestDto, UserType } from "../interfaces/user";
+import {
+  UpdateUserData,
+  User,
+  UserRequestDto,
+  UserType,
+} from "../interfaces/user";
 import { Customer } from "../interfaces/user";
 import { AddressDetails } from "../components/AddressDetails";
 import { UserDetails } from "../components/UserDetails";
 import { AddressInfo } from "../interfaces/customer";
-import { updateUser, reset } from "../features/auth/authSlice"
+import { updateUser, reset } from "../features/auth/authSlice";
 import { useEffect } from "react";
 import { StateStatus } from "../interfaces/state";
 import { toast } from "react-toastify";
@@ -28,10 +33,10 @@ export function Profile() {
       },
       userId: user!.id,
       userType: user!.userType,
-    }
+    };
 
-    dispatch(updateUser(updateData))
-  }
+    dispatch(updateUser(updateData));
+  };
 
   const handleUpdateAddress = (data: AddressInfo) => {
     const updateData: UpdateUserData = {
@@ -41,10 +46,10 @@ export function Profile() {
       },
       userId: user!.id,
       userType: user!.userType,
-    }
+    };
 
-    dispatch(updateUser(updateData))
-  }
+    dispatch(updateUser(updateData));
+  };
 
   useEffect(() => {
     if (status === StateStatus.Error) {
@@ -52,9 +57,9 @@ export function Profile() {
     }
 
     return () => {
-      dispatch(reset())
-    }
-  }, [status, message])
+      dispatch(reset());
+    };
+  }, [status, message]);
 
   return (
     <Row className="d-flex justify-content-center">
@@ -89,15 +94,21 @@ export function Profile() {
 
         <div className="mt-3">
           <h1 className="text-center mt-3 mb-4">User Details</h1>
-          <UserDetails user={user as User} onSubmit={(data) => handleUpdateDetails(data)} />
+          <UserDetails
+            user={user as User}
+            onSubmit={(data) => handleUpdateDetails(data)}
+          />
         </div>
-        
+
         <hr />
 
         {user?.userType == UserType.Customer && (
           <div className="mt-3">
             <h1 className="text-center mt-3 mb-4">Address Info</h1>
-            <AddressDetails user={user as Customer} onSubmit={(data) => handleUpdateAddress(data)} />
+            <AddressDetails
+              user={user as Customer}
+              onSubmit={(data) => handleUpdateAddress(data)}
+            />
           </div>
         )}
       </Col>

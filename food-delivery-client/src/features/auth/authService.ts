@@ -68,7 +68,7 @@ const registerPartner = async (
 const updateCustomer = async (
   customerId: number,
   requestDto: UpdateCustomerRequestDto,
-  token: string | null,
+  token: string | null
 ): Promise<CustomerResponseDto> => {
   try {
     const response = await axios.put<CustomerResponseDto>(
@@ -93,7 +93,7 @@ const updateCustomer = async (
 const updatePartner = async (
   partnerId: number,
   requestDto: UpdatePartnerRequestDto,
-  token: string | null,
+  token: string | null
 ): Promise<PartnerResponseDto> => {
   try {
     const response = await axios.put<PartnerResponseDto>(

@@ -1,11 +1,23 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { RootState } from "../../app/store";
 import authService from "./authService";
-import { Customer, Partner, UpdateUserData, User, UserType } from "../../interfaces/user";
+import {
+  Customer,
+  Partner,
+  UpdateUserData,
+  User,
+  UserType,
+} from "../../interfaces/user";
 import { StateStatus } from "../../interfaces/state";
 import { LoginRequestDto } from "../../interfaces/login";
-import { RegisterCustomerRequestDto, UpdateCustomerRequestDto } from "../../interfaces/customer";
-import { RegisterPartnerRequestDto, UpdatePartnerRequestDto } from "../../interfaces/partner";
+import {
+  RegisterCustomerRequestDto,
+  UpdateCustomerRequestDto,
+} from "../../interfaces/customer";
+import {
+  RegisterPartnerRequestDto,
+  UpdatePartnerRequestDto,
+} from "../../interfaces/partner";
 
 interface AuthState {
   user: User | null;
@@ -74,9 +86,17 @@ export const updateUser = createAsyncThunk(
 
       switch (userType) {
         case UserType.Customer:
-          return await authService.updateCustomer(userId, data as UpdateCustomerRequestDto, token);
+          return await authService.updateCustomer(
+            userId,
+            data as UpdateCustomerRequestDto,
+            token
+          );
         case UserType.Partner:
-          return await authService.updatePartner(userId, data as UpdatePartnerRequestDto, token);
+          return await authService.updatePartner(
+            userId,
+            data as UpdatePartnerRequestDto,
+            token
+          );
       }
     } catch (error: unknown) {
       let message: string = "";
@@ -146,8 +166,6 @@ export const authSlice = createSlice({
       })
       .addCase(updateUser.rejected, (state, action) => {
         state.status = StateStatus.Error;
-        state.user = null;
-        state.token = null;
         state.message = action.payload as string;
       })
       .addCase(updateUser.fulfilled, (state, action) => {
@@ -158,7 +176,7 @@ export const authSlice = createSlice({
             break;
           case UserType.Partner:
             state.user = action.payload as unknown as Partner;
-              break;
+            break;
         }
       });
   },
