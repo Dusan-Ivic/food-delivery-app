@@ -6,12 +6,14 @@ interface ProductModalProps {
   isVisible: boolean;
   onSubmit: (data: ProductFormData) => void;
   handleClose: () => void;
+  product: ProductFormData | null;
 }
 
 export function ProductModal({
   isVisible,
   onSubmit,
   handleClose,
+  product,
 }: ProductModalProps) {
   return (
     <Modal show={isVisible} onHide={handleClose}>
@@ -19,7 +21,7 @@ export function ProductModal({
         <Modal.Title>Add new product</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <ProductForm onSubmit={onSubmit} />
+        <ProductForm onSubmit={onSubmit} product={product} />
       </Modal.Body>
     </Modal>
   );

@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { StateStatus } from "../../interfaces/state";
 import { RootState } from "../../app/store";
-import { CreateProductRequestDto, Product } from "../../interfaces/product";
+import { ProductRequestDto, Product } from "../../interfaces/product";
 import productsService from "./productsService";
 
 interface ProductsState {
@@ -33,10 +33,26 @@ export const getProductsByStore = createAsyncThunk(
 
 export const createProduct = createAsyncThunk(
   "products/create",
-  async (productData: CreateProductRequestDto, thunkAPI) => {
+  async (productData: ProductRequestDto, thunkAPI) => {
     try {
       const { token } = (thunkAPI.getState() as RootState).auth;
       return await productsService.createProduct(productData, token);
+    } catch (error: unknown) {
+      let message: string = "";
+      if (error instanceof Error) {
+        message = error.message;
+      }
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+export const updateProduct = createAsyncThunk(
+  "products/update",
+  async (product: { data: ProductRequestDto, productId: number}, thunkAPI) => {
+    try {
+      const { token } = (thunkAPI.getState() as RootState).auth;
+      return await productsService.updateProduct(product.productId, product.data, token);
     } catch (error: unknown) {
       let message: string = "";
       if (error instanceof Error) {
@@ -84,6 +100,22 @@ export const productsSlice = createSlice({
       .addCase(createProduct.fulfilled, (state, action) => {
         state.status = StateStatus.Success;
         state.products.push(action.payload);
+      })
+      .addCase(updateProduct.pending, (state) => {
+        state.status = StateStatus.Loading;
+      })
+      .addCase(updateProduct.rejected, (state, action) => {
+        state.status = StateStatus.Error;
+        state.message = action.payload as string;
+      })
+      .addCase(updateProduct.fulfilled, (state, action) => {
+        state.status = StateStatus.Success;
+        state.products = state.products.map((product) => {
+          if (product.id === action.payload.id) {
+            return action.payload;
+          }
+          return product;
+        });
       });
   },
 });

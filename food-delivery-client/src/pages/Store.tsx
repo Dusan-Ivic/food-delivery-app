@@ -3,6 +3,9 @@ import { Link, useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import {
   getProductsByStore,
+  createProduct,
+  updateProduct,
+  reset as resetProductsState,
   clearProducts,
 } from "../features/products/productsSlice";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
@@ -31,9 +34,8 @@ import { CreateOrderRequestDto } from "../interfaces/order";
 import { StateStatus } from "../interfaces/state";
 import { toast } from "react-toastify";
 import { UserType } from "../interfaces/user";
-import { ProductFormData } from "../interfaces/product";
+import { Product, ProductFormData } from "../interfaces/product";
 import { ProductModal } from "../components/ProductModal";
-import { createProduct } from "../features/products/productsSlice"
 
 export function StorePage() {
   const { id } = useParams();
@@ -53,18 +55,31 @@ export function StorePage() {
     [items]
   );
   const [modalVisible, setModalVisible] = useState<boolean>(false);
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
 
-  const handleOpenModal = () => {
+  const handleOpenModal = (product: Product | null) => {
+    if (product) {
+      setSelectedProduct(product);
+    }
     setModalVisible(true);
   };
 
   const handleCloseModal = () => {
     setModalVisible(false);
+    setSelectedProduct(null);
   };
 
   const handleSubmit = (data: ProductFormData) => {
-    dispatch(createProduct({...data, storeId: store!.id}));
+    if (selectedProduct) {
+      dispatch(updateProduct({
+        data: { ...data, storeId: selectedProduct.storeId },
+        productId: selectedProduct.id
+      }))
+    } else {
+      dispatch(createProduct({...data, storeId: store!.id}));
+    }
     setModalVisible(false);
+    setSelectedProduct(null);
   };
 
   useEffect(() => {
@@ -86,7 +101,6 @@ export function StorePage() {
     return () => {
       dispatch(clearProducts());
       dispatch(closeCart());
-      dispatch(resetOrdersState());
     };
   }, [id]);
 
@@ -106,11 +120,19 @@ export function StorePage() {
       dispatch(clearCartItems());
       setCartVisible(false);
     }
+
+    return () => {
+      dispatch(resetOrdersState())
+    }
   }, [ordersStatus, ordersMessage]);
 
   useEffect(() => {
     if (productsStatus == StateStatus.Error) {
       toast.error(productsMessage);
+    }
+
+    return () => {
+      dispatch(resetProductsState())
     }
 
   }, [productsStatus, productsMessage]);
@@ -179,7 +201,7 @@ export function StorePage() {
             )}
             {canManageProducts && (
               <Button
-                onClick={() => handleOpenModal()}
+                onClick={() => handleOpenModal(null)}
                 className="position-relative"
               >
                 <IoMdAddCircleOutline className="fs-4" />
@@ -192,6 +214,8 @@ export function StorePage() {
           products={products}
           canAddToCart={canManageCart}
           addToCart={(product) => dispatch(addToCart(product))}
+          canManageProduct={canManageProducts}
+          editProduct={(product) => handleOpenModal(product)}
         />
         <ShoppingCart
           store={store}
@@ -206,6 +230,7 @@ export function StorePage() {
           onSubmit={handleSubmit}
           isVisible={modalVisible}
           handleClose={handleCloseModal}
+          product={selectedProduct}
         />
       </>
     )

@@ -9,7 +9,7 @@ export interface Product {
 
 export interface GetProductResponseDto extends Product {}
 
-export interface CreateProductRequestDto {
+export interface ProductRequestDto {
   name: string;
   description: string;
   price: number;
@@ -17,7 +17,7 @@ export interface CreateProductRequestDto {
   storeId: number;
 } 
 
-export interface CreateProductResponseDto extends Product {}
+export interface ProductResponseDto extends Product {}
 
 export interface ProductFormData {
   name: string;

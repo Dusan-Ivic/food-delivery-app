@@ -6,9 +6,10 @@ import { ProductFormData } from "../../interfaces/product";
 
 interface ProductFormProps {
   onSubmit: (data: ProductFormData) => void;
+  product: ProductFormData | null;
 }
 
-export function ProductForm({ onSubmit }: ProductFormProps) {
+export function ProductForm({ onSubmit, product }: ProductFormProps) {
   const validationSchema = Yup.object().shape({
     name: Yup.string()
       .required("Name is required")
@@ -26,12 +27,20 @@ export function ProductForm({ onSubmit }: ProductFormProps) {
       .moreThan(0, "Quantity must be greater than 0"),
   });
 
+  const initialValues: ProductFormData = {
+    name: product?.name || "",
+    description: product?.description || "",
+    price: product?.price || 0,
+    quantity: product?.quantity || 0,
+  }
+
   const {
     register,
     handleSubmit,
     formState: { errors, touchedFields },
   } = useForm<ProductFormData>({
     mode: "all",
+    defaultValues: initialValues,
     resolver: yupResolver(validationSchema),
   });
 
@@ -113,7 +122,7 @@ export function ProductForm({ onSubmit }: ProductFormProps) {
       <Row>
         <Col>
           <Button variant="primary" type="submit" className="w-100">
-            Create
+            Submit
           </Button>
         </Col>
       </Row>
