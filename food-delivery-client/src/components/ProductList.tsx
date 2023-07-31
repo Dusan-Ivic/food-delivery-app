@@ -4,15 +4,30 @@ import { ProductItem } from "./ProductItem";
 
 interface ProductListProps {
   products: Product[];
+  canAddToCart: boolean;
   addToCart: (product: Product) => void;
+  canManageProduct: boolean;
+  editProduct: (product: Product) => void;
 }
 
-export function ProductList({ products, addToCart }: ProductListProps) {
+export function ProductList({
+  products,
+  canAddToCart,
+  addToCart,
+  canManageProduct,
+  editProduct,
+}: ProductListProps) {
   return (
     <Row md={2} xs={1} lg={2} xl={3} className="g-3">
       {products.map((product) => (
         <Col key={product.id}>
-          <ProductItem product={product} addToCart={addToCart} />
+          <ProductItem
+            product={product}
+            canAddToCart={canAddToCart}
+            addToCart={addToCart}
+            canManageProduct={canManageProduct}
+            editProduct={editProduct}
+          />
         </Col>
       ))}
     </Row>

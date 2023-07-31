@@ -4,7 +4,6 @@
     {
         public int DeliveryTimeInMinutes { get; set; }
         public decimal DeliveryFee { get; set; } = decimal.Zero;
-        public decimal MinimumOrderAmount { get; set; } = decimal.Zero;
     }
 
     public class Store
@@ -21,6 +20,6 @@
         public List<Product> Products { get; set; } = new List<Product>();
         public List<Order> Orders { get; set; } = new List<Order>();
         public DeliveryOptions DeliveryOptions { get; set; } = default!;
-        public List<string> Categories { get; set; } = new List<string>();
+        public string Category { get; set; } = string.Empty;
     }
 }

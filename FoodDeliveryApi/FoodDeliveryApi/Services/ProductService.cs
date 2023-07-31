@@ -90,7 +90,7 @@ namespace FoodDeliveryApi.Services
 
         public async Task<UpdateProductResponseDto> UpdateProduct(long id, long partnerId, UpdateProductRequestDto requestDto)
         {
-            Product? product = await _productRepository.GetProductById(id, true);
+            Product? product = await _productRepository.GetProductById(id);
 
             if (product == null)
             {
@@ -132,7 +132,7 @@ namespace FoodDeliveryApi.Services
 
         public async Task<DeleteProductResponseDto> DeleteProduct(long id, long partnerId)
         {
-            Product? product = await _productRepository.GetProductById(id, true);
+            Product? product = await _productRepository.GetProductById(id);
 
             if (product == null)
             {

@@ -10,7 +10,7 @@ export function Home() {
   const { stores, status, message } = useAppSelector((state) => state.stores);
 
   useEffect(() => {
-    dispatch(getStores());
+    dispatch(getStores(null));
 
     return () => {
       dispatch(reset());
@@ -25,7 +25,7 @@ export function Home() {
 
   return (
     <div>
-      <h1 className="text-center mt-3 mb-4">Stores</h1>
+      <h1 className="text-center mt-3 mb-4">Available Stores</h1>
       <StoreList stores={stores} />
     </div>
   );

@@ -3,6 +3,9 @@ import { Link, useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import {
   getProductsByStore,
+  createProduct,
+  updateProduct,
+  reset as resetProductsState,
   clearProducts,
 } from "../features/products/productsSlice";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
@@ -10,6 +13,7 @@ import { Store } from "../interfaces/store";
 import { StoreInfo } from "../components/StoreInfo";
 import { IoArrowBack } from "react-icons/io5";
 import { HiOutlineShoppingCart } from "react-icons/hi";
+import { IoMdAddCircleOutline } from "react-icons/io"
 import { ProductList } from "../components/ProductList";
 import { Button } from "react-bootstrap";
 import { ShoppingCart } from "../components/ShoppingCart";
@@ -28,16 +32,19 @@ import {
 import { CartItem } from "../interfaces/cart";
 import { CreateOrderRequestDto } from "../interfaces/order";
 import { StateStatus } from "../interfaces/state";
-import { formatCurrency } from "../utils/currencyFormatter";
 import { toast } from "react-toastify";
+import { UserType } from "../interfaces/user";
+import { Product, ProductFormData } from "../interfaces/product";
+import { ProductModal } from "../components/ProductModal";
 
 export function StorePage() {
   const { id } = useParams();
   const [store, setStore] = useState<Store | null>(null);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const { user } = useAppSelector((state) => state.auth);
   const { stores } = useAppSelector((state) => state.stores);
-  const { products } = useAppSelector((state) => state.products);
+  const { products, status: productsStatus, message: productsMessage } = useAppSelector((state) => state.products);
   const { status: ordersStatus, message: ordersMessage } = useAppSelector(
     (state) => state.orders
   );
@@ -47,6 +54,33 @@ export function StorePage() {
     () => items.reduce((quantity, item) => item.quantity + quantity, 0),
     [items]
   );
+  const [modalVisible, setModalVisible] = useState<boolean>(false);
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+
+  const handleOpenModal = (product: Product | null) => {
+    if (product) {
+      setSelectedProduct(product);
+    }
+    setModalVisible(true);
+  };
+
+  const handleCloseModal = () => {
+    setModalVisible(false);
+    setSelectedProduct(null);
+  };
+
+  const handleSubmit = (data: ProductFormData) => {
+    if (selectedProduct) {
+      dispatch(updateProduct({
+        data: { ...data, storeId: selectedProduct.storeId },
+        productId: selectedProduct.id
+      }))
+    } else {
+      dispatch(createProduct({...data, storeId: store!.id}));
+    }
+    setModalVisible(false);
+    setSelectedProduct(null);
+  };
 
   useEffect(() => {
     const numberId = Number(id);
@@ -67,7 +101,6 @@ export function StorePage() {
     return () => {
       dispatch(clearProducts());
       dispatch(closeCart());
-      dispatch(resetOrdersState());
     };
   }, [id]);
 
@@ -87,7 +120,22 @@ export function StorePage() {
       dispatch(clearCartItems());
       setCartVisible(false);
     }
+
+    return () => {
+      dispatch(resetOrdersState())
+    }
   }, [ordersStatus, ordersMessage]);
+
+  useEffect(() => {
+    if (productsStatus == StateStatus.Error) {
+      toast.error(productsMessage);
+    }
+
+    return () => {
+      dispatch(resetProductsState())
+    }
+
+  }, [productsStatus, productsMessage]);
 
   const submitOrder = (store: Store, items: CartItem[]) => {
     const requestDto: CreateOrderRequestDto = {
@@ -98,22 +146,28 @@ export function StorePage() {
       })),
     };
 
-    const itemsPrice = requestDto.items.reduce((total, cartItem) => {
-      const item = items.find((i) => i.id === cartItem.productId);
-      return total + (item?.price || 0) * cartItem.quantity;
-    }, 0);
-
-    if (itemsPrice < store.deliveryOptions.minimumOrderAmount) {
-      toast.error(
-        `Minimum order amount is ${formatCurrency(
-          store.deliveryOptions.minimumOrderAmount
-        )}. Please add more items to your cart.`
-      );
-      return;
-    }
-
     dispatch(createOrder(requestDto));
   };
+
+  const canManageCart = useMemo(() => {
+    if (!user) {
+      return false;
+    }
+
+    return user.userType == UserType.Customer;
+  }, [user]);
+
+  const canManageProducts = useMemo(() => {
+    if (!user) {
+      return false;
+    }
+
+    if (user.userType != UserType.Partner) {
+      return false;
+    }
+
+    return store?.partnerId === user.id;
+  }, [user, store]);
 
   return (
     store && (
@@ -123,32 +177,45 @@ export function StorePage() {
             <Link to="/" className="text-reset">
               <IoArrowBack className="fs-3" />
             </Link>
-            <Button
-              onClick={() => setCartVisible(true)}
-              className="position-relative"
-            >
-              <HiOutlineShoppingCart className="fs-4" />
-              <div
-                className="rounded-circle bg-danger d-flex justify-content-center align-items-center"
-                style={{
-                  color: "white",
-                  width: "1.5rem",
-                  height: "1.5rem",
-                  position: "absolute",
-                  bottom: 0,
-                  right: 0,
-                  transform: "translate(40%, 40%)",
-                }}
+            {canManageCart && (
+              <Button
+                onClick={() => setCartVisible(true)}
+                className="position-relative"
               >
-                {totalCartItems}
-              </div>
-            </Button>
+                <HiOutlineShoppingCart className="fs-4" />
+                <div
+                  className="rounded-circle bg-danger d-flex justify-content-center align-items-center"
+                  style={{
+                    color: "white",
+                    width: "1.5rem",
+                    height: "1.5rem",
+                    position: "absolute",
+                    bottom: 0,
+                    right: 0,
+                    transform: "translate(40%, 40%)",
+                  }}
+                >
+                  {totalCartItems}
+                </div>
+              </Button>
+            )}
+            {canManageProducts && (
+              <Button
+                onClick={() => handleOpenModal(null)}
+                className="position-relative"
+              >
+                <IoMdAddCircleOutline className="fs-4" />
+              </Button>
+            )}
           </div>
           <StoreInfo store={store} />
         </div>
         <ProductList
           products={products}
+          canAddToCart={canManageCart}
           addToCart={(product) => dispatch(addToCart(product))}
+          canManageProduct={canManageProducts}
+          editProduct={(product) => handleOpenModal(product)}
         />
         <ShoppingCart
           store={store}
@@ -158,6 +225,12 @@ export function StorePage() {
           removeFromCart={(itemId) => dispatch(removeFromCart(itemId))}
           decreaseQuantity={(itemId) => dispatch(decreaseQuantity(itemId))}
           submitOrder={(store, items) => submitOrder(store, items)}
+        />
+        <ProductModal
+          onSubmit={handleSubmit}
+          isVisible={modalVisible}
+          handleClose={handleCloseModal}
+          product={selectedProduct}
         />
       </>
     )

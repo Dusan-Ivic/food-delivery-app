@@ -20,7 +20,7 @@ export function StoreInfo({ store }: StoreInfoProps) {
         <Card.Body className="text-light d-flex flex-column justify-content-between h-100 p-0">
           <Card.Title className="d-flex justify-content-between align-items-baseline mb-4">
             <span className="fs-5">{store.name}</span>
-            <span className="ms-2">{store.categories[0]}</span>
+            <span className="ms-2">{store.category}</span>
           </Card.Title>
           <div>{store.description}</div>
           <div className="d-flex align-items-center column-gap-3 text-warning">
