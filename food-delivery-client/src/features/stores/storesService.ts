@@ -1,5 +1,9 @@
 import axios from "axios";
-import { GetStoreResponseDto } from "../../interfaces/store";
+import {
+  CreateStoreRequestDto,
+  CreateStoreResponseDto,
+  GetStoreResponseDto,
+} from "../../interfaces/store";
 
 const getStores = async (
   partnerId: number | null
@@ -36,9 +40,34 @@ const getStoresByPartner = async (
   }
 };
 
+const createStore = async (
+  requestDto: CreateStoreRequestDto,
+  token: string | null
+): Promise<CreateStoreResponseDto> => {
+  try {
+    const response = await axios.post<CreateStoreResponseDto>(
+      `${import.meta.env.VITE_API_URL}/api/stores`,
+      requestDto,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw new Error(error.response?.data.message);
+    } else {
+      throw new Error("Unknown error occurred.");
+    }
+  }
+};
+
 const storesService = {
   getStores,
   getStoresByPartner,
+  createStore,
 };
 
 export default storesService;

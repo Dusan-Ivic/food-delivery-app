@@ -1,15 +1,23 @@
-import { getStores, clearStores } from "../features/stores/storesSlice";
+import {
+  getStores,
+  clearStores,
+  createStore,
+  reset,
+} from "../features/stores/storesSlice";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { useEffect } from "react";
 import { StoreList } from "../components/StoreList";
 import { BsHouseAddFill } from "react-icons/bs";
 import { Button, Col, Row } from "react-bootstrap";
 import { StoreForm } from "../components/forms";
+import { StateStatus } from "../interfaces/state";
+import { toast } from "react-toastify";
+import { CreateStoreRequestDto as StoreFormData } from "../interfaces/store";
 
 export function PartnerDashboard() {
   const dispatch = useAppDispatch();
   const { user } = useAppSelector((state) => state.auth);
-  const { stores } = useAppSelector((state) => state.stores);
+  const { stores, status, message } = useAppSelector((state) => state.stores);
 
   useEffect(() => {
     if (user) {
@@ -20,6 +28,20 @@ export function PartnerDashboard() {
       dispatch(clearStores());
     };
   }, []);
+
+  useEffect(() => {
+    if (status == StateStatus.Error) {
+      toast.error(message);
+    }
+
+    return () => {
+      dispatch(reset());
+    };
+  }, [status, message]);
+
+  const onSubmit = (data: StoreFormData) => {
+    dispatch(createStore(data));
+  };
 
   return (
     <div>
@@ -48,7 +70,7 @@ export function PartnerDashboard() {
       <Row className="d-flex justify-content-center">
         <Col xs={10} sm={12} md={10} lg={7} xl={6}>
           <h1 className="mt-3 mb-3">Create new store</h1>
-          <StoreForm onSubmit={(data) => console.log(data)} />
+          <StoreForm onSubmit={onSubmit} />
         </Col>
       </Row>
     </div>

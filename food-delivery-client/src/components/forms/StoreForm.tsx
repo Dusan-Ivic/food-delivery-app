@@ -33,9 +33,11 @@ export function StoreForm({ onSubmit }: StoreFormProps) {
       .max(20, "Category is too long"),
     deliveryOptions: Yup.object().shape({
       deliveryTimeInMinutes: Yup.number()
+        .typeError("Delivery time must be a number")
         .required("Delivery time is required")
         .moreThan(0, "Delivery time must be greater than 0"),
       deliveryFee: Yup.number()
+        .typeError("Delivery fee must be a number")
         .required("Delivery fee is required")
         .min(0, "Delivery fee can't be a negative number")
         .max(10, "Delivery fee can't be greater than $10"),
@@ -162,6 +164,8 @@ export function StoreForm({ onSubmit }: StoreFormProps) {
             <Form.Control
               type="number"
               defaultValue={0}
+              min={0}
+              step={0.1}
               {...register("deliveryOptions.deliveryTimeInMinutes")}
               isValid={
                 touchedFields.deliveryOptions?.deliveryTimeInMinutes &&
@@ -180,6 +184,8 @@ export function StoreForm({ onSubmit }: StoreFormProps) {
             <Form.Control
               type="number"
               defaultValue={0}
+              min={0}
+              step={0.1}
               {...register("deliveryOptions.deliveryFee")}
               isValid={
                 touchedFields.deliveryOptions?.deliveryFee &&

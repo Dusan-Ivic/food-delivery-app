@@ -100,20 +100,6 @@ export function StorePage() {
       })),
     };
 
-    const itemsPrice = requestDto.items.reduce((total, cartItem) => {
-      const item = items.find((i) => i.id === cartItem.productId);
-      return total + (item?.price || 0) * cartItem.quantity;
-    }, 0);
-
-    if (itemsPrice < store.deliveryOptions.minimumOrderAmount) {
-      toast.error(
-        `Minimum order amount is ${formatCurrency(
-          store.deliveryOptions.minimumOrderAmount
-        )}. Please add more items to your cart.`
-      );
-      return;
-    }
-
     dispatch(createOrder(requestDto));
   };
 

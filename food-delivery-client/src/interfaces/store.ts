@@ -28,3 +28,5 @@ export interface CreateStoreRequestDto {
   deliveryOptions: DeliveryOptions;
   category: string;
 }
+
+export interface CreateStoreResponseDto extends Store {}
