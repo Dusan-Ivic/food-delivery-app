@@ -13,6 +13,8 @@ export interface OrderItemResponseDto {
   quantity: number;
   totalPrice: number;
   orderId: number;
+  productName: string;
+  productPrice: number;
 }
 
 export interface OrderResponseDto {
@@ -23,6 +25,7 @@ export interface OrderResponseDto {
   deliveryFee: number;
   totalPrice: number;
   storeId: number;
+  storeName: string;
   items: OrderItemResponseDto[];
 }
 
