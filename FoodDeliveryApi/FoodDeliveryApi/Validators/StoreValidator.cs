@@ -35,7 +35,8 @@ namespace FoodDeliveryApi.Validators
                 .SetValidator(new DeliveryOptionsValidator());
 
             RuleFor(x => x.Category)
-                .NotNull().WithMessage("Category is required");
+                .NotNull().WithMessage("Category is required")
+                .MaximumLength(20).WithMessage("Category is too long");
         }
     }
 
