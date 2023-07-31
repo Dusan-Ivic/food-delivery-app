@@ -13,7 +13,7 @@ export function OrderHistory({ orders }: OrderHistoryProps) {
       <thead>
         <tr>
           <th>Order ID</th>
-          <th>Store ID</th>
+          <th>Store</th>
           <th>Creation date</th>
           <th>Creation time</th>
           <th>Total Amount</th>
@@ -23,7 +23,7 @@ export function OrderHistory({ orders }: OrderHistoryProps) {
         {orders.map((order) => (
           <tr key={order.id}>
             <td>{order.id}</td>
-            <td>{order.storeId}</td>
+            <td>{order.store?.name}</td>
             <td>{moment(order.createdAt).format("LL")}</td>
             <td>{moment(order.createdAt).format("LT")}</td>
             <td>{formatCurrency(order.totalPrice)}</td>

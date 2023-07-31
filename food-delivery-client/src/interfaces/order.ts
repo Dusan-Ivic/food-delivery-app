@@ -1,3 +1,6 @@
+import { Product } from "./product";
+import { Store } from "./store";
+
 export interface OrderItemRequestDto {
   productId: number;
   quantity: number;
@@ -13,6 +16,7 @@ export interface OrderItemResponseDto {
   quantity: number;
   totalPrice: number;
   orderId: number;
+  product: Product;
 }
 
 export interface OrderResponseDto {
@@ -23,6 +27,7 @@ export interface OrderResponseDto {
   deliveryFee: number;
   totalPrice: number;
   storeId: number;
+  store: Store;
   items: OrderItemResponseDto[];
 }
 
