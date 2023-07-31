@@ -5,19 +5,33 @@ import {
   reset,
 } from "../features/stores/storesSlice";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { StoreList } from "../components/StoreList";
 import { BsHouseAddFill } from "react-icons/bs";
-import { Button, Col, Row } from "react-bootstrap";
-import { StoreForm } from "../components/forms";
+import { Button } from "react-bootstrap";
 import { StateStatus } from "../interfaces/state";
 import { toast } from "react-toastify";
 import { CreateStoreRequestDto as StoreFormData } from "../interfaces/store";
+import { StoreModal } from "../components/StoreModal";
 
 export function PartnerDashboard() {
   const dispatch = useAppDispatch();
   const { user } = useAppSelector((state) => state.auth);
   const { stores, status, message } = useAppSelector((state) => state.stores);
+  const [modalVisible, setModalVisible] = useState<boolean>(false);
+
+  const handleOpenModal = () => {
+    setModalVisible(true);
+  };
+
+  const handleCloseModal = () => {
+    setModalVisible(false);
+  };
+
+  const handleSubmit = (data: StoreFormData) => {
+    dispatch(createStore(data));
+    setModalVisible(false);
+  };
 
   useEffect(() => {
     if (user) {
@@ -39,19 +53,12 @@ export function PartnerDashboard() {
     };
   }, [status, message]);
 
-  const onSubmit = (data: StoreFormData) => {
-    dispatch(createStore(data));
-  };
-
   return (
     <div>
       <div>
         <div className="d-flex justify-content-between align-items-center mb-3">
           <h1 className="text-center mt-3 mb-3">Your Stores</h1>
-          <Button
-            onClick={() => console.log("add store")}
-            className="bg-success"
-          >
+          <Button onClick={() => handleOpenModal()} className="bg-success">
             <BsHouseAddFill className="fs-4" />
           </Button>
         </div>
@@ -67,12 +74,11 @@ export function PartnerDashboard() {
 
       <hr />
 
-      <Row className="d-flex justify-content-center">
-        <Col xs={10} sm={12} md={10} lg={7} xl={6}>
-          <h1 className="mt-3 mb-3">Create new store</h1>
-          <StoreForm onSubmit={onSubmit} />
-        </Col>
-      </Row>
+      <StoreModal
+        onSubmit={handleSubmit}
+        isVisible={modalVisible}
+        handleClose={handleCloseModal}
+      />
     </div>
   );
 }

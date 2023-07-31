@@ -28,7 +28,6 @@ import {
 import { CartItem } from "../interfaces/cart";
 import { CreateOrderRequestDto } from "../interfaces/order";
 import { StateStatus } from "../interfaces/state";
-import { formatCurrency } from "../utils/currencyFormatter";
 import { toast } from "react-toastify";
 import { UserType } from "../interfaces/user";
 
