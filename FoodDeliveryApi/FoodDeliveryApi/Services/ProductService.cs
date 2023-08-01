@@ -144,9 +144,11 @@ namespace FoodDeliveryApi.Services
                 throw new ActionNotAllowedException("Unauthorized to delete this product. Only the creator can perform this action.");
             }
 
+            product.IsDeleted = true;
+
             try
             {
-                await _productRepository.DeleteProduct(product);
+                await _productRepository.UpdateProduct(product);
             }
             catch (Exception)
             {
