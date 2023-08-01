@@ -3,6 +3,7 @@ import {
   ProductRequestDto,
   ProductResponseDto,
 } from "../../interfaces/product";
+import { ImageResponseDto } from "../../interfaces/image";
 
 const getProductsByStore = async (
   storeId: number
@@ -93,11 +94,38 @@ const deleteProduct = async (
   }
 };
 
+const uploadImage = async (
+  productId: number,
+  formData: FormData,
+  token: string | null
+): Promise<ImageResponseDto> => {
+  try {
+    const response = await axios.put<ImageResponseDto>(
+      `${import.meta.env.VITE_API_URL}/api/products/${productId}/image`,
+      formData,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw new Error(error.response?.data.message);
+    } else {
+      throw new Error("Unknown error occurred.");
+    }
+  }
+};
+
 const productsService = {
   getProductsByStore,
   createProduct,
   updateProduct,
   deleteProduct,
+  uploadImage,
 };
 
 export default productsService;

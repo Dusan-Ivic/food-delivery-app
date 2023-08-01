@@ -1,9 +1,10 @@
-import { Card } from "react-bootstrap";
+import { Card, Form } from "react-bootstrap";
 import { ProductState } from "../interfaces/product";
 import { formatCurrency } from "../utils/currencyFormatter";
 import { GrAddCircle } from "react-icons/gr";
 import { BiEdit } from "react-icons/bi";
 import { AiFillDelete } from "react-icons/ai";
+import { useRef } from "react";
 
 interface ProductItemProps {
   product: ProductState;
@@ -12,6 +13,7 @@ interface ProductItemProps {
   canManageProduct: boolean;
   editProduct: (product: ProductState) => void;
   deleteProduct: (product: ProductState) => void;
+  onImageChange: (productId: number, imageFile: File | null) => void;
 }
 
 export function ProductItem({
@@ -21,15 +23,42 @@ export function ProductItem({
   canManageProduct,
   editProduct,
   deleteProduct,
+  onImageChange,
 }: ProductItemProps) {
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleClick = () => {
+    if (fileInputRef.current && canManageProduct) {
+      fileInputRef.current.click();
+    }
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const imageFile = e.target.files?.item(0);
+    if (imageFile && canManageProduct) {
+      onImageChange(product.id, imageFile);
+    }
+  };
+
   return (
     <Card className="h-100">
       <div>
         <Card.Img
           variant="top"
-          src={"https://placehold.co/900x600?text=No+Image"}
+          src={product?.imageData || "/images/no-image.svg"}
           height="200px"
-          style={{ objectFit: "cover" }}
+          style={{
+            objectFit: "cover",
+            cursor: canManageProduct ? "pointer" : "default",
+          }}
+          onClick={handleClick}
+        />
+        <Form.Control
+          type="file"
+          ref={fileInputRef}
+          className="d-none"
+          onChange={handleChange}
+          accept=".jpg, .jpeg, .png"
         />
         {canManageProduct && (
           <AiFillDelete
