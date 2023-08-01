@@ -161,6 +161,26 @@ const getImage = async (token: string | null): Promise<ImageResponseDto> => {
   }
 };
 
+const removeImage = async (token: string | null): Promise<void> => {
+  try {
+    const response = await axios.delete(
+      `${import.meta.env.VITE_API_URL}/api/auth/image`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw new Error(error.response?.data.message);
+    } else {
+      throw new Error("Unknown error occurred.");
+    }
+  }
+};
+
 const authService = {
   loginUser,
   registerCustomer,
@@ -169,6 +189,7 @@ const authService = {
   updatePartner,
   uploadImage,
   getImage,
+  removeImage,
 };
 
 export default authService;

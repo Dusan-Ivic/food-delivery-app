@@ -140,6 +140,22 @@ export const getImage = createAsyncThunk(
   }
 );
 
+export const removeImage = createAsyncThunk(
+  "auth/remove-image",
+  async (_, thunkAPI) => {
+    try {
+      const { token } = (thunkAPI.getState() as RootState).auth;
+      return await authService.removeImage(token);
+    } catch (error: unknown) {
+      let message: string = "";
+      if (error instanceof Error) {
+        message = error.message;
+      }
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
 export const authSlice = createSlice({
   name: "auth",
   initialState,
@@ -255,6 +271,19 @@ export const authSlice = createSlice({
           } else {
             state.user.image = null;
           }
+        }
+      })
+      .addCase(removeImage.pending, (state) => {
+        state.status = StateStatus.Loading;
+      })
+      .addCase(removeImage.rejected, (state, action) => {
+        state.status = StateStatus.Error;
+        state.message = action.payload as string;
+      })
+      .addCase(removeImage.fulfilled, (state) => {
+        state.status = StateStatus.Success;
+        if (state.user) {
+          state.user.image = null;
         }
       });
   },

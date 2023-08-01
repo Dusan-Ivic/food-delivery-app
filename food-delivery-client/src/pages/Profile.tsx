@@ -15,6 +15,7 @@ import {
   reset,
   uploadImage,
   getImage,
+  removeImage,
 } from "../features/auth/authSlice";
 import { useEffect, useRef } from "react";
 import { StateStatus } from "../interfaces/state";
@@ -85,7 +86,11 @@ export function Profile() {
     }
   };
 
-  const handleRemove = () => {};
+  const handleRemove = () => {
+    if (user && user.image) {
+      dispatch(removeImage());
+    }
+  };
 
   return (
     user && (

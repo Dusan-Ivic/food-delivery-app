@@ -9,5 +9,6 @@ namespace FoodDeliveryApi.Interfaces.Services
         public Task ChangePassword(long id, UserType userType, ChangePasswordRequestDto requestDto);
         public Task<ImageResponseDto> UploadImage(long id, UserType userType, IFormFile image);
         public Task<ImageResponseDto> GetImage(long userId, UserType userType);
+        public Task RemoveImage(long userId, UserType userType);
     }
 }

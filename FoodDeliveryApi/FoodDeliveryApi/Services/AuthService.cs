@@ -15,6 +15,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace FoodDeliveryApi.Services
 {
@@ -200,6 +201,29 @@ namespace FoodDeliveryApi.Services
             }
 
             return _mapper.Map<ImageResponseDto>(existingUser);
+        }
+
+        public async Task RemoveImage(long userId, UserType userType)
+        {
+            User? existingUser = await _authRepository.GetUserById(userId, userType);
+
+            if (existingUser == null)
+            {
+                throw new ResourceNotFoundException("User with this id doesn't exist");
+            }
+
+            existingUser.ImageData = new byte[0];
+
+            try
+            {
+                existingUser = await _authRepository.UpdateUser(existingUser);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+            return;
         }
     }
 }
