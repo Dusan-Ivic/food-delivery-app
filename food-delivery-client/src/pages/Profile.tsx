@@ -4,7 +4,6 @@ import {
   UpdateUserData,
   User,
   UserRequestDto,
-  UserType,
   Customer,
 } from "../interfaces/user";
 import { AddressDetails } from "../components/AddressDetails";
@@ -18,7 +17,7 @@ import {
   removeImage,
 } from "../features/auth/authSlice";
 import { useEffect, useRef } from "react";
-import { StateStatus } from "../interfaces/state";
+import { UserType, StateStatus } from "../interfaces/enums";
 import { toast } from "react-toastify";
 import { UserAvatar } from "../components/UserAvatar";
 

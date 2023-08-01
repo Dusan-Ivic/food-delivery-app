@@ -3,7 +3,7 @@ import { Col, Row } from "react-bootstrap";
 import { RegisterCustomerRequestDto as RegisterCustomerFormData } from "../interfaces/customer";
 import { RegisterPartnerRequestDto as RegisterPartnerFormData } from "../interfaces/partner";
 import { Link } from "react-router-dom";
-import { AllowedUserType } from "../interfaces/user";
+import { AllowedUserType, StateStatus } from "../interfaces/enums";
 import { SetUserTypeScreen, RegisterFormScreen } from "./screens";
 import {
   registerCustomer,
@@ -12,7 +12,6 @@ import {
 } from "../features/auth/authSlice";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { useNavigate } from "react-router-dom";
-import { StateStatus } from "../interfaces/state";
 import { toast } from "react-toastify";
 
 export function Register() {

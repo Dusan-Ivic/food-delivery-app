@@ -5,10 +5,9 @@ import { LoginRequestDto as LoginFormData } from "../interfaces/login";
 import { loginUser, reset } from "../features/auth/authSlice";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { useNavigate } from "react-router-dom";
-import { StateStatus } from "../interfaces/state";
+import { StateStatus, UserType } from "../interfaces/enums";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
-import { UserType } from "../interfaces/user";
 
 export function Login() {
   const navigate = useNavigate();

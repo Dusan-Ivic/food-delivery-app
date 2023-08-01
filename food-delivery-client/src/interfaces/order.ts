@@ -1,10 +1,5 @@
+import { OrderStatus } from "./enums";
 import { StoreResponseDto } from "./store";
-
-export enum OrderStatus {
-  Pending = 0,
-  Canceled = 1,
-  Completed = 2,
-}
 
 export interface OrderItemRequestDto {
   productId: number;

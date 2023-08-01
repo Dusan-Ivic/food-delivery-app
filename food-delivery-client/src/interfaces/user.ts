@@ -1,16 +1,6 @@
 import { UpdateCustomerRequestDto } from "./customer";
 import { UpdatePartnerRequestDto } from "./partner";
-
-export enum UserType {
-  Customer = 0,
-  Partner = 1,
-  Admin = 2,
-}
-
-export enum AllowedUserType {
-  Customer = 0,
-  Partner = 1,
-}
+import { PartnerStatus, UserType } from "./enums";
 
 interface UserBase {
   id: number;
@@ -35,13 +25,6 @@ export interface Customer extends UserBase {
 export interface Admin extends UserBase {}
 
 export type User = Customer | Partner | Admin;
-
-export enum PartnerStatus {
-  Pending = 0,
-  Rejected = 1,
-  Accepted = 2,
-  Suspended = 3,
-}
 
 export interface UserRequestDto {
   username: string;

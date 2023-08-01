@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { StoreList } from "../components/StoreList";
 import { getStores, reset } from "../features/stores/storesSlice";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
-import { StateStatus } from "../interfaces/state";
+import { StateStatus } from "../interfaces/enums";
 import { toast } from "react-toastify";
 
 export function Home() {

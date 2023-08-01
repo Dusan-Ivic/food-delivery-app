@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { AllowedUserType } from "../../interfaces/user";
+import { AllowedUserType } from "../../interfaces/enums";
 import { RegisterCustomerRequestDto as RegisterCustomerFormData } from "../../interfaces/customer";
 import { RegisterPartnerRequestDto as RegisterPartnerFormData } from "../../interfaces/partner";
 import {

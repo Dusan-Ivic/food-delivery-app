@@ -1,5 +1,5 @@
 import { Button } from "react-bootstrap";
-import { AllowedUserType } from "../../interfaces/user";
+import { AllowedUserType } from "../../interfaces/enums";
 
 interface SetUserTypeProps {
   onSetType: (type: AllowedUserType) => void;

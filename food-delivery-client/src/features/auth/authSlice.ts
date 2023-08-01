@@ -1,14 +1,8 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { RootState } from "../../app/store";
 import authService from "./authService";
-import {
-  Customer,
-  Partner,
-  UpdateUserData,
-  User,
-  UserType,
-} from "../../interfaces/user";
-import { StateStatus } from "../../interfaces/state";
+import { Customer, Partner, UpdateUserData, User } from "../../interfaces/user";
+import { StateStatus, UserType } from "../../interfaces/enums";
 import { LoginRequestDto } from "../../interfaces/login";
 import {
   RegisterCustomerRequestDto,

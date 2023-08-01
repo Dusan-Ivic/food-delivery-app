@@ -4,7 +4,7 @@ import { logout } from "../features/auth/authSlice";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { useNavigate } from "react-router-dom";
 import { useMemo } from "react";
-import { UserType } from "../interfaces/user";
+import { UserType } from "../interfaces/enums";
 
 export function Header() {
   const navigate = useNavigate();

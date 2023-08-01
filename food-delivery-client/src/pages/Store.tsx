@@ -36,9 +36,8 @@ import {
 } from "../features/stores/storesSlice";
 import { CartItem } from "../interfaces/cart";
 import { CreateOrderRequestDto } from "../interfaces/order";
-import { StateStatus } from "../interfaces/state";
+import { StateStatus, UserType } from "../interfaces/enums";
 import { toast } from "react-toastify";
-import { UserType } from "../interfaces/user";
 import { Product, ProductFormData } from "../interfaces/product";
 import { ProductModal } from "../components/ProductModal";
 import { ConfirmationModal } from "../components/ConfirmationModal";

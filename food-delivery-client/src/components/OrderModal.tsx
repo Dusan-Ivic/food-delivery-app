@@ -1,5 +1,6 @@
 import { Button, Col, Modal, Row, Stack } from "react-bootstrap";
-import { OrderResponseDto as Order, OrderStatus } from "../interfaces/order";
+import { OrderResponseDto as Order } from "../interfaces/order";
+import { OrderStatus } from "../interfaces/enums";
 import { formatCurrency } from "../utils/currencyFormatter";
 import { MdOutlineKeyboardDoubleArrowRight } from "react-icons/md";
 import { ImCancelCircle } from "react-icons/im";

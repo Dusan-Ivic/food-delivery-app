@@ -1,4 +1,5 @@
-import { User, UserType } from "./user";
+import { UserType } from "./enums";
+import { User } from "./user";
 
 export interface LoginRequestDto {
   username: string;

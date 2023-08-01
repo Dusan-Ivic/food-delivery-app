@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { StateStatus } from "../../interfaces/state";
+import { StateStatus } from "../../interfaces/enums";
 import { StoreRequestDto, StoreState } from "../../interfaces/store";
 import { RootState } from "../../app/store";
 import storesService from "./storesService";
