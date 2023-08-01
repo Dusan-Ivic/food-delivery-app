@@ -2,10 +2,10 @@ import { Form, Button, Row, Col } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
-import { RegisterPartnerRequestDto as RegisterPartnerFormData } from "../../interfaces/partner";
+import { RegisterPartnerRequestDto } from "../../interfaces/partner";
 
 interface RegisterPartnerProps {
-  onSubmit: (data: RegisterPartnerFormData) => void;
+  onSubmit: (data: RegisterPartnerRequestDto) => void;
 }
 
 export function RegisterPartner({ onSubmit }: RegisterPartnerProps) {
@@ -31,7 +31,7 @@ export function RegisterPartner({ onSubmit }: RegisterPartnerProps) {
     register,
     handleSubmit,
     formState: { errors, touchedFields },
-  } = useForm<RegisterPartnerFormData>({
+  } = useForm<RegisterPartnerRequestDto>({
     mode: "all",
     resolver: yupResolver(validationSchema),
   });

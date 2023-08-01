@@ -1,16 +1,15 @@
 import { Row, Col, Form, Button } from "react-bootstrap";
-import { Customer } from "../interfaces/user";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
-import { AddressInfo } from "../interfaces/customer";
+import { AddressInfo } from "../interfaces/user";
 
 interface AddressDetailsProps {
-  user: Customer;
+  data: AddressInfo;
   onSubmit: (data: AddressInfo) => void;
 }
 
-export function AddressDetails({ user, onSubmit }: AddressDetailsProps) {
+export function AddressDetails({ data, onSubmit }: AddressDetailsProps) {
   const validationSchema = Yup.object().shape({
     address: Yup.string()
       .required("Address is required")
@@ -30,9 +29,9 @@ export function AddressDetails({ user, onSubmit }: AddressDetailsProps) {
   } = useForm<AddressInfo>({
     mode: "all",
     defaultValues: {
-      address: user.address,
-      city: user.city,
-      postalCode: user.postalCode
+      address: data.address,
+      city: data.city,
+      postalCode: data.postalCode,
     },
     resolver: yupResolver(validationSchema),
   });

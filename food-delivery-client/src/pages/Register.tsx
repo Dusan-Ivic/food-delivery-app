@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Col, Row } from "react-bootstrap";
-import { RegisterCustomerRequestDto as RegisterCustomerFormData } from "../interfaces/customer";
-import { RegisterPartnerRequestDto as RegisterPartnerFormData } from "../interfaces/partner";
+import { CustomerRequestDto } from "../interfaces/customer";
+import { PartnerRequestDto } from "../interfaces/partner";
 import { Link } from "react-router-dom";
 import { AllowedUserType, StateStatus } from "../interfaces/enums";
 import { SetUserTypeScreen, RegisterFormScreen } from "./screens";
@@ -20,15 +20,13 @@ export function Register() {
   const dispatch = useAppDispatch();
   const { status, message } = useAppSelector((state) => state.auth);
 
-  const onSubmit = (
-    data: RegisterCustomerFormData | RegisterPartnerFormData
-  ) => {
+  const onSubmit = (data: CustomerRequestDto | PartnerRequestDto) => {
     switch (userType) {
       case AllowedUserType.Customer:
-        dispatch(registerCustomer(data as RegisterCustomerFormData));
+        dispatch(registerCustomer(data as CustomerRequestDto));
         break;
       case AllowedUserType.Partner:
-        dispatch(registerPartner(data as RegisterPartnerFormData));
+        dispatch(registerPartner(data as PartnerRequestDto));
         break;
     }
   };

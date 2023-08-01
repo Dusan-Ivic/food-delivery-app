@@ -1,20 +1,20 @@
-import { PartnerStatus } from "./enums";
+import { PartnerStatus, UserType } from "./enums";
+import { UserBase } from "./user";
 
-interface PartnerBase {
-  username: string;
-  email: string;
-  firstName: string;
-  lastName: string;
-}
-
-export interface PartnerResponseDto extends PartnerBase {
-  id: number;
-  status: PartnerStatus;
-}
+export interface PartnerBase extends UserBase {}
 
 export interface RegisterPartnerRequestDto extends PartnerBase {
   password: string;
   confirmPassword: string;
 }
 
-export interface UpdatePartnerRequestDto extends PartnerBase {}
+export interface PartnerRequestDto extends PartnerBase {}
+
+export interface PartnerResponseDto extends PartnerBase {
+  id: number;
+  status: PartnerStatus;
+  userType: UserType;
+  image: string | null;
+}
+
+export interface PartnerState extends PartnerResponseDto {}

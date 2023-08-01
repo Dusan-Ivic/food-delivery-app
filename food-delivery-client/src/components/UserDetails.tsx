@@ -2,14 +2,14 @@ import { Form, Row, Col, Button } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
-import { User, UserRequestDto } from "../interfaces/user";
+import { UserBase } from "../interfaces/user";
 
 interface UserDetailsProps {
-  onSubmit: (data: UserRequestDto) => void;
-  user: User;
+  data: UserBase;
+  onSubmit: (data: UserBase) => void;
 }
 
-export function UserDetails({ user, onSubmit }: UserDetailsProps) {
+export function UserDetails({ data, onSubmit }: UserDetailsProps) {
   const validationSchema = Yup.object().shape({
     username: Yup.string()
       .required("Username is required")
@@ -25,13 +25,13 @@ export function UserDetails({ user, onSubmit }: UserDetailsProps) {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<UserRequestDto>({
+  } = useForm<UserBase>({
     mode: "all",
     defaultValues: {
-      username: user.username,
-      email: user.email,
-      firstName: user.firstName,
-      lastName: user.lastName,
+      username: data.username,
+      email: data.email,
+      firstName: data.firstName,
+      lastName: data.lastName,
     },
     resolver: yupResolver(validationSchema),
   });

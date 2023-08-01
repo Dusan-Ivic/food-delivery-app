@@ -1,40 +1,22 @@
-import { UpdateCustomerRequestDto } from "./customer";
-import { UpdatePartnerRequestDto } from "./partner";
-import { PartnerStatus, UserType } from "./enums";
+import { CustomerRequestDto, CustomerState } from "./customer";
+import { PartnerRequestDto, PartnerState } from "./partner";
+import { AdminRequestDto, AdminState } from "./admin";
 
-interface UserBase {
-  id: number;
-  username: string;
-  email: string;
-  firstName: string;
-  lastName: string;
-  userType: UserType;
-  image: string | null;
-}
-
-export interface Partner extends UserBase {
-  partnerStatus: PartnerStatus;
-}
-
-export interface Customer extends UserBase {
+export interface AddressInfo {
   address: string;
   city: string;
   postalCode: string;
 }
 
-export interface Admin extends UserBase {}
-
-export type User = Customer | Partner | Admin;
-
-export interface UserRequestDto {
+export interface UserBase {
   username: string;
   email: string;
   firstName: string;
   lastName: string;
 }
 
-export interface UpdateUserData {
-  data: UpdateCustomerRequestDto | UpdatePartnerRequestDto;
-  userId: number;
-  userType: UserType;
-}
+export type UserState = CustomerState | PartnerState | AdminState;
+export type UserRequestDto =
+  | CustomerRequestDto
+  | PartnerRequestDto
+  | AdminRequestDto;

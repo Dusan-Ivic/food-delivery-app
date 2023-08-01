@@ -2,10 +2,10 @@ import { Form, Button, Row, Col } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
-import { RegisterCustomerRequestDto as RegisterCustomerFormData } from "../../interfaces/customer";
+import { RegisterCustomerRequestDto } from "../../interfaces/customer";
 
 interface RegisterCustomerProps {
-  onSubmit: (data: RegisterCustomerFormData) => void;
+  onSubmit: (data: RegisterCustomerRequestDto) => void;
 }
 
 export function RegisterCustomer({ onSubmit }: RegisterCustomerProps) {
@@ -40,7 +40,7 @@ export function RegisterCustomer({ onSubmit }: RegisterCustomerProps) {
     register,
     handleSubmit,
     formState: { errors, touchedFields },
-  } = useForm<RegisterCustomerFormData>({
+  } = useForm<RegisterCustomerRequestDto>({
     mode: "all",
     resolver: yupResolver(validationSchema),
   });

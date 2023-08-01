@@ -1,14 +1,9 @@
 import { Button, Col, Form, Row } from "react-bootstrap";
 import { useAppSelector, useAppDispatch } from "../app/hooks";
-import {
-  UpdateUserData,
-  User,
-  UserRequestDto,
-  Customer,
-} from "../interfaces/user";
+import { UserBase } from "../interfaces/user";
 import { AddressDetails } from "../components/AddressDetails";
 import { UserDetails } from "../components/UserDetails";
-import { AddressInfo } from "../interfaces/customer";
+import { AddressInfo } from "../interfaces/user";
 import {
   updateUser,
   reset,
@@ -44,30 +39,32 @@ export function Profile() {
     };
   }, []);
 
-  const handleUpdateDetails = (data: UserRequestDto) => {
-    const updateData: UpdateUserData = {
-      data: {
-        ...user!,
-        ...data,
-      },
-      userId: user!.id,
-      userType: user!.userType,
+  const handleUpdateDetails = (data: UserBase) => {
+    if (!user) {
+      return;
+    }
+
+    const updatedUser = {
+      userId: user.id,
+      userType: user.userType,
+      userData: { ...user, ...data },
     };
 
-    dispatch(updateUser(updateData));
+    dispatch(updateUser(updatedUser));
   };
 
   const handleUpdateAddress = (data: AddressInfo) => {
-    const updateData: UpdateUserData = {
-      data: {
-        ...user!,
-        ...data,
-      },
-      userId: user!.id,
-      userType: user!.userType,
+    if (!user) {
+      return;
+    }
+
+    const updatedUser = {
+      userId: user.id,
+      userType: user.userType,
+      userData: { ...user, ...data },
     };
 
-    dispatch(updateUser(updateData));
+    dispatch(updateUser(updatedUser));
   };
 
   const handleClick = () => {
@@ -124,7 +121,7 @@ export function Profile() {
           <div className="mt-3">
             <h1 className="text-center mt-3 mb-4">User Details</h1>
             <UserDetails
-              user={user as User}
+              data={user as UserBase}
               onSubmit={(data) => handleUpdateDetails(data)}
             />
           </div>
@@ -135,7 +132,7 @@ export function Profile() {
             <div className="mt-3">
               <h1 className="text-center mt-3 mb-4">Address Info</h1>
               <AddressDetails
-                user={user as Customer}
+                data={user as AddressInfo}
                 onSubmit={(data) => handleUpdateAddress(data)}
               />
             </div>

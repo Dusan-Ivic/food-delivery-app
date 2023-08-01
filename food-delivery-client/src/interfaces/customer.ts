@@ -1,26 +1,19 @@
-export interface CustomerBase {
-  username: string;
-  email: string;
-  firstName: string;
-  lastName: string;
-  address: string;
-  city: string;
-  postalCode: string;
-}
+import { UserType } from "./enums";
+import { AddressInfo, UserBase } from "./user";
 
-export interface CustomerResponseDto extends CustomerBase {
-  id: number;
-}
+export interface CustomerBase extends UserBase, AddressInfo {}
 
 export interface RegisterCustomerRequestDto extends CustomerBase {
   password: string;
   confirmPassword: string;
 }
 
-export interface UpdateCustomerRequestDto extends CustomerBase {}
+export interface CustomerRequestDto extends CustomerBase {}
 
-export interface AddressInfo {
-  address: string;
-  city: string;
-  postalCode: string;
+export interface CustomerResponseDto extends CustomerBase {
+  id: number;
+  userType: UserType;
+  image: string | null;
 }
+
+export interface CustomerState extends CustomerResponseDto {}

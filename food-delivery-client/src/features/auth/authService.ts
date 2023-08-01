@@ -1,14 +1,12 @@
 import axios from "axios";
 import { LoginRequestDto, LoginResponseDto } from "../../interfaces/login";
 import {
-  RegisterCustomerRequestDto,
+  CustomerRequestDto,
   CustomerResponseDto,
-  UpdateCustomerRequestDto,
 } from "../../interfaces/customer";
 import {
-  RegisterPartnerRequestDto,
+  PartnerRequestDto,
   PartnerResponseDto,
-  UpdatePartnerRequestDto,
 } from "../../interfaces/partner";
 import { ImageResponseDto } from "../../interfaces/image";
 
@@ -31,7 +29,7 @@ const loginUser = async (
 };
 
 const registerCustomer = async (
-  requestDto: RegisterCustomerRequestDto
+  requestDto: CustomerRequestDto
 ): Promise<CustomerResponseDto> => {
   try {
     const response = await axios.post<CustomerResponseDto>(
@@ -49,7 +47,7 @@ const registerCustomer = async (
 };
 
 const registerPartner = async (
-  requestDto: RegisterPartnerRequestDto
+  requestDto: PartnerRequestDto
 ): Promise<PartnerResponseDto> => {
   try {
     const response = await axios.post<PartnerResponseDto>(
@@ -68,7 +66,7 @@ const registerPartner = async (
 
 const updateCustomer = async (
   customerId: number,
-  requestDto: UpdateCustomerRequestDto,
+  requestDto: CustomerRequestDto,
   token: string | null
 ): Promise<CustomerResponseDto> => {
   try {
@@ -93,7 +91,7 @@ const updateCustomer = async (
 
 const updatePartner = async (
   partnerId: number,
-  requestDto: UpdatePartnerRequestDto,
+  requestDto: PartnerRequestDto,
   token: string | null
 ): Promise<PartnerResponseDto> => {
   try {
