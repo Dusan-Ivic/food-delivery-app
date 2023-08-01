@@ -19,6 +19,11 @@ namespace FoodDeliveryApi.Repositories
             return await _dbContext.Orders.Include(x => x.Store).Include(x => x.Items).ThenInclude(x => x.Product).ToListAsync();
         }
 
+        public async Task<Order?> GetOrderById(long id)
+        {
+            return await _dbContext.Orders.Include(x => x.Store).Include(x => x.Items).ThenInclude(x => x.Product).FirstOrDefaultAsync(x => x.Id == id);
+        }
+
         public async Task<List<Order>> GetOrdersByCustomer(long customerId)
         {
             return await _dbContext.Orders.Include(x => x.Store).Include(x => x.Items).ThenInclude(x => x.Product).Where(x => x.CustomerId == customerId).ToListAsync();
@@ -34,6 +39,20 @@ namespace FoodDeliveryApi.Repositories
             try
             {
                 await _dbContext.Orders.AddAsync(order);
+                await _dbContext.SaveChangesAsync();
+                return order;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public async Task<Order> UpdateOrder(Order order)
+        {
+            try
+            {
+                _dbContext.Entry(order).State = EntityState.Modified;
                 await _dbContext.SaveChangesAsync();
                 return order;
             }

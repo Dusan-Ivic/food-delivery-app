@@ -1,15 +1,22 @@
 import { Table } from "react-bootstrap";
-import { OrderResponseDto as Order } from "../interfaces/order";
+import { OrderResponseDto as Order, OrderStatus } from "../interfaces/order";
 import { formatCurrency } from "../utils/currencyFormatter";
 import moment from "moment";
 import { useState } from "react";
 import { OrderModal } from "./OrderModal";
+import { GoDotFill } from "react-icons/go";
 
 interface OrderHistoryProps {
   orders: Order[];
+  canManageOrders: boolean;
+  onCancelOrder: (orderId: number) => void;
 }
 
-export function OrderHistory({ orders }: OrderHistoryProps) {
+export function OrderHistory({
+  orders,
+  canManageOrders,
+  onCancelOrder,
+}: OrderHistoryProps) {
   const [modalOrder, setModalOrder] = useState<Order | null>(null);
   const [modalVisible, setModalVisible] = useState<boolean>(false);
 
@@ -20,9 +27,21 @@ export function OrderHistory({ orders }: OrderHistoryProps) {
     }
   };
 
+  const handleCancelOrder = (orderId: number) => {
+    setModalVisible(false);
+    setModalOrder(null);
+    onCancelOrder(orderId);
+  };
+
   const handleModalClose = () => {
     setModalVisible(false);
     setModalOrder(null);
+  };
+
+  const orderStatusToColorMap = {
+    [OrderStatus.Pending]: "gold",
+    [OrderStatus.Canceled]: "red",
+    [OrderStatus.Completed]: "green",
   };
 
   return (
@@ -34,7 +53,7 @@ export function OrderHistory({ orders }: OrderHistoryProps) {
             <th>Store</th>
             <th>Creation date</th>
             <th>Creation time</th>
-            <th>Items cost</th>
+            <th>Status</th>
             <th>Total amount</th>
           </tr>
         </thead>
@@ -43,13 +62,24 @@ export function OrderHistory({ orders }: OrderHistoryProps) {
             <tr
               key={order.id}
               onClick={() => handleOpenOrder(order)}
-              style={{ cursor: "pointer" }}
+              style={{ cursor: "pointer", position: "relative" }}
             >
               <td>{order.id}</td>
-              <td>{order.storeName}</td>
+              <td>{order.store?.name}</td>
               <td>{moment(order.createdAt).format("LL")}</td>
               <td>{moment(order.createdAt).format("LT")}</td>
-              <td>{formatCurrency(order.itemsPrice)}</td>
+              <td className="d-md-flex">
+                <div className="w-auto h-100">
+                  <GoDotFill
+                    style={{
+                      color: orderStatusToColorMap[order.orderStatus],
+                    }}
+                  />
+                </div>
+                <span className="d-none d-md-flex ps-0 ps-md-2 w-100">
+                  {OrderStatus[order.orderStatus]}
+                </span>
+              </td>
               <td>{formatCurrency(order.totalPrice)}</td>
             </tr>
           ))}
@@ -59,6 +89,8 @@ export function OrderHistory({ orders }: OrderHistoryProps) {
         isVisible={modalVisible}
         order={modalOrder}
         handleClose={handleModalClose}
+        canManageOrders={canManageOrders}
+        onCancelOrder={handleCancelOrder}
       />
     </>
   );

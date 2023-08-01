@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using FoodDeliveryApi.Dto.Order;
+using FoodDeliveryApi.Enums;
 using FoodDeliveryApi.Models;
+using Microsoft.AspNetCore.Routing.Constraints;
 
 namespace FoodDeliveryApi.Mapping
 {
@@ -17,12 +19,13 @@ namespace FoodDeliveryApi.Mapping
             CreateMap<CreateOrderRequestDto, Order>();
             CreateMap<Order, CreateOrderResponseDto>();
 
-            CreateMap<Order, GetOrderResponseDto>()
-                .ForMember(dest => dest.StoreName, opt => opt.MapFrom(src => src.Store.Name));
+            CreateMap<Order, GetOrderResponseDto>();
 
             CreateMap<OrderItem, GetOrderItemResponseDto>()
                 .ForMember(dest => dest.ProductName, opt => opt.MapFrom(src => src.Product.Name))
                 .ForMember(dest => dest.ProductPrice, opt => opt.MapFrom(src => (src.TotalPrice / src.Quantity)));
+
+            CreateMap<Order, DeleteOrderResponseDto>();
         }
     }
 }

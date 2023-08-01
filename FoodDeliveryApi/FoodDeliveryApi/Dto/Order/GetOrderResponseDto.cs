@@ -1,4 +1,5 @@
 ﻿using FoodDeliveryApi.Dto.Store;
+using FoodDeliveryApi.Enums;
 
 namespace FoodDeliveryApi.Dto.Order
 {
@@ -10,6 +11,7 @@ namespace FoodDeliveryApi.Dto.Order
         public decimal ItemsPrice { get; set; }
         public decimal DeliveryFee { get; set; }
         public decimal TotalPrice { get; set; }
-        public string StoreName { get; set; } = string.Empty;
+        public GetStoreResponseDto Store { get; set; } = default!;
+        public OrderStatus OrderStatus { get; set; }
     }
 }

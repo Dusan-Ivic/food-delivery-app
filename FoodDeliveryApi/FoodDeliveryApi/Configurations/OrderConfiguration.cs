@@ -11,6 +11,8 @@ namespace FoodDeliveryApi.Configurations
             builder.HasKey(x => x.Id);
             builder.Property(x => x.Id).ValueGeneratedOnAdd();
 
+            builder.Property(x => x.IsCanceled).HasDefaultValue(false);
+
             builder.Property(x => x.CreatedAt).IsRequired();
 
             builder.HasOne(x => x.Customer).WithMany(x => x.Orders).HasForeignKey(x => x.CustomerId);
@@ -22,6 +24,8 @@ namespace FoodDeliveryApi.Configurations
             builder.Property(x => x.TotalPrice).IsRequired();
 
             builder.HasOne(x => x.Store).WithMany(x => x.Orders).HasForeignKey(x => x.StoreId);
+
+            builder.Ignore(x => x.OrderStatus);
         }
     }
 

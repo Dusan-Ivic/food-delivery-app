@@ -73,5 +73,34 @@ namespace FoodDeliveryApi.Controllers
 
             return Ok(responseDto);
         }
+
+        [HttpDelete("{id}")]
+        [Authorize(Roles = "Customer")]
+        public async Task<IActionResult> CancelOrder(long id)
+        {
+            Claim? idClaim = User.Claims.FirstOrDefault(x => x.Type == "UserId");
+            long userId = long.Parse(idClaim!.Value);
+
+            DeleteOrderResponseDto responseDto;
+
+            try
+            {
+                responseDto = await _orderService.CancelOrder(id, userId);
+            }
+            catch (ResourceNotFoundException ex)
+            {
+                return NotFound(new ErrorResponseDto() { Message = ex.Message });
+            }
+            catch (ActionNotAllowedException ex)
+            {
+                return Unauthorized(new ErrorResponseDto() { Message = ex.Message });
+            }
+            catch (OrderCancellationException ex)
+            {
+                return Conflict(new ErrorResponseDto() { Message = ex.Message });
+            }
+
+            return Ok(responseDto);
+        }
     }
 }

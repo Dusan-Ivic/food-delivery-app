@@ -1,10 +1,12 @@
-﻿using System.Diagnostics.Eventing.Reader;
+﻿using FoodDeliveryApi.Enums;
+using System.Diagnostics.Eventing.Reader;
 
 namespace FoodDeliveryApi.Models
 {
     public class Order
     {
         public long Id { get; set; }
+        public bool IsCanceled { get; set; }
         public DateTime CreatedAt { get; set; } = default!;
         public long CustomerId { get; set; }
         public Customer Customer { get; set; } = default!;
@@ -14,5 +16,18 @@ namespace FoodDeliveryApi.Models
         public decimal TotalPrice { get; set; }
         public long StoreId { get; set; }
         public Store Store { get; set; } = default!;
+        public OrderStatus OrderStatus
+        {
+            get
+            {
+                if (IsCanceled)
+                {
+                    return OrderStatus.Canceled;
+                }
+
+                DateTime deliveryDateTime = CreatedAt.AddMinutes(Store.DeliveryOptions.DeliveryTimeInMinutes);
+                return DateTime.UtcNow >= deliveryDateTime ? OrderStatus.Completed : OrderStatus.Pending;
+            }
+        }
     }
 }

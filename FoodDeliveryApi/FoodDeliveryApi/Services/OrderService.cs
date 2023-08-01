@@ -106,5 +106,44 @@ namespace FoodDeliveryApi.Services
 
             return _mapper.Map<CreateOrderResponseDto>(order);
         }
+
+        public async Task<DeleteOrderResponseDto> CancelOrder(long orderId, long customerId)
+        {
+            Order? order = await _orderRepository.GetOrderById(orderId);
+
+            if (order == null)
+            {
+                throw new ResourceNotFoundException("Order with this id doesn't exist");
+            }
+
+            if (order.CustomerId != customerId)
+            {
+                throw new ActionNotAllowedException("Unauthorized to cancel this order. Only the creator can perform this action.");
+            }
+
+            DateTime deliveryTime = order.CreatedAt.AddMinutes((int)order.Store.DeliveryOptions.DeliveryTimeInMinutes);
+
+            if (DateTime.UtcNow > deliveryTime)
+            {
+                throw new OrderCancellationException("Cannot cancel the order because it has already been completed.");
+            }
+
+            order.IsCanceled = true;
+            order.Items.ForEach(item =>
+            {
+                item.Product.Quantity += item.Quantity;
+            });
+
+            try
+            {
+                await _orderRepository.UpdateOrder(order);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+            return _mapper.Map<DeleteOrderResponseDto>(order);
+        }
     }
 }

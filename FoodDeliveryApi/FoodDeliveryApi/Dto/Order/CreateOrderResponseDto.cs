@@ -1,4 +1,6 @@
-﻿namespace FoodDeliveryApi.Dto.Order
+﻿using FoodDeliveryApi.Enums;
+
+namespace FoodDeliveryApi.Dto.Order
 {
     public class CreateOrderResponseDto : BaseOrderDto<OrderItemResponseDto>
     {
@@ -8,5 +10,6 @@
         public decimal ItemsPrice { get; set; }
         public decimal DeliveryFee { get; set; }
         public decimal TotalPrice { get; set; }
+        public OrderStatus OrderStatus { get; set; }
     }
 }

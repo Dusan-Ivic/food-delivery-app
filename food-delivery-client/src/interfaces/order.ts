@@ -1,3 +1,11 @@
+import { Store } from "./store";
+
+export enum OrderStatus {
+  Pending = 0,
+  Canceled = 1,
+  Completed = 2,
+}
+
 export interface OrderItemRequestDto {
   productId: number;
   quantity: number;
@@ -25,8 +33,9 @@ export interface OrderResponseDto {
   deliveryFee: number;
   totalPrice: number;
   storeId: number;
-  storeName: string;
+  store: Store;
   items: OrderItemResponseDto[];
+  orderStatus: OrderStatus;
 }
 
 export interface CreateOrderRequestDto extends OrderRequestDto {}
