@@ -30,7 +30,7 @@ namespace FoodDeliveryApi.Configurations
 
             builder.Property(x => x.Category).IsRequired().HasMaxLength(20);
 
-            builder.Property(x => x.ImageData).HasColumnType("bytea");
+            builder.Property(x => x.ImageData).HasColumnType("bytea").HasDefaultValue(Array.Empty<byte>());
         }
     }
 }
