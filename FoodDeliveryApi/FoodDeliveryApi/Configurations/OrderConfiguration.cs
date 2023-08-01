@@ -24,6 +24,8 @@ namespace FoodDeliveryApi.Configurations
             builder.Property(x => x.TotalPrice).IsRequired();
 
             builder.HasOne(x => x.Store).WithMany(x => x.Orders).HasForeignKey(x => x.StoreId);
+
+            builder.Ignore(x => x.OrderStatus);
         }
     }
 

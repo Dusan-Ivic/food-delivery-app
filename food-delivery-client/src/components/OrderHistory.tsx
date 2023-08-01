@@ -1,5 +1,5 @@
 import { Table } from "react-bootstrap";
-import { OrderResponseDto as Order } from "../interfaces/order";
+import { OrderResponseDto as Order, OrderStatus } from "../interfaces/order";
 import { formatCurrency } from "../utils/currencyFormatter";
 import moment from "moment";
 import { useState } from "react";
@@ -11,8 +11,6 @@ interface OrderHistoryProps {
   canManageOrders: boolean;
   onCancelOrder: (orderId: number) => void;
 }
-
-type OrderStatus = "Pending" | "Canceled" | "Completed";
 
 export function OrderHistory({
   orders,
@@ -40,24 +38,10 @@ export function OrderHistory({
     setModalOrder(null);
   };
 
-  const getOrderStatus = (order: Order): OrderStatus => {
-    if (order.isCanceled) {
-      return "Canceled";
-    } else if (
-      moment(order.createdAt)
-        .add(order.store?.deliveryOptions.deliveryTimeInMinutes, "m")
-        .isAfter()
-    ) {
-      return "Pending";
-    } else {
-      return "Completed";
-    }
-  };
-
   const orderStatusToColorMap = {
-    Pending: "gold",
-    Canceled: "red",
-    Completed: "green",
+    [OrderStatus.Pending]: "gold",
+    [OrderStatus.Canceled]: "red",
+    [OrderStatus.Completed]: "green",
   };
 
   return (
@@ -88,24 +72,14 @@ export function OrderHistory({
                 <div className="w-auto h-100">
                   <GoDotFill
                     style={{
-                      color: orderStatusToColorMap[getOrderStatus(order)],
+                      color: orderStatusToColorMap[order.orderStatus],
                     }}
                   />
                 </div>
                 <span className="d-none d-md-flex ps-0 ps-md-2 w-100">
-                  {getOrderStatus(order)}
+                  {OrderStatus[order.orderStatus]}
                 </span>
               </td>
-              {/* <td className="d-flex flex-column flex-md-row align-items-md-center h-100">
-                <GoDotFill
-                  style={{
-                    color: orderStatusToColorMap[getOrderStatus(order)],
-                  }}
-                />{" "}
-                <span className="d-none d-md-inline ps-0 ps-md-2 w-100">
-                  {getOrderStatus(order)}
-                </span>
-              </td> */}
               <td>{formatCurrency(order.totalPrice)}</td>
             </tr>
           ))}

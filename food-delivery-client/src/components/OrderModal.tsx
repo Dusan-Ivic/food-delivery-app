@@ -1,10 +1,9 @@
 import { Button, Col, Modal, Row, Stack } from "react-bootstrap";
-import { OrderResponseDto as Order } from "../interfaces/order";
+import { OrderResponseDto as Order, OrderStatus } from "../interfaces/order";
 import { formatCurrency } from "../utils/currencyFormatter";
 import { MdOutlineKeyboardDoubleArrowRight } from "react-icons/md";
 import { ImCancelCircle } from "react-icons/im";
 import { useMemo } from "react";
-import moment from "moment";
 
 interface OrderModalProps {
   isVisible: boolean;
@@ -30,13 +29,7 @@ export function OrderModal({
       return false;
     }
 
-    if (order.isCanceled) {
-      return false;
-    }
-
-    return moment(order.createdAt)
-      .add(order.store.deliveryOptions.deliveryTimeInMinutes, "m")
-      .isAfter();
+    return order.orderStatus === OrderStatus.Pending;
   }, [order]);
 
   return (

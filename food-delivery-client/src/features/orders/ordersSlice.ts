@@ -4,6 +4,7 @@ import { RootState } from "../../app/store";
 import {
   CreateOrderRequestDto,
   OrderResponseDto as Order,
+  OrderStatus,
 } from "../../interfaces/order";
 import ordersService from "./ordersService";
 
@@ -113,7 +114,7 @@ export const ordersSlice = createSlice({
         state.status = StateStatus.Success;
         state.orders = state.orders.map((order) => {
           if (order.id === action.payload.id) {
-            return { ...order, isCanceled: true };
+            return { ...order, orderStatus: OrderStatus.Canceled };
           }
 
           return order;

@@ -1,4 +1,6 @@
-﻿namespace FoodDeliveryApi.Dto.Order
+﻿using FoodDeliveryApi.Enums;
+
+namespace FoodDeliveryApi.Dto.Order
 {
     public class BaseOrderDto<T>
     {

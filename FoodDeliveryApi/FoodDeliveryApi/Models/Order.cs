@@ -1,4 +1,5 @@
-﻿using System.Diagnostics.Eventing.Reader;
+﻿using FoodDeliveryApi.Enums;
+using System.Diagnostics.Eventing.Reader;
 
 namespace FoodDeliveryApi.Models
 {
@@ -15,5 +16,18 @@ namespace FoodDeliveryApi.Models
         public decimal TotalPrice { get; set; }
         public long StoreId { get; set; }
         public Store Store { get; set; } = default!;
+        public OrderStatus OrderStatus
+        {
+            get
+            {
+                if (IsCanceled)
+                {
+                    return OrderStatus.Canceled;
+                }
+
+                DateTime deliveryDateTime = CreatedAt.AddMinutes(Store.DeliveryOptions.DeliveryTimeInMinutes);
+                return DateTime.UtcNow >= deliveryDateTime ? OrderStatus.Completed : OrderStatus.Pending;
+            }
+        }
     }
 }
