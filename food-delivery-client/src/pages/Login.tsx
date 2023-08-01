@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { Col, Row } from "react-bootstrap";
 import { LoginForm } from "../components/forms/LoginForm";
-import { LoginRequestDto as LoginFormData } from "../interfaces/login";
+import { LoginRequestDto } from "../interfaces/login";
 import { loginUser, reset } from "../features/auth/authSlice";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { useNavigate } from "react-router-dom";
@@ -14,7 +14,7 @@ export function Login() {
   const dispatch = useAppDispatch();
   const { user, status, message } = useAppSelector((state) => state.auth);
 
-  const onSubmit = (data: LoginFormData) => {
+  const onSubmit = (data: LoginRequestDto) => {
     dispatch(loginUser(data));
   };
 
