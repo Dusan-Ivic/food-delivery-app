@@ -1,5 +1,5 @@
 import { Button, Col, Modal, Row, Stack } from "react-bootstrap";
-import { OrderResponseDto as Order } from "../interfaces/order";
+import { OrderResponseDto as OrderState } from "../interfaces/order";
 import { OrderStatus } from "../interfaces/enums";
 import { formatCurrency } from "../utils/currencyFormatter";
 import { MdOutlineKeyboardDoubleArrowRight } from "react-icons/md";
@@ -8,7 +8,7 @@ import { useMemo } from "react";
 
 interface OrderModalProps {
   isVisible: boolean;
-  order: Order | null;
+  order: OrderState | null;
   handleClose: () => void;
   canManageOrders: boolean;
   onCancelOrder: (orderId: number) => void;
@@ -55,7 +55,7 @@ export function OrderModal({
                       <div className="fs-5">&times;{item.quantity}</div>
                     </div>
                     <Row className="d-flex justify-content-between align-items-center">
-                      <Col>{formatCurrency(item.productPrice)}</Col>
+                      <Col>{formatCurrency(item.productPrice || 0)}</Col>
                       <Col className="text-center fs-4">
                         <MdOutlineKeyboardDoubleArrowRight />
                       </Col>

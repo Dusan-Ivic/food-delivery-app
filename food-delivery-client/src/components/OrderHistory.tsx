@@ -1,5 +1,5 @@
 import { Table } from "react-bootstrap";
-import { OrderResponseDto as Order } from "../interfaces/order";
+import { OrderResponseDto as OrderState } from "../interfaces/order";
 import { OrderStatus } from "../interfaces/enums";
 import { formatCurrency } from "../utils/currencyFormatter";
 import moment from "moment";
@@ -8,7 +8,7 @@ import { OrderModal } from "./OrderModal";
 import { GoDotFill } from "react-icons/go";
 
 interface OrderHistoryProps {
-  orders: Order[];
+  orders: OrderState[];
   canManageOrders: boolean;
   onCancelOrder: (orderId: number) => void;
 }
@@ -18,10 +18,10 @@ export function OrderHistory({
   canManageOrders,
   onCancelOrder,
 }: OrderHistoryProps) {
-  const [modalOrder, setModalOrder] = useState<Order | null>(null);
+  const [modalOrder, setModalOrder] = useState<OrderState | null>(null);
   const [modalVisible, setModalVisible] = useState<boolean>(false);
 
-  const handleOpenOrder = (order: Order) => {
+  const handleOpenOrder = (order: OrderState) => {
     if (order) {
       setModalVisible(true);
       setModalOrder(order);

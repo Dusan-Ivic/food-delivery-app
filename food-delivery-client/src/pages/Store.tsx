@@ -35,7 +35,7 @@ import {
   reset as resetStoresState,
 } from "../features/stores/storesSlice";
 import { CartItem } from "../interfaces/cart";
-import { CreateOrderRequestDto } from "../interfaces/order";
+import { OrderRequestDto } from "../interfaces/order";
 import { StateStatus, UserType } from "../interfaces/enums";
 import { toast } from "react-toastify";
 import { ProductModal } from "../components/ProductModal";
@@ -180,7 +180,7 @@ export function StorePage() {
   }, [storesStatus, storesMessage]);
 
   const submitOrder = (store: StoreState, items: CartItem[]) => {
-    const requestDto: CreateOrderRequestDto = {
+    const requestDto: OrderRequestDto = {
       storeId: store.id,
       items: items.map((item) => ({
         productId: item.id,

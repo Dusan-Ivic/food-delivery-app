@@ -1,15 +1,9 @@
 import axios from "axios";
-import {
-  GetOrderResponseDto,
-  OrderRequestDto,
-  OrderResponseDto,
-} from "../../interfaces/order";
+import { OrderRequestDto, OrderResponseDto } from "../../interfaces/order";
 
-const getOrders = async (
-  token: string | null
-): Promise<GetOrderResponseDto[]> => {
+const getOrders = async (token: string | null): Promise<OrderResponseDto[]> => {
   try {
-    const response = await axios.get<GetOrderResponseDto[]>(
+    const response = await axios.get<OrderResponseDto[]>(
       `${import.meta.env.VITE_API_URL}/api/orders`,
       {
         headers: {
