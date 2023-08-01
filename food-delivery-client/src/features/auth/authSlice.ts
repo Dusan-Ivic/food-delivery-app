@@ -108,6 +108,22 @@ export const updateUser = createAsyncThunk(
   }
 );
 
+export const uploadImage = createAsyncThunk(
+  "auth/upload-image",
+  async (formData: FormData, thunkAPI) => {
+    try {
+      const { token } = (thunkAPI.getState() as RootState).auth;
+      return await authService.uploadImage(formData, token);
+    } catch (error: unknown) {
+      let message: string = "";
+      if (error instanceof Error) {
+        message = error.message;
+      }
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
 export const authSlice = createSlice({
   name: "auth",
   initialState,
@@ -177,6 +193,27 @@ export const authSlice = createSlice({
           case UserType.Partner:
             state.user = action.payload as unknown as Partner;
             break;
+        }
+      })
+      .addCase(uploadImage.pending, (state) => {
+        state.status = StateStatus.Loading;
+      })
+      .addCase(uploadImage.rejected, (state, action) => {
+        state.status = StateStatus.Error;
+        state.message = action.payload as string;
+      })
+      .addCase(uploadImage.fulfilled, (state, action) => {
+        state.status = StateStatus.Success;
+        if (state.user) {
+          const base64String = action.payload.imageData.toString() || "";
+          const byteCharacters = atob(base64String);
+          const byteNumbers = new Array(byteCharacters.length);
+          for (let i = 0; i < byteCharacters.length; i++) {
+            byteNumbers[i] = byteCharacters.charCodeAt(i);
+          }
+          const uint8Array = new Uint8Array(byteNumbers);
+          const blob = new Blob([uint8Array], { type: "image/jpeg" });
+          state.user.image = URL.createObjectURL(blob);
         }
       });
   },
