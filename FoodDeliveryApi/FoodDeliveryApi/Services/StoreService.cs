@@ -1,12 +1,15 @@
 ﻿using AutoMapper;
 using FluentValidation;
 using FluentValidation.Results;
+using FoodDeliveryApi.Dto.Auth;
 using FoodDeliveryApi.Dto.Store;
+using FoodDeliveryApi.Enums;
 using FoodDeliveryApi.Exceptions;
 using FoodDeliveryApi.Interfaces.Repositories;
 using FoodDeliveryApi.Interfaces.Services;
 using FoodDeliveryApi.Models;
 using FoodDeliveryApi.Repositories;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace FoodDeliveryApi.Services
 {
@@ -139,6 +142,44 @@ namespace FoodDeliveryApi.Services
             }
 
             return _mapper.Map<DeleteStoreResponseDto>(store);
+        }
+
+        public async Task<ImageResponseDto> UploadImage(long storeId, long partnerId, IFormFile image)
+        {
+            if (image == null || image.Length == 0)
+            {
+                throw new InvalidImageException("Provided image is invalid. Please ensure that the image has valid content");
+            }
+
+            Store? existingStore = await _storeRepository.GetStoreById(storeId);
+
+            if (existingStore == null)
+            {
+                throw new ResourceNotFoundException("Store with this id doesn't exist");
+            }
+
+            if (existingStore.PartnerId != partnerId)
+            {
+                throw new ActionNotAllowedException("Unauthorized to update this store. Only the creator can perform this action.");
+            }
+
+            using var memoryStream = new MemoryStream();
+            image.CopyTo(memoryStream);
+
+            byte[] imageData = memoryStream.ToArray();
+
+            existingStore.ImageData = imageData;
+
+            try
+            {
+                existingStore = await _storeRepository.UpdateStore(existingStore);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+            return _mapper.Map<ImageResponseDto>(existingStore);
         }
     }
 }

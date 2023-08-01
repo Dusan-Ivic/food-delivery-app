@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using FoodDeliveryApi.Dto.Auth;
 using FoodDeliveryApi.Dto.Store;
 using FoodDeliveryApi.Models;
 
@@ -17,6 +18,8 @@ namespace FoodDeliveryApi.Mapping
             CreateMap<Store, UpdateStoreResponseDto>();
 
             CreateMap<Store, DeleteStoreResponseDto>();
+
+            CreateMap<Store, ImageResponseDto>();
         }
     }
 }
