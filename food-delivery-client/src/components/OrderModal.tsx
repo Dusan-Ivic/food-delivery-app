@@ -34,15 +34,16 @@ export function OrderModal({
       return false;
     }
 
-    // TODO - Change "30" to store.deliveryOptions.deliveryTimeInMinutes
-    return moment(order.createdAt).add(30, "m").isAfter();
+    return moment(order.createdAt)
+      .add(order.store.deliveryOptions.deliveryTimeInMinutes, "m")
+      .isAfter();
   }, [order]);
 
   return (
     order && (
       <Modal show={isVisible} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>Order from {order.storeName}</Modal.Title>
+          <Modal.Title>Order from {order.store.name}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Stack gap={3} className="p-3">

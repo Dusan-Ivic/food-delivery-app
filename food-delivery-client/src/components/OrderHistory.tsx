@@ -40,7 +40,11 @@ export function OrderHistory({
   const getOrderStatus = (order: Order) => {
     if (order.isCanceled) {
       return "Canceled";
-    } else if (moment(order.createdAt).add(30, "m").isAfter()) {
+    } else if (
+      moment(order.createdAt)
+        .add(order.store.deliveryOptions.deliveryTimeInMinutes, "m")
+        .isAfter()
+    ) {
       return "Pending";
     } else {
       return "Completed";
@@ -68,7 +72,7 @@ export function OrderHistory({
               style={{ cursor: "pointer", position: "relative" }}
             >
               <td>{order.id}</td>
-              <td>{order.storeName}</td>
+              <td>{order.store.name}</td>
               <td>{moment(order.createdAt).format("LL")}</td>
               <td>{moment(order.createdAt).format("LT")}</td>
               <td>{getOrderStatus(order)}</td>

@@ -1,3 +1,5 @@
+import { Store } from "./store";
+
 export interface OrderItemRequestDto {
   productId: number;
   quantity: number;
@@ -25,7 +27,7 @@ export interface OrderResponseDto {
   deliveryFee: number;
   totalPrice: number;
   storeId: number;
-  storeName: string;
+  store: Store;
   items: OrderItemResponseDto[];
   isCanceled: boolean;
 }
