@@ -27,6 +27,7 @@ export interface OrderResponseDto {
   storeId: number;
   storeName: string;
   items: OrderItemResponseDto[];
+  isCanceled: boolean;
 }
 
 export interface CreateOrderRequestDto extends OrderRequestDto {}

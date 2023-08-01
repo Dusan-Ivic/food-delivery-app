@@ -7,9 +7,15 @@ import { OrderModal } from "./OrderModal";
 
 interface OrderHistoryProps {
   orders: Order[];
+  canManageOrders: boolean;
+  onCancelOrder: (orderId: number) => void;
 }
 
-export function OrderHistory({ orders }: OrderHistoryProps) {
+export function OrderHistory({
+  orders,
+  canManageOrders,
+  onCancelOrder,
+}: OrderHistoryProps) {
   const [modalOrder, setModalOrder] = useState<Order | null>(null);
   const [modalVisible, setModalVisible] = useState<boolean>(false);
 
@@ -20,9 +26,25 @@ export function OrderHistory({ orders }: OrderHistoryProps) {
     }
   };
 
+  const handleCancelOrder = (orderId: number) => {
+    setModalVisible(false);
+    setModalOrder(null);
+    onCancelOrder(orderId);
+  };
+
   const handleModalClose = () => {
     setModalVisible(false);
     setModalOrder(null);
+  };
+
+  const getOrderStatus = (order: Order) => {
+    if (order.isCanceled) {
+      return "Canceled";
+    } else if (moment(order.createdAt).add(30, "m").isAfter()) {
+      return "Pending";
+    } else {
+      return "Completed";
+    }
   };
 
   return (
@@ -34,7 +56,7 @@ export function OrderHistory({ orders }: OrderHistoryProps) {
             <th>Store</th>
             <th>Creation date</th>
             <th>Creation time</th>
-            <th>Items cost</th>
+            <th>Status</th>
             <th>Total amount</th>
           </tr>
         </thead>
@@ -43,13 +65,13 @@ export function OrderHistory({ orders }: OrderHistoryProps) {
             <tr
               key={order.id}
               onClick={() => handleOpenOrder(order)}
-              style={{ cursor: "pointer" }}
+              style={{ cursor: "pointer", position: "relative" }}
             >
               <td>{order.id}</td>
               <td>{order.storeName}</td>
               <td>{moment(order.createdAt).format("LL")}</td>
               <td>{moment(order.createdAt).format("LT")}</td>
-              <td>{formatCurrency(order.itemsPrice)}</td>
+              <td>{getOrderStatus(order)}</td>
               <td>{formatCurrency(order.totalPrice)}</td>
             </tr>
           ))}
@@ -59,6 +81,8 @@ export function OrderHistory({ orders }: OrderHistoryProps) {
         isVisible={modalVisible}
         order={modalOrder}
         handleClose={handleModalClose}
+        canManageOrders={canManageOrders}
+        onCancelOrder={handleCancelOrder}
       />
     </>
   );
