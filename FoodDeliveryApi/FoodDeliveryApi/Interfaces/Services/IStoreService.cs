@@ -1,4 +1,6 @@
-﻿using FoodDeliveryApi.Dto.Store;
+﻿using FoodDeliveryApi.Dto.Auth;
+using FoodDeliveryApi.Dto.Store;
+using FoodDeliveryApi.Enums;
 
 namespace FoodDeliveryApi.Interfaces.Services
 {
@@ -9,5 +11,6 @@ namespace FoodDeliveryApi.Interfaces.Services
         public Task<CreateStoreResponseDto> CreateStore(long partnerId, CreateStoreRequestDto requestDto);
         public Task<UpdateStoreResponseDto> UpdateStore(long id, long partnerId, UpdateStoreRequestDto requestDto);
         public Task<DeleteStoreResponseDto> DeleteStore(long id);
+        public Task<ImageResponseDto> UploadImage(long storeId, long partnerId, IFormFile image);
     }
 }
