@@ -1,20 +1,20 @@
 import { Link } from "react-router-dom";
-import { AllowedUserType } from "../../interfaces/user";
-import { RegisterCustomerRequestDto as RegisterCustomerFormData } from "../../interfaces/customer";
-import { RegisterPartnerRequestDto as RegisterPartnerFormData } from "../../interfaces/partner";
+import { AllowedUserType } from "../../interfaces/enums";
+import { CustomerRequestDto } from "../../interfaces/customer";
+import { PartnerRequestDto } from "../../interfaces/partner";
 import {
   RegisterCustomerForm,
   RegisterPartnerForm,
 } from "../../components/forms";
 
 interface RegisterFormScreenProps {
-  onSubmit: (data: RegisterCustomerFormData | RegisterPartnerFormData) => void;
+  onSubmit: (data: CustomerRequestDto | PartnerRequestDto) => void;
   onSetType: (type: AllowedUserType | null) => void;
   userType: AllowedUserType;
 }
 
 interface FormComponentProps {
-  onSubmit: (data: RegisterCustomerFormData | RegisterPartnerFormData) => void;
+  onSubmit: (data: CustomerRequestDto | PartnerRequestDto) => void;
 }
 
 export function RegisterFormScreen({

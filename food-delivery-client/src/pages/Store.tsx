@@ -10,7 +10,7 @@ import {
   deleteProduct,
 } from "../features/products/productsSlice";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
-import { Store } from "../interfaces/store";
+import { StoreState } from "../interfaces/store";
 import { StoreInfo } from "../components/StoreInfo";
 import { IoArrowBack } from "react-icons/io5";
 import { HiOutlineShoppingCart } from "react-icons/hi";
@@ -35,13 +35,12 @@ import {
   reset as resetStoresState,
 } from "../features/stores/storesSlice";
 import { CartItem } from "../interfaces/cart";
-import { CreateOrderRequestDto } from "../interfaces/order";
-import { StateStatus } from "../interfaces/state";
+import { OrderRequestDto } from "../interfaces/order";
+import { StateStatus, UserType } from "../interfaces/enums";
 import { toast } from "react-toastify";
-import { UserType } from "../interfaces/user";
-import { Product, ProductFormData } from "../interfaces/product";
 import { ProductModal } from "../components/ProductModal";
 import { ConfirmationModal } from "../components/ConfirmationModal";
+import { ProductRequestDto, ProductState } from "../interfaces/product";
 
 interface ModalProps {
   isVisible: boolean;
@@ -75,7 +74,9 @@ export function StorePage() {
     [items]
   );
   const [modalVisible, setModalVisible] = useState<boolean>(false);
-  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const [selectedProduct, setSelectedProduct] = useState<ProductState | null>(
+    null
+  );
   const [confirmModal, setConfirmModal] = useState<ModalProps>({
     isVisible: false,
     content: "",
@@ -83,7 +84,7 @@ export function StorePage() {
     payload: null,
   });
 
-  const store = useMemo(() => {
+  const store = useMemo<StoreState | null>(() => {
     const numberId = Number(id);
     if (!numberId) {
       return null;
@@ -98,7 +99,7 @@ export function StorePage() {
     return storeData;
   }, [id, stores]);
 
-  const handleOpenModal = (product: Product | null) => {
+  const handleOpenModal = (product: ProductState | null) => {
     if (product) {
       setSelectedProduct(product);
     }
@@ -110,7 +111,7 @@ export function StorePage() {
     setSelectedProduct(null);
   };
 
-  const handleSubmit = (data: ProductFormData) => {
+  const handleSubmit = (data: ProductRequestDto) => {
     if (selectedProduct) {
       dispatch(
         updateProduct({
@@ -178,8 +179,8 @@ export function StorePage() {
     };
   }, [storesStatus, storesMessage]);
 
-  const submitOrder = (store: Store, items: CartItem[]) => {
-    const requestDto: CreateOrderRequestDto = {
+  const submitOrder = (store: StoreState, items: CartItem[]) => {
+    const requestDto: OrderRequestDto = {
       storeId: store.id,
       items: items.map((item) => ({
         productId: item.id,
@@ -210,7 +211,7 @@ export function StorePage() {
     return store?.partnerId === user.id;
   }, [user, store]);
 
-  const handleDeleteProduct = (product: Product) => {
+  const handleDeleteProduct = (product: ProductState) => {
     setConfirmModal({
       isVisible: true,
       content: `You are about to delete product '${product.name}'`,
@@ -297,7 +298,7 @@ export function StorePage() {
           addToCart={(product) => dispatch(addToCart(product))}
           canManageProduct={canManageStore}
           editProduct={(product) => handleOpenModal(product)}
-          deleteProduct={(productId) => handleDeleteProduct(productId)}
+          deleteProduct={(product) => handleDeleteProduct(product)}
         />
         <ShoppingCart
           store={store}

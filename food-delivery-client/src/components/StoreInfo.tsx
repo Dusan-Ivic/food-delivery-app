@@ -1,11 +1,11 @@
 import { Card, Form } from "react-bootstrap";
-import { Store } from "../interfaces/store";
+import { StoreState } from "../interfaces/store";
 import { TbTruckDelivery, TbClockHour4 } from "react-icons/tb";
 import { formatCurrency } from "../utils/currencyFormatter";
 import { useRef } from "react";
 
 interface StoreInfoProps {
-  store: Store;
+  store: StoreState;
   canManageStore: boolean;
   onImageChange: (imageFile: File | null) => void;
 }

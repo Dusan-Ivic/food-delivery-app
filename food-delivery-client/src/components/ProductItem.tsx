@@ -1,17 +1,17 @@
 import { Card } from "react-bootstrap";
-import { Product } from "../interfaces/product";
+import { ProductState } from "../interfaces/product";
 import { formatCurrency } from "../utils/currencyFormatter";
 import { GrAddCircle } from "react-icons/gr";
 import { BiEdit } from "react-icons/bi";
 import { AiFillDelete } from "react-icons/ai";
 
 interface ProductItemProps {
-  product: Product;
+  product: ProductState;
   canAddToCart: boolean;
-  addToCart: (product: Product) => void;
+  addToCart: (product: ProductState) => void;
   canManageProduct: boolean;
-  editProduct: (product: Product) => void;
-  deleteProduct: (product: Product) => void;
+  editProduct: (product: ProductState) => void;
+  deleteProduct: (product: ProductState) => void;
 }
 
 export function ProductItem({

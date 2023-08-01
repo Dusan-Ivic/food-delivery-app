@@ -1,26 +1,20 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { RootState } from "../../app/store";
 import authService from "./authService";
-import {
-  Customer,
-  Partner,
-  UpdateUserData,
-  User,
-  UserType,
-} from "../../interfaces/user";
-import { StateStatus } from "../../interfaces/state";
+import { UserRequestDto, UserState } from "../../interfaces/user";
+import { StateStatus, UserType } from "../../interfaces/enums";
 import { LoginRequestDto } from "../../interfaces/login";
 import {
-  RegisterCustomerRequestDto,
-  UpdateCustomerRequestDto,
+  CustomerRequestDto,
+  CustomerResponseDto,
 } from "../../interfaces/customer";
 import {
-  RegisterPartnerRequestDto,
-  UpdatePartnerRequestDto,
+  PartnerRequestDto,
+  PartnerResponseDto,
 } from "../../interfaces/partner";
 
 interface AuthState {
-  user: User | null;
+  user: UserState | null;
   token: string | null;
   status: StateStatus;
   message: string;
@@ -50,7 +44,7 @@ export const loginUser = createAsyncThunk(
 
 export const registerCustomer = createAsyncThunk(
   "auth/register-customer",
-  async (registerData: RegisterCustomerRequestDto, thunkAPI) => {
+  async (registerData: CustomerRequestDto, thunkAPI) => {
     try {
       return await authService.registerCustomer(registerData);
     } catch (error: unknown) {
@@ -65,7 +59,7 @@ export const registerCustomer = createAsyncThunk(
 
 export const registerPartner = createAsyncThunk(
   "auth/register-partner",
-  async (registerData: RegisterPartnerRequestDto, thunkAPI) => {
+  async (registerData: PartnerRequestDto, thunkAPI) => {
     try {
       return await authService.registerPartner(registerData);
     } catch (error: unknown) {
@@ -80,7 +74,14 @@ export const registerPartner = createAsyncThunk(
 
 export const updateUser = createAsyncThunk(
   "auth/update-user",
-  async ({ data, userId, userType }: UpdateUserData, thunkAPI) => {
+  async (
+    {
+      userId,
+      userType,
+      userData,
+    }: { userId: number; userType: UserType; userData: UserRequestDto },
+    thunkAPI
+  ) => {
     try {
       const { token } = (thunkAPI.getState() as RootState).auth;
 
@@ -88,13 +89,13 @@ export const updateUser = createAsyncThunk(
         case UserType.Customer:
           return await authService.updateCustomer(
             userId,
-            data as UpdateCustomerRequestDto,
+            userData as CustomerRequestDto,
             token
           );
         case UserType.Partner:
           return await authService.updatePartner(
             userId,
-            data as UpdatePartnerRequestDto,
+            userData as PartnerRequestDto,
             token
           );
       }
@@ -220,10 +221,10 @@ export const authSlice = createSlice({
         state.status = StateStatus.Success;
         switch (state.user?.userType) {
           case UserType.Customer:
-            state.user = action.payload as Customer;
+            state.user = action.payload as CustomerResponseDto;
             break;
           case UserType.Partner:
-            state.user = action.payload as unknown as Partner;
+            state.user = action.payload as unknown as PartnerResponseDto;
             break;
         }
       })

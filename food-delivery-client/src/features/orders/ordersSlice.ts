@@ -1,15 +1,14 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { StateStatus } from "../../interfaces/state";
+import { StateStatus, OrderStatus } from "../../interfaces/enums";
 import { RootState } from "../../app/store";
 import {
-  CreateOrderRequestDto,
-  OrderResponseDto as Order,
-  OrderStatus,
+  OrderRequestDto,
+  OrderResponseDto as OrderState,
 } from "../../interfaces/order";
 import ordersService from "./ordersService";
 
 interface OrdersState {
-  orders: Order[];
+  orders: OrderState[];
   status: StateStatus;
   message: string;
 }
@@ -35,7 +34,7 @@ export const getOrders = createAsyncThunk("orders/get", async (_, thunkAPI) => {
 
 export const createOrder = createAsyncThunk(
   "orders/create",
-  async (orderData: CreateOrderRequestDto, thunkAPI) => {
+  async (orderData: OrderRequestDto, thunkAPI) => {
     try {
       const { token } = (thunkAPI.getState() as RootState).auth;
       return await ordersService.createOrder(orderData, token);

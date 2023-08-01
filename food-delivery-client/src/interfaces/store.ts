@@ -3,45 +3,27 @@ export interface DeliveryOptions {
   deliveryFee: number;
 }
 
-export interface Store {
-  id: number;
-  name: string;
-  description?: string;
-  address: string;
-  city: string;
-  postalCode: string;
-  phone: string;
-  partnerId: number;
-  deliveryOptions: DeliveryOptions;
-  category: string;
-  imageData: string | null;
-}
-
-export interface StoreResponseDto {
-  id: number;
-  name: string;
-  description?: string;
-  address: string;
-  city: string;
-  postalCode: string;
-  phone: string;
-  partnerId: number;
-  deliveryOptions: DeliveryOptions;
-  category: string;
-  imageData: Uint8Array;
-}
-
-export interface GetStoreResponseDto extends StoreResponseDto {}
-
-export interface CreateStoreRequestDto {
+export interface StoreBase {
   name: string;
   description: string;
   address: string;
   city: string;
   postalCode: string;
   phone: string;
-  deliveryOptions: DeliveryOptions;
   category: string;
+  deliveryOptions: DeliveryOptions;
 }
 
-export interface CreateStoreResponseDto extends Store {}
+export interface StoreRequestDto extends StoreBase {}
+
+export interface StoreResponseDto extends StoreBase {
+  id: number;
+  partnerId: number;
+  imageData: Uint8Array;
+}
+
+export interface StoreState extends StoreBase {
+  id: number;
+  partnerId: number;
+  imageData: string | null;
+}

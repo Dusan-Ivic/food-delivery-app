@@ -1,11 +1,11 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { StateStatus } from "../../interfaces/state";
+import { StateStatus } from "../../interfaces/enums";
 import { RootState } from "../../app/store";
-import { ProductRequestDto, Product } from "../../interfaces/product";
+import { ProductRequestDto, ProductState } from "../../interfaces/product";
 import productsService from "./productsService";
 
 interface ProductsState {
-  products: Product[];
+  products: ProductState[];
   status: StateStatus;
   message: string;
 }

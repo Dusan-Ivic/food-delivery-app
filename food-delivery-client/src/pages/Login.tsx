@@ -1,21 +1,20 @@
 import { useEffect } from "react";
 import { Col, Row } from "react-bootstrap";
 import { LoginForm } from "../components/forms/LoginForm";
-import { LoginRequestDto as LoginFormData } from "../interfaces/login";
+import { LoginRequestDto } from "../interfaces/login";
 import { loginUser, reset } from "../features/auth/authSlice";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { useNavigate } from "react-router-dom";
-import { StateStatus } from "../interfaces/state";
+import { StateStatus, UserType } from "../interfaces/enums";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
-import { UserType } from "../interfaces/user";
 
 export function Login() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { user, status, message } = useAppSelector((state) => state.auth);
 
-  const onSubmit = (data: LoginFormData) => {
+  const onSubmit = (data: LoginRequestDto) => {
     dispatch(loginUser(data));
   };
 

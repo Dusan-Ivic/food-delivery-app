@@ -1,4 +1,5 @@
-import { User, UserType } from "./user";
+import { UserType } from "./enums";
+import { UserState } from "./user";
 
 export interface LoginRequestDto {
   username: string;
@@ -7,6 +8,6 @@ export interface LoginRequestDto {
 }
 
 export interface LoginResponseDto {
-  user: User;
+  user: UserState;
   token: string;
 }

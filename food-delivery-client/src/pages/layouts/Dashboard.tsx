@@ -1,5 +1,5 @@
 import { useAppSelector } from "../../app/hooks";
-import { UserType } from "../../interfaces/user";
+import { UserType } from "../../interfaces/enums";
 import { PartnerDashboard } from "../PartnerDashboard";
 
 export function Dashboard() {

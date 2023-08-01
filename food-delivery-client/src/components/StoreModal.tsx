@@ -1,10 +1,10 @@
 import { Modal } from "react-bootstrap";
 import { StoreForm } from "./forms";
-import { CreateStoreRequestDto as StoreFormData } from "../interfaces/store";
+import { StoreRequestDto } from "../interfaces/store";
 
 interface StoreModalProps {
   isVisible: boolean;
-  onSubmit: (data: StoreFormData) => void;
+  onSubmit: (data: StoreRequestDto) => void;
   handleClose: () => void;
 }
 

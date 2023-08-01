@@ -2,14 +2,13 @@ import axios from "axios";
 import {
   ProductRequestDto,
   ProductResponseDto,
-  GetProductResponseDto,
 } from "../../interfaces/product";
 
 const getProductsByStore = async (
   storeId: number
-): Promise<GetProductResponseDto[]> => {
+): Promise<ProductResponseDto[]> => {
   try {
-    const response = await axios.get<GetProductResponseDto[]>(
+    const response = await axios.get<ProductResponseDto[]>(
       `${import.meta.env.VITE_API_URL}/api/products?storeId=${storeId}`
     );
     return response.data;

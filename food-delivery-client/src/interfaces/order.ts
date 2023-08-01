@@ -1,14 +1,18 @@
-import { Store } from "./store";
-
-export enum OrderStatus {
-  Pending = 0,
-  Canceled = 1,
-  Completed = 2,
-}
+import { OrderStatus } from "./enums";
+import { StoreResponseDto } from "./store";
 
 export interface OrderItemRequestDto {
   productId: number;
   quantity: number;
+}
+
+export interface OrderItemResponseDto {
+  productId: number;
+  orderId: number;
+  quantity: number;
+  totalPrice: number;
+  productName?: string;
+  productPrice?: number;
 }
 
 export interface OrderRequestDto {
@@ -16,30 +20,15 @@ export interface OrderRequestDto {
   items: OrderItemRequestDto[];
 }
 
-export interface OrderItemResponseDto {
-  productId: number;
-  quantity: number;
-  totalPrice: number;
-  orderId: number;
-  productName: string;
-  productPrice: number;
-}
-
 export interface OrderResponseDto {
   id: number;
-  createdAt: Date;
   customerId: number;
+  storeId: number;
+  store: StoreResponseDto;
+  createdAt: Date;
   itemsPrice: number;
   deliveryFee: number;
   totalPrice: number;
-  storeId: number;
-  store: Store;
-  items: OrderItemResponseDto[];
   orderStatus: OrderStatus;
+  items: OrderItemResponseDto[];
 }
-
-export interface CreateOrderRequestDto extends OrderRequestDto {}
-
-export interface CreateOrderResponseDto extends OrderResponseDto {}
-
-export interface GetOrderResponseDto extends OrderResponseDto {}

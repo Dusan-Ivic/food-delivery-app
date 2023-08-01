@@ -8,8 +8,7 @@ import {
   cancelOrder,
   reset,
 } from "../features/orders/ordersSlice";
-import { UserType } from "../interfaces/user";
-import { StateStatus } from "../interfaces/state";
+import { UserType, StateStatus } from "../interfaces/enums";
 import { toast } from "react-toastify";
 
 export function Orders() {

@@ -1,5 +1,5 @@
 import { Card } from "react-bootstrap";
-import { UserType } from "../interfaces/user";
+import { UserType } from "../interfaces/enums";
 
 interface UserAvatarProps {
   image: string | null;

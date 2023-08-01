@@ -2,10 +2,10 @@ import { Button, Col, Form, Row } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
-import { CreateStoreRequestDto as StoreFormData } from "../../interfaces/store";
+import { StoreRequestDto } from "../../interfaces/store";
 
 interface StoreFormProps {
-  onSubmit: (data: StoreFormData) => void;
+  onSubmit: (data: StoreRequestDto) => void;
 }
 
 export function StoreForm({ onSubmit }: StoreFormProps) {
@@ -48,7 +48,7 @@ export function StoreForm({ onSubmit }: StoreFormProps) {
     register,
     handleSubmit,
     formState: { errors, touchedFields },
-  } = useForm<StoreFormData>({
+  } = useForm<StoreRequestDto>({
     mode: "all",
     resolver: yupResolver(validationSchema),
   });

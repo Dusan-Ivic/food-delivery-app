@@ -1,14 +1,14 @@
 import { Row, Col } from "react-bootstrap";
-import { Product } from "../interfaces/product";
+import { ProductState } from "../interfaces/product";
 import { ProductItem } from "./ProductItem";
 
 interface ProductListProps {
-  products: Product[];
+  products: ProductState[];
   canAddToCart: boolean;
-  addToCart: (product: Product) => void;
+  addToCart: (product: ProductState) => void;
   canManageProduct: boolean;
-  editProduct: (product: Product) => void;
-  deleteProduct: (product: Product) => void;
+  editProduct: (product: ProductState) => void;
+  deleteProduct: (product: ProductState) => void;
 }
 
 export function ProductList({

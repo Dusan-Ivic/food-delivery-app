@@ -1,17 +1,13 @@
 import axios from "axios";
-import {
-  CreateStoreRequestDto,
-  CreateStoreResponseDto,
-  GetStoreResponseDto,
-} from "../../interfaces/store";
+import { StoreRequestDto, StoreResponseDto } from "../../interfaces/store";
 import { ImageResponseDto } from "../../interfaces/image";
 
 const getStores = async (
   partnerId: number | null
-): Promise<GetStoreResponseDto[]> => {
+): Promise<StoreResponseDto[]> => {
   try {
     const query = partnerId ? `?partnerId=${partnerId}` : "";
-    const response = await axios.get<GetStoreResponseDto[]>(
+    const response = await axios.get<StoreResponseDto[]>(
       `${import.meta.env.VITE_API_URL}/api/stores${query}`
     );
     return response.data;
@@ -26,9 +22,9 @@ const getStores = async (
 
 const getStoresByPartner = async (
   partnerId: number
-): Promise<GetStoreResponseDto[]> => {
+): Promise<StoreResponseDto[]> => {
   try {
-    const response = await axios.get<GetStoreResponseDto[]>(
+    const response = await axios.get<StoreResponseDto[]>(
       `${import.meta.env.VITE_API_URL}/api/stores?partnerId=${partnerId}`
     );
     return response.data;
@@ -42,11 +38,11 @@ const getStoresByPartner = async (
 };
 
 const createStore = async (
-  requestDto: CreateStoreRequestDto,
+  requestDto: StoreRequestDto,
   token: string | null
-): Promise<CreateStoreResponseDto> => {
+): Promise<StoreResponseDto> => {
   try {
-    const response = await axios.post<CreateStoreResponseDto>(
+    const response = await axios.post<StoreResponseDto>(
       `${import.meta.env.VITE_API_URL}/api/stores`,
       requestDto,
       {

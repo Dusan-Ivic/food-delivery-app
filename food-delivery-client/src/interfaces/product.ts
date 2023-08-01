@@ -1,27 +1,20 @@
-export interface Product {
-  id: number;
+export interface ProductBase {
   name: string;
   description: string;
   price: number;
   quantity: number;
+}
+
+export interface ProductRequestDto extends ProductBase {
+  storeId?: number;
+}
+
+export interface ProductResponseDto extends ProductBase {
+  id: number;
   storeId: number;
 }
 
-export interface GetProductResponseDto extends Product {}
-
-export interface ProductRequestDto {
-  name: string;
-  description: string;
-  price: number;
-  quantity: number;
+export interface ProductState extends ProductBase {
+  id: number;
   storeId: number;
-} 
-
-export interface ProductResponseDto extends Product {}
-
-export interface ProductFormData {
-  name: string;
-  description: string;
-  price: number;
-  quantity: number;
 }
