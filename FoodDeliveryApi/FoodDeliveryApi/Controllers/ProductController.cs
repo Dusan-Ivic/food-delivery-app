@@ -1,6 +1,8 @@
 ﻿using FluentValidation;
+using FoodDeliveryApi.Dto.Auth;
 using FoodDeliveryApi.Dto.Error;
 using FoodDeliveryApi.Dto.Product;
+using FoodDeliveryApi.Enums;
 using FoodDeliveryApi.Exceptions;
 using FoodDeliveryApi.Interfaces.Services;
 using FoodDeliveryApi.Models;
@@ -131,6 +133,38 @@ namespace FoodDeliveryApi.Controllers
             try
             {
                 responseDto = await _productService.DeleteProduct(id, userId);
+            }
+            catch (ResourceNotFoundException ex)
+            {
+                return NotFound(new ErrorResponseDto() { Message = ex.Message });
+            }
+            catch (ActionNotAllowedException ex)
+            {
+                return StatusCode(StatusCodes.Status403Forbidden, new ErrorResponseDto()
+                {
+                    Message = ex.Message
+                });
+            }
+
+            return Ok(responseDto);
+        }
+
+        [HttpPut("{id}/image")]
+        [Authorize(Roles = "Partner", Policy = "VerifiedPartner")]
+        public async Task<IActionResult> UploadImage(long id, [FromForm] IFormFile image)
+        {
+            Claim? idClaim = User.Claims.FirstOrDefault(x => x.Type == "UserId");
+            long userId = long.Parse(idClaim!.Value);
+
+            ImageResponseDto responseDto;
+
+            try
+            {
+                responseDto = await _productService.UploadImage(id, userId, image);
+            }
+            catch (InvalidImageException ex)
+            {
+                return BadRequest(new ErrorResponseDto() { Message = ex.Message });
             }
             catch (ResourceNotFoundException ex)
             {

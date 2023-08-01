@@ -22,6 +22,8 @@ namespace FoodDeliveryApi.Configurations
             builder.Property(x => x.Quantity).IsRequired();
 
             builder.HasOne(x => x.Store).WithMany(x => x.Products).HasForeignKey(x => x.StoreId);
+
+            builder.Property(x => x.ImageData).HasColumnType("bytea").HasDefaultValue(Array.Empty<byte>());
         }
     }
 }
