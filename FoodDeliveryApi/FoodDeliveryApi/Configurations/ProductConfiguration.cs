@@ -11,6 +11,8 @@ namespace FoodDeliveryApi.Configurations
             builder.HasKey(x => x.Id);
             builder.Property(x => x.Id).ValueGeneratedOnAdd();
 
+            builder.Property(x => x.IsDeleted).HasDefaultValue(false);
+
             builder.Property(x => x.Name).IsRequired().HasMaxLength(100);
 
             builder.Property(x => x.Description).HasMaxLength(500);
