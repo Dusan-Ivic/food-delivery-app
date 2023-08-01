@@ -1,22 +1,48 @@
-import { Card } from "react-bootstrap";
+import { Card, Form } from "react-bootstrap";
 import { Store } from "../interfaces/store";
 import { TbTruckDelivery, TbClockHour4 } from "react-icons/tb";
 import { formatCurrency } from "../utils/currencyFormatter";
+import { useRef } from "react";
 
 interface StoreInfoProps {
   store: Store;
+  canManageStore: boolean;
+  onImageChange: (imageFile: File | null) => void;
 }
 
-export function StoreInfo({ store }: StoreInfoProps) {
+export function StoreInfo({
+  store,
+  canManageStore,
+  onImageChange,
+}: StoreInfoProps) {
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleClick = () => {
+    if (fileInputRef.current && canManageStore) {
+      fileInputRef.current.click();
+    }
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const imageFile = e.target.files?.item(0);
+    if (imageFile) {
+      onImageChange(imageFile);
+    }
+  };
+
   return (
     <Card className="h-100">
       <Card.Img
         variant="top"
-        src={"https://placehold.co/900x600?text=No+Image"}
+        src={store?.imageData || "/images/no-image.svg"}
         height="200px"
         style={{ objectFit: "cover" }}
       />
-      <Card.ImgOverlay className="bg-dark opacity-75">
+      <Card.ImgOverlay
+        onClick={handleClick}
+        className="bg-dark opacity-75"
+        style={{ cursor: canManageStore ? "pointer" : "default" }}
+      >
         <Card.Body className="text-light d-flex flex-column justify-content-between h-100 p-0">
           <Card.Title className="d-flex justify-content-between align-items-baseline mb-4">
             <span className="fs-5">{store.name}</span>
@@ -35,6 +61,13 @@ export function StoreInfo({ store }: StoreInfoProps) {
           </div>
         </Card.Body>
       </Card.ImgOverlay>
+      <Form.Control
+        type="file"
+        ref={fileInputRef}
+        className="d-none"
+        onChange={handleChange}
+        accept=".jpg, .jpeg, .png"
+      />
     </Card>
   );
 }

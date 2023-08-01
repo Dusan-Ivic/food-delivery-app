@@ -10,7 +10,7 @@ export function StoreItem({ store }: StoreItemProps) {
     <Card className="h-100">
       <Card.Img
         variant="top"
-        src={"https://placehold.co/900x600?text=No+Image"}
+        src={store?.imageData || "/images/no-image.svg"}
         height="200px"
         style={{ objectFit: "cover" }}
       />

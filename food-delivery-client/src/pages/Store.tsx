@@ -30,6 +30,10 @@ import {
   createOrder,
   reset as resetOrdersState,
 } from "../features/orders/ordersSlice";
+import {
+  uploadImage,
+  reset as resetStoresState,
+} from "../features/stores/storesSlice";
 import { CartItem } from "../interfaces/cart";
 import { CreateOrderRequestDto } from "../interfaces/order";
 import { StateStatus } from "../interfaces/state";
@@ -48,11 +52,14 @@ interface ModalProps {
 
 export function StorePage() {
   const { id } = useParams();
-  const [store, setStore] = useState<Store | null>(null);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { user } = useAppSelector((state) => state.auth);
-  const { stores } = useAppSelector((state) => state.stores);
+  const {
+    stores,
+    status: storesStatus,
+    message: storesMessage,
+  } = useAppSelector((state) => state.stores);
   const {
     products,
     status: productsStatus,
@@ -75,6 +82,21 @@ export function StorePage() {
     action: null,
     payload: null,
   });
+
+  const store = useMemo(() => {
+    const numberId = Number(id);
+    if (!numberId) {
+      return null;
+    }
+
+    const storeData = stores?.find((x) => x.id === numberId);
+
+    if (!storeData) {
+      return null;
+    }
+
+    return storeData;
+  }, [id, stores]);
 
   const handleOpenModal = (product: Product | null) => {
     if (product) {
@@ -104,26 +126,15 @@ export function StorePage() {
   };
 
   useEffect(() => {
-    const numberId = Number(id);
-
-    if (!numberId) {
-      toast.error("Invalid store id");
+    if (!store) {
       navigate("/");
-    } else {
-      const storeData = stores.find((x) => x.id === numberId);
-      if (storeData == null) {
-        toast.error("Store not found");
-        navigate("/");
-      } else {
-        setStore(storeData);
-      }
     }
 
     return () => {
       dispatch(clearProducts());
       dispatch(closeCart());
     };
-  }, [id]);
+  }, [store]);
 
   useEffect(() => {
     if (store) {
@@ -157,6 +168,16 @@ export function StorePage() {
     };
   }, [productsStatus, productsMessage]);
 
+  useEffect(() => {
+    if (storesStatus == StateStatus.Error) {
+      toast.error(storesMessage);
+    }
+
+    return () => {
+      dispatch(resetStoresState());
+    };
+  }, [storesStatus, storesMessage]);
+
   const submitOrder = (store: Store, items: CartItem[]) => {
     const requestDto: CreateOrderRequestDto = {
       storeId: store.id,
@@ -177,7 +198,7 @@ export function StorePage() {
     return user.userType == UserType.Customer;
   }, [user]);
 
-  const canManageProducts = useMemo(() => {
+  const canManageStore = useMemo(() => {
     if (!user) {
       return false;
     }
@@ -217,6 +238,14 @@ export function StorePage() {
     });
   };
 
+  const handleImageChange = (imageFile: File | null) => {
+    if (imageFile) {
+      const formData = new FormData();
+      formData.append("image", imageFile);
+      dispatch(uploadImage({ storeId: store!.id, formData: formData }));
+    }
+  };
+
   return (
     store && (
       <>
@@ -247,7 +276,7 @@ export function StorePage() {
                 </div>
               </Button>
             )}
-            {canManageProducts && (
+            {canManageStore && (
               <Button
                 onClick={() => handleOpenModal(null)}
                 className="position-relative"
@@ -256,13 +285,17 @@ export function StorePage() {
               </Button>
             )}
           </div>
-          <StoreInfo store={store} />
+          <StoreInfo
+            store={store}
+            canManageStore={canManageStore}
+            onImageChange={handleImageChange}
+          />
         </div>
         <ProductList
           products={products}
           canAddToCart={canManageCart}
           addToCart={(product) => dispatch(addToCart(product))}
-          canManageProduct={canManageProducts}
+          canManageProduct={canManageStore}
           editProduct={(product) => handleOpenModal(product)}
           deleteProduct={(productId) => handleDeleteProduct(productId)}
         />
