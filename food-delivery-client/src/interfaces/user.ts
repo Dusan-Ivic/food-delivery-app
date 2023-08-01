@@ -19,6 +19,7 @@ interface UserBase {
   firstName: string;
   lastName: string;
   userType: UserType;
+  image: string | null;
 }
 
 export interface Partner extends UserBase {

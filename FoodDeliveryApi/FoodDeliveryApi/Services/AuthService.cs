@@ -15,6 +15,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace FoodDeliveryApi.Services
 {
@@ -144,6 +145,74 @@ namespace FoodDeliveryApi.Services
 
             string salt = BCrypt.Net.BCrypt.GenerateSalt();
             existingUser.Password = BCrypt.Net.BCrypt.HashPassword(requestDto.NewPassword, salt);
+
+            try
+            {
+                existingUser = await _authRepository.UpdateUser(existingUser);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+            return;
+        }
+
+        public async Task<ImageResponseDto> UploadImage(long id, UserType userType, IFormFile image)
+        {
+            if (image == null || image.Length == 0)
+            {
+                throw new InvalidImageException("Provided image is invalid. Please ensure that the image has valid content");
+            }
+
+            User? existingUser = await _authRepository.GetUserById(id, userType);
+
+            if (existingUser == null)
+            {
+                throw new ResourceNotFoundException("User with this id doesn't exist");
+            }
+
+            using var memoryStream = new MemoryStream();
+            image.CopyTo(memoryStream);
+
+            byte[] imageData = memoryStream.ToArray();
+
+            existingUser.ImageData = imageData;
+
+            try
+            {
+                existingUser = await _authRepository.UpdateUser(existingUser);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+            return _mapper.Map<ImageResponseDto>(existingUser);
+        }
+
+        public async Task<ImageResponseDto> GetImage(long id, UserType userType)
+        {
+            User? existingUser = await _authRepository.GetUserById(id, userType);
+
+            if (existingUser == null)
+            {
+                throw new ResourceNotFoundException("User with this id doesn't exist");
+            }
+
+            return _mapper.Map<ImageResponseDto>(existingUser);
+        }
+
+        public async Task RemoveImage(long userId, UserType userType)
+        {
+            User? existingUser = await _authRepository.GetUserById(userId, userType);
+
+            if (existingUser == null)
+            {
+                throw new ResourceNotFoundException("User with this id doesn't exist");
+            }
+
+            existingUser.ImageData = new byte[0];
 
             try
             {

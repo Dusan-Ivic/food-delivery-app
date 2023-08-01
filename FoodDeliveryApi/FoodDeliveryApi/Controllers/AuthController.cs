@@ -77,5 +77,79 @@ namespace FoodDeliveryApi.Controllers
 
             return Ok("Password successfully changed");
         }
+
+        [HttpPut("image")]
+        [Authorize]
+        public async Task<IActionResult> UploadImage([FromForm] IFormFile image)
+        {
+            Claim? idClaim = User.Claims.FirstOrDefault(x => x.Type == "UserId");
+            long userId = long.Parse(idClaim!.Value);
+
+            Claim? roleClaim = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Role);
+            UserType userType = (UserType)Enum.Parse(typeof(UserType), roleClaim!.Value);
+
+            ImageResponseDto responseDto;
+
+            try
+            {
+               responseDto = await _authService.UploadImage(userId, userType, image);
+            }
+            catch (InvalidImageException ex)
+            {
+                return BadRequest(new ErrorResponseDto() { Message = ex.Message });
+            }
+            catch (ResourceNotFoundException ex)
+            {
+                return NotFound(new ErrorResponseDto() { Message = ex.Message });
+            }
+
+            return Ok(responseDto);
+        }
+
+        [HttpGet("image")]
+        [Authorize]
+        public async Task<IActionResult> GetImage()
+        {
+            Claim? idClaim = User.Claims.FirstOrDefault(x => x.Type == "UserId");
+            long userId = long.Parse(idClaim!.Value);
+
+            Claim? roleClaim = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Role);
+            UserType userType = (UserType)Enum.Parse(typeof(UserType), roleClaim!.Value);
+
+            ImageResponseDto responseDto;
+
+            try
+            {
+                responseDto = await _authService.GetImage(userId, userType);
+            }
+            catch (ResourceNotFoundException ex)
+            {
+                return NotFound(new ErrorResponseDto() { Message = ex.Message });
+            }
+
+            return Ok(responseDto);
+        }
+
+        [HttpDelete("image")]
+        [Authorize]
+        public async Task<IActionResult> RemoveImage()
+        {
+            Claim? idClaim = User.Claims.FirstOrDefault(x => x.Type == "UserId");
+            long userId = long.Parse(idClaim!.Value);
+
+            Claim? roleClaim = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Role);
+            UserType userType = (UserType)Enum.Parse(typeof(UserType), roleClaim!.Value);
+
+            try
+            {
+                await _authService.RemoveImage(userId, userType);
+            }
+            catch (ResourceNotFoundException ex)
+            {
+                return NotFound(new ErrorResponseDto() { Message = ex.Message });
+            }
+
+            return NoContent();
+        }
     }
 }

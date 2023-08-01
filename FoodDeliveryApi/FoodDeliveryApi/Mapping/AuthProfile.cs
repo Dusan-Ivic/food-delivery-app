@@ -27,6 +27,8 @@ namespace FoodDeliveryApi.Mapping
                 .ForMember(dest => dest.PostalCode, opt => opt.MapFrom(src => ((Customer)src).PostalCode));
 
             CreateMap<ChangePasswordRequestDto, User>().ForMember(dest => dest.Password, opt => opt.MapFrom(src => src.OldPassword));
+
+            CreateMap<User, ImageResponseDto>();
         }
     }
 }

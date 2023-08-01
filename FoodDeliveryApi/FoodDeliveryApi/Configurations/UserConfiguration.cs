@@ -22,6 +22,8 @@ namespace FoodDeliveryApi.Configurations
             builder.Property(x => x.FirstName).IsRequired().HasMaxLength(50);
 
             builder.Property(x => x.LastName).IsRequired().HasMaxLength(50);
+
+            builder.Property(x => x.ImageData).HasColumnType("bytea");
         }
     }
 }
