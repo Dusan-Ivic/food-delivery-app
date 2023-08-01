@@ -10,7 +10,12 @@ import {
 import { AddressDetails } from "../components/AddressDetails";
 import { UserDetails } from "../components/UserDetails";
 import { AddressInfo } from "../interfaces/customer";
-import { updateUser, reset, uploadImage } from "../features/auth/authSlice";
+import {
+  updateUser,
+  reset,
+  uploadImage,
+  getImage,
+} from "../features/auth/authSlice";
 import { useEffect, useRef } from "react";
 import { StateStatus } from "../interfaces/state";
 import { toast } from "react-toastify";
@@ -20,6 +25,24 @@ export function Profile() {
   const { user, status, message } = useAppSelector((state) => state.auth);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    if (status === StateStatus.Error) {
+      toast.error(message);
+    }
+
+    return () => {
+      dispatch(reset());
+    };
+  }, [status, message]);
+
+  useEffect(() => {
+    dispatch(getImage());
+
+    return () => {
+      dispatch(reset());
+    };
+  }, []);
 
   const handleUpdateDetails = (data: UserRequestDto) => {
     const updateData: UpdateUserData = {
@@ -46,16 +69,6 @@ export function Profile() {
 
     dispatch(updateUser(updateData));
   };
-
-  useEffect(() => {
-    if (status === StateStatus.Error) {
-      toast.error(message);
-    }
-
-    return () => {
-      dispatch(reset());
-    };
-  }, [status, message]);
 
   const handleClick = () => {
     if (fileInputRef.current) {

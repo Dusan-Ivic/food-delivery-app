@@ -10,7 +10,7 @@ import {
   PartnerResponseDto,
   UpdatePartnerRequestDto,
 } from "../../interfaces/partner";
-import { UploadImageResponseDto } from "../../interfaces/image";
+import { ImageResponseDto } from "../../interfaces/image";
 
 const loginUser = async (
   requestDto: LoginRequestDto
@@ -119,15 +119,35 @@ const updatePartner = async (
 const uploadImage = async (
   formData: FormData,
   token: string | null
-): Promise<UploadImageResponseDto> => {
+): Promise<ImageResponseDto> => {
   try {
-    const response = await axios.put<UploadImageResponseDto>(
+    const response = await axios.put<ImageResponseDto>(
       `${import.meta.env.VITE_API_URL}/api/auth/image`,
       formData,
       {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw new Error(error.response?.data.message);
+    } else {
+      throw new Error("Unknown error occurred.");
+    }
+  }
+};
+
+const getImage = async (token: string | null): Promise<ImageResponseDto> => {
+  try {
+    const response = await axios.get<ImageResponseDto>(
+      `${import.meta.env.VITE_API_URL}/api/auth/image`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
         },
       }
     );
@@ -148,6 +168,7 @@ const authService = {
   updateCustomer,
   updatePartner,
   uploadImage,
+  getImage,
 };
 
 export default authService;

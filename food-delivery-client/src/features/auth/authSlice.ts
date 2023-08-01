@@ -124,6 +124,22 @@ export const uploadImage = createAsyncThunk(
   }
 );
 
+export const getImage = createAsyncThunk(
+  "auth/get-image",
+  async (_, thunkAPI) => {
+    try {
+      const { token } = (thunkAPI.getState() as RootState).auth;
+      return await authService.getImage(token);
+    } catch (error: unknown) {
+      let message: string = "";
+      if (error instanceof Error) {
+        message = error.message;
+      }
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
 export const authSlice = createSlice({
   name: "auth",
   initialState,
@@ -214,6 +230,31 @@ export const authSlice = createSlice({
           const uint8Array = new Uint8Array(byteNumbers);
           const blob = new Blob([uint8Array], { type: "image/jpeg" });
           state.user.image = URL.createObjectURL(blob);
+        }
+      })
+      .addCase(getImage.pending, (state) => {
+        state.status = StateStatus.Loading;
+      })
+      .addCase(getImage.rejected, (state, action) => {
+        state.status = StateStatus.Error;
+        state.message = action.payload as string;
+      })
+      .addCase(getImage.fulfilled, (state, action) => {
+        state.status = StateStatus.Success;
+        if (state.user) {
+          if (action.payload.imageData) {
+            const base64String = action.payload.imageData.toString();
+            const byteCharacters = atob(base64String.toString());
+            const byteNumbers = new Array(byteCharacters.length);
+            for (let i = 0; i < byteCharacters.length; i++) {
+              byteNumbers[i] = byteCharacters.charCodeAt(i);
+            }
+            const uint8Array = new Uint8Array(byteNumbers);
+            const blob = new Blob([uint8Array], { type: "image/jpeg" });
+            state.user.image = URL.createObjectURL(blob);
+          } else {
+            state.user.image = null;
+          }
         }
       });
   },

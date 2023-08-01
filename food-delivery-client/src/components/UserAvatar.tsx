@@ -2,7 +2,7 @@ import { Card } from "react-bootstrap";
 import { UserType } from "../interfaces/user";
 
 interface UserAvatarProps {
-  image: string;
+  image: string | null;
   userType: UserType;
 }
 

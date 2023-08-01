@@ -1,3 +1,3 @@
-export interface UploadImageResponseDto {
+export interface ImageResponseDto {
   imageData: Uint8Array;
 }

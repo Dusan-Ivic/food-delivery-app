@@ -189,5 +189,17 @@ namespace FoodDeliveryApi.Services
 
             return _mapper.Map<ImageResponseDto>(existingUser);
         }
+
+        public async Task<ImageResponseDto> GetImage(long id, UserType userType)
+        {
+            User? existingUser = await _authRepository.GetUserById(id, userType);
+
+            if (existingUser == null)
+            {
+                throw new ResourceNotFoundException("User with this id doesn't exist");
+            }
+
+            return _mapper.Map<ImageResponseDto>(existingUser);
+        }
     }
 }
