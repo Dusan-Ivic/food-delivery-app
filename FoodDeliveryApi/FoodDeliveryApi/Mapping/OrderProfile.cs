@@ -23,6 +23,8 @@ namespace FoodDeliveryApi.Mapping
             CreateMap<OrderItem, GetOrderItemResponseDto>()
                 .ForMember(dest => dest.ProductName, opt => opt.MapFrom(src => src.Product.Name))
                 .ForMember(dest => dest.ProductPrice, opt => opt.MapFrom(src => (src.TotalPrice / src.Quantity)));
+
+            CreateMap<Order, DeleteOrderResponseDto>();
         }
     }
 }

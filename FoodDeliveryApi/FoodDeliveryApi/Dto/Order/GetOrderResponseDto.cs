@@ -5,6 +5,7 @@ namespace FoodDeliveryApi.Dto.Order
     public class GetOrderResponseDto : BaseOrderDto<GetOrderItemResponseDto>
     {
         public long Id { get; set; }
+        public bool IsCanceled { get; set; }
         public DateTime CreatedAt { get; set; } = default!;
         public long CustomerId { get; set; }
         public decimal ItemsPrice { get; set; }

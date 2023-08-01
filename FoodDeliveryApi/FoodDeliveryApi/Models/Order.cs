@@ -5,6 +5,7 @@ namespace FoodDeliveryApi.Models
     public class Order
     {
         public long Id { get; set; }
+        public bool IsCanceled { get; set; }
         public DateTime CreatedAt { get; set; } = default!;
         public long CustomerId { get; set; }
         public Customer Customer { get; set; } = default!;
