@@ -1,4 +1,4 @@
-import { Store } from "./store";
+import { StoreResponseDto } from "./store";
 
 export enum OrderStatus {
   Pending = 0,
@@ -33,7 +33,7 @@ export interface OrderResponseDto {
   deliveryFee: number;
   totalPrice: number;
   storeId: number;
-  store: Store;
+  store: StoreResponseDto;
   items: OrderItemResponseDto[];
   orderStatus: OrderStatus;
 }

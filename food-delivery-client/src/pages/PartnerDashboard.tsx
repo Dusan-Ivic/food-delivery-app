@@ -11,7 +11,7 @@ import { BsHouseAddFill } from "react-icons/bs";
 import { Button } from "react-bootstrap";
 import { StateStatus } from "../interfaces/state";
 import { toast } from "react-toastify";
-import { CreateStoreRequestDto as StoreFormData } from "../interfaces/store";
+import { StoreRequestDto } from "../interfaces/store";
 import { StoreModal } from "../components/StoreModal";
 
 export function PartnerDashboard() {
@@ -28,7 +28,7 @@ export function PartnerDashboard() {
     setModalVisible(false);
   };
 
-  const handleSubmit = (data: StoreFormData) => {
+  const handleSubmit = (data: StoreRequestDto) => {
     dispatch(createStore(data));
     setModalVisible(false);
   };

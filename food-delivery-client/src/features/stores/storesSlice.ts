@@ -1,12 +1,12 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { StateStatus } from "../../interfaces/state";
-import { CreateStoreRequestDto, Store } from "../../interfaces/store";
+import { StoreRequestDto, StoreState } from "../../interfaces/store";
 import { RootState } from "../../app/store";
 import storesService from "./storesService";
 import { convertByteArrayToBlob } from "../../utils/imageConverter";
 
 interface StoresState {
-  stores: Store[];
+  stores: StoreState[];
   status: StateStatus;
   message: string;
 }
@@ -34,7 +34,7 @@ export const getStores = createAsyncThunk(
 
 export const createStore = createAsyncThunk(
   "stores/create",
-  async (storeData: CreateStoreRequestDto, thunkAPI) => {
+  async (storeData: StoreRequestDto, thunkAPI) => {
     try {
       const { token } = (thunkAPI.getState() as RootState).auth;
       return await storesService.createStore(storeData, token);
@@ -108,7 +108,11 @@ export const storesSlice = createSlice({
       })
       .addCase(createStore.fulfilled, (state, action) => {
         state.status = StateStatus.Success;
-        state.stores.push(action.payload);
+        const responseDto = action.payload;
+        state.stores.push({
+          ...responseDto,
+          imageData: convertByteArrayToBlob(responseDto.imageData),
+        });
       })
       .addCase(uploadImage.pending, (state) => {
         state.status = StateStatus.Loading;
@@ -119,20 +123,14 @@ export const storesSlice = createSlice({
       })
       .addCase(uploadImage.fulfilled, (state, action) => {
         state.status = StateStatus.Success;
-        const base64String = action.payload.imageData.toString() || "";
-        const byteCharacters = atob(base64String);
-        const byteNumbers = new Array(byteCharacters.length);
-        for (let i = 0; i < byteCharacters.length; i++) {
-          byteNumbers[i] = byteCharacters.charCodeAt(i);
-        }
-        const uint8Array = new Uint8Array(byteNumbers);
-        const blob = new Blob([uint8Array], { type: "image/jpeg" });
-
+        const responseDto = action.payload;
         state.stores = state.stores.map((store) => {
           if (store.id === action.payload.id) {
-            return { ...store, imageData: URL.createObjectURL(blob) };
+            return {
+              ...store,
+              imageData: convertByteArrayToBlob(responseDto.imageData),
+            };
           }
-
           return store;
         });
       });

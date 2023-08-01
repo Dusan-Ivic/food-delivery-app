@@ -3,16 +3,16 @@ import { Button, Offcanvas, Stack } from "react-bootstrap";
 import { CartItem } from "../interfaces/cart";
 import { ShoppingCartItem } from "./ShoppingCartItem";
 import { formatCurrency } from "../utils/currencyFormatter";
-import { Store } from "../interfaces/store";
+import { StoreState } from "../interfaces/store";
 
 interface ShoppingCartProps {
-  store: Store;
+  store: StoreState;
   items: CartItem[];
   isOpen: boolean;
   closeCart: () => void;
   removeFromCart: (itemId: number) => void;
   decreaseQuantity: (itemId: number) => void;
-  submitOrder: (store: Store, items: CartItem[]) => void;
+  submitOrder: (store: StoreState, items: CartItem[]) => void;
 }
 
 export function ShoppingCart({

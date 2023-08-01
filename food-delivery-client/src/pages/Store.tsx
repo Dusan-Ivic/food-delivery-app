@@ -10,7 +10,7 @@ import {
   deleteProduct,
 } from "../features/products/productsSlice";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
-import { Store } from "../interfaces/store";
+import { StoreState } from "../interfaces/store";
 import { StoreInfo } from "../components/StoreInfo";
 import { IoArrowBack } from "react-icons/io5";
 import { HiOutlineShoppingCart } from "react-icons/hi";
@@ -83,7 +83,7 @@ export function StorePage() {
     payload: null,
   });
 
-  const store = useMemo(() => {
+  const store = useMemo<StoreState | null>(() => {
     const numberId = Number(id);
     if (!numberId) {
       return null;
@@ -178,7 +178,7 @@ export function StorePage() {
     };
   }, [storesStatus, storesMessage]);
 
-  const submitOrder = (store: Store, items: CartItem[]) => {
+  const submitOrder = (store: StoreState, items: CartItem[]) => {
     const requestDto: CreateOrderRequestDto = {
       storeId: store.id,
       items: items.map((item) => ({

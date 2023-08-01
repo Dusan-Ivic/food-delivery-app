@@ -1,8 +1,8 @@
 import { Card } from "react-bootstrap";
-import { Store } from "../interfaces/store";
+import { StoreState } from "../interfaces/store";
 
 interface StoreItemProps {
-  store: Store;
+  store: StoreState;
 }
 
 export function StoreItem({ store }: StoreItemProps) {
