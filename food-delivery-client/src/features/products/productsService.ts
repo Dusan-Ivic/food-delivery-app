@@ -1,5 +1,9 @@
 import axios from "axios";
-import { ProductRequestDto, ProductResponseDto, GetProductResponseDto } from "../../interfaces/product";
+import {
+  ProductRequestDto,
+  ProductResponseDto,
+  GetProductResponseDto,
+} from "../../interfaces/product";
 
 const getProductsByStore = async (
   storeId: number
@@ -67,10 +71,34 @@ const updateProduct = async (
   }
 };
 
+const deleteProduct = async (
+  productId: number,
+  token: string | null
+): Promise<{ id: number }> => {
+  try {
+    const response = await axios.delete<{ id: number }>(
+      `${import.meta.env.VITE_API_URL}/api/products/${productId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw new Error(error.response?.data.message);
+    } else {
+      throw new Error("Unknown error occurred.");
+    }
+  }
+};
+
 const productsService = {
   getProductsByStore,
   createProduct,
   updateProduct,
+  deleteProduct,
 };
 
 export default productsService;

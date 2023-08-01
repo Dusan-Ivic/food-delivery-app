@@ -2,7 +2,8 @@ import { Card } from "react-bootstrap";
 import { Product } from "../interfaces/product";
 import { formatCurrency } from "../utils/currencyFormatter";
 import { GrAddCircle } from "react-icons/gr";
-import { BiEdit } from "react-icons/bi"
+import { BiEdit } from "react-icons/bi";
+import { AiFillDelete } from "react-icons/ai";
 
 interface ProductItemProps {
   product: Product;
@@ -10,6 +11,7 @@ interface ProductItemProps {
   addToCart: (product: Product) => void;
   canManageProduct: boolean;
   editProduct: (product: Product) => void;
+  deleteProduct: (product: Product) => void;
 }
 
 export function ProductItem({
@@ -18,6 +20,7 @@ export function ProductItem({
   addToCart,
   canManageProduct,
   editProduct,
+  deleteProduct,
 }: ProductItemProps) {
   return (
     <Card className="h-100">
@@ -29,10 +32,25 @@ export function ProductItem({
           style={{ objectFit: "cover" }}
         />
         {canManageProduct && (
+          <AiFillDelete
+            onClick={() => deleteProduct(product)}
+            style={{
+              color: "red",
+              width: "1.5rem",
+              height: "1.5rem",
+              position: "absolute",
+              top: 0,
+              left: 0,
+              transform: "translate(25%, 25%)",
+              cursor: "pointer",
+            }}
+          />
+        )}
+        {canManageProduct && (
           <BiEdit
             onClick={() => editProduct(product)}
             style={{
-              color: "white",
+              color: "orange",
               width: "1.5rem",
               height: "1.5rem",
               position: "absolute",
