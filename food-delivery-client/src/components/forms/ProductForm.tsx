@@ -2,11 +2,11 @@ import { Button, Col, Form, Row } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
-import { ProductFormData } from "../../interfaces/product";
+import { ProductRequestDto } from "../../interfaces/product";
 
 interface ProductFormProps {
-  onSubmit: (data: ProductFormData) => void;
-  product: ProductFormData | null;
+  onSubmit: (data: ProductRequestDto) => void;
+  product: ProductRequestDto | null;
 }
 
 export function ProductForm({ onSubmit, product }: ProductFormProps) {
@@ -27,18 +27,18 @@ export function ProductForm({ onSubmit, product }: ProductFormProps) {
       .moreThan(0, "Quantity must be greater than 0"),
   });
 
-  const initialValues: ProductFormData = {
+  const initialValues: ProductRequestDto = {
     name: product?.name || "",
     description: product?.description || "",
     price: product?.price || 0,
     quantity: product?.quantity || 0,
-  }
+  };
 
   const {
     register,
     handleSubmit,
     formState: { errors, touchedFields },
-  } = useForm<ProductFormData>({
+  } = useForm<ProductRequestDto>({
     mode: "all",
     defaultValues: initialValues,
     resolver: yupResolver(validationSchema),
@@ -86,15 +86,10 @@ export function ProductForm({ onSubmit, product }: ProductFormProps) {
               min={0}
               step="any"
               {...register("price")}
-              isValid={
-                touchedFields.price &&
-                !errors.price
-              }
+              isValid={touchedFields.price && !errors.price}
               placeholder="$10"
             />
-            <div className="text-danger">
-              {errors.price?.message}
-            </div>
+            <div className="text-danger">{errors.price?.message}</div>
           </Form.Group>
         </Col>
         <Col>
@@ -106,15 +101,10 @@ export function ProductForm({ onSubmit, product }: ProductFormProps) {
               min={0}
               step={1}
               {...register("quantity")}
-              isValid={
-                touchedFields.quantity &&
-                !errors.quantity
-              }
+              isValid={touchedFields.quantity && !errors.quantity}
               placeholder="50"
             />
-            <div className="text-danger">
-              {errors.quantity?.message}
-            </div>
+            <div className="text-danger">{errors.quantity?.message}</div>
           </Form.Group>
         </Col>
       </Row>

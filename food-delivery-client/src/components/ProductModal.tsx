@@ -1,12 +1,12 @@
 import { Modal } from "react-bootstrap";
-import { ProductFormData } from "../interfaces/product";
+import { ProductRequestDto } from "../interfaces/product";
 import { ProductForm } from "./forms/ProductForm";
 
 interface ProductModalProps {
   isVisible: boolean;
-  onSubmit: (data: ProductFormData) => void;
+  onSubmit: (data: ProductRequestDto) => void;
   handleClose: () => void;
-  product: ProductFormData | null;
+  product: ProductRequestDto | null;
 }
 
 export function ProductModal({

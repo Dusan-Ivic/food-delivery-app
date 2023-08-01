@@ -1,4 +1,4 @@
-import { PartnerStatus } from "./user";
+import { PartnerStatus } from "./enums";
 
 interface PartnerBase {
   username: string;
