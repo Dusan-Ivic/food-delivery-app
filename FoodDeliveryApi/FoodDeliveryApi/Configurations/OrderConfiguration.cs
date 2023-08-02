@@ -42,6 +42,12 @@ namespace FoodDeliveryApi.Configurations
             builder.Property(x => x.Quantity).IsRequired();
 
             builder.Property(x => x.TotalPrice).IsRequired();
+
+            builder.Property(x => x.ProductName).IsRequired().HasMaxLength(100);
+
+            builder.Property(x => x.ProductPrice).IsRequired();
+
+            builder.Property(x => x.ProductImage).HasColumnType("bytea").HasDefaultValue(Array.Empty<byte>());
         }
     }
 }

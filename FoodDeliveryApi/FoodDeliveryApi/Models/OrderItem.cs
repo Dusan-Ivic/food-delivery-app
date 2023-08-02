@@ -8,5 +8,11 @@
         public decimal TotalPrice { get; set; }
         public long OrderId { get; set; }
         public Order Order { get; set; } = default!;
+
+        // Values at the time of order creation (may be changed later in Product)
+        public string ProductName { get; set; } = string.Empty;
+        public decimal ProductPrice { get; set; }
+        public byte[] ProductImage { get; set; } = default!;
+
     }
 }

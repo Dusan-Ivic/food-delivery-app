@@ -109,8 +109,6 @@ export function StorePage() {
 
   useEffect(() => {
     setProductModalVisible(selectedProduct != null);
-
-    console.log(selectedProduct);
   }, [selectedProduct]);
 
   useEffect(() => {

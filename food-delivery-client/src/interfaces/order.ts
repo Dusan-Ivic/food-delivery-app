@@ -1,5 +1,4 @@
 import { OrderStatus } from "./enums";
-import { ProductResponseDto, ProductState } from "./product";
 import { StoreResponseDto } from "./store";
 
 export interface OrderItemRequestDto {
@@ -12,7 +11,9 @@ export interface OrderItemResponseDto {
   orderId: number;
   quantity: number;
   totalPrice: number;
-  product: ProductResponseDto;
+  productName: string;
+  productPrice: number;
+  productImage?: Uint8Array;
 }
 
 export interface OrderRequestDto {
@@ -38,7 +39,9 @@ export interface OrderItemState {
   orderId: number;
   quantity: number;
   totalPrice: number;
-  product: ProductState;
+  productName: string;
+  productPrice: number;
+  productImage?: string | null;
 }
 
 export interface OrderState {
