@@ -1,5 +1,5 @@
 import { Table } from "react-bootstrap";
-import { OrderResponseDto as OrderState } from "../interfaces/order";
+import { OrderState } from "../interfaces/order";
 import { OrderStatus } from "../interfaces/enums";
 import { formatCurrency } from "../utils/currencyFormatter";
 import moment from "moment";
