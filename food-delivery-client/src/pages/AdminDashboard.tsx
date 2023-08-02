@@ -5,15 +5,17 @@ import {
 import {
   getPartners,
   clearPartners,
+  verifyPartner,
   reset as resetPartners,
 } from "../features/partners/partnersSlice";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { useEffect } from "react";
-import { StateStatus } from "../interfaces/enums";
+import { PartnerStatus, StateStatus } from "../interfaces/enums";
 import { toast } from "react-toastify";
 import { StoreList } from "../components/StoreList";
 import { PartnerList } from "../components/PartnerList";
 import { Col, Row } from "react-bootstrap";
+import { PartnerState } from "../interfaces/partner";
 
 export function AdminDashboard() {
   const dispatch = useAppDispatch();
@@ -61,6 +63,14 @@ export function AdminDashboard() {
     };
   }, [partnersStatus, partnersMessage]);
 
+  const handleVerify = (partner: PartnerState, status: PartnerStatus) => {
+    if (partner.status === status) {
+      toast.warn(`Partner is already ${PartnerStatus[status]}`);
+    } else {
+      dispatch(verifyPartner({ partnerId: partner.id, newStatus: status }));
+    }
+  };
+
   return (
     <Row>
       <Col>
@@ -68,7 +78,7 @@ export function AdminDashboard() {
           <h1 className="text-center mt-3 mb-3">Partners</h1>
         </div>
         {partners.length > 0 ? (
-          <PartnerList partners={partners} />
+          <PartnerList partners={partners} onVerify={handleVerify} />
         ) : (
           <p className="text-center mt-4">
             There are currently no registered partners

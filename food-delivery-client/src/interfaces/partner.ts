@@ -23,3 +23,7 @@ export interface PartnerState extends PartnerBase {
   userType: UserType;
   imageData: string | null;
 }
+
+export interface VerifyPartnerRequestDto {
+  status: PartnerStatus;
+}

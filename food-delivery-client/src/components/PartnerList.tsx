@@ -2,7 +2,6 @@ import { Table } from "react-bootstrap";
 import { PartnerState } from "../interfaces/partner";
 import { PartnerStatus } from "../interfaces/enums";
 import { LuVerified } from "react-icons/lu";
-import { FiSettings } from "react-icons/fi";
 import {
   AiOutlineCheckCircle,
   AiOutlineCloseCircle,
@@ -12,9 +11,10 @@ import { HiOutlineX } from "react-icons/hi";
 
 interface PartnerListProps {
   partners: PartnerState[];
+  onVerify: (partner: PartnerState, status: PartnerStatus) => void;
 }
 
-export function PartnerList({ partners }: PartnerListProps) {
+export function PartnerList({ partners, onVerify }: PartnerListProps) {
   const statusToIconMap = {
     [PartnerStatus.Pending]: (
       <AiOutlineLoading3Quarters className="fs-5" style={{ color: "orange" }} />
@@ -45,9 +45,7 @@ export function PartnerList({ partners }: PartnerListProps) {
             <th>First name</th>
             <th>Last name</th>
             <th>Status</th>
-            <th>
-              <FiSettings />
-            </th>
+            <th>Verify</th>
           </tr>
         </thead>
         <tbody className="align-middle">
@@ -71,10 +69,16 @@ export function PartnerList({ partners }: PartnerListProps) {
               <td>
                 <div className="d-md-flex justify-content-center">
                   <div style={{ cursor: "pointer" }}>
-                    <AiOutlineCheckCircle className="fs-4" />
+                    <AiOutlineCheckCircle
+                      className="fs-4"
+                      onClick={() => onVerify(partner, PartnerStatus.Accepted)}
+                    />
                   </div>
                   <div style={{ cursor: "pointer" }}>
-                    <AiOutlineCloseCircle className="fs-4" />
+                    <AiOutlineCloseCircle
+                      className="fs-4"
+                      onClick={() => onVerify(partner, PartnerStatus.Rejected)}
+                    />
                   </div>
                 </div>
               </td>
