@@ -41,11 +41,11 @@ import { CartItem } from "../interfaces/cart";
 import { OrderRequestDto } from "../interfaces/order";
 import { StateStatus, UserType } from "../interfaces/enums";
 import { toast } from "react-toastify";
-import { ProductModal } from "../components/ProductModal";
 import { ConfirmationModal } from "../components/ConfirmationModal";
 import { ProductRequestDto, ProductState } from "../interfaces/product";
 import { FormModal, FormProps } from "../components/FormModal";
 import { StoreForm } from "../components/forms/StoreForm";
+import { ProductForm } from "../components/forms/ProductForm";
 
 interface ModalProps {
   isVisible: boolean;
@@ -78,7 +78,6 @@ export function StorePage() {
     () => items.reduce((quantity, item) => item.quantity + quantity, 0),
     [items]
   );
-  const [modalVisible, setModalVisible] = useState<boolean>(false);
   const [selectedProduct, setSelectedProduct] = useState<ProductState | null>(
     null
   );
@@ -90,6 +89,8 @@ export function StorePage() {
   });
 
   const [isStoreModalVisible, setStoreModalVisible] = useState<boolean>(false);
+  const [isProductModalVisible, setProductModalVisible] =
+    useState<boolean>(false);
 
   const store = useMemo<StoreState | null>(() => {
     const numberId = Number(id);
@@ -106,32 +107,11 @@ export function StorePage() {
     return storeData;
   }, [id, stores]);
 
-  const handleOpenModal = (product: ProductState | null) => {
-    if (product) {
-      setSelectedProduct(product);
-    }
-    setModalVisible(true);
-  };
+  useEffect(() => {
+    setProductModalVisible(selectedProduct != null);
 
-  const handleCloseModal = () => {
-    setModalVisible(false);
-    setSelectedProduct(null);
-  };
-
-  const handleSubmit = (data: ProductRequestDto) => {
-    if (selectedProduct) {
-      dispatch(
-        updateProduct({
-          data: { ...data, storeId: selectedProduct.storeId },
-          productId: selectedProduct.id,
-        })
-      );
-    } else {
-      dispatch(createProduct({ ...data, storeId: store!.id }));
-    }
-    setModalVisible(false);
-    setSelectedProduct(null);
-  };
+    console.log(selectedProduct);
+  }, [selectedProduct]);
 
   useEffect(() => {
     if (!store) {
@@ -272,6 +252,13 @@ export function StorePage() {
     return <StoreForm store={data} onSubmit={onSubmit} />;
   };
 
+  const ProductFormComponent = ({
+    data,
+    onSubmit,
+  }: FormProps<ProductRequestDto>) => {
+    return <ProductForm product={data} onSubmit={onSubmit} />;
+  };
+
   return (
     store && (
       <>
@@ -313,7 +300,7 @@ export function StorePage() {
                 </Button>
                 <Button
                   variant="success"
-                  onClick={() => handleOpenModal(null)}
+                  onClick={() => setProductModalVisible(true)}
                   className="position-relative ms-2"
                 >
                   <IoMdAddCircleOutline className="fs-4" />
@@ -332,7 +319,7 @@ export function StorePage() {
           canAddToCart={canManageCart}
           addToCart={(product) => dispatch(addToCart(product))}
           canManageProduct={canManageStore}
-          editProduct={(product) => handleOpenModal(product)}
+          editProduct={(product) => setSelectedProduct(product)}
           deleteProduct={(product) => handleDeleteProduct(product)}
           onImageChange={(productId, imageFile) =>
             handleProductImageChange(productId, imageFile)
@@ -347,17 +334,33 @@ export function StorePage() {
           decreaseQuantity={(itemId) => dispatch(decreaseQuantity(itemId))}
           submitOrder={(store, items) => submitOrder(store, items)}
         />
-        <ProductModal
-          onSubmit={handleSubmit}
-          isVisible={modalVisible}
-          handleClose={handleCloseModal}
-          product={selectedProduct}
-        />
+
         <ConfirmationModal
           isVisible={confirmModal.isVisible}
           content={confirmModal.content}
           onConfirm={handleConfirm}
           onCancel={handleCancel}
+        />
+
+        <FormModal
+          isVisible={isProductModalVisible}
+          title={selectedProduct ? "Update product" : "Add new product"}
+          FormComponent={ProductFormComponent}
+          data={selectedProduct as ProductRequestDto}
+          onSubmit={(data) =>
+            selectedProduct
+              ? dispatch(
+                  updateProduct({
+                    productId: selectedProduct.id,
+                    requestDto: { ...data, storeId: store.id },
+                  })
+                )
+              : dispatch(createProduct({ ...data, storeId: store.id }))
+          }
+          onClose={() => {
+            setSelectedProduct(null);
+            setProductModalVisible(false);
+          }}
         />
 
         <FormModal
