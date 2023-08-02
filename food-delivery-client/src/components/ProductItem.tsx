@@ -1,9 +1,8 @@
 import { Card, Form } from "react-bootstrap";
 import { ProductState } from "../interfaces/product";
 import { formatCurrency } from "../utils/currencyFormatter";
-import { GrAddCircle } from "react-icons/gr";
 import { BiEdit } from "react-icons/bi";
-import { AiFillDelete } from "react-icons/ai";
+import { AiFillDelete, AiOutlinePlusSquare } from "react-icons/ai";
 import { useRef } from "react";
 
 interface ProductItemProps {
@@ -42,7 +41,11 @@ export function ProductItem({
 
   return (
     <Card className="h-100">
-      <div>
+      <div
+        style={{
+          position: "relative",
+        }}
+      >
         <Card.Img
           variant="top"
           src={product?.imageData || "/images/no-image.svg"}
@@ -52,6 +55,16 @@ export function ProductItem({
             cursor: canManageProduct ? "pointer" : "default",
           }}
           onClick={handleClick}
+        />
+        <div
+          style={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            width: "100%",
+            height: "100%",
+            backgroundColor: "rgba(0, 0, 0, 0.3)",
+          }}
         />
         <Form.Control
           type="file"
@@ -64,7 +77,9 @@ export function ProductItem({
           <AiFillDelete
             onClick={() => deleteProduct(product)}
             style={{
-              color: "red",
+              filter: "drop-shadow(0px 3px 4px rgba(0, 0, 0, 0.5))",
+              display: "inline-block",
+              color: "white",
               width: "1.5rem",
               height: "1.5rem",
               position: "absolute",
@@ -79,7 +94,9 @@ export function ProductItem({
           <BiEdit
             onClick={() => editProduct(product)}
             style={{
-              color: "orange",
+              filter: "drop-shadow(0px 3px 4px rgba(0, 0, 0, 0.5))",
+              display: "inline-block",
+              color: "white",
               width: "1.5rem",
               height: "1.5rem",
               position: "absolute",
@@ -91,9 +108,11 @@ export function ProductItem({
           />
         )}
         {canAddToCart && (
-          <GrAddCircle
+          <AiOutlinePlusSquare
             onClick={() => addToCart(product)}
             style={{
+              filter: "drop-shadow(0px 3px 4px rgba(0, 0, 0, 0.5))",
+              display: "inline-block",
               color: "white",
               width: "1.5rem",
               height: "1.5rem",

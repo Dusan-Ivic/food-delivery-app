@@ -44,11 +44,34 @@ export function OrderModal({
             {order.items.map((item) => (
               <Row key={item.productId}>
                 <div className="d-flex">
-                  <img
-                    src={item.product.imageData || "/images/no-image.svg"}
-                    style={{ width: "40%" }}
+                  <div
                     className="me-3"
-                  />
+                    style={{
+                      width: "70%",
+                      position: "relative",
+                    }}
+                  >
+                    <img
+                      src={item.product.imageData || "/images/no-image.svg"}
+                      style={{
+                        width: "100%",
+                        height: "100%",
+                        objectFit: "cover",
+                        borderRadius: "10px",
+                      }}
+                    />
+                    <div
+                      style={{
+                        position: "absolute",
+                        top: 0,
+                        left: 0,
+                        width: "100%",
+                        height: "100%",
+                        backgroundColor: "rgba(0, 0, 0, 0.2)",
+                        borderRadius: "10px",
+                      }}
+                    />
+                  </div>
                   <div className="w-100 d-flex flex-column justify-content-between py-3">
                     <div className="d-flex justify-content-between align-items-center">
                       <div className="fs-5">{item.product.name}</div>

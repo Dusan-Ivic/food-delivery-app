@@ -32,16 +32,36 @@ export function StoreInfo({
 
   return (
     <Card className="h-100">
-      <Card.Img
-        variant="top"
-        src={store?.imageData || "/images/no-image.svg"}
-        height="200px"
-        style={{ objectFit: "cover" }}
-      />
+      <div
+        style={{
+          position: "relative",
+        }}
+      >
+        <Card.Img
+          variant="top"
+          src={store?.imageData || "/images/no-image.svg"}
+          height="200px"
+          style={{ objectFit: "cover" }}
+        />
+        <div
+          style={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            width: "100%",
+            height: "100%",
+            backgroundColor: "rgba(0, 0, 0, 0.6)",
+          }}
+        />
+      </div>
+
       <Card.ImgOverlay
         onClick={handleClick}
-        className="bg-dark opacity-75"
-        style={{ cursor: canManageStore ? "pointer" : "default" }}
+        style={{
+          cursor: canManageStore ? "pointer" : "default",
+          filter: "drop-shadow(0px 3px 4px rgba(0, 0, 0, 0.7))",
+          display: "inline-block",
+        }}
       >
         <Card.Body className="text-light d-flex flex-column justify-content-between h-100 p-0">
           <Card.Title className="d-flex justify-content-between align-items-baseline mb-4">
