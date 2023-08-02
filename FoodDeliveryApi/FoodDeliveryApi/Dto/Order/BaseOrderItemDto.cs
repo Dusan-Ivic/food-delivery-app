@@ -17,6 +17,7 @@ namespace FoodDeliveryApi.Dto.Order
     {
         public decimal TotalPrice { get; set; }
         public long OrderId { get; set; }
-        public GetProductResponseDto Product { get; set; } = default!;
+        public string ProductName { get; set; } = string.Empty;
+        public decimal ProductPrice { get; set; }
     }
 }

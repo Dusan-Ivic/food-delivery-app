@@ -86,6 +86,11 @@ namespace FoodDeliveryApi.Services
                     throw new InsufficientQuantityException($"Not enough products available. Available quantity: {product.Quantity}");
                 }
 
+                // Save product's current information
+                orderItem.ProductName = product.Name;
+                orderItem.ProductPrice = product.Price;
+                orderItem.ProductImage = product.ImageData;
+
                 orderItem.TotalPrice = orderItem.Quantity * product.Price;
                 product.Quantity -= orderItem.Quantity;
             }
