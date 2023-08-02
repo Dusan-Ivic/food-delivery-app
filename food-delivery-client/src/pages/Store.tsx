@@ -44,7 +44,8 @@ import { toast } from "react-toastify";
 import { ProductModal } from "../components/ProductModal";
 import { ConfirmationModal } from "../components/ConfirmationModal";
 import { ProductRequestDto, ProductState } from "../interfaces/product";
-import { StoreModal } from "../components/StoreModal";
+import { FormModal, FormProps } from "../components/FormModal";
+import { StoreForm } from "../components/forms/StoreForm";
 
 interface ModalProps {
   isVisible: boolean;
@@ -87,7 +88,8 @@ export function StorePage() {
     action: null,
     payload: null,
   });
-  const [storeModalVisible, setStoreModalVisible] = useState<boolean>(false);
+
+  const [isStoreModalVisible, setStoreModalVisible] = useState<boolean>(false);
 
   const store = useMemo<StoreState | null>(() => {
     const numberId = Number(id);
@@ -263,9 +265,11 @@ export function StorePage() {
     }
   };
 
-  const handleStoreSubmit = (data: StoreRequestDto) => {
-    dispatch(updateStore({ storeId: store!.id, requestDto: data }));
-    setStoreModalVisible(false);
+  const StoreFormComponent = ({
+    data,
+    onSubmit,
+  }: FormProps<StoreRequestDto>) => {
+    return <StoreForm store={data} onSubmit={onSubmit} />;
   };
 
   return (
@@ -355,11 +359,16 @@ export function StorePage() {
           onConfirm={handleConfirm}
           onCancel={handleCancel}
         />
-        <StoreModal
-          onSubmit={handleStoreSubmit}
-          isVisible={storeModalVisible}
-          handleClose={() => setStoreModalVisible(false)}
-          store={store}
+
+        <FormModal
+          isVisible={isStoreModalVisible}
+          title="Update store"
+          FormComponent={StoreFormComponent}
+          data={store as StoreRequestDto}
+          onSubmit={(data) =>
+            dispatch(updateStore({ storeId: store.id, requestDto: data }))
+          }
+          onClose={() => setStoreModalVisible(false)}
         />
       </>
     )
