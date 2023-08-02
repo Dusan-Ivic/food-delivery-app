@@ -20,3 +20,9 @@ export type UserRequestDto =
   | CustomerRequestDto
   | PartnerRequestDto
   | AdminRequestDto;
+
+export interface ChangePasswordRequestDto {
+  oldPassword: string;
+  confirmPassword: string;
+  newPassword: string;
+}
