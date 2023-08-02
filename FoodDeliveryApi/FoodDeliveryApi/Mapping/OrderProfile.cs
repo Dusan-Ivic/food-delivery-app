@@ -22,7 +22,6 @@ namespace FoodDeliveryApi.Mapping
             CreateMap<Order, GetOrderResponseDto>();
 
             CreateMap<OrderItem, GetOrderItemResponseDto>();
-                //.ForMember(dest => dest.Product, opt => opt.MapFrom(src => src.Product));
 
             CreateMap<Order, DeleteOrderResponseDto>();
         }

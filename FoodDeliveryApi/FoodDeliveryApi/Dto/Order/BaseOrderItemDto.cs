@@ -1,4 +1,6 @@
-﻿namespace FoodDeliveryApi.Dto.Order
+﻿using FoodDeliveryApi.Dto.Product;
+
+namespace FoodDeliveryApi.Dto.Order
 {
     public class BaseOrderItemDto
     {
@@ -15,5 +17,6 @@
     {
         public decimal TotalPrice { get; set; }
         public long OrderId { get; set; }
+        public GetProductResponseDto Product { get; set; } = default!;
     }
 }

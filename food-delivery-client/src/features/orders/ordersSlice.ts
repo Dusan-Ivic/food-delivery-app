@@ -120,7 +120,7 @@ export const ordersSlice = createSlice({
             ...item,
             product: {
               ...product,
-              imageData: convertByteArrayToBlob(product.imageData) ?? null,
+              imageData: null, //convertByteArrayToBlob(product.imageData),
             },
           };
         });
