@@ -14,7 +14,7 @@ export function Header() {
     if (!user) {
       return false;
     }
-    return [UserType.Partner].includes(user.userType);
+    return [UserType.Partner, UserType.Admin].includes(user.userType);
   }, [user]);
 
   const handleLogout = () => {

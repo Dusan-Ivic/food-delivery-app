@@ -1,5 +1,6 @@
 import { useAppSelector } from "../../app/hooks";
 import { UserType } from "../../interfaces/enums";
+import { AdminDashboard } from "../AdminDashboard";
 import { PartnerDashboard } from "../PartnerDashboard";
 
 export function Dashboard() {
@@ -9,6 +10,8 @@ export function Dashboard() {
     switch (user?.userType) {
       case UserType.Partner:
         return <PartnerDashboard />;
+      case UserType.Admin:
+        return <AdminDashboard />;
       default:
         return null;
     }
