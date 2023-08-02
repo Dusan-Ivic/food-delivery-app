@@ -44,7 +44,9 @@ export function ProductItem({
       <div
         style={{
           position: "relative",
+          cursor: canManageProduct ? "pointer" : "default",
         }}
+        onClick={handleClick}
       >
         <Card.Img
           variant="top"
@@ -52,9 +54,14 @@ export function ProductItem({
           height="200px"
           style={{
             objectFit: "cover",
-            cursor: canManageProduct ? "pointer" : "default",
           }}
-          onClick={handleClick}
+        />
+        <Form.Control
+          type="file"
+          ref={fileInputRef}
+          className="d-none"
+          onChange={handleChange}
+          accept=".jpg, .jpeg, .png"
         />
         <div
           style={{
@@ -66,65 +73,58 @@ export function ProductItem({
             backgroundColor: "rgba(0, 0, 0, 0.3)",
           }}
         />
-        <Form.Control
-          type="file"
-          ref={fileInputRef}
-          className="d-none"
-          onChange={handleChange}
-          accept=".jpg, .jpeg, .png"
-        />
-        {canManageProduct && (
-          <AiFillDelete
-            onClick={() => deleteProduct(product)}
-            style={{
-              filter: "drop-shadow(0px 3px 4px rgba(0, 0, 0, 0.5))",
-              display: "inline-block",
-              color: "white",
-              width: "1.5rem",
-              height: "1.5rem",
-              position: "absolute",
-              top: 0,
-              left: 0,
-              transform: "translate(25%, 25%)",
-              cursor: "pointer",
-            }}
-          />
-        )}
-        {canManageProduct && (
-          <BiEdit
-            onClick={() => editProduct(product)}
-            style={{
-              filter: "drop-shadow(0px 3px 4px rgba(0, 0, 0, 0.5))",
-              display: "inline-block",
-              color: "white",
-              width: "1.5rem",
-              height: "1.5rem",
-              position: "absolute",
-              top: 0,
-              right: 0,
-              transform: "translate(-25%, 25%)",
-              cursor: "pointer",
-            }}
-          />
-        )}
-        {canAddToCart && (
-          <AiOutlinePlusSquare
-            onClick={() => addToCart(product)}
-            style={{
-              filter: "drop-shadow(0px 3px 4px rgba(0, 0, 0, 0.5))",
-              display: "inline-block",
-              color: "white",
-              width: "1.5rem",
-              height: "1.5rem",
-              position: "absolute",
-              top: 0,
-              right: 0,
-              transform: "translate(-25%, 25%)",
-              cursor: "pointer",
-            }}
-          />
-        )}
       </div>
+      {canManageProduct && (
+        <AiFillDelete
+          onClick={() => deleteProduct(product)}
+          style={{
+            filter: "drop-shadow(0px 3px 4px rgba(0, 0, 0, 0.5))",
+            display: "inline-block",
+            color: "white",
+            width: "1.5rem",
+            height: "1.5rem",
+            position: "absolute",
+            top: 0,
+            left: 0,
+            transform: "translate(25%, 25%)",
+            cursor: "pointer",
+          }}
+        />
+      )}
+      {canManageProduct && (
+        <BiEdit
+          onClick={() => editProduct(product)}
+          style={{
+            filter: "drop-shadow(0px 3px 4px rgba(0, 0, 0, 0.5))",
+            display: "inline-block",
+            color: "white",
+            width: "1.5rem",
+            height: "1.5rem",
+            position: "absolute",
+            top: 0,
+            right: 0,
+            transform: "translate(-25%, 25%)",
+            cursor: "pointer",
+          }}
+        />
+      )}
+      {canAddToCart && (
+        <AiOutlinePlusSquare
+          onClick={() => addToCart(product)}
+          style={{
+            filter: "drop-shadow(0px 3px 4px rgba(0, 0, 0, 0.5))",
+            display: "inline-block",
+            color: "white",
+            width: "1.5rem",
+            height: "1.5rem",
+            position: "absolute",
+            top: 0,
+            right: 0,
+            transform: "translate(-25%, 25%)",
+            cursor: "pointer",
+          }}
+        />
+      )}
       <Card.Body className="d-flex flex-column">
         <Card.Title className="d-flex justify-content-between align-items-baseline mb-4">
           <span className="fs-5">{product.name}</span>
