@@ -1,7 +1,11 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { RootState } from "../../app/store";
 import authService from "./authService";
-import { UserRequestDto, UserState } from "../../interfaces/user";
+import {
+  ChangePasswordRequestDto,
+  UserRequestDto,
+  UserState,
+} from "../../interfaces/user";
 import { StateStatus, UserType } from "../../interfaces/enums";
 import { LoginRequestDto } from "../../interfaces/login";
 import {
@@ -157,6 +161,22 @@ export const removeImage = createAsyncThunk(
   }
 );
 
+export const changePassword = createAsyncThunk(
+  "auth/change-password",
+  async (passwordData: ChangePasswordRequestDto, thunkAPI) => {
+    try {
+      const { token } = (thunkAPI.getState() as RootState).auth;
+      return await authService.changePassword(passwordData, token);
+    } catch (error: unknown) {
+      let message: string = "";
+      if (error instanceof Error) {
+        message = error.message;
+      }
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
 export const authSlice = createSlice({
   name: "auth",
   initialState,
@@ -286,6 +306,17 @@ export const authSlice = createSlice({
         if (state.user) {
           state.user.image = null;
         }
+      })
+      .addCase(changePassword.pending, (state) => {
+        state.status = StateStatus.Loading;
+      })
+      .addCase(changePassword.rejected, (state, action) => {
+        state.status = StateStatus.Error;
+        state.message = action.payload as string;
+      })
+      .addCase(changePassword.fulfilled, (state, action) => {
+        state.status = StateStatus.Success;
+        state.message = action.payload as string;
       });
   },
 });

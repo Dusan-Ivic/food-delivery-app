@@ -1,6 +1,6 @@
 import { Button, Col, Form, Row } from "react-bootstrap";
 import { useAppSelector, useAppDispatch } from "../app/hooks";
-import { UserBase } from "../interfaces/user";
+import { ChangePasswordRequestDto, UserBase } from "../interfaces/user";
 import { AddressDetails } from "../components/AddressDetails";
 import { UserDetails } from "../components/UserDetails";
 import { AddressInfo } from "../interfaces/user";
@@ -10,11 +10,13 @@ import {
   uploadImage,
   getImage,
   removeImage,
+  changePassword,
 } from "../features/auth/authSlice";
 import { useEffect, useRef } from "react";
 import { UserType, StateStatus } from "../interfaces/enums";
 import { toast } from "react-toastify";
 import { UserAvatar } from "../components/UserAvatar";
+import { ChangePassword } from "../components/ChangePassword";
 
 export function Profile() {
   const { user, status, message } = useAppSelector((state) => state.auth);
@@ -24,6 +26,10 @@ export function Profile() {
   useEffect(() => {
     if (status === StateStatus.Error) {
       toast.error(message);
+    }
+
+    if (status === StateStatus.Success) {
+      toast.success(message);
     }
 
     return () => {
@@ -67,13 +73,13 @@ export function Profile() {
     dispatch(updateUser(updatedUser));
   };
 
-  const handleClick = () => {
+  const handleImageClick = () => {
     if (fileInputRef.current) {
       fileInputRef.current.click();
     }
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const imageFile = e.target.files?.item(0);
     if (imageFile) {
       const formData = new FormData();
@@ -82,10 +88,14 @@ export function Profile() {
     }
   };
 
-  const handleRemove = () => {
+  const handleImageRemove = () => {
     if (user && user.image) {
       dispatch(removeImage());
     }
+  };
+
+  const handlePasswordChange = (data: ChangePasswordRequestDto) => {
+    dispatch(changePassword(data));
   };
 
   return (
@@ -96,12 +106,16 @@ export function Profile() {
           <div className="w-50 mx-auto">
             <UserAvatar image={user.image} userType={user.userType} />
             <div className="w-100 d-flex justify-content-around mt-3 gap-3">
-              <Button variant="primary" className="w-50" onClick={handleClick}>
+              <Button
+                variant="primary"
+                className="w-50"
+                onClick={handleImageClick}
+              >
                 <Form.Control
                   type="file"
                   ref={fileInputRef}
                   className="d-none"
-                  onChange={handleChange}
+                  onChange={handleImageChange}
                   accept=".jpg, .jpeg, .png"
                 />
                 Upload
@@ -109,7 +123,7 @@ export function Profile() {
               <Button
                 variant="secondary"
                 className="w-50"
-                onClick={handleRemove}
+                onClick={handleImageRemove}
               >
                 Remove
               </Button>
@@ -126,17 +140,25 @@ export function Profile() {
             />
           </div>
 
+          {user?.userType == UserType.Customer && (
+            <>
+              <hr />
+              <div className="mt-3">
+                <h1 className="text-center mt-3 mb-4">Address Info</h1>
+                <AddressDetails
+                  data={user as AddressInfo}
+                  onSubmit={(data) => handleUpdateAddress(data)}
+                />
+              </div>
+            </>
+          )}
+
           <hr />
 
-          {user?.userType == UserType.Customer && (
-            <div className="mt-3">
-              <h1 className="text-center mt-3 mb-4">Address Info</h1>
-              <AddressDetails
-                data={user as AddressInfo}
-                onSubmit={(data) => handleUpdateAddress(data)}
-              />
-            </div>
-          )}
+          <div className="mt-3">
+            <h1 className="text-center mt-3 mb-4">Change Password</h1>
+            <ChangePassword onSubmit={(data) => handlePasswordChange(data)} />
+          </div>
         </Col>
       </Row>
     )
