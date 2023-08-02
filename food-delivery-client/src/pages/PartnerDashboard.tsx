@@ -7,26 +7,14 @@ import { Button } from "react-bootstrap";
 import { StateStatus } from "../interfaces/enums";
 import { toast } from "react-toastify";
 import { StoreRequestDto } from "../interfaces/store";
-import { StoreModal } from "../components/StoreModal";
+import { FormModal, FormProps } from "../components/FormModal";
+import { StoreForm } from "../components/forms";
 
 export function PartnerDashboard() {
   const dispatch = useAppDispatch();
   const { user } = useAppSelector((state) => state.auth);
   const { stores, status, message } = useAppSelector((state) => state.stores);
-  const [modalVisible, setModalVisible] = useState<boolean>(false);
-
-  const handleOpenModal = () => {
-    setModalVisible(true);
-  };
-
-  const handleCloseModal = () => {
-    setModalVisible(false);
-  };
-
-  const handleSubmit = (data: StoreRequestDto) => {
-    dispatch(createStore(data));
-    setModalVisible(false);
-  };
+  const [isModalVisible, setModalVisible] = useState<boolean>(false);
 
   useEffect(() => {
     if (user) {
@@ -48,12 +36,16 @@ export function PartnerDashboard() {
     };
   }, [status, message]);
 
+  const FormComponent = ({ data, onSubmit }: FormProps<StoreRequestDto>) => {
+    return <StoreForm store={data} onSubmit={onSubmit} />;
+  };
+
   return (
     <div>
       <div>
         <div className="d-flex justify-content-between align-items-center mb-3">
           <h1 className="text-center mt-3 mb-3">Your Stores</h1>
-          <Button onClick={() => handleOpenModal()} className="bg-success">
+          <Button onClick={() => setModalVisible(true)} className="bg-success">
             <BsHouseAddFill className="fs-4" />
           </Button>
         </div>
@@ -69,11 +61,13 @@ export function PartnerDashboard() {
 
       <hr />
 
-      <StoreModal
-        onSubmit={handleSubmit}
-        isVisible={modalVisible}
-        handleClose={handleCloseModal}
-        store={null}
+      <FormModal
+        isVisible={isModalVisible}
+        title="Add new store"
+        FormComponent={FormComponent}
+        data={null}
+        onSubmit={(data) => dispatch(createStore(data))}
+        onClose={() => setModalVisible(false)}
       />
     </div>
   );

@@ -34,10 +34,10 @@ export const getProductsByStore = createAsyncThunk(
 
 export const createProduct = createAsyncThunk(
   "products/create",
-  async (productData: ProductRequestDto, thunkAPI) => {
+  async (requestDto: ProductRequestDto, thunkAPI) => {
     try {
       const { token } = (thunkAPI.getState() as RootState).auth;
-      return await productsService.createProduct(productData, token);
+      return await productsService.createProduct(requestDto, token);
     } catch (error: unknown) {
       let message: string = "";
       if (error instanceof Error) {
@@ -50,12 +50,15 @@ export const createProduct = createAsyncThunk(
 
 export const updateProduct = createAsyncThunk(
   "products/update",
-  async (product: { data: ProductRequestDto; productId: number }, thunkAPI) => {
+  async (
+    product: { productId: number; requestDto: ProductRequestDto },
+    thunkAPI
+  ) => {
     try {
       const { token } = (thunkAPI.getState() as RootState).auth;
       return await productsService.updateProduct(
         product.productId,
-        product.data,
+        product.requestDto,
         token
       );
     } catch (error: unknown) {
