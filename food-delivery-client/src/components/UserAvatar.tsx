@@ -17,7 +17,7 @@ export function UserAvatar({ image, userType }: UserAvatarProps) {
     <Card>
       <Card.Img
         variant="top"
-        src={image || "images/blank-profile-image.png"}
+        src={image || "/images/blank-profile-image.png"}
         width="150px"
         style={{ objectFit: "cover" }}
       />

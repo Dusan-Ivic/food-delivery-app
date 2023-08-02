@@ -13,7 +13,11 @@ export interface AdminRequestDto extends AdminBase {}
 export interface AdminResponseDto extends AdminBase {
   id: number;
   userType: UserType;
-  image: string | null;
+  imageData: Uint8Array;
 }
 
-export interface AdminState extends AdminResponseDto {}
+export interface AdminState extends AdminBase {
+  id: number;
+  userType: UserType;
+  imageData: string | null;
+}

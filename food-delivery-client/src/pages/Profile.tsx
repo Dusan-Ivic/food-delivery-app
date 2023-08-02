@@ -8,7 +8,6 @@ import {
   updateUser,
   reset,
   uploadImage,
-  getImage,
   removeImage,
   changePassword,
 } from "../features/auth/authSlice";
@@ -25,25 +24,17 @@ export function Profile() {
 
   useEffect(() => {
     if (status === StateStatus.Error) {
-      toast.error(message);
+      message ? toast.error(message) : console.error(message);
     }
 
-    if (status === StateStatus.Success) {
-      toast.success(message);
+    if (status === StateStatus.Success && message) {
+      message ? toast.success(message) : console.error(message);
     }
 
     return () => {
       dispatch(reset());
     };
   }, [status, message]);
-
-  useEffect(() => {
-    dispatch(getImage());
-
-    return () => {
-      dispatch(reset());
-    };
-  }, []);
 
   const handleUpdateDetails = (data: UserBase) => {
     if (!user) {
@@ -89,7 +80,7 @@ export function Profile() {
   };
 
   const handleImageRemove = () => {
-    if (user && user.image) {
+    if (user && user.imageData) {
       dispatch(removeImage());
     }
   };
@@ -104,7 +95,7 @@ export function Profile() {
         <Col xs={10} sm={12} md={10} lg={7} xl={6}>
           <h1 className="text-center mt-3 mb-4">Your Profile</h1>
           <div className="w-50 mx-auto">
-            <UserAvatar image={user.image} userType={user.userType} />
+            <UserAvatar image={user.imageData} userType={user.userType} />
             <div className="w-100 d-flex justify-content-around mt-3 gap-3">
               <Button
                 variant="primary"

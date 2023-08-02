@@ -14,7 +14,12 @@ export interface PartnerResponseDto extends PartnerBase {
   id: number;
   status: PartnerStatus;
   userType: UserType;
-  image: string | null;
+  imageData: Uint8Array;
 }
 
-export interface PartnerState extends PartnerResponseDto {}
+export interface PartnerState extends PartnerBase {
+  id: number;
+  status: PartnerStatus;
+  userType: UserType;
+  imageData: string | null;
+}
