@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using FluentValidation;
 using FluentValidation.Results;
+using FoodDeliveryApi.Dto.Auth;
 using FoodDeliveryApi.Dto.Product;
 using FoodDeliveryApi.Exceptions;
 using FoodDeliveryApi.Interfaces.Repositories;
@@ -156,6 +157,44 @@ namespace FoodDeliveryApi.Services
             }
 
             return _mapper.Map<DeleteProductResponseDto>(product);
+        }
+
+        public async Task<ImageResponseDto> UploadImage(long productId, long partnerId, IFormFile image)
+        {
+            if (image == null || image.Length == 0)
+            {
+                throw new InvalidImageException("Provided image is invalid. Please ensure that the image has valid content");
+            }
+
+            Product? existingProduct = await _productRepository.GetProductById(productId);
+
+            if (existingProduct == null)
+            {
+                throw new ResourceNotFoundException("Store with this id doesn't exist");
+            }
+
+            if (existingProduct.Store.PartnerId != partnerId)
+            {
+                throw new ActionNotAllowedException("Unauthorized to update this store. Only the creator can perform this action.");
+            }
+
+            using var memoryStream = new MemoryStream();
+            image.CopyTo(memoryStream);
+
+            byte[] imageData = memoryStream.ToArray();
+
+            existingProduct.ImageData = imageData;
+
+            try
+            {
+                existingProduct = await _productRepository.UpdateProduct(existingProduct);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+            return _mapper.Map<ImageResponseDto>(existingProduct);
         }
     }
 }

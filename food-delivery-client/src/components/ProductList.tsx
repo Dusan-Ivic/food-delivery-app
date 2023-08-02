@@ -9,6 +9,7 @@ interface ProductListProps {
   canManageProduct: boolean;
   editProduct: (product: ProductState) => void;
   deleteProduct: (product: ProductState) => void;
+  onImageChange: (productId: number, imageFile: File | null) => void;
 }
 
 export function ProductList({
@@ -18,6 +19,7 @@ export function ProductList({
   canManageProduct,
   editProduct,
   deleteProduct,
+  onImageChange,
 }: ProductListProps) {
   return (
     <Row md={2} xs={1} lg={2} xl={3} className="g-3">
@@ -30,6 +32,7 @@ export function ProductList({
             canManageProduct={canManageProduct}
             editProduct={editProduct}
             deleteProduct={deleteProduct}
+            onImageChange={onImageChange}
           />
         </Col>
       ))}

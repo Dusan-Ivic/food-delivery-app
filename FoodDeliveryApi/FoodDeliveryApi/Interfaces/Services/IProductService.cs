@@ -1,4 +1,5 @@
-﻿using FoodDeliveryApi.Dto.Product;
+﻿using FoodDeliveryApi.Dto.Auth;
+using FoodDeliveryApi.Dto.Product;
 
 namespace FoodDeliveryApi.Interfaces.Services
 {
@@ -9,5 +10,6 @@ namespace FoodDeliveryApi.Interfaces.Services
         public Task<CreateProductResponseDto> CreateProduct(long partnerId, CreateProductRequestDto requestDto);
         public Task<UpdateProductResponseDto> UpdateProduct(long id, long partnerId, UpdateProductRequestDto requestDto);
         public Task<DeleteProductResponseDto> DeleteProduct(long id, long partnerId);
+        public Task<ImageResponseDto> UploadImage(long productId, long partnerId, IFormFile image);
     }
 }

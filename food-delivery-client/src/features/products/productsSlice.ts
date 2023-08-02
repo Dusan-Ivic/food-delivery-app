@@ -3,6 +3,7 @@ import { StateStatus } from "../../interfaces/enums";
 import { RootState } from "../../app/store";
 import { ProductRequestDto, ProductState } from "../../interfaces/product";
 import productsService from "./productsService";
+import { convertByteArrayToBlob } from "../../utils/imageConverter";
 
 interface ProductsState {
   products: ProductState[];
@@ -83,6 +84,25 @@ export const deleteProduct = createAsyncThunk(
   }
 );
 
+export const uploadImage = createAsyncThunk(
+  "products/upload-image",
+  async (
+    { productId, formData }: { productId: number; formData: FormData },
+    thunkAPI
+  ) => {
+    try {
+      const { token } = (thunkAPI.getState() as RootState).auth;
+      return await productsService.uploadImage(productId, formData, token);
+    } catch (error: unknown) {
+      let message: string = "";
+      if (error instanceof Error) {
+        message = error.message;
+      }
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
 export const productsSlice = createSlice({
   name: "products",
   initialState,
@@ -108,7 +128,12 @@ export const productsSlice = createSlice({
       })
       .addCase(getProductsByStore.fulfilled, (state, action) => {
         state.status = StateStatus.Success;
-        state.products = action.payload;
+        state.products = action.payload.map((product) => {
+          return {
+            ...product,
+            imageData: convertByteArrayToBlob(product.imageData) ?? null,
+          };
+        });
       })
       .addCase(createProduct.pending, (state) => {
         state.status = StateStatus.Loading;
@@ -119,7 +144,11 @@ export const productsSlice = createSlice({
       })
       .addCase(createProduct.fulfilled, (state, action) => {
         state.status = StateStatus.Success;
-        state.products.push(action.payload);
+        const responseDto = action.payload;
+        state.products.push({
+          ...responseDto,
+          imageData: convertByteArrayToBlob(responseDto.imageData),
+        });
       })
       .addCase(updateProduct.pending, (state) => {
         state.status = StateStatus.Loading;
@@ -132,7 +161,11 @@ export const productsSlice = createSlice({
         state.status = StateStatus.Success;
         state.products = state.products.map((product) => {
           if (product.id === action.payload.id) {
-            return action.payload;
+            const responseDto = action.payload;
+            return {
+              ...responseDto,
+              imageData: convertByteArrayToBlob(responseDto.imageData),
+            };
           }
           return product;
         });
@@ -149,6 +182,26 @@ export const productsSlice = createSlice({
         state.products = state.products.filter(
           (product) => product.id !== action.payload.id
         );
+      })
+      .addCase(uploadImage.pending, (state) => {
+        state.status = StateStatus.Loading;
+      })
+      .addCase(uploadImage.rejected, (state, action) => {
+        state.status = StateStatus.Error;
+        state.message = action.payload as string;
+      })
+      .addCase(uploadImage.fulfilled, (state, action) => {
+        state.status = StateStatus.Success;
+        const responseDto = action.payload;
+        state.products = state.products.map((product) => {
+          if (product.id === action.payload.id) {
+            return {
+              ...product,
+              imageData: convertByteArrayToBlob(responseDto.imageData),
+            };
+          }
+          return product;
+        });
       });
   },
 });

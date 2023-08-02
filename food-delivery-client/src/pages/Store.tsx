@@ -8,6 +8,7 @@ import {
   reset as resetProductsState,
   clearProducts,
   deleteProduct,
+  uploadImage as uploadProductImage,
 } from "../features/products/productsSlice";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { StoreState } from "../interfaces/store";
@@ -31,7 +32,7 @@ import {
   reset as resetOrdersState,
 } from "../features/orders/ordersSlice";
 import {
-  uploadImage,
+  uploadImage as uploadStoreImage,
   reset as resetStoresState,
 } from "../features/stores/storesSlice";
 import { CartItem } from "../interfaces/cart";
@@ -239,11 +240,22 @@ export function StorePage() {
     });
   };
 
-  const handleImageChange = (imageFile: File | null) => {
+  const handleStoreImageChange = (imageFile: File | null) => {
     if (imageFile) {
       const formData = new FormData();
       formData.append("image", imageFile);
-      dispatch(uploadImage({ storeId: store!.id, formData: formData }));
+      dispatch(uploadStoreImage({ storeId: store!.id, formData: formData }));
+    }
+  };
+
+  const handleProductImageChange = (
+    productId: number,
+    imageFile: File | null
+  ) => {
+    if (imageFile) {
+      const formData = new FormData();
+      formData.append("image", imageFile);
+      dispatch(uploadProductImage({ productId, formData }));
     }
   };
 
@@ -289,7 +301,7 @@ export function StorePage() {
           <StoreInfo
             store={store}
             canManageStore={canManageStore}
-            onImageChange={handleImageChange}
+            onImageChange={handleStoreImageChange}
           />
         </div>
         <ProductList
@@ -299,6 +311,9 @@ export function StorePage() {
           canManageProduct={canManageStore}
           editProduct={(product) => handleOpenModal(product)}
           deleteProduct={(product) => handleDeleteProduct(product)}
+          onImageChange={(productId, imageFile) =>
+            handleProductImageChange(productId, imageFile)
+          }
         />
         <ShoppingCart
           store={store}
