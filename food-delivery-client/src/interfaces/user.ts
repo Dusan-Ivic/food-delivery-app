@@ -1,6 +1,10 @@
-import { CustomerRequestDto, CustomerState } from "./customer";
-import { PartnerRequestDto, PartnerState } from "./partner";
-import { AdminRequestDto, AdminState } from "./admin";
+import {
+  CustomerRequestDto,
+  CustomerResponseDto,
+  CustomerState,
+} from "./customer";
+import { PartnerRequestDto, PartnerResponseDto, PartnerState } from "./partner";
+import { AdminRequestDto, AdminResponseDto, AdminState } from "./admin";
 
 export interface AddressInfo {
   address: string;
@@ -16,6 +20,10 @@ export interface UserBase {
 }
 
 export type UserState = CustomerState | PartnerState | AdminState;
+export type UserResponseDto =
+  | CustomerResponseDto
+  | PartnerResponseDto
+  | AdminResponseDto;
 export type UserRequestDto =
   | CustomerRequestDto
   | PartnerRequestDto

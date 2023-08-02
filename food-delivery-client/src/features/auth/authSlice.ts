@@ -6,7 +6,7 @@ import {
   UserRequestDto,
   UserState,
 } from "../../interfaces/user";
-import { StateStatus, UserType } from "../../interfaces/enums";
+import { PartnerStatus, StateStatus, UserType } from "../../interfaces/enums";
 import { LoginRequestDto } from "../../interfaces/login";
 import {
   CustomerRequestDto,
@@ -16,6 +16,7 @@ import {
   PartnerRequestDto,
   PartnerResponseDto,
 } from "../../interfaces/partner";
+import { convertByteArrayToBlob } from "../../utils/imageConverter";
 
 interface AuthState {
   user: UserState | null;
@@ -129,22 +130,6 @@ export const uploadImage = createAsyncThunk(
   }
 );
 
-export const getImage = createAsyncThunk(
-  "auth/get-image",
-  async (_, thunkAPI) => {
-    try {
-      const { token } = (thunkAPI.getState() as RootState).auth;
-      return await authService.getImage(token);
-    } catch (error: unknown) {
-      let message: string = "";
-      if (error instanceof Error) {
-        message = error.message;
-      }
-      return thunkAPI.rejectWithValue(message);
-    }
-  }
-);
-
 export const removeImage = createAsyncThunk(
   "auth/remove-image",
   async (_, thunkAPI) => {
@@ -205,7 +190,12 @@ export const authSlice = createSlice({
       })
       .addCase(loginUser.fulfilled, (state, action) => {
         state.status = StateStatus.Success;
-        state.user = action.payload.user;
+        const userResponse = action.payload.user;
+        state.user = {
+          ...userResponse,
+          imageData: convertByteArrayToBlob(userResponse.imageData),
+          status: PartnerStatus.Pending,
+        };
         state.token = action.payload.token;
       })
       .addCase(registerCustomer.pending, (state) => {
@@ -241,10 +231,19 @@ export const authSlice = createSlice({
         state.status = StateStatus.Success;
         switch (state.user?.userType) {
           case UserType.Customer:
-            state.user = action.payload as CustomerResponseDto;
+            const customerResponse = action.payload as CustomerResponseDto;
+            state.user = {
+              ...customerResponse,
+              imageData: convertByteArrayToBlob(customerResponse.imageData),
+            };
             break;
           case UserType.Partner:
-            state.user = action.payload as unknown as PartnerResponseDto;
+            const partnerResponse =
+              action.payload as unknown as PartnerResponseDto;
+            state.user = {
+              ...partnerResponse,
+              imageData: convertByteArrayToBlob(partnerResponse.imageData),
+            };
             break;
         }
       })
@@ -258,40 +257,9 @@ export const authSlice = createSlice({
       .addCase(uploadImage.fulfilled, (state, action) => {
         state.status = StateStatus.Success;
         if (state.user) {
-          const base64String = action.payload.imageData.toString() || "";
-          const byteCharacters = atob(base64String);
-          const byteNumbers = new Array(byteCharacters.length);
-          for (let i = 0; i < byteCharacters.length; i++) {
-            byteNumbers[i] = byteCharacters.charCodeAt(i);
-          }
-          const uint8Array = new Uint8Array(byteNumbers);
-          const blob = new Blob([uint8Array], { type: "image/jpeg" });
-          state.user.image = URL.createObjectURL(blob);
-        }
-      })
-      .addCase(getImage.pending, (state) => {
-        state.status = StateStatus.Loading;
-      })
-      .addCase(getImage.rejected, (state, action) => {
-        state.status = StateStatus.Error;
-        state.message = action.payload as string;
-      })
-      .addCase(getImage.fulfilled, (state, action) => {
-        state.status = StateStatus.Success;
-        if (state.user) {
-          if (action.payload.imageData) {
-            const base64String = action.payload.imageData.toString();
-            const byteCharacters = atob(base64String.toString());
-            const byteNumbers = new Array(byteCharacters.length);
-            for (let i = 0; i < byteCharacters.length; i++) {
-              byteNumbers[i] = byteCharacters.charCodeAt(i);
-            }
-            const uint8Array = new Uint8Array(byteNumbers);
-            const blob = new Blob([uint8Array], { type: "image/jpeg" });
-            state.user.image = URL.createObjectURL(blob);
-          } else {
-            state.user.image = null;
-          }
+          state.user.imageData = convertByteArrayToBlob(
+            action.payload.imageData
+          );
         }
       })
       .addCase(removeImage.pending, (state) => {
@@ -304,7 +272,7 @@ export const authSlice = createSlice({
       .addCase(removeImage.fulfilled, (state) => {
         state.status = StateStatus.Success;
         if (state.user) {
-          state.user.image = null;
+          state.user.imageData = null;
         }
       })
       .addCase(changePassword.pending, (state) => {

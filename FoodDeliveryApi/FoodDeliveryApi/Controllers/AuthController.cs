@@ -106,30 +106,6 @@ namespace FoodDeliveryApi.Controllers
             return Ok(responseDto);
         }
 
-        [HttpGet("image")]
-        [Authorize]
-        public async Task<IActionResult> GetImage()
-        {
-            Claim? idClaim = User.Claims.FirstOrDefault(x => x.Type == "UserId");
-            long userId = long.Parse(idClaim!.Value);
-
-            Claim? roleClaim = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Role);
-            UserType userType = (UserType)Enum.Parse(typeof(UserType), roleClaim!.Value);
-
-            ImageResponseDto responseDto;
-
-            try
-            {
-                responseDto = await _authService.GetImage(userId, userType);
-            }
-            catch (ResourceNotFoundException ex)
-            {
-                return NotFound(new ErrorResponseDto() { Message = ex.Message });
-            }
-
-            return Ok(responseDto);
-        }
-
         [HttpDelete("image")]
         [Authorize]
         public async Task<IActionResult> RemoveImage()
