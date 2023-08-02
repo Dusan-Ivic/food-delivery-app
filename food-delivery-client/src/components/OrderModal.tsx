@@ -52,7 +52,7 @@ export function OrderModal({
                     }}
                   >
                     <img
-                      src={item.product.imageData || "/images/no-image.svg"}
+                      src={item.productImage || "/images/no-image.svg"}
                       style={{
                         width: "100%",
                         height: "100%",
@@ -74,11 +74,11 @@ export function OrderModal({
                   </div>
                   <div className="w-100 d-flex flex-column justify-content-between py-3">
                     <div className="d-flex justify-content-between align-items-center">
-                      <div className="fs-5">{item.product.name}</div>
+                      <div className="fs-5">{item.productName}</div>
                       <div className="fs-5">&times;{item.quantity}</div>
                     </div>
                     <Row className="d-flex justify-content-between align-items-center">
-                      <Col>{formatCurrency(item.product.price) || 0}</Col>
+                      <Col>{formatCurrency(item.productPrice) || 0}</Col>
                       <Col className="text-center fs-4">
                         <MdOutlineKeyboardDoubleArrowRight />
                       </Col>

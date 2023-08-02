@@ -89,13 +89,9 @@ export const ordersSlice = createSlice({
         state.status = StateStatus.Success;
         state.orders = action.payload.map((order) => {
           const items = order.items.map((item) => {
-            const product = item.product;
             return {
               ...item,
-              product: {
-                ...product,
-                imageData: convertByteArrayToBlob(product.imageData) ?? null,
-              },
+              productImage: convertByteArrayToBlob(item.productImage!) ?? null,
             };
           });
           return {
@@ -115,13 +111,9 @@ export const ordersSlice = createSlice({
         state.status = StateStatus.Success;
         const responseDto = action.payload;
         const items = responseDto.items.map((item) => {
-          const product = item.product;
           return {
             ...item,
-            product: {
-              ...product,
-              imageData: null, //convertByteArrayToBlob(product.imageData),
-            },
+            productImage: null, //convertByteArrayToBlob(item.productImage!) ?? null,
           };
         });
         state.orders.push({
