@@ -11,11 +11,12 @@ import {
   uploadImage as uploadProductImage,
 } from "../features/products/productsSlice";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
-import { StoreState } from "../interfaces/store";
+import { StoreRequestDto, StoreState } from "../interfaces/store";
 import { StoreInfo } from "../components/StoreInfo";
 import { IoArrowBack } from "react-icons/io5";
 import { HiOutlineShoppingCart } from "react-icons/hi";
 import { IoMdAddCircleOutline } from "react-icons/io";
+import { BiEdit } from "react-icons/bi";
 import { ProductList } from "../components/ProductList";
 import { Button } from "react-bootstrap";
 import { ShoppingCart } from "../components/ShoppingCart";
@@ -33,6 +34,7 @@ import {
 } from "../features/orders/ordersSlice";
 import {
   uploadImage as uploadStoreImage,
+  updateStore,
   reset as resetStoresState,
 } from "../features/stores/storesSlice";
 import { CartItem } from "../interfaces/cart";
@@ -42,6 +44,7 @@ import { toast } from "react-toastify";
 import { ProductModal } from "../components/ProductModal";
 import { ConfirmationModal } from "../components/ConfirmationModal";
 import { ProductRequestDto, ProductState } from "../interfaces/product";
+import { StoreModal } from "../components/StoreModal";
 
 interface ModalProps {
   isVisible: boolean;
@@ -84,6 +87,7 @@ export function StorePage() {
     action: null,
     payload: null,
   });
+  const [storeModalVisible, setStoreModalVisible] = useState<boolean>(false);
 
   const store = useMemo<StoreState | null>(() => {
     const numberId = Number(id);
@@ -259,6 +263,11 @@ export function StorePage() {
     }
   };
 
+  const handleStoreSubmit = (data: StoreRequestDto) => {
+    dispatch(updateStore({ storeId: store!.id, requestDto: data }));
+    setStoreModalVisible(false);
+  };
+
   return (
     store && (
       <>
@@ -290,12 +299,22 @@ export function StorePage() {
               </Button>
             )}
             {canManageStore && (
-              <Button
-                onClick={() => handleOpenModal(null)}
-                className="position-relative"
-              >
-                <IoMdAddCircleOutline className="fs-4" />
-              </Button>
+              <div>
+                <Button
+                  variant="warning"
+                  onClick={() => setStoreModalVisible(true)}
+                  className="position-relative"
+                >
+                  <BiEdit className="fs-4" />
+                </Button>
+                <Button
+                  variant="success"
+                  onClick={() => handleOpenModal(null)}
+                  className="position-relative ms-2"
+                >
+                  <IoMdAddCircleOutline className="fs-4" />
+                </Button>
+              </div>
             )}
           </div>
           <StoreInfo
@@ -335,6 +354,12 @@ export function StorePage() {
           content={confirmModal.content}
           onConfirm={handleConfirm}
           onCancel={handleCancel}
+        />
+        <StoreModal
+          onSubmit={handleStoreSubmit}
+          isVisible={storeModalVisible}
+          handleClose={() => setStoreModalVisible(false)}
+          store={store}
         />
       </>
     )

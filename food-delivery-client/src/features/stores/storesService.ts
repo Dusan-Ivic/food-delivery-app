@@ -87,11 +87,37 @@ const uploadImage = async (
   }
 };
 
+const updateStore = async (
+  storeId: number,
+  requestDto: StoreRequestDto,
+  token: string | null
+): Promise<StoreResponseDto> => {
+  try {
+    const response = await axios.put<StoreResponseDto>(
+      `${import.meta.env.VITE_API_URL}/api/stores/${storeId}`,
+      requestDto,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw new Error(error.response?.data.message);
+    } else {
+      throw new Error("Unknown error occurred.");
+    }
+  }
+};
+
 const storesService = {
   getStores,
   getStoresByPartner,
   createStore,
   uploadImage,
+  updateStore,
 };
 
 export default storesService;

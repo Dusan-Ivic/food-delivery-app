@@ -6,9 +6,10 @@ import { StoreRequestDto } from "../../interfaces/store";
 
 interface StoreFormProps {
   onSubmit: (data: StoreRequestDto) => void;
+  store: StoreRequestDto | null;
 }
 
-export function StoreForm({ onSubmit }: StoreFormProps) {
+export function StoreForm({ onSubmit, store }: StoreFormProps) {
   const validationSchema = Yup.object().shape({
     name: Yup.string()
       .required("Name is required")
@@ -44,12 +45,27 @@ export function StoreForm({ onSubmit }: StoreFormProps) {
     }),
   });
 
+  const initialValues: StoreRequestDto = {
+    name: store?.name || "",
+    description: store?.description || "",
+    address: store?.address || "",
+    city: store?.city || "",
+    postalCode: store?.postalCode || "",
+    phone: store?.phone || "",
+    category: store?.category || "",
+    deliveryOptions: {
+      deliveryTimeInMinutes: store?.deliveryOptions?.deliveryTimeInMinutes || 0,
+      deliveryFee: store?.deliveryOptions?.deliveryFee || 0,
+    },
+  };
+
   const {
     register,
     handleSubmit,
     formState: { errors, touchedFields },
   } = useForm<StoreRequestDto>({
     mode: "all",
+    defaultValues: initialValues,
     resolver: yupResolver(validationSchema),
   });
 
@@ -203,7 +219,7 @@ export function StoreForm({ onSubmit }: StoreFormProps) {
       <Row>
         <Col>
           <Button variant="primary" type="submit" className="w-100">
-            Create
+            Submit
           </Button>
         </Col>
       </Row>

@@ -73,6 +73,7 @@ export function PartnerDashboard() {
         onSubmit={handleSubmit}
         isVisible={modalVisible}
         handleClose={handleCloseModal}
+        store={null}
       />
     </div>
   );

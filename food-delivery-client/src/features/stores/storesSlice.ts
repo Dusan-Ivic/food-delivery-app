@@ -67,6 +67,25 @@ export const uploadImage = createAsyncThunk(
   }
 );
 
+export const updateStore = createAsyncThunk(
+  "stores/update",
+  async (
+    { storeId, requestDto }: { storeId: number; requestDto: StoreRequestDto },
+    thunkAPI
+  ) => {
+    try {
+      const { token } = (thunkAPI.getState() as RootState).auth;
+      return await storesService.updateStore(storeId, requestDto, token);
+    } catch (error: unknown) {
+      let message: string = "";
+      if (error instanceof Error) {
+        message = error.message;
+      }
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
 export const storesSlice = createSlice({
   name: "stores",
   initialState,
@@ -112,6 +131,26 @@ export const storesSlice = createSlice({
         state.stores.push({
           ...responseDto,
           imageData: convertByteArrayToBlob(responseDto.imageData),
+        });
+      })
+      .addCase(updateStore.pending, (state) => {
+        state.status = StateStatus.Loading;
+      })
+      .addCase(updateStore.rejected, (state, action) => {
+        state.status = StateStatus.Error;
+        state.message = action.payload as string;
+      })
+      .addCase(updateStore.fulfilled, (state, action) => {
+        state.status = StateStatus.Success;
+        state.stores = state.stores.map((store) => {
+          if (store.id === action.payload.id) {
+            const responseDto = action.payload;
+            return {
+              ...responseDto,
+              imageData: convertByteArrayToBlob(responseDto.imageData),
+            };
+          }
+          return store;
         });
       })
       .addCase(uploadImage.pending, (state) => {

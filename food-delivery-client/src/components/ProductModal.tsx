@@ -18,7 +18,9 @@ export function ProductModal({
   return (
     <Modal show={isVisible} onHide={handleClose}>
       <Modal.Header closeButton>
-        <Modal.Title>Add new product</Modal.Title>
+        <Modal.Title>
+          {product ? "Update product" : "Add new product"}
+        </Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <ProductForm onSubmit={onSubmit} product={product} />
