@@ -1,9 +1,4 @@
-import {
-  getStores,
-  clearStores,
-  createStore,
-  reset,
-} from "../features/stores/storesSlice";
+import { getStores, createStore, reset } from "../features/stores/storesSlice";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { useEffect, useState } from "react";
 import { StoreList } from "../components/StoreList";
@@ -39,7 +34,7 @@ export function PartnerDashboard() {
     }
 
     return () => {
-      dispatch(clearStores());
+      dispatch(reset());
     };
   }, []);
 
