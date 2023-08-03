@@ -19,7 +19,7 @@ const initialState: OrdersState = {
 
 export const getOrders = createAsyncThunk("orders/get", async (_, thunkAPI) => {
   try {
-    const { token } = (thunkAPI.getState() as RootState).auth;
+    const { accessToken } = (thunkAPI.getState() as RootState).auth;
     return await ordersService.getOrders(token);
   } catch (error: unknown) {
     let message: string = "";
@@ -34,7 +34,7 @@ export const createOrder = createAsyncThunk(
   "orders/create",
   async (orderData: OrderRequestDto, thunkAPI) => {
     try {
-      const { token } = (thunkAPI.getState() as RootState).auth;
+      const { accessToken } = (thunkAPI.getState() as RootState).auth;
       return await ordersService.createOrder(orderData, token);
     } catch (error: unknown) {
       let message: string = "";
@@ -50,7 +50,7 @@ export const cancelOrder = createAsyncThunk(
   "orders/cancel",
   async (orderId: number, thunkAPI) => {
     try {
-      const { token } = (thunkAPI.getState() as RootState).auth;
+      const { accessToken } = (thunkAPI.getState() as RootState).auth;
       return await ordersService.cancelOrder(orderId, token);
     } catch (error: unknown) {
       let message: string = "";

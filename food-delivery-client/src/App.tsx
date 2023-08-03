@@ -18,17 +18,17 @@ import { useEffect } from "react";
 
 function App() {
   const dispatch = useAppDispatch();
-  const { token } = useAppSelector((state) => state.auth);
+  const { accessToken } = useAppSelector((state) => state.auth);
 
   useEffect(() => {
-    if (token) {
+    if (accessToken) {
       dispatch(getProfile());
     }
 
     return () => {
       dispatch(reset());
     };
-  }, [token]);
+  }, [accessToken]);
 
   return (
     <div className="bg-light pb-5" style={{ minHeight: "100vh" }}>

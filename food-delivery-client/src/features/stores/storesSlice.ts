@@ -41,7 +41,7 @@ export const createStore = createAsyncThunk(
       if (user?.userType === UserType.Partner) {
         const partner = user as PartnerState;
         if (partner.status === PartnerStatus.Accepted) {
-          const { token } = (thunkAPI.getState() as RootState).auth;
+          const { accessToken } = (thunkAPI.getState() as RootState).auth;
           return await storesService.createStore(storeData, token);
         }
       }
@@ -69,7 +69,7 @@ export const uploadImage = createAsyncThunk(
       if (user?.userType === UserType.Partner) {
         const partner = user as PartnerState;
         if (partner.status === PartnerStatus.Accepted) {
-          const { token } = (thunkAPI.getState() as RootState).auth;
+          const { accessToken } = (thunkAPI.getState() as RootState).auth;
           return await storesService.uploadImage(storeId, formData, token);
         }
       }
@@ -97,7 +97,7 @@ export const updateStore = createAsyncThunk(
       if (user?.userType === UserType.Partner) {
         const partner = user as PartnerState;
         if (partner.status === PartnerStatus.Accepted) {
-          const { token } = (thunkAPI.getState() as RootState).auth;
+          const { accessToken } = (thunkAPI.getState() as RootState).auth;
           return await storesService.updateStore(storeId, requestDto, token);
         }
       }

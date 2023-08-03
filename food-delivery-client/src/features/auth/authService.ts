@@ -14,6 +14,7 @@ import {
 } from "../../interfaces/user";
 import {
   CreateTokenRequestDto,
+  DeleteTokenRequestDto,
   TokenResponseDto,
 } from "../../interfaces/token";
 
@@ -40,6 +41,30 @@ const getProfile = async (token: string | null): Promise<UserResponseDto> => {
     const response = await axios.get<UserResponseDto>(
       `${import.meta.env.VITE_API_URL}/api/auth/profile`,
       {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw new Error(error.response?.data.message);
+    } else {
+      throw new Error("Unknown error occurred.");
+    }
+  }
+};
+
+const deleteRefreshToken = async (
+  requestDto: DeleteTokenRequestDto,
+  token: string | null
+): Promise<void> => {
+  try {
+    const response = await axios.delete(
+      `${import.meta.env.VITE_API_URL}/api/auth/token`,
+      {
+        data: requestDto,
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -213,6 +238,7 @@ const changePassword = async (
 const authService = {
   generateToken,
   getProfile,
+  deleteRefreshToken,
   registerCustomer,
   registerPartner,
   updateCustomer,

@@ -13,3 +13,7 @@ export interface TokenResponseDto {
   refreshToken: string;
   expiresIn: number;
 }
+
+export interface DeleteTokenRequestDto {
+  refreshToken: string;
+}
