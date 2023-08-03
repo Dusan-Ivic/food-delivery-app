@@ -200,6 +200,33 @@ namespace FoodDeliveryApi.Services
                 string accessTokenPayload = TokenHelpers.GenerateAccessToken(jwtSecretKey, jwtIssuer, claims, accessTokenExpiresIn);
                 string refreshTokenPayload = TokenHelpers.GenerateRefreshToken();
 
+                TokenResponseDto responseDto = new TokenResponseDto()
+                {
+                    AccessToken = accessTokenPayload,
+                    ExpiresIn = accessTokenExpiresIn,
+                };
+
+                RefreshToken? existingRefreshToken = await _authRepository.GetRefreshTokenByUser(user.Id);
+
+                if (existingRefreshToken != null)
+                {
+                    existingRefreshToken.Token = refreshTokenPayload;
+                    existingRefreshToken.CreatedAt = DateTime.UtcNow;
+
+                    try
+                    {
+                        existingRefreshToken = await _authRepository.UpdateRefreshToken(existingRefreshToken);
+                    }
+                    catch (Exception)
+                    {
+                        throw;
+                    }
+
+                    responseDto.RefreshToken = existingRefreshToken.Token;
+
+                    return responseDto;
+                }
+
                 RefreshToken refreshToken = new RefreshToken()
                 {
                     Token = refreshTokenPayload,
@@ -218,12 +245,7 @@ namespace FoodDeliveryApi.Services
                     throw;
                 }
 
-                TokenResponseDto responseDto = new TokenResponseDto()
-                {
-                    AccessToken = accessTokenPayload,
-                    RefreshToken = refreshToken.Token,
-                    ExpiresIn = accessTokenExpiresIn
-                };
+                responseDto.RefreshToken = refreshToken.Token;
 
                 return responseDto;
             }

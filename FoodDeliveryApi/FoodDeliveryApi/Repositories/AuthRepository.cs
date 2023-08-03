@@ -48,6 +48,11 @@ namespace FoodDeliveryApi.Repositories
             return await _dbContext.RefreshTokens.FirstOrDefaultAsync(x => x.Token == token);
         }
 
+        public async Task<RefreshToken?> GetRefreshTokenByUser(long userId)
+        {
+            return await _dbContext.RefreshTokens.FirstOrDefaultAsync(x => x.UserId == userId);
+        }
+
         public async Task<User?> GetUserById(long id, UserType userType)
         {
             switch (userType)
@@ -75,6 +80,20 @@ namespace FoodDeliveryApi.Repositories
                     return await _dbContext.Admins.Where(x => x.Username == username).FirstOrDefaultAsync();
                 default:
                     throw new ArgumentException("Invalid user type");
+            }
+        }
+
+        public async Task<RefreshToken> UpdateRefreshToken(RefreshToken refreshToken)
+        {
+            try
+            {
+                _dbContext.Entry(refreshToken).State = EntityState.Modified;
+                await _dbContext.SaveChangesAsync();
+                return refreshToken;
+            }
+            catch (Exception)
+            {
+                throw;
             }
         }
 
