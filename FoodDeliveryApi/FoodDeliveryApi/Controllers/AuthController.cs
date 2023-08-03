@@ -24,31 +24,6 @@ namespace FoodDeliveryApi.Controllers
             _authService = authService;
         }
 
-        [HttpPost]
-        public async Task<IActionResult> LoginUser([FromBody] LoginUserRequestDto requestDto)
-        {
-            LoginUserResponseDto responseDto;
-
-            try
-            {
-                responseDto = await _authService.LoginUser(requestDto);
-            }
-            catch (IncorrectLoginCredentialsException ex)
-            {
-                return Unauthorized(new ErrorResponseDto() { Message = ex.Message });
-            }
-            catch (ValidationException ex)
-            {
-                return BadRequest(new ErrorResponseDto()
-                {
-                    Message = "One or more validation errors occurred. See the 'Errors' for details.",
-                    Errors = ex.Errors.Select(err => err.ErrorMessage).ToList()
-                });
-            }
-
-            return Ok(responseDto);
-        }
-
         [HttpGet("profile")]
         [Authorize]
         public async Task<IActionResult> GetProfile()
