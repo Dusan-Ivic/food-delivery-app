@@ -1,6 +1,6 @@
 import { Header } from "./components/Header";
 import { Container } from "react-bootstrap";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useNavigate } from "react-router-dom";
 import {
   Home,
   Login,
@@ -13,22 +13,35 @@ import {
 import { PrivateRoute } from "./components/PrivateRoute";
 import { ToastContainer } from "react-toastify";
 import { useAppDispatch, useAppSelector } from "./app/hooks";
-import { getProfile, reset } from "./features/auth/authSlice";
+import { getProfile, generateToken, reset } from "./features/auth/authSlice";
 import { useEffect } from "react";
+import { CreateTokenRequestDto } from "./interfaces/token";
+import { GrantType } from "./interfaces/enums";
 
 function App() {
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const { accessToken } = useAppSelector((state) => state.auth);
+  const { user, accessToken, refreshToken } = useAppSelector(
+    (state) => state.auth
+  );
 
   useEffect(() => {
-    if (accessToken) {
+    if (!refreshToken) {
+      navigate("/login");
+    } else if (!accessToken) {
+      const requestDto: CreateTokenRequestDto = {
+        grantType: GrantType.RefreshToken,
+        refreshToken: refreshToken,
+      };
+      dispatch(generateToken(requestDto));
+    } else if (!user) {
       dispatch(getProfile());
     }
 
     return () => {
       dispatch(reset());
     };
-  }, [accessToken]);
+  }, [accessToken, refreshToken]);
 
   return (
     <div className="bg-light pb-5" style={{ minHeight: "100vh" }}>

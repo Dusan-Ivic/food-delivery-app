@@ -6,8 +6,7 @@ import {
   UserRequestDto,
   UserState,
 } from "../../interfaces/user";
-import { GrantType, StateStatus, UserType } from "../../interfaces/enums";
-import { LoginRequestDto } from "../../interfaces/login";
+import { StateStatus, UserType } from "../../interfaces/enums";
 import {
   CustomerRequestDto,
   CustomerResponseDto,
@@ -33,21 +32,15 @@ interface AuthState {
 const initialState: AuthState = {
   user: null,
   accessToken: null,
-  refreshToken: null,
+  refreshToken: localStorage.getItem("refreshToken"),
   status: StateStatus.None,
   message: "",
 };
 
-export const loginUser = createAsyncThunk(
+export const generateToken = createAsyncThunk(
   "auth/login",
-  async (loginData: LoginRequestDto, thunkAPI) => {
+  async (requestDto: CreateTokenRequestDto, thunkAPI) => {
     try {
-      const requestDto: CreateTokenRequestDto = {
-        grantType: GrantType.UsernamePassword,
-        username: loginData.username,
-        password: loginData.password,
-        userType: loginData.userType,
-      };
       return await authService.generateToken(requestDto);
     } catch (error: unknown) {
       let message: string = "";
@@ -221,20 +214,22 @@ export const authSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(loginUser.pending, (state) => {
+      .addCase(generateToken.pending, (state) => {
         state.status = StateStatus.Loading;
       })
-      .addCase(loginUser.rejected, (state, action) => {
+      .addCase(generateToken.rejected, (state, action) => {
         state.status = StateStatus.Error;
         state.user = null;
         state.accessToken = null;
         state.refreshToken = null;
         state.message = action.payload as string;
+        localStorage.removeItem("refreshToken");
       })
-      .addCase(loginUser.fulfilled, (state, action) => {
+      .addCase(generateToken.fulfilled, (state, action) => {
         state.status = StateStatus.Success;
         state.accessToken = action.payload.accessToken;
         state.refreshToken = action.payload.refreshToken;
+        localStorage.setItem("refreshToken", state.refreshToken);
       })
       .addCase(getProfile.pending, (state) => {
         state.status = StateStatus.Loading;
@@ -263,12 +258,14 @@ export const authSlice = createSlice({
         state.accessToken = null;
         state.refreshToken = null;
         state.message = action.payload as string;
+        localStorage.removeItem("refreshToken");
       })
       .addCase(logoutUser.fulfilled, (state) => {
         state.status = StateStatus.Success;
         state.user = null;
         state.accessToken = null;
         state.refreshToken = null;
+        localStorage.removeItem("refreshToken");
       })
       .addCase(registerCustomer.pending, (state) => {
         state.status = StateStatus.Loading;

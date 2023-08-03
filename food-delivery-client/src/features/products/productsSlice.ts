@@ -42,7 +42,7 @@ export const createProduct = createAsyncThunk(
         const partner = user as PartnerState;
         if (partner.status === PartnerStatus.Accepted) {
           const { accessToken } = (thunkAPI.getState() as RootState).auth;
-          return await productsService.createProduct(requestDto, token);
+          return await productsService.createProduct(requestDto, accessToken);
         }
       }
       return thunkAPI.rejectWithValue(
@@ -73,7 +73,7 @@ export const updateProduct = createAsyncThunk(
           return await productsService.updateProduct(
             product.productId,
             product.requestDto,
-            token
+            accessToken
           );
         }
       }
@@ -99,7 +99,7 @@ export const deleteProduct = createAsyncThunk(
         const partner = user as PartnerState;
         if (partner.status === PartnerStatus.Accepted) {
           const { accessToken } = (thunkAPI.getState() as RootState).auth;
-          return await productsService.deleteProduct(productId, token);
+          return await productsService.deleteProduct(productId, accessToken);
         }
       }
       return thunkAPI.rejectWithValue(
@@ -127,7 +127,11 @@ export const uploadImage = createAsyncThunk(
         const partner = user as PartnerState;
         if (partner.status === PartnerStatus.Accepted) {
           const { accessToken } = (thunkAPI.getState() as RootState).auth;
-          return await productsService.uploadImage(productId, formData, token);
+          return await productsService.uploadImage(
+            productId,
+            formData,
+            accessToken
+          );
         }
       }
       return thunkAPI.rejectWithValue(
