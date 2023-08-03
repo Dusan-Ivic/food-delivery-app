@@ -50,27 +50,13 @@ namespace FoodDeliveryApi.Middleware
             }
             else if (authorizeResult.Forbidden)
             {
-                ErrorResponseDto errorDto = new ErrorResponseDto();
-
-                if (context.User.IsInRole("Partner"))
-                {
-                    AuthorizationFailure? failure = authorizeResult.AuthorizationFailure;
-                    if (failure != null && failure.FailedRequirements.Any(req => req is ClaimsAuthorizationRequirement))
-                    {
-                        context.Response.StatusCode = StatusCodes.Status403Forbidden;
-                        context.Response.ContentType = "application/json";
-
-                        errorDto.Message = "You cannot perform this action as you are not verified!";
-
-                        await context.Response.WriteAsync(JsonSerializer.Serialize(errorDto, serializerOptions));
-                        return;
-                    }
-                }
-
                 context.Response.StatusCode = StatusCodes.Status403Forbidden;
                 context.Response.ContentType = "application/json";
 
-                errorDto.Message = "You do not have the required role or meet the necessary policy to access this resource.";
+                ErrorResponseDto errorDto = new ErrorResponseDto()
+                {
+                    Message = "You do not have the required role or meet the necessary policy to access this resource."
+                };
 
                 await context.Response.WriteAsync(JsonSerializer.Serialize(errorDto, serializerOptions));
                 return;
