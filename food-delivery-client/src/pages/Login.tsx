@@ -31,7 +31,10 @@ export function Login() {
     }
 
     if (user) {
-      if (user.userType == UserType.Customer) {
+      const destinationPage = sessionStorage.getItem("redirectTo");
+      if (destinationPage) {
+        navigate(destinationPage);
+      } else if (user.userType == UserType.Customer) {
         navigate("/");
       } else {
         navigate("/dashboard");

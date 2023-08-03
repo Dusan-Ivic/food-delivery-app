@@ -56,7 +56,7 @@ function App() {
           <Route
             path="/orders"
             element={
-              <PrivateRoute>
+              <PrivateRoute sourcePage="/orders">
                 <Orders />
               </PrivateRoute>
             }
@@ -64,7 +64,7 @@ function App() {
           <Route
             path="/profile"
             element={
-              <PrivateRoute>
+              <PrivateRoute sourcePage="/profile">
                 <Profile />
               </PrivateRoute>
             }
@@ -72,7 +72,7 @@ function App() {
           <Route
             path="/dashboard"
             element={
-              <PrivateRoute>
+              <PrivateRoute sourcePage="/dashboard">
                 <Dashboard />
               </PrivateRoute>
             }
