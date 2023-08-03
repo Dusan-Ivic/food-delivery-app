@@ -1,6 +1,6 @@
 import { Header } from "./components/Header";
 import { Container } from "react-bootstrap";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useNavigate } from "react-router-dom";
 import {
   Home,
   Login,
@@ -12,8 +12,37 @@ import {
 } from "./pages";
 import { PrivateRoute } from "./components/PrivateRoute";
 import { ToastContainer } from "react-toastify";
+import { useAppDispatch, useAppSelector } from "./app/hooks";
+import { getProfile, generateToken, reset } from "./features/auth/authSlice";
+import { useEffect } from "react";
+import { CreateTokenRequestDto } from "./interfaces/token";
+import { GrantType } from "./interfaces/enums";
 
 function App() {
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+  const { user, accessToken, refreshToken } = useAppSelector(
+    (state) => state.auth
+  );
+
+  useEffect(() => {
+    if (!refreshToken) {
+      navigate("/login");
+    } else if (!accessToken) {
+      const requestDto: CreateTokenRequestDto = {
+        grantType: GrantType.RefreshToken,
+        refreshToken: refreshToken,
+      };
+      dispatch(generateToken(requestDto));
+    } else if (!user) {
+      dispatch(getProfile());
+    }
+
+    return () => {
+      dispatch(reset());
+    };
+  }, [accessToken, refreshToken]);
+
   return (
     <div className="bg-light pb-5" style={{ minHeight: "100vh" }}>
       <Header />
@@ -27,7 +56,7 @@ function App() {
           <Route
             path="/orders"
             element={
-              <PrivateRoute>
+              <PrivateRoute sourcePage="/orders">
                 <Orders />
               </PrivateRoute>
             }
@@ -35,7 +64,7 @@ function App() {
           <Route
             path="/profile"
             element={
-              <PrivateRoute>
+              <PrivateRoute sourcePage="/profile">
                 <Profile />
               </PrivateRoute>
             }
@@ -43,7 +72,7 @@ function App() {
           <Route
             path="/dashboard"
             element={
-              <PrivateRoute>
+              <PrivateRoute sourcePage="/dashboard">
                 <Dashboard />
               </PrivateRoute>
             }

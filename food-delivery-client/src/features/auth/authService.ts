@@ -1,5 +1,4 @@
 import axios from "axios";
-import { LoginRequestDto, LoginResponseDto } from "../../interfaces/login";
 import {
   CustomerRequestDto,
   CustomerResponseDto,
@@ -9,15 +8,67 @@ import {
   PartnerResponseDto,
 } from "../../interfaces/partner";
 import { ImageResponseDto } from "../../interfaces/image";
-import { ChangePasswordRequestDto } from "../../interfaces/user";
+import {
+  ChangePasswordRequestDto,
+  UserResponseDto,
+} from "../../interfaces/user";
+import {
+  CreateTokenRequestDto,
+  DeleteTokenRequestDto,
+  TokenResponseDto,
+} from "../../interfaces/token";
 
-const loginUser = async (
-  requestDto: LoginRequestDto
-): Promise<LoginResponseDto> => {
+const generateToken = async (
+  requestDto: CreateTokenRequestDto
+): Promise<TokenResponseDto> => {
   try {
-    const response = await axios.post<LoginResponseDto>(
-      `${import.meta.env.VITE_API_URL}/api/auth`,
+    const response = await axios.post<TokenResponseDto>(
+      `${import.meta.env.VITE_API_URL}/api/auth/token`,
       requestDto
+    );
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw new Error(error.response?.data.message);
+    } else {
+      throw new Error("Unknown error occurred.");
+    }
+  }
+};
+
+const getProfile = async (token: string | null): Promise<UserResponseDto> => {
+  try {
+    const response = await axios.get<UserResponseDto>(
+      `${import.meta.env.VITE_API_URL}/api/auth/profile`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw new Error(error.response?.data.message);
+    } else {
+      throw new Error("Unknown error occurred.");
+    }
+  }
+};
+
+const deleteRefreshToken = async (
+  requestDto: DeleteTokenRequestDto,
+  token: string | null
+): Promise<void> => {
+  try {
+    const response = await axios.delete(
+      `${import.meta.env.VITE_API_URL}/api/auth/token`,
+      {
+        data: requestDto,
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
     );
     return response.data;
   } catch (error) {
@@ -185,7 +236,9 @@ const changePassword = async (
 };
 
 const authService = {
-  loginUser,
+  generateToken,
+  getProfile,
+  deleteRefreshToken,
   registerCustomer,
   registerPartner,
   updateCustomer,

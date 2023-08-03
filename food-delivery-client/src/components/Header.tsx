@@ -1,6 +1,6 @@
 import { Navbar, Nav, Container } from "react-bootstrap";
 import { NavLink } from "react-router-dom";
-import { logout } from "../features/auth/authSlice";
+import { logoutUser } from "../features/auth/authSlice";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { useNavigate } from "react-router-dom";
 import { useMemo } from "react";
@@ -25,7 +25,7 @@ export function Header() {
   }, [user]);
 
   const handleLogout = () => {
-    dispatch(logout());
+    dispatch(logoutUser());
     navigate("/login");
   };
 

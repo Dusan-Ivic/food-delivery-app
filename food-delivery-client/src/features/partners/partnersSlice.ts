@@ -24,8 +24,8 @@ export const getPartners = createAsyncThunk(
   "partners/get",
   async (_, thunkAPI) => {
     try {
-      const { token } = (thunkAPI.getState() as RootState).auth;
-      return await partnersService.getPartners(token);
+      const { accessToken } = (thunkAPI.getState() as RootState).auth;
+      return await partnersService.getPartners(accessToken);
     } catch (error: unknown) {
       let message: string = "";
       if (error instanceof Error) {
@@ -43,11 +43,15 @@ export const verifyPartner = createAsyncThunk(
     thunkAPI
   ) => {
     try {
-      const { token } = (thunkAPI.getState() as RootState).auth;
+      const { accessToken } = (thunkAPI.getState() as RootState).auth;
       const requestDto: VerifyPartnerRequestDto = {
         status: newStatus,
       };
-      return await partnersService.verifyPartner(partnerId, requestDto, token);
+      return await partnersService.verifyPartner(
+        partnerId,
+        requestDto,
+        accessToken
+      );
     } catch (error: unknown) {
       let message: string = "";
       if (error instanceof Error) {

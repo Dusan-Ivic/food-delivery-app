@@ -41,8 +41,8 @@ export const createProduct = createAsyncThunk(
       if (user?.userType === UserType.Partner) {
         const partner = user as PartnerState;
         if (partner.status === PartnerStatus.Accepted) {
-          const { token } = (thunkAPI.getState() as RootState).auth;
-          return await productsService.createProduct(requestDto, token);
+          const { accessToken } = (thunkAPI.getState() as RootState).auth;
+          return await productsService.createProduct(requestDto, accessToken);
         }
       }
       return thunkAPI.rejectWithValue(
@@ -69,11 +69,11 @@ export const updateProduct = createAsyncThunk(
       if (user?.userType === UserType.Partner) {
         const partner = user as PartnerState;
         if (partner.status === PartnerStatus.Accepted) {
-          const { token } = (thunkAPI.getState() as RootState).auth;
+          const { accessToken } = (thunkAPI.getState() as RootState).auth;
           return await productsService.updateProduct(
             product.productId,
             product.requestDto,
-            token
+            accessToken
           );
         }
       }
@@ -98,8 +98,8 @@ export const deleteProduct = createAsyncThunk(
       if (user?.userType === UserType.Partner) {
         const partner = user as PartnerState;
         if (partner.status === PartnerStatus.Accepted) {
-          const { token } = (thunkAPI.getState() as RootState).auth;
-          return await productsService.deleteProduct(productId, token);
+          const { accessToken } = (thunkAPI.getState() as RootState).auth;
+          return await productsService.deleteProduct(productId, accessToken);
         }
       }
       return thunkAPI.rejectWithValue(
@@ -126,8 +126,12 @@ export const uploadImage = createAsyncThunk(
       if (user?.userType === UserType.Partner) {
         const partner = user as PartnerState;
         if (partner.status === PartnerStatus.Accepted) {
-          const { token } = (thunkAPI.getState() as RootState).auth;
-          return await productsService.uploadImage(productId, formData, token);
+          const { accessToken } = (thunkAPI.getState() as RootState).auth;
+          return await productsService.uploadImage(
+            productId,
+            formData,
+            accessToken
+          );
         }
       }
       return thunkAPI.rejectWithValue(

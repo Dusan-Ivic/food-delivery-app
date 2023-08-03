@@ -2,12 +2,13 @@ import { useEffect } from "react";
 import { Col, Row } from "react-bootstrap";
 import { LoginForm } from "../components/forms/LoginForm";
 import { LoginRequestDto } from "../interfaces/login";
-import { loginUser, reset } from "../features/auth/authSlice";
+import { generateToken, reset } from "../features/auth/authSlice";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { useNavigate } from "react-router-dom";
-import { StateStatus, UserType } from "../interfaces/enums";
+import { GrantType, StateStatus, UserType } from "../interfaces/enums";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
+import { CreateTokenRequestDto } from "../interfaces/token";
 
 export function Login() {
   const navigate = useNavigate();
@@ -15,7 +16,13 @@ export function Login() {
   const { user, status, message } = useAppSelector((state) => state.auth);
 
   const onSubmit = (data: LoginRequestDto) => {
-    dispatch(loginUser(data));
+    const requestDto: CreateTokenRequestDto = {
+      grantType: GrantType.UsernamePassword,
+      username: data.username,
+      password: data.password,
+      userType: data.userType,
+    };
+    dispatch(generateToken(requestDto));
   };
 
   useEffect(() => {
@@ -24,7 +31,10 @@ export function Login() {
     }
 
     if (user) {
-      if (user.userType == UserType.Customer) {
+      const destinationPage = sessionStorage.getItem("redirectTo");
+      if (destinationPage) {
+        navigate(destinationPage);
+      } else if (user.userType == UserType.Customer) {
         navigate("/");
       } else {
         navigate("/dashboard");

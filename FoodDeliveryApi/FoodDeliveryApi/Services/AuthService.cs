@@ -35,85 +35,32 @@ namespace FoodDeliveryApi.Services
             _mapper = mapper;
         }
 
-        public async Task<LoginUserResponseDto> LoginUser(LoginUserRequestDto requestDto)
+        public async Task<UserResponseDto> GetProfile(long userId, UserType userType)
         {
-            User user = _mapper.Map<User>(requestDto);
-
-            ValidationResult validationResult = _validator.Validate(user, options =>
-            {
-                options.IncludeProperties(x => x.Username);
-                options.IncludeProperties(x => x.Password);
-            });
-
-            if (!validationResult.IsValid)
-            {
-                throw new ValidationException(validationResult.Errors);
-            }
-
-            User? existingUser = await _authRepository.GetUserByUsername(user.Username, requestDto.UserType);
+            User? existingUser = await _authRepository.GetUserById(userId, userType);
 
             if (existingUser == null)
             {
-                throw new IncorrectLoginCredentialsException("User with this username doesn't exist");
+                throw new ResourceNotFoundException("User with this id doesn't exist");
             }
 
-            if (!BCrypt.Net.BCrypt.Verify(user.Password, existingUser.Password))
-            {
-                throw new IncorrectLoginCredentialsException("Incorrect password");
-            }
+            UserResponseDto responseDto = new UserResponseDto();
 
-            UserResponseDto userDto;
-
-            switch (requestDto.UserType)
+            switch (userType)
             {
                 case UserType.Customer:
-                    userDto = _mapper.Map<CustomerResponseDto>(existingUser);
+                    responseDto = _mapper.Map<CustomerResponseDto>(existingUser);
                     break;
                 case UserType.Partner:
-                    userDto = _mapper.Map<PartnerResponseDto>(existingUser);
+                    responseDto = _mapper.Map<PartnerResponseDto>(existingUser);
                     break;
                 case UserType.Admin:
-                    userDto = _mapper.Map<AdminResponseDto>(existingUser);
+                    responseDto = _mapper.Map<AdminResponseDto>(existingUser);
                     break;
                 default:
-                    userDto = _mapper.Map<UserResponseDto>(existingUser);
+                    responseDto = _mapper.Map<UserResponseDto>(existingUser);
                     break;
             }
-
-            userDto.UserType = requestDto.UserType;
-
-            List<Claim> claims = new List<Claim>
-            {
-                new Claim("UserId", existingUser.Id.ToString()),
-                new Claim(ClaimTypes.Role, userDto.UserType.ToString())
-            };
-
-            if (existingUser is Partner possiblePartner)
-            {
-                claims.Add(new Claim("Status", possiblePartner.Status.ToString()));
-                // TODO
-                //responseDto.PartnerStatus = possiblePartner.Status;
-            }
-
-            string jwtSecretKey = _jwtSettings.GetValue<string>("SecretKey");
-            string jwtIssuer = _jwtSettings.GetValue<string>("Issuer");
-
-            SymmetricSecurityKey secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSecretKey));
-
-            SigningCredentials signingCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
-
-            JwtSecurityToken securityToken = new JwtSecurityToken(
-                issuer: jwtIssuer,
-                claims: claims,
-                expires: DateTime.Now.AddMinutes(20),
-                signingCredentials: signingCredentials
-            );
-
-            LoginUserResponseDto responseDto = new LoginUserResponseDto()
-            {
-                User = userDto,
-                Token = new JwtSecurityTokenHandler().WriteToken(securityToken)
-            };
 
             return responseDto;
         }
@@ -170,6 +117,33 @@ namespace FoodDeliveryApi.Services
                 string accessTokenPayload = TokenHelpers.GenerateAccessToken(jwtSecretKey, jwtIssuer, claims, accessTokenExpiresIn);
                 string refreshTokenPayload = TokenHelpers.GenerateRefreshToken();
 
+                TokenResponseDto responseDto = new TokenResponseDto()
+                {
+                    AccessToken = accessTokenPayload,
+                    ExpiresIn = accessTokenExpiresIn,
+                };
+
+                RefreshToken? existingRefreshToken = await _authRepository.GetRefreshTokenByUser(user.Id);
+
+                if (existingRefreshToken != null)
+                {
+                    existingRefreshToken.Token = refreshTokenPayload;
+                    existingRefreshToken.CreatedAt = DateTime.UtcNow;
+
+                    try
+                    {
+                        existingRefreshToken = await _authRepository.UpdateRefreshToken(existingRefreshToken);
+                    }
+                    catch (Exception)
+                    {
+                        throw;
+                    }
+
+                    responseDto.RefreshToken = existingRefreshToken.Token;
+
+                    return responseDto;
+                }
+
                 RefreshToken refreshToken = new RefreshToken()
                 {
                     Token = refreshTokenPayload,
@@ -188,12 +162,7 @@ namespace FoodDeliveryApi.Services
                     throw;
                 }
 
-                TokenResponseDto responseDto = new TokenResponseDto()
-                {
-                    AccessToken = accessTokenPayload,
-                    RefreshToken = refreshToken.Token,
-                    ExpiresIn = accessTokenExpiresIn
-                };
+                responseDto.RefreshToken = refreshToken.Token;
 
                 return responseDto;
             }
