@@ -1,32 +1,27 @@
 import { Table } from "react-bootstrap";
 import { PartnerState } from "../interfaces/partner";
 import { PartnerStatus } from "../interfaces/enums";
-import { LuVerified } from "react-icons/lu";
-import {
-  AiOutlineCheckCircle,
-  AiOutlineCloseCircle,
-  AiOutlineLoading3Quarters,
-} from "react-icons/ai";
-import { HiOutlineX } from "react-icons/hi";
+import { LuShieldCheck, LuShieldClose, LuShieldQuestion } from "react-icons/lu";
+import { HiOutlineX, HiOutlineCheck } from "react-icons/hi";
 
-interface PartnerListProps {
+interface PartnerTableProps {
   partners: PartnerState[];
   onVerify: (partner: PartnerState, status: PartnerStatus) => void;
 }
 
-export function PartnerList({ partners, onVerify }: PartnerListProps) {
+export function PartnerTable({ partners, onVerify }: PartnerTableProps) {
   const statusToIconMap = {
     [PartnerStatus.Pending]: (
-      <AiOutlineLoading3Quarters className="fs-5" style={{ color: "orange" }} />
+      <LuShieldQuestion className="fs-4" style={{ color: "orange" }} />
     ),
     [PartnerStatus.Rejected]: (
-      <HiOutlineX className="fs-5" style={{ color: "red" }} />
+      <LuShieldClose className="fs-4" style={{ color: "red" }} />
     ),
     [PartnerStatus.Suspended]: (
-      <HiOutlineX className="fs-5" style={{ color: "red" }} />
+      <LuShieldClose className="fs-4" style={{ color: "red" }} />
     ),
     [PartnerStatus.Accepted]: (
-      <LuVerified className="fs-4" style={{ color: "green" }} />
+      <LuShieldCheck className="fs-4" style={{ color: "green" }} />
     ),
   };
 
@@ -69,14 +64,16 @@ export function PartnerList({ partners, onVerify }: PartnerListProps) {
               <td>
                 <div className="d-md-flex justify-content-center">
                   <div style={{ cursor: "pointer" }}>
-                    <AiOutlineCheckCircle
+                    <HiOutlineCheck
                       className="fs-4"
+                      style={{ color: "darkblue" }}
                       onClick={() => onVerify(partner, PartnerStatus.Accepted)}
                     />
                   </div>
                   <div style={{ cursor: "pointer" }}>
-                    <AiOutlineCloseCircle
+                    <HiOutlineX
                       className="fs-4"
+                      style={{ color: "darkred" }}
                       onClick={() => onVerify(partner, PartnerStatus.Rejected)}
                     />
                   </div>

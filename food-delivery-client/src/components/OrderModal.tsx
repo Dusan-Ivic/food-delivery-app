@@ -11,7 +11,7 @@ interface OrderModalProps {
   order: OrderState | null;
   handleClose: () => void;
   canManageOrders: boolean;
-  onCancelOrder: (orderId: number) => void;
+  onCancelOrder?: (orderId: number) => void;
 }
 
 export function OrderModal({
@@ -103,7 +103,7 @@ export function OrderModal({
               {canCancelOrder && (
                 <Col className="h-100 w-100 d-flex justify-content-end align-items-end">
                   <Button
-                    onClick={() => onCancelOrder(order.id)}
+                    onClick={() => onCancelOrder!(order.id)}
                     variant="danger text-white d-flex align-items-center"
                   >
                     Cancel Order <ImCancelCircle className="ms-2 fs-5" />

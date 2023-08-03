@@ -10,11 +10,18 @@ export function Header() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { user } = useAppSelector((state) => state.auth);
-  const canSeeDashboard: boolean = useMemo(() => {
+  const canAccessDashboard: boolean = useMemo(() => {
     if (!user) {
       return false;
     }
     return [UserType.Partner, UserType.Admin].includes(user.userType);
+  }, [user]);
+
+  const canAccessOrders: boolean = useMemo(() => {
+    if (!user) {
+      return false;
+    }
+    return [UserType.Customer].includes(user.userType);
   }, [user]);
 
   const handleLogout = () => {
@@ -36,15 +43,18 @@ export function Header() {
         <Nav>
           {user ? (
             <>
-              {canSeeDashboard && (
+              {canAccessDashboard && (
                 <Nav.Link to="/dashboard" as={NavLink}>
                   Dashboard
                 </Nav.Link>
               )}
 
-              <Nav.Link to="/orders" as={NavLink}>
-                Orders
-              </Nav.Link>
+              {canAccessOrders && (
+                <Nav.Link to="/orders" as={NavLink}>
+                  Your Orders
+                </Nav.Link>
+              )}
+
               <Nav.Link to="/profile" as={NavLink}>
                 Profile
               </Nav.Link>

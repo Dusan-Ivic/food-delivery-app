@@ -5,12 +5,13 @@ import { formatCurrency } from "../utils/currencyFormatter";
 import moment from "moment";
 import { useState } from "react";
 import { OrderModal } from "./OrderModal";
-import { GoDotFill } from "react-icons/go";
+import { HiOutlineDotsHorizontal } from "react-icons/hi";
+import { HiOutlineX, HiOutlineCheck } from "react-icons/hi";
 
 interface OrderHistoryProps {
   orders: OrderState[];
   canManageOrders: boolean;
-  onCancelOrder: (orderId: number) => void;
+  onCancelOrder?: (orderId: number) => void;
 }
 
 export function OrderHistory({
@@ -31,7 +32,7 @@ export function OrderHistory({
   const handleCancelOrder = (orderId: number) => {
     setModalVisible(false);
     setModalOrder(null);
-    onCancelOrder(orderId);
+    onCancelOrder!(orderId);
   };
 
   const handleModalClose = () => {
@@ -39,10 +40,16 @@ export function OrderHistory({
     setModalOrder(null);
   };
 
-  const orderStatusToColorMap = {
-    [OrderStatus.Pending]: "gold",
-    [OrderStatus.Canceled]: "red",
-    [OrderStatus.Completed]: "green",
+  const statusToIconMap = {
+    [OrderStatus.Pending]: (
+      <HiOutlineDotsHorizontal className="fs-5" style={{ color: "orange" }} />
+    ),
+    [OrderStatus.Canceled]: (
+      <HiOutlineX className="fs-5" style={{ color: "red" }} />
+    ),
+    [OrderStatus.Completed]: (
+      <HiOutlineCheck className="fs-4" style={{ color: "green" }} />
+    ),
   };
 
   return (
@@ -69,18 +76,7 @@ export function OrderHistory({
               <td>{order.store?.name}</td>
               <td>{moment(order.createdAt).format("LL")}</td>
               <td>{moment(order.createdAt).format("LT")}</td>
-              <td className="d-md-flex">
-                <div className="w-auto h-100">
-                  <GoDotFill
-                    style={{
-                      color: orderStatusToColorMap[order.orderStatus],
-                    }}
-                  />
-                </div>
-                <span className="d-none d-md-flex ps-0 ps-md-2 w-100">
-                  {OrderStatus[order.orderStatus]}
-                </span>
-              </td>
+              <td>{statusToIconMap[order.orderStatus]}</td>
               <td>{formatCurrency(order.totalPrice)}</td>
             </tr>
           ))}

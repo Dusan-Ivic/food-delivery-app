@@ -49,7 +49,7 @@ export function Orders() {
   return (
     <Row className="d-flex justify-content-center">
       <Col>
-        <h1 className="text-center mt-3 mb-4">Order History</h1>
+        <h1 className="text-center mt-3 mb-4">Your Order History</h1>
         {orders.length > 0 ? (
           <OrderHistory
             orders={orders}
