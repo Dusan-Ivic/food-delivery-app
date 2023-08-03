@@ -1,6 +1,7 @@
 ﻿using FluentValidation;
 using FoodDeliveryApi.Dto.Auth;
 using FoodDeliveryApi.Dto.Error;
+using FoodDeliveryApi.Dto.User;
 using FoodDeliveryApi.Enums;
 using FoodDeliveryApi.Exceptions;
 using FoodDeliveryApi.Interfaces.Services;
@@ -46,6 +47,53 @@ namespace FoodDeliveryApi.Controllers
             }
 
             return Ok(responseDto);
+        }
+
+        [HttpPost("token")]
+        public async Task<IActionResult> GenerateToken([FromBody] CreateTokenRequestDto requestDto)
+        {
+            TokenResponseDto responseDto;
+
+            try
+            {
+                responseDto = await _authService.GenerateToken(requestDto);
+            }
+            catch (IncorrectLoginCredentialsException ex)
+            {
+                return Unauthorized(new ErrorResponseDto() { Message = ex.Message });
+            }
+            catch (ResourceNotFoundException ex)
+            {
+                return NotFound(new ErrorResponseDto() { Message = ex.Message });
+            }
+
+            return Ok(responseDto);
+        }
+
+        [HttpDelete("token")]
+        [Authorize]
+        public async Task<IActionResult> DeleteRefreshToken([FromBody] DeleteTokenRequestDto requestDto)
+        {
+            Claim? idClaim = User.Claims.FirstOrDefault(x => x.Type == "UserId");
+            long userId = long.Parse(idClaim!.Value);
+
+            Claim? roleClaim = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Role);
+            UserType userType = (UserType)Enum.Parse(typeof(UserType), roleClaim!.Value);
+
+            try
+            {
+                await _authService.DeleteToken(userId, userType, requestDto);
+            }
+            catch (IncorrectLoginCredentialsException ex)
+            {
+                return Unauthorized(new ErrorResponseDto() { Message = ex.Message });
+            }
+            catch (ResourceNotFoundException ex)
+            {
+                return NotFound(new ErrorResponseDto() { Message = ex.Message });
+            }
+
+            return NoContent();
         }
 
         [HttpPut("password")]
