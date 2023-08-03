@@ -1,9 +1,10 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { StateStatus } from "../../interfaces/enums";
+import { PartnerStatus, StateStatus, UserType } from "../../interfaces/enums";
 import { RootState } from "../../app/store";
 import { ProductRequestDto, ProductState } from "../../interfaces/product";
 import productsService from "./productsService";
 import { convertByteArrayToBlob } from "../../utils/imageConverter";
+import { PartnerState } from "../../interfaces/partner";
 
 interface ProductsState {
   products: ProductState[];
@@ -36,8 +37,17 @@ export const createProduct = createAsyncThunk(
   "products/create",
   async (requestDto: ProductRequestDto, thunkAPI) => {
     try {
-      const { token } = (thunkAPI.getState() as RootState).auth;
-      return await productsService.createProduct(requestDto, token);
+      const { user } = (thunkAPI.getState() as RootState).auth;
+      if (user?.userType === UserType.Partner) {
+        const partner = user as PartnerState;
+        if (partner.status === PartnerStatus.Accepted) {
+          const { token } = (thunkAPI.getState() as RootState).auth;
+          return await productsService.createProduct(requestDto, token);
+        }
+      }
+      return thunkAPI.rejectWithValue(
+        "You are not verified to perform this action!"
+      );
     } catch (error: unknown) {
       let message: string = "";
       if (error instanceof Error) {
@@ -55,11 +65,20 @@ export const updateProduct = createAsyncThunk(
     thunkAPI
   ) => {
     try {
-      const { token } = (thunkAPI.getState() as RootState).auth;
-      return await productsService.updateProduct(
-        product.productId,
-        product.requestDto,
-        token
+      const { user } = (thunkAPI.getState() as RootState).auth;
+      if (user?.userType === UserType.Partner) {
+        const partner = user as PartnerState;
+        if (partner.status === PartnerStatus.Accepted) {
+          const { token } = (thunkAPI.getState() as RootState).auth;
+          return await productsService.updateProduct(
+            product.productId,
+            product.requestDto,
+            token
+          );
+        }
+      }
+      return thunkAPI.rejectWithValue(
+        "You are not verified to perform this action!"
       );
     } catch (error: unknown) {
       let message: string = "";
@@ -75,8 +94,17 @@ export const deleteProduct = createAsyncThunk(
   "products/delete",
   async (productId: number, thunkAPI) => {
     try {
-      const { token } = (thunkAPI.getState() as RootState).auth;
-      return await productsService.deleteProduct(productId, token);
+      const { user } = (thunkAPI.getState() as RootState).auth;
+      if (user?.userType === UserType.Partner) {
+        const partner = user as PartnerState;
+        if (partner.status === PartnerStatus.Accepted) {
+          const { token } = (thunkAPI.getState() as RootState).auth;
+          return await productsService.deleteProduct(productId, token);
+        }
+      }
+      return thunkAPI.rejectWithValue(
+        "You are not verified to perform this action!"
+      );
     } catch (error: unknown) {
       let message: string = "";
       if (error instanceof Error) {
@@ -94,8 +122,17 @@ export const uploadImage = createAsyncThunk(
     thunkAPI
   ) => {
     try {
-      const { token } = (thunkAPI.getState() as RootState).auth;
-      return await productsService.uploadImage(productId, formData, token);
+      const { user } = (thunkAPI.getState() as RootState).auth;
+      if (user?.userType === UserType.Partner) {
+        const partner = user as PartnerState;
+        if (partner.status === PartnerStatus.Accepted) {
+          const { token } = (thunkAPI.getState() as RootState).auth;
+          return await productsService.uploadImage(productId, formData, token);
+        }
+      }
+      return thunkAPI.rejectWithValue(
+        "You are not verified to perform this action!"
+      );
     } catch (error: unknown) {
       let message: string = "";
       if (error instanceof Error) {

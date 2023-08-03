@@ -1,9 +1,10 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { StateStatus } from "../../interfaces/enums";
+import { PartnerStatus, StateStatus, UserType } from "../../interfaces/enums";
 import { StoreRequestDto, StoreState } from "../../interfaces/store";
 import { RootState } from "../../app/store";
 import storesService from "./storesService";
 import { convertByteArrayToBlob } from "../../utils/imageConverter";
+import { PartnerState } from "../../interfaces/partner";
 
 interface StoresState {
   stores: StoreState[];
@@ -36,8 +37,17 @@ export const createStore = createAsyncThunk(
   "stores/create",
   async (storeData: StoreRequestDto, thunkAPI) => {
     try {
-      const { token } = (thunkAPI.getState() as RootState).auth;
-      return await storesService.createStore(storeData, token);
+      const { user } = (thunkAPI.getState() as RootState).auth;
+      if (user?.userType === UserType.Partner) {
+        const partner = user as PartnerState;
+        if (partner.status === PartnerStatus.Accepted) {
+          const { token } = (thunkAPI.getState() as RootState).auth;
+          return await storesService.createStore(storeData, token);
+        }
+      }
+      return thunkAPI.rejectWithValue(
+        "You are not verified to perform this action!"
+      );
     } catch (error: unknown) {
       let message: string = "";
       if (error instanceof Error) {
@@ -55,8 +65,17 @@ export const uploadImage = createAsyncThunk(
     thunkAPI
   ) => {
     try {
-      const { token } = (thunkAPI.getState() as RootState).auth;
-      return await storesService.uploadImage(storeId, formData, token);
+      const { user } = (thunkAPI.getState() as RootState).auth;
+      if (user?.userType === UserType.Partner) {
+        const partner = user as PartnerState;
+        if (partner.status === PartnerStatus.Accepted) {
+          const { token } = (thunkAPI.getState() as RootState).auth;
+          return await storesService.uploadImage(storeId, formData, token);
+        }
+      }
+      return thunkAPI.rejectWithValue(
+        "You are not verified to perform this action!"
+      );
     } catch (error: unknown) {
       let message: string = "";
       if (error instanceof Error) {
@@ -74,8 +93,17 @@ export const updateStore = createAsyncThunk(
     thunkAPI
   ) => {
     try {
-      const { token } = (thunkAPI.getState() as RootState).auth;
-      return await storesService.updateStore(storeId, requestDto, token);
+      const { user } = (thunkAPI.getState() as RootState).auth;
+      if (user?.userType === UserType.Partner) {
+        const partner = user as PartnerState;
+        if (partner.status === PartnerStatus.Accepted) {
+          const { token } = (thunkAPI.getState() as RootState).auth;
+          return await storesService.updateStore(storeId, requestDto, token);
+        }
+      }
+      return thunkAPI.rejectWithValue(
+        "You are not verified to perform this action!"
+      );
     } catch (error: unknown) {
       let message: string = "";
       if (error instanceof Error) {

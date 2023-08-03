@@ -2,8 +2,8 @@ import { getStores, createStore, reset } from "../features/stores/storesSlice";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { useEffect, useState } from "react";
 import { BsHouseAddFill } from "react-icons/bs";
-import { Button, Col, Row } from "react-bootstrap";
-import { StateStatus } from "../interfaces/enums";
+import { Alert, Button, Col, Row } from "react-bootstrap";
+import { PartnerStatus, StateStatus } from "../interfaces/enums";
 import { toast } from "react-toastify";
 import { StoreRequestDto } from "../interfaces/store";
 import { FormModal, FormProps } from "../components/FormModal";
@@ -11,6 +11,7 @@ import { StoreForm } from "../components/forms";
 import { getOrders, clearOrders } from "../features/orders/ordersSlice";
 import { OrderHistory } from "../components/OrderHistory";
 import { StoreTable } from "../components/StoreTable";
+import { PartnerState } from "../interfaces/partner";
 
 export function PartnerDashboard() {
   const dispatch = useAppDispatch();
@@ -49,9 +50,54 @@ export function PartnerDashboard() {
     return <StoreForm store={data} onSubmit={onSubmit} />;
   };
 
+  const AlertComponent = ({
+    status,
+    children,
+  }: {
+    status: PartnerStatus;
+    children: JSX.Element;
+  }) => {
+    switch (status) {
+      case PartnerStatus.Pending:
+        return (
+          <Alert variant="warning">
+            {children} You may be restricted from performing certain actions.
+          </Alert>
+        );
+      case PartnerStatus.Rejected:
+        return (
+          <Alert variant="danger">
+            {children} You may be restricted from performing certain actions.
+          </Alert>
+        );
+      case PartnerStatus.Suspended:
+        return (
+          <Alert variant="danger">
+            {children} You may be restricted from performing certain actions.
+          </Alert>
+        );
+      case PartnerStatus.Accepted:
+        return (
+          <Alert variant="success">
+            {children} You can now perform all store and product related
+            actions.
+          </Alert>
+        );
+    }
+  };
+
   return (
-    <Row>
-      <Col>
+    <Col>
+      <Row>
+        <AlertComponent status={(user as PartnerState).status}>
+          <>
+            Your current status is:{" "}
+            {PartnerStatus[(user as PartnerState).status]}.
+          </>
+        </AlertComponent>
+      </Row>
+
+      <Row>
         <div className="d-flex justify-content-between align-items-center mb-3">
           <h1 className="text-center mt-3 mb-3">Your Stores</h1>
           <Button onClick={() => setModalVisible(true)} className="bg-success">
@@ -66,11 +112,11 @@ export function PartnerDashboard() {
             You don't have any registered stores
           </p>
         )}
-      </Col>
+      </Row>
 
       <hr />
 
-      <Col>
+      <Row>
         <div className="d-flex justify-content-between align-items-center mb-3">
           <h1 className="text-center mt-3 mb-3">Orders</h1>
         </div>
@@ -81,7 +127,7 @@ export function PartnerDashboard() {
             There are currently no registered partners
           </p>
         )}
-      </Col>
+      </Row>
 
       <FormModal
         isVisible={isModalVisible}
@@ -91,6 +137,6 @@ export function PartnerDashboard() {
         onSubmit={(data) => dispatch(createStore(data))}
         onClose={() => setModalVisible(false)}
       />
-    </Row>
+    </Col>
   );
 }

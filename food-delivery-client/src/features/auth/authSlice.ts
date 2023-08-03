@@ -6,7 +6,7 @@ import {
   UserRequestDto,
   UserState,
 } from "../../interfaces/user";
-import { PartnerStatus, StateStatus, UserType } from "../../interfaces/enums";
+import { StateStatus, UserType } from "../../interfaces/enums";
 import { LoginRequestDto } from "../../interfaces/login";
 import {
   CustomerRequestDto,
@@ -194,7 +194,6 @@ export const authSlice = createSlice({
         state.user = {
           ...userResponse,
           imageData: convertByteArrayToBlob(userResponse.imageData),
-          status: PartnerStatus.Pending,
         };
         state.token = action.payload.token;
       })
