@@ -22,6 +22,7 @@ import { Col, Row } from "react-bootstrap";
 import { PartnerState } from "../interfaces/partner";
 import { StoreTable } from "../components/StoreTable";
 import { OrderHistory } from "../components/OrderHistory";
+import { Spinner } from "../components/Spinner";
 
 export function AdminDashboard() {
   const dispatch = useAppDispatch();
@@ -95,50 +96,68 @@ export function AdminDashboard() {
   };
 
   return (
-    <Row>
-      <Col>
+    <Col>
+      <Row>
         <div className="d-flex justify-content-between align-items-center mb-3">
           <h1 className="text-center mt-3 mb-3">Partners</h1>
         </div>
 
-        {partners.length > 0 ? (
-          <PartnerTable partners={partners} onVerify={handleVerify} />
+        {partnersStatus === StateStatus.Loading ? (
+          <Spinner />
         ) : (
-          <p className="text-center mt-4">
-            There are currently no registered partners
-          </p>
+          <>
+            {partners.length > 0 ? (
+              <PartnerTable partners={partners} onVerify={handleVerify} />
+            ) : (
+              <p className="text-center mt-4">
+                There are currently no registered partners
+              </p>
+            )}
+          </>
         )}
-      </Col>
+      </Row>
 
       <hr />
 
-      <Col>
+      <Row>
         <div className="d-flex justify-content-between align-items-center mb-3">
           <h1 className="text-center mt-3 mb-3">Registered Stores</h1>
         </div>
-        {partners.length > 0 ? (
-          <StoreTable stores={stores} />
+
+        {storesStatus === StateStatus.Loading ? (
+          <Spinner />
         ) : (
-          <p className="text-center mt-4">
-            There are currently no registered stores
-          </p>
+          <>
+            {stores.length > 0 ? (
+              <StoreTable stores={stores} />
+            ) : (
+              <p className="text-center mt-4">
+                There are currently no registered stores
+              </p>
+            )}
+          </>
         )}
-      </Col>
+      </Row>
 
       <hr />
 
-      <Col>
+      <Row>
         <div className="d-flex justify-content-between align-items-center mb-3">
           <h1 className="text-center mt-3 mb-3">Orders</h1>
         </div>
-        {partners.length > 0 ? (
-          <OrderHistory orders={orders} canManageOrders={false} />
+
+        {ordersStatus === StateStatus.Loading ? (
+          <Spinner />
         ) : (
-          <p className="text-center mt-4">
-            There are currently no registered partners
-          </p>
+          <>
+            {orders.length > 0 ? (
+              <OrderHistory orders={orders} canManageOrders={false} />
+            ) : (
+              <p className="text-center mt-4">There are currently no orders</p>
+            )}
+          </>
         )}
-      </Col>
-    </Row>
+      </Row>
+    </Col>
   );
 }

@@ -46,6 +46,7 @@ import { ProductRequestDto, ProductState } from "../interfaces/product";
 import { FormModal, FormProps } from "../components/FormModal";
 import { StoreForm } from "../components/forms/StoreForm";
 import { ProductForm } from "../components/forms/ProductForm";
+import { Spinner } from "../components/Spinner";
 
 interface ModalProps {
   isVisible: boolean;
@@ -312,17 +313,31 @@ export function StorePage() {
             onImageChange={handleStoreImageChange}
           />
         </div>
-        <ProductList
-          products={products}
-          canAddToCart={canManageCart}
-          addToCart={(product) => dispatch(addToCart(product))}
-          canManageProduct={canManageStore}
-          editProduct={(product) => setSelectedProduct(product)}
-          deleteProduct={(product) => handleDeleteProduct(product)}
-          onImageChange={(productId, imageFile) =>
-            handleProductImageChange(productId, imageFile)
-          }
-        />
+
+        {productsStatus === StateStatus.Loading ? (
+          <Spinner />
+        ) : (
+          <>
+            {products.length > 0 ? (
+              <ProductList
+                products={products}
+                canAddToCart={canManageCart}
+                addToCart={(product) => dispatch(addToCart(product))}
+                canManageProduct={canManageStore}
+                editProduct={(product) => setSelectedProduct(product)}
+                deleteProduct={(product) => handleDeleteProduct(product)}
+                onImageChange={(productId, imageFile) =>
+                  handleProductImageChange(productId, imageFile)
+                }
+              />
+            ) : (
+              <p className="text-center mt-4">
+                There are currently no products in this store
+              </p>
+            )}
+          </>
+        )}
+
         <ShoppingCart
           store={store}
           items={items}

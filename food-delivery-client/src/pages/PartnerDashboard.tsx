@@ -1,4 +1,8 @@
-import { getStores, createStore, reset } from "../features/stores/storesSlice";
+import {
+  getStores,
+  createStore,
+  reset as resetStoresState,
+} from "../features/stores/storesSlice";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { useEffect, useState } from "react";
 import { BsHouseAddFill } from "react-icons/bs";
@@ -8,10 +12,15 @@ import { toast } from "react-toastify";
 import { StoreRequestDto } from "../interfaces/store";
 import { FormModal, FormProps } from "../components/FormModal";
 import { StoreForm } from "../components/forms";
-import { getOrders, clearOrders } from "../features/orders/ordersSlice";
+import {
+  getOrders,
+  clearOrders,
+  reset as resetOrdersState,
+} from "../features/orders/ordersSlice";
 import { OrderHistory } from "../components/OrderHistory";
 import { StoreTable } from "../components/StoreTable";
 import { PartnerState } from "../interfaces/partner";
+import { Spinner } from "../components/Spinner";
 
 export function PartnerDashboard() {
   const dispatch = useAppDispatch();
@@ -21,7 +30,11 @@ export function PartnerDashboard() {
     status: storesStatus,
     message: storesMessage,
   } = useAppSelector((state) => state.stores);
-  const { orders } = useAppSelector((state) => state.orders);
+  const {
+    orders,
+    status: ordersStatus,
+    message: ordersMessage,
+  } = useAppSelector((state) => state.orders);
   const [isModalVisible, setModalVisible] = useState<boolean>(false);
 
   useEffect(() => {
@@ -31,7 +44,7 @@ export function PartnerDashboard() {
     }
 
     return () => {
-      dispatch(reset());
+      dispatch(resetStoresState());
       dispatch(clearOrders());
     };
   }, []);
@@ -42,9 +55,19 @@ export function PartnerDashboard() {
     }
 
     return () => {
-      dispatch(reset());
+      dispatch(resetStoresState());
     };
   }, [storesStatus, storesMessage]);
+
+  useEffect(() => {
+    if (ordersStatus == StateStatus.Error) {
+      toast.error(ordersMessage);
+    }
+
+    return () => {
+      dispatch(resetOrdersState());
+    };
+  }, [ordersStatus, ordersMessage]);
 
   const FormComponent = ({ data, onSubmit }: FormProps<StoreRequestDto>) => {
     return <StoreForm store={data} onSubmit={onSubmit} />;
@@ -105,12 +128,19 @@ export function PartnerDashboard() {
           </Button>
         </div>
 
-        {stores.length > 0 ? (
-          <StoreTable stores={stores} />
+        {storesStatus === StateStatus.Loading ? (
+          <Spinner />
         ) : (
-          <p className="text-center mt-4">
-            You don't have any registered stores
-          </p>
+          <>
+            {stores.length > 0 ? (
+              <StoreTable stores={stores} />
+            ) : (
+              <p className="text-center mt-4">
+                {" "}
+                You don't have any registered stores
+              </p>
+            )}
+          </>
         )}
       </Row>
 
@@ -120,12 +150,17 @@ export function PartnerDashboard() {
         <div className="d-flex justify-content-between align-items-center mb-3">
           <h1 className="text-center mt-3 mb-3">Orders</h1>
         </div>
-        {orders.length > 0 ? (
-          <OrderHistory orders={orders} canManageOrders={false} />
+
+        {ordersStatus === StateStatus.Loading ? (
+          <Spinner />
         ) : (
-          <p className="text-center mt-4">
-            There are currently no registered partners
-          </p>
+          <>
+            {orders.length > 0 ? (
+              <OrderHistory orders={orders} canManageOrders={false} />
+            ) : (
+              <p className="text-center mt-4">There are currently no orders</p>
+            )}
+          </>
         )}
       </Row>
 

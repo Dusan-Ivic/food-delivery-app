@@ -4,6 +4,7 @@ import { getStores, reset } from "../features/stores/storesSlice";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { StateStatus } from "../interfaces/enums";
 import { toast } from "react-toastify";
+import { Spinner } from "../components/Spinner";
 
 export function Home() {
   const dispatch = useAppDispatch();
@@ -26,7 +27,20 @@ export function Home() {
   return (
     <div>
       <h1 className="text-center mt-3 mb-4">Available Stores</h1>
-      <StoreList stores={stores} />
+
+      {status === StateStatus.Loading ? (
+        <Spinner />
+      ) : (
+        <>
+          {stores.length > 0 ? (
+            <StoreList stores={stores} />
+          ) : (
+            <p className="text-center mt-4">
+              There are currently no registered stores
+            </p>
+          )}
+        </>
+      )}
     </div>
   );
 }

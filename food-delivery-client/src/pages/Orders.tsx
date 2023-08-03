@@ -6,14 +6,13 @@ import {
   getOrders,
   clearOrders,
   cancelOrder,
-  reset,
 } from "../features/orders/ordersSlice";
 import { UserType, StateStatus } from "../interfaces/enums";
-import { toast } from "react-toastify";
+import { Spinner } from "../components/Spinner";
 
 export function Orders() {
   const dispatch = useAppDispatch();
-  const { orders, status, message } = useAppSelector((state) => state.orders);
+  const { orders, status } = useAppSelector((state) => state.orders);
   const { user } = useAppSelector((state) => state.auth);
 
   useEffect(() => {
@@ -23,16 +22,6 @@ export function Orders() {
       dispatch(clearOrders());
     };
   }, []);
-
-  useEffect(() => {
-    if (status == StateStatus.Error) {
-      toast.error(message);
-    }
-
-    return () => {
-      dispatch(reset());
-    };
-  }, [status, message]);
 
   const handleCancelOrder = (orderId: number) => {
     dispatch(cancelOrder(orderId));
@@ -50,14 +39,21 @@ export function Orders() {
     <Row className="d-flex justify-content-center">
       <Col>
         <h1 className="text-center mt-3 mb-4">Your Order History</h1>
-        {orders.length > 0 ? (
-          <OrderHistory
-            orders={orders}
-            canManageOrders={canManageOrders}
-            onCancelOrder={handleCancelOrder}
-          />
+
+        {status === StateStatus.Loading ? (
+          <Spinner />
         ) : (
-          <p className="text-center mt-4">You have no orders</p>
+          <>
+            {orders.length > 0 ? (
+              <OrderHistory
+                orders={orders}
+                canManageOrders={canManageOrders}
+                onCancelOrder={handleCancelOrder}
+              />
+            ) : (
+              <p className="text-center mt-4">You have no orders</p>
+            )}
+          </>
         )}
       </Col>
     </Row>
