@@ -62,6 +62,8 @@ namespace FoodDeliveryApi.Services
                     break;
             }
 
+            responseDto.UserType = userType;
+
             return responseDto;
         }
 
