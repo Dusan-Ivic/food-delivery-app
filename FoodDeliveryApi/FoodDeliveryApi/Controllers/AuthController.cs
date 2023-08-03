@@ -48,6 +48,23 @@ namespace FoodDeliveryApi.Controllers
             return Ok(responseDto);
         }
 
+        [HttpPost("refresh")]
+        public async Task<IActionResult> GenerateToken([FromBody] TokenRequestDto requestDto)
+        {
+            TokenResponseDto responseDto;
+
+            try
+            {
+                responseDto = await _authService.GenerateToken(requestDto);
+            }
+            catch (IncorrectLoginCredentialsException ex)
+            {
+                return Unauthorized(new ErrorResponseDto() { Message = ex.Message });
+            }
+
+            return Ok(responseDto);
+        }
+
         [HttpPut("password")]
         [Authorize]
         public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordRequestDto requestDto)

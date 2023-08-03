@@ -8,6 +8,7 @@ using FoodDeliveryApi.Dto.Partner;
 using FoodDeliveryApi.Dto.User;
 using FoodDeliveryApi.Enums;
 using FoodDeliveryApi.Exceptions;
+using FoodDeliveryApi.Helpers;
 using FoodDeliveryApi.Interfaces.Repositories;
 using FoodDeliveryApi.Interfaces.Services;
 using FoodDeliveryApi.Models;
@@ -115,6 +116,141 @@ namespace FoodDeliveryApi.Services
             };
 
             return responseDto;
+        }
+
+        public async Task<TokenResponseDto> GenerateToken(TokenRequestDto requestDto)
+        {
+            GrantType grantType = requestDto.GrantType;
+
+            if (grantType == GrantType.UsernamePassword)
+            {
+                UserType? userType = requestDto.UserType;
+                string? username = requestDto.Username;
+                string? password = requestDto.Password;
+
+                if (userType == null)
+                {
+                    throw new IncorrectLoginCredentialsException("User type is required");
+                }
+
+                if (string.IsNullOrEmpty(username) ||  string.IsNullOrEmpty(password))
+                {
+                    throw new IncorrectLoginCredentialsException("Username and password are required");
+                }
+
+                User? user = await _authRepository.GetUserByUsername(username, userType.Value);
+
+                if (user == null)
+                {
+                    throw new IncorrectLoginCredentialsException("Incorrect username");
+                }
+
+                if (!BCrypt.Net.BCrypt.Verify(password, user.Password))
+                {
+                    throw new IncorrectLoginCredentialsException("Incorrect password");
+                }
+
+                List<Claim> claims = new List<Claim>()
+                {
+                    new Claim("UserId", user.Id.ToString()),
+                    new Claim(ClaimTypes.Role, userType.Value.ToString())
+                };
+
+                if (user is Partner partner)
+                {
+                    claims.Add(new Claim("Status", partner.Status.ToString()));
+                }
+
+                string jwtSecretKey = _jwtSettings.GetValue<string>("SecretKey");
+                string jwtIssuer = _jwtSettings.GetValue<string>("Issuer");
+
+                int accessTokenExpiresIn = 1800;
+                int refreshTokenExpiresIn = 2592000;
+
+                string accessTokenPayload = TokenHelpers.GenerateAccessToken(jwtSecretKey, jwtIssuer, claims, accessTokenExpiresIn);
+                string refreshTokenPayload = TokenHelpers.GenerateRefreshToken();
+
+                RefreshToken refreshToken = new RefreshToken()
+                {
+                    Token = refreshTokenPayload,
+                    CreatedAt = DateTime.UtcNow,
+                    ExpiresIn = refreshTokenExpiresIn,
+                    UserId = user.Id,
+                    UserType = userType.Value
+                };
+
+                try
+                {
+                    refreshToken = await _authRepository.CreateRefreshToken(refreshToken);
+                }
+                catch (Exception)
+                {
+                    throw;
+                }
+
+                TokenResponseDto responseDto = new TokenResponseDto()
+                {
+                    AccessToken = accessTokenPayload,
+                    RefreshToken = refreshToken.Token,
+                    ExpiresIn = accessTokenExpiresIn
+                };
+
+                return responseDto;
+            }
+            else if (grantType == GrantType.RefreshToken)
+            {
+                string? refreshToken = requestDto.RefreshToken;
+
+                if (string.IsNullOrEmpty(refreshToken))
+                {
+                    throw new IncorrectLoginCredentialsException("Refresh token is required");
+                }
+
+                RefreshToken? existingRefreshToken = await _authRepository.GetRefreshToken(refreshToken);
+
+                if (existingRefreshToken == null)
+                {
+                    throw new IncorrectLoginCredentialsException("Provided refresh token is not valid");
+                }
+
+                User? user = await _authRepository.GetUserById(existingRefreshToken.UserId, existingRefreshToken.UserType);
+
+                if (user == null)
+                {
+                    throw new ResourceNotFoundException("User with this id doesn't exist");
+                }
+
+                List<Claim> claims = new List<Claim>()
+                {
+                    new Claim("UserId", user.Id.ToString()),
+                    new Claim(ClaimTypes.Role, existingRefreshToken.UserType.ToString())
+                };
+
+                if (user is Partner partner)
+                {
+                    claims.Add(new Claim("Status", partner.Status.ToString()));
+                }
+
+                string jwtSecretKey = _jwtSettings.GetValue<string>("SecretKey");
+                string jwtIssuer = _jwtSettings.GetValue<string>("Issuer");
+
+                int accessTokenExpiresIn = 1800;
+
+                string accessToken = TokenHelpers.GenerateAccessToken(jwtSecretKey, jwtIssuer, claims, accessTokenExpiresIn);
+
+                TokenResponseDto responseDto = new TokenResponseDto()
+                {
+                    AccessToken = accessToken,
+                    RefreshToken = existingRefreshToken.Token,
+                    ExpiresIn = accessTokenExpiresIn
+                };
+
+                return responseDto;
+            }
+            else
+            {
+                throw new NotImplementedException();
+            }
         }
 
         public async Task ChangePassword(long id, UserType userType, ChangePasswordRequestDto requestDto)
