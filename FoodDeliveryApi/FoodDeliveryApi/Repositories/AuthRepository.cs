@@ -29,6 +29,20 @@ namespace FoodDeliveryApi.Repositories
             }
         }
 
+        public async Task DeleteRefreshToken(RefreshToken refreshToken)
+        {
+            try
+            {
+                _dbContext.RefreshTokens.Remove(refreshToken);
+                await _dbContext.SaveChangesAsync();
+                return;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
         public async Task<RefreshToken?> GetRefreshToken(string token)
         {
             return await _dbContext.RefreshTokens.FirstOrDefaultAsync(x => x.Token == token);

@@ -2,7 +2,7 @@
 
 namespace FoodDeliveryApi.Dto.Auth
 {
-    public class TokenRequestDto
+    public class CreateTokenRequestDto
     {
         public GrantType GrantType { get; set; }
         public UserType? UserType { get; set; }

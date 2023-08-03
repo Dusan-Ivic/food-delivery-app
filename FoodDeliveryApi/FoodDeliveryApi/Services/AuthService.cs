@@ -118,7 +118,7 @@ namespace FoodDeliveryApi.Services
             return responseDto;
         }
 
-        public async Task<TokenResponseDto> GenerateToken(TokenRequestDto requestDto)
+        public async Task<TokenResponseDto> GenerateToken(CreateTokenRequestDto requestDto)
         {
             GrantType grantType = requestDto.GrantType;
 
@@ -251,6 +251,36 @@ namespace FoodDeliveryApi.Services
             {
                 throw new NotImplementedException();
             }
+        }
+
+        public async Task DeleteToken(long userId, UserType userType, DeleteTokenRequestDto requestDto)
+        {
+            User? user = await _authRepository.GetUserById(userId, userType);
+
+            if (user == null)
+            {
+                throw new ResourceNotFoundException("User with this id doesn't exist");
+            }
+
+            string refreshToken = requestDto.RefreshToken;
+
+            RefreshToken? existingRefreshToken = await _authRepository.GetRefreshToken(refreshToken);
+
+            if (existingRefreshToken == null)
+            {
+                throw new IncorrectLoginCredentialsException("Provided refresh token is not valid");
+            }
+
+            try
+            {
+                await _authRepository.DeleteRefreshToken(existingRefreshToken);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+            return;
         }
 
         public async Task ChangePassword(long id, UserType userType, ChangePasswordRequestDto requestDto)

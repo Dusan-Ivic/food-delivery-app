@@ -10,5 +10,6 @@ namespace FoodDeliveryApi.Interfaces.Repositories
         public Task<User> UpdateUser(User user);
         public Task<RefreshToken> CreateRefreshToken(RefreshToken refreshToken);
         public Task<RefreshToken?> GetRefreshToken(string token);
+        public Task DeleteRefreshToken(RefreshToken refreshToken);
     }
 }
