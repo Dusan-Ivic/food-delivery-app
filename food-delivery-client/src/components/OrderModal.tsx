@@ -4,7 +4,8 @@ import { OrderStatus } from "../interfaces/enums";
 import { formatCurrency } from "../utils/currencyFormatter";
 import { MdOutlineKeyboardDoubleArrowRight } from "react-icons/md";
 import { ImCancelCircle } from "react-icons/im";
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
+import moment from "moment";
 
 interface OrderModalProps {
   isVisible: boolean;
@@ -21,6 +22,15 @@ export function OrderModal({
   canManageOrders,
   onCancelOrder,
 }: OrderModalProps) {
+  const [currentTime, setCurrentTime] = useState(moment());
+
+  useEffect(() => {
+    const interval = setInterval(() => setCurrentTime(moment()), 1000);
+    return () => {
+      clearInterval(interval);
+    };
+  }, []);
+
   const canCancelOrder = useMemo(() => {
     if (!order) {
       return false;
@@ -32,6 +42,27 @@ export function OrderModal({
 
     return order.orderStatus === OrderStatus.Pending;
   }, [order]);
+
+  const getDeliveryTime = (order: OrderState) => {
+    return moment(order.createdAt).add(
+      order.store.deliveryOptions.deliveryTimeInMinutes,
+      "minutes"
+    );
+  };
+
+  const getFormattedDeliveryTime = useMemo(() => {
+    if (!order) {
+      return null;
+    }
+
+    const deliveryTime = getDeliveryTime(order);
+    const duration = moment.duration(
+      deliveryTime.diff(currentTime),
+      "milliseconds"
+    );
+
+    return moment.utc(duration.asMilliseconds()).format("mm:ss");
+  }, [currentTime, order]);
 
   return (
     order && (
@@ -100,16 +131,22 @@ export function OrderModal({
                   Delivery fee: {formatCurrency(order.deliveryFee)}
                 </div>
               </Col>
-              {canCancelOrder && (
-                <Col className="h-100 w-100 d-flex justify-content-end align-items-end">
+              <Col className="d-flex flex-column justify-content-between">
+                <div className="text-center">
+                  {order.orderStatus === OrderStatus.Pending &&
+                    getDeliveryTime(order).isAfter() && (
+                      <>Delivering in {getFormattedDeliveryTime}</>
+                    )}
+                </div>
+                {canCancelOrder && (
                   <Button
                     onClick={() => onCancelOrder!(order.id)}
-                    variant="danger text-white d-flex align-items-center"
+                    variant="danger text-white d-flex justify-content-center align-items-center"
                   >
                     Cancel Order <ImCancelCircle className="ms-2 fs-5" />
                   </Button>
-                </Col>
-              )}
+                )}
+              </Col>
             </Row>
           </Stack>
         </Modal.Body>
