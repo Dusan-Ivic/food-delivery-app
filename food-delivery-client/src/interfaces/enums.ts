@@ -28,3 +28,8 @@ export enum OrderStatus {
   Canceled = 1,
   Completed = 2,
 }
+
+export enum GrantType {
+  UsernamePassword = 0,
+  RefreshToken = 1,
+}

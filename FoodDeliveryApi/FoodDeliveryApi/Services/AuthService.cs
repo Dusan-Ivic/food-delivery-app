@@ -118,6 +118,36 @@ namespace FoodDeliveryApi.Services
             return responseDto;
         }
 
+        public async Task<UserResponseDto> GetProfile(long userId, UserType userType)
+        {
+            User? existingUser = await _authRepository.GetUserById(userId, userType);
+
+            if (existingUser == null)
+            {
+                throw new ResourceNotFoundException("User with this id doesn't exist");
+            }
+
+            UserResponseDto responseDto = new UserResponseDto();
+
+            switch (userType)
+            {
+                case UserType.Customer:
+                    responseDto = _mapper.Map<CustomerResponseDto>(existingUser);
+                    break;
+                case UserType.Partner:
+                    responseDto = _mapper.Map<PartnerResponseDto>(existingUser);
+                    break;
+                case UserType.Admin:
+                    responseDto = _mapper.Map<AdminResponseDto>(existingUser);
+                    break;
+                default:
+                    responseDto = _mapper.Map<UserResponseDto>(existingUser);
+                    break;
+            }
+
+            return responseDto;
+        }
+
         public async Task<TokenResponseDto> GenerateToken(CreateTokenRequestDto requestDto)
         {
             GrantType grantType = requestDto.GrantType;

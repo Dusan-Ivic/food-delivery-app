@@ -6,7 +6,7 @@ import {
   UserRequestDto,
   UserState,
 } from "../../interfaces/user";
-import { StateStatus, UserType } from "../../interfaces/enums";
+import { GrantType, StateStatus, UserType } from "../../interfaces/enums";
 import { LoginRequestDto } from "../../interfaces/login";
 import {
   CustomerRequestDto,
@@ -17,10 +17,12 @@ import {
   PartnerResponseDto,
 } from "../../interfaces/partner";
 import { convertByteArrayToBlob } from "../../utils/imageConverter";
+import { CreateTokenRequestDto } from "../../interfaces/token";
 
 interface AuthState {
   user: UserState | null;
   token: string | null;
+  refreshToken: string | null;
   status: StateStatus;
   message: string;
 }
@@ -28,6 +30,7 @@ interface AuthState {
 const initialState: AuthState = {
   user: null,
   token: null,
+  refreshToken: null,
   status: StateStatus.None,
   message: "",
 };
@@ -36,7 +39,29 @@ export const loginUser = createAsyncThunk(
   "auth/login",
   async (loginData: LoginRequestDto, thunkAPI) => {
     try {
-      return await authService.loginUser(loginData);
+      const requestDto: CreateTokenRequestDto = {
+        grantType: GrantType.UsernamePassword,
+        username: loginData.username,
+        password: loginData.password,
+        userType: loginData.userType,
+      };
+      return await authService.generateToken(requestDto);
+    } catch (error: unknown) {
+      let message: string = "";
+      if (error instanceof Error) {
+        message = error.message;
+      }
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+export const getProfile = createAsyncThunk(
+  "auth/profile",
+  async (_, thunkAPI) => {
+    try {
+      const { token } = (thunkAPI.getState() as RootState).auth;
+      return await authService.getProfile(token);
     } catch (error: unknown) {
       let message: string = "";
       if (error instanceof Error) {
@@ -190,12 +215,24 @@ export const authSlice = createSlice({
       })
       .addCase(loginUser.fulfilled, (state, action) => {
         state.status = StateStatus.Success;
-        const userResponse = action.payload.user;
+        state.token = action.payload.accessToken;
+        state.refreshToken = action.payload.refreshToken;
+      })
+      .addCase(getProfile.pending, (state) => {
+        state.status = StateStatus.Loading;
+      })
+      .addCase(getProfile.rejected, (state, action) => {
+        state.status = StateStatus.Error;
+        state.user = null;
+        state.message = action.payload as string;
+      })
+      .addCase(getProfile.fulfilled, (state, action) => {
+        state.status = StateStatus.Success;
+        const userResponse = action.payload;
         state.user = {
           ...userResponse,
           imageData: convertByteArrayToBlob(userResponse.imageData),
         };
-        state.token = action.payload.token;
       })
       .addCase(registerCustomer.pending, (state) => {
         state.status = StateStatus.Loading;

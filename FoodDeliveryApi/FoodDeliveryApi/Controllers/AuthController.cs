@@ -49,6 +49,30 @@ namespace FoodDeliveryApi.Controllers
             return Ok(responseDto);
         }
 
+        [HttpGet("profile")]
+        [Authorize]
+        public async Task<IActionResult> GetProfile()
+        {
+            Claim? idClaim = User.Claims.FirstOrDefault(x => x.Type == "UserId");
+            long userId = long.Parse(idClaim!.Value);
+
+            Claim? roleClaim = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Role);
+            UserType userType = (UserType)Enum.Parse(typeof(UserType), roleClaim!.Value);
+
+            UserResponseDto responseDto;
+
+            try
+            {
+                responseDto =  await _authService.GetProfile(userId, userType);
+            }
+            catch (ResourceNotFoundException ex)
+            {
+                return Unauthorized(new ErrorResponseDto() { Message = ex.Message });
+            }
+
+            return Ok(responseDto);
+        }
+
         [HttpPost("token")]
         public async Task<IActionResult> GenerateToken([FromBody] CreateTokenRequestDto requestDto)
         {

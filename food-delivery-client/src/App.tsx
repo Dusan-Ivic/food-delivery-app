@@ -12,8 +12,24 @@ import {
 } from "./pages";
 import { PrivateRoute } from "./components/PrivateRoute";
 import { ToastContainer } from "react-toastify";
+import { useAppDispatch, useAppSelector } from "./app/hooks";
+import { getProfile, reset } from "./features/auth/authSlice";
+import { useEffect } from "react";
 
 function App() {
+  const dispatch = useAppDispatch();
+  const { token } = useAppSelector((state) => state.auth);
+
+  useEffect(() => {
+    if (token) {
+      dispatch(getProfile());
+    }
+
+    return () => {
+      dispatch(reset());
+    };
+  }, [token]);
+
   return (
     <div className="bg-light pb-5" style={{ minHeight: "100vh" }}>
       <Header />
