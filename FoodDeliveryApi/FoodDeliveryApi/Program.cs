@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
@@ -145,6 +146,13 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseFileServer(new FileServerOptions()
+{
+    FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), builder.Configuration["FileServerSettings:FolderName"])),
+    RequestPath = $"/{builder.Configuration["FileServerSettings:FolderName"]}",
+    EnableDefaultFiles = true,
+});
 
 app.UseHttpsRedirection();
 app.UseCors(builder.Configuration["CorsSettings:Name"]);
