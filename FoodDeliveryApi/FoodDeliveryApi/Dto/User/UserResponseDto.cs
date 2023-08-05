@@ -13,6 +13,6 @@ namespace FoodDeliveryApi.Dto.User
         public string FirstName { get; set; } = string.Empty;
         public string LastName { get; set; } = string.Empty;
         public UserType UserType { get; set; }
-        public byte[] ImageData { get; set; } = default!;
+        public string? Image { get; set; }
     }
 }

@@ -3,7 +3,6 @@ import { PartnerStatus, StateStatus, UserType } from "../../interfaces/enums";
 import { RootState } from "../../app/store";
 import { ProductRequestDto, ProductState } from "../../interfaces/product";
 import productsService from "./productsService";
-import { convertByteArrayToBlob } from "../../utils/imageConverter";
 import { PartnerState } from "../../interfaces/partner";
 
 interface ProductsState {
@@ -172,12 +171,7 @@ export const productsSlice = createSlice({
       })
       .addCase(getProductsByStore.fulfilled, (state, action) => {
         state.status = StateStatus.Success;
-        state.products = action.payload.map((product) => {
-          return {
-            ...product,
-            imageData: convertByteArrayToBlob(product.imageData) ?? null,
-          };
-        });
+        state.products = action.payload;
       })
       .addCase(createProduct.pending, (state) => {
         state.status = StateStatus.Loading;
@@ -188,11 +182,7 @@ export const productsSlice = createSlice({
       })
       .addCase(createProduct.fulfilled, (state, action) => {
         state.status = StateStatus.Success;
-        const responseDto = action.payload;
-        state.products.push({
-          ...responseDto,
-          imageData: convertByteArrayToBlob(responseDto.imageData),
-        });
+        state.products.push(action.payload);
       })
       .addCase(updateProduct.pending, (state) => {
         state.status = StateStatus.Loading;
@@ -205,11 +195,7 @@ export const productsSlice = createSlice({
         state.status = StateStatus.Success;
         state.products = state.products.map((product) => {
           if (product.id === action.payload.id) {
-            const responseDto = action.payload;
-            return {
-              ...responseDto,
-              imageData: convertByteArrayToBlob(responseDto.imageData),
-            };
+            return action.payload;
           }
           return product;
         });
@@ -236,12 +222,11 @@ export const productsSlice = createSlice({
       })
       .addCase(uploadImage.fulfilled, (state, action) => {
         state.status = StateStatus.Success;
-        const responseDto = action.payload;
         state.products = state.products.map((product) => {
           if (product.id === action.payload.id) {
             return {
               ...product,
-              imageData: convertByteArrayToBlob(responseDto.imageData),
+              image: action.payload.image,
             };
           }
           return product;

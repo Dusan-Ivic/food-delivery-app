@@ -19,11 +19,11 @@ export interface StoreRequestDto extends StoreBase {}
 export interface StoreResponseDto extends StoreBase {
   id: number;
   partnerId: number;
-  imageData: Uint8Array;
+  image: string | null;
 }
 
 export interface StoreState extends StoreBase {
   id: number;
   partnerId: number;
-  imageData: string | null;
+  image: string | null;
 }

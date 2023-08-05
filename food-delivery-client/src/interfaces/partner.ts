@@ -14,14 +14,14 @@ export interface PartnerResponseDto extends PartnerBase {
   id: number;
   status: PartnerStatus;
   userType: UserType;
-  imageData: Uint8Array;
+  image: string | null;
 }
 
 export interface PartnerState extends PartnerBase {
   id: number;
   status: PartnerStatus;
   userType: UserType;
-  imageData: string | null;
+  image: string | null;
 }
 
 export interface VerifyPartnerRequestDto {

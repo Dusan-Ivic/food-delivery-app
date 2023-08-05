@@ -21,6 +21,6 @@
         public List<Order> Orders { get; set; } = new List<Order>();
         public DeliveryOptions DeliveryOptions { get; set; } = default!;
         public string Category { get; set; } = string.Empty;
-        public byte[] ImageData { get; set; } = default!;
+        public string? Image { get; set; }
     }
 }
