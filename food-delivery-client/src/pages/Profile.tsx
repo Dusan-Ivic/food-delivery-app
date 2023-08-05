@@ -23,12 +23,12 @@ export function Profile() {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    if (status === StateStatus.Error) {
-      message ? toast.error(message) : console.error(message);
+    if (status === StateStatus.Error && message) {
+      toast.error(message);
     }
 
     if (status === StateStatus.Success && message) {
-      message ? toast.success(message) : console.error(message);
+      toast.success(message);
     }
 
     return () => {

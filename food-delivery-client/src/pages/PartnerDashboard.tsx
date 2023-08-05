@@ -50,7 +50,7 @@ export function PartnerDashboard() {
   }, []);
 
   useEffect(() => {
-    if (storesStatus == StateStatus.Error) {
+    if (storesStatus == StateStatus.Error && storesMessage) {
       toast.error(storesMessage);
     }
 
@@ -60,7 +60,7 @@ export function PartnerDashboard() {
   }, [storesStatus, storesMessage]);
 
   useEffect(() => {
-    if (ordersStatus == StateStatus.Error) {
+    if (ordersStatus == StateStatus.Error && ordersMessage) {
       toast.error(ordersMessage);
     }
 

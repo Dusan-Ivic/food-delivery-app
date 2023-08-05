@@ -26,7 +26,7 @@ export function Login() {
   };
 
   useEffect(() => {
-    if (status == StateStatus.Error) {
+    if (status == StateStatus.Error && message) {
       toast.error(message);
     }
 

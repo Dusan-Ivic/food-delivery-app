@@ -58,7 +58,7 @@ export function AdminDashboard() {
   }, []);
 
   useEffect(() => {
-    if (storesStatus == StateStatus.Error) {
+    if (storesStatus == StateStatus.Error && storesMessage) {
       toast.error(storesMessage);
     }
 
@@ -68,7 +68,7 @@ export function AdminDashboard() {
   }, [storesStatus, storesMessage]);
 
   useEffect(() => {
-    if (partnersStatus == StateStatus.Error) {
+    if (partnersStatus == StateStatus.Error && partnersMessage) {
       toast.error(partnersMessage);
     }
 
@@ -78,7 +78,7 @@ export function AdminDashboard() {
   }, [partnersStatus, partnersMessage]);
 
   useEffect(() => {
-    if (ordersStatus == StateStatus.Error) {
+    if (ordersStatus == StateStatus.Error && ordersMessage) {
       toast.error(ordersMessage);
     }
 

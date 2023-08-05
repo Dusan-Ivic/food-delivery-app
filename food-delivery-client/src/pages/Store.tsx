@@ -131,7 +131,7 @@ export function StorePage() {
   }, [store]);
 
   useEffect(() => {
-    if (ordersStatus == StateStatus.Error) {
+    if (ordersStatus == StateStatus.Error && ordersMessage) {
       toast.error(ordersMessage);
     }
 
@@ -146,7 +146,7 @@ export function StorePage() {
   }, [ordersStatus, ordersMessage]);
 
   useEffect(() => {
-    if (productsStatus == StateStatus.Error) {
+    if (productsStatus == StateStatus.Error && productsMessage) {
       toast.error(productsMessage);
     }
 
@@ -156,7 +156,7 @@ export function StorePage() {
   }, [productsStatus, productsMessage]);
 
   useEffect(() => {
-    if (storesStatus == StateStatus.Error) {
+    if (storesStatus == StateStatus.Error && storesMessage) {
       toast.error(storesMessage);
     }
 
