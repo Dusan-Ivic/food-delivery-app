@@ -1,6 +1,6 @@
 import { Header } from "./components/Header";
 import { Container } from "react-bootstrap";
-import { Routes, Route, useNavigate } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import {
   Home,
   Login,
@@ -19,29 +19,28 @@ import { CreateTokenRequestDto } from "./interfaces/token";
 import { GrantType } from "./interfaces/enums";
 
 function App() {
-  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { user, accessToken, refreshToken } = useAppSelector(
     (state) => state.auth
   );
 
   useEffect(() => {
-    if (!refreshToken) {
-      navigate("/login");
-    } else if (!accessToken) {
+    if (refreshToken && !accessToken) {
       const requestDto: CreateTokenRequestDto = {
         grantType: GrantType.RefreshToken,
         refreshToken: refreshToken,
       };
       dispatch(generateToken(requestDto));
-    } else if (!user) {
+    }
+
+    if (refreshToken && accessToken && !user) {
       dispatch(getProfile());
     }
 
     return () => {
       dispatch(reset());
     };
-  }, [accessToken, refreshToken]);
+  }, [accessToken, refreshToken, user]);
 
   return (
     <div className="bg-light pb-5" style={{ minHeight: "100vh" }}>
@@ -56,7 +55,7 @@ function App() {
           <Route
             path="/orders"
             element={
-              <PrivateRoute sourcePage="/orders">
+              <PrivateRoute>
                 <Orders />
               </PrivateRoute>
             }
@@ -64,7 +63,7 @@ function App() {
           <Route
             path="/profile"
             element={
-              <PrivateRoute sourcePage="/profile">
+              <PrivateRoute>
                 <Profile />
               </PrivateRoute>
             }
@@ -72,7 +71,7 @@ function App() {
           <Route
             path="/dashboard"
             element={
-              <PrivateRoute sourcePage="/dashboard">
+              <PrivateRoute>
                 <Dashboard />
               </PrivateRoute>
             }
