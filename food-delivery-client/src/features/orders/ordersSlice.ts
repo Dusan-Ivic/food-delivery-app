@@ -3,7 +3,6 @@ import { StateStatus, OrderStatus } from "../../interfaces/enums";
 import { RootState } from "../../app/store";
 import { OrderRequestDto, OrderState } from "../../interfaces/order";
 import ordersService from "./ordersService";
-import { convertByteArrayToBlob } from "../../utils/imageConverter";
 
 interface OrdersState {
   orders: OrderState[];
@@ -87,18 +86,7 @@ export const ordersSlice = createSlice({
       })
       .addCase(getOrders.fulfilled, (state, action) => {
         state.status = StateStatus.Success;
-        state.orders = action.payload.map((order) => {
-          const items = order.items.map((item) => {
-            return {
-              ...item,
-              productImage: convertByteArrayToBlob(item.productImage!) ?? null,
-            };
-          });
-          return {
-            ...order,
-            items,
-          };
-        });
+        state.orders = action.payload;
       })
       .addCase(createOrder.pending, (state) => {
         state.status = StateStatus.Loading;
@@ -109,17 +97,7 @@ export const ordersSlice = createSlice({
       })
       .addCase(createOrder.fulfilled, (state, action) => {
         state.status = StateStatus.Success;
-        const responseDto = action.payload;
-        const items = responseDto.items.map((item) => {
-          return {
-            ...item,
-            productImage: null, //convertByteArrayToBlob(item.productImage!) ?? null,
-          };
-        });
-        state.orders.push({
-          ...responseDto,
-          items: items,
-        });
+        state.orders.push(action.payload);
       })
       .addCase(cancelOrder.pending, (state) => {
         state.status = StateStatus.Loading;

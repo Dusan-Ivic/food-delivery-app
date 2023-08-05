@@ -6,6 +6,7 @@ import { MdOutlineKeyboardDoubleArrowRight } from "react-icons/md";
 import { ImCancelCircle } from "react-icons/im";
 import { useEffect, useMemo, useState } from "react";
 import moment from "moment";
+import { getFullImageUrl } from "../utils/imageUrlGenerator";
 
 interface OrderModalProps {
   isVisible: boolean;
@@ -83,7 +84,11 @@ export function OrderModal({
                     }}
                   >
                     <img
-                      src={item.productImage || "/images/no-image.svg"}
+                      src={
+                        item.productImage
+                          ? getFullImageUrl(item.productImage)
+                          : "/images/no-image.svg"
+                      }
                       style={{
                         width: "100%",
                         height: "100%",

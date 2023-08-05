@@ -13,7 +13,7 @@ export interface OrderItemResponseDto {
   totalPrice: number;
   productName: string;
   productPrice: number;
-  productImage?: Uint8Array;
+  productImage: string | null;
 }
 
 export interface OrderRequestDto {
@@ -41,7 +41,7 @@ export interface OrderItemState {
   totalPrice: number;
   productName: string;
   productPrice: number;
-  productImage?: string | null;
+  productImage: string | null;
 }
 
 export interface OrderState {

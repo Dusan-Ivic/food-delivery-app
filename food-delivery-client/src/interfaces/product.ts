@@ -12,11 +12,11 @@ export interface ProductRequestDto extends ProductBase {
 export interface ProductResponseDto extends ProductBase {
   id: number;
   storeId: number;
-  imageData: Uint8Array;
+  image: string | null;
 }
 
 export interface ProductState extends ProductBase {
   id: number;
   storeId: number;
-  imageData: string | null;
+  image: string | null;
 }

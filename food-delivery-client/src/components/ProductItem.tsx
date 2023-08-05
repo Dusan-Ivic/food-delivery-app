@@ -4,6 +4,7 @@ import { formatCurrency } from "../utils/currencyFormatter";
 import { BiEdit } from "react-icons/bi";
 import { AiFillDelete, AiOutlinePlusSquare } from "react-icons/ai";
 import { useRef } from "react";
+import { getFullImageUrl } from "../utils/imageUrlGenerator";
 
 interface ProductItemProps {
   product: ProductState;
@@ -50,7 +51,11 @@ export function ProductItem({
       >
         <Card.Img
           variant="top"
-          src={product?.imageData || "/images/no-image.svg"}
+          src={
+            product.image
+              ? getFullImageUrl(product.image)
+              : "/images/no-image.svg"
+          }
           height="200px"
           style={{
             objectFit: "cover",

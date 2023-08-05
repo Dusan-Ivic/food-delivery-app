@@ -89,7 +89,7 @@ namespace FoodDeliveryApi.Services
                 // Save product's current information
                 orderItem.ProductName = product.Name;
                 orderItem.ProductPrice = product.Price;
-                //orderItem.ProductImage = product.ImageData;
+                orderItem.ProductImage = product.Image;
 
                 orderItem.TotalPrice = orderItem.Quantity * product.Price;
                 product.Quantity -= orderItem.Quantity;
