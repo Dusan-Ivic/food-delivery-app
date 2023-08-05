@@ -3,6 +3,7 @@ import { StoreState } from "../interfaces/store";
 import { TbTruckDelivery, TbClockHour4 } from "react-icons/tb";
 import { formatCurrency } from "../utils/currencyFormatter";
 import { useRef } from "react";
+import { getFullImageUrl } from "../utils/imageUrlGenerator";
 
 interface StoreInfoProps {
   store: StoreState;
@@ -39,7 +40,11 @@ export function StoreInfo({
       >
         <Card.Img
           variant="top"
-          src={store?.imageData || "/images/no-image.svg"}
+          src={
+            store?.image
+              ? getFullImageUrl(store?.image)
+              : "/images/no-image.svg"
+          }
           height="200px"
           style={{ objectFit: "cover" }}
         />

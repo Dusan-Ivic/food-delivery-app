@@ -1,5 +1,6 @@
 import { Card } from "react-bootstrap";
 import { StoreState } from "../interfaces/store";
+import { getFullImageUrl } from "../utils/imageUrlGenerator";
 
 interface StoreItemProps {
   store: StoreState;
@@ -15,7 +16,11 @@ export function StoreItem({ store }: StoreItemProps) {
       >
         <Card.Img
           variant="top"
-          src={store?.imageData || "/images/no-image.svg"}
+          src={
+            store?.image
+              ? getFullImageUrl(store?.image)
+              : "/images/no-image.svg"
+          }
           height="200px"
           style={{ objectFit: "cover" }}
         />

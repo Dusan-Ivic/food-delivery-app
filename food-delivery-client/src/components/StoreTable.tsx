@@ -2,6 +2,7 @@ import { Table } from "react-bootstrap";
 import { StoreState } from "../interfaces/store";
 import { FaStoreAlt } from "react-icons/fa";
 import { Link } from "react-router-dom";
+import { getFullImageUrl } from "../utils/imageUrlGenerator";
 
 interface StoreTableProps {
   stores: StoreState[];
@@ -34,7 +35,11 @@ export function StoreTable({ stores }: StoreTableProps) {
               <td>
                 <img
                   style={{ height: "48px", width: "48px", objectFit: "cover" }}
-                  src={store.imageData || "/images/blank-profile-image.png"}
+                  src={
+                    store.image
+                      ? getFullImageUrl(store.image)
+                      : "/images/no-image.svg"
+                  }
                 />
               </td>
               <td>{store.name}</td>

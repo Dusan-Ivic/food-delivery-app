@@ -163,12 +163,29 @@ namespace FoodDeliveryApi.Services
                 throw new ActionNotAllowedException("Unauthorized to update this store. Only the creator can perform this action.");
             }
 
-            using var memoryStream = new MemoryStream();
-            image.CopyTo(memoryStream);
+            if (existingStore.Image != null)
+            {
+                string oldImageName = existingStore.Image;
+                string oldImagePath = Path.Combine(Directory.GetCurrentDirectory(), "Images", oldImageName);
 
-            byte[] imageData = memoryStream.ToArray();
+                if (File.Exists(oldImagePath))
+                {
+                    File.Delete(oldImagePath);
+                }
+            }
 
-            //existingStore.ImageData = imageData;
+            string fileExtension = Path.GetExtension(image.FileName);
+
+            DateTime currentTime = DateTime.UtcNow;
+            string newImageName = $"{currentTime:yyyyMMddHHmmssfff}{fileExtension}";
+            string newImagePath = Path.Combine(Directory.GetCurrentDirectory(), "Images", newImageName);
+
+            using (var stream = new FileStream(newImagePath, FileMode.Create))
+            {
+                image.CopyTo(stream);
+            }
+
+            existingStore.Image = newImageName;
 
             try
             {
