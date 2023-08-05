@@ -15,7 +15,6 @@ import {
   PartnerRequestDto,
   PartnerResponseDto,
 } from "../../interfaces/partner";
-import { convertByteArrayToBlob } from "../../utils/imageConverter";
 import {
   CreateTokenRequestDto,
   DeleteTokenRequestDto,
@@ -243,11 +242,7 @@ export const authSlice = createSlice({
       })
       .addCase(getProfile.fulfilled, (state, action) => {
         state.status = StateStatus.Success;
-        const userResponse = action.payload;
-        state.user = {
-          ...userResponse,
-          imageData: convertByteArrayToBlob(userResponse.imageData),
-        };
+        state.user = action.payload;
       })
       .addCase(logoutUser.pending, (state) => {
         state.status = StateStatus.Loading;
@@ -300,19 +295,10 @@ export const authSlice = createSlice({
         state.status = StateStatus.Success;
         switch (state.user?.userType) {
           case UserType.Customer:
-            const customerResponse = action.payload as CustomerResponseDto;
-            state.user = {
-              ...customerResponse,
-              imageData: convertByteArrayToBlob(customerResponse.imageData),
-            };
+            state.user = action.payload as CustomerResponseDto;
             break;
           case UserType.Partner:
-            const partnerResponse =
-              action.payload as unknown as PartnerResponseDto;
-            state.user = {
-              ...partnerResponse,
-              imageData: convertByteArrayToBlob(partnerResponse.imageData),
-            };
+            state.user = action.payload as PartnerResponseDto; // as unknown
             break;
         }
       })
@@ -326,9 +312,7 @@ export const authSlice = createSlice({
       .addCase(uploadImage.fulfilled, (state, action) => {
         state.status = StateStatus.Success;
         if (state.user) {
-          state.user.imageData = convertByteArrayToBlob(
-            action.payload.imageData
-          );
+          state.user.image = action.payload.image;
         }
       })
       .addCase(removeImage.pending, (state) => {
@@ -341,7 +325,7 @@ export const authSlice = createSlice({
       .addCase(removeImage.fulfilled, (state) => {
         state.status = StateStatus.Success;
         if (state.user) {
-          state.user.imageData = null;
+          state.user.image = null;
         }
       })
       .addCase(changePassword.pending, (state) => {

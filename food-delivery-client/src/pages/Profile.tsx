@@ -80,7 +80,7 @@ export function Profile() {
   };
 
   const handleImageRemove = () => {
-    if (user && user.imageData) {
+    if (user && user.image) {
       dispatch(removeImage());
     }
   };
@@ -95,7 +95,7 @@ export function Profile() {
         <Col xs={10} sm={12} md={10} lg={7} xl={6}>
           <h1 className="text-center mt-3 mb-4">Your Profile</h1>
           <div className="w-50 mx-auto">
-            <UserAvatar image={user.imageData} userType={user.userType} />
+            <UserAvatar image={user.image} userType={user.userType} />
             <div className="w-100 d-flex justify-content-around mt-3 gap-3">
               <Button
                 variant="primary"

@@ -23,6 +23,7 @@ namespace FoodDeliveryApi.Services
     public class AuthService : IAuthService
     {
         private readonly IConfigurationSection _jwtSettings;
+        private readonly IConfigurationSection _fsSettings;
         private readonly IAuthRepository _authRepository;
         private readonly IValidator<User> _validator;
         private readonly IMapper _mapper;
@@ -30,6 +31,7 @@ namespace FoodDeliveryApi.Services
         public AuthService(IConfiguration config, IAuthRepository authRepository, IValidator<User> validator, IMapper mapper)
         {
             _jwtSettings = config.GetSection("JWTSettings");
+            _fsSettings = config.GetSection("FileServerSettings");
             _authRepository = authRepository;
             _validator = validator;
             _mapper = mapper;
@@ -309,10 +311,29 @@ namespace FoodDeliveryApi.Services
                 throw new ResourceNotFoundException("User with this id doesn't exist");
             }
 
-            using var memoryStream = new MemoryStream();
-            image.CopyTo(memoryStream);
+            if (existingUser.Image != null)
+            {
+                string oldImageName = existingUser.Image;
+                string oldImagePath = Path.Combine(Directory.GetCurrentDirectory(), "Images", oldImageName);
 
-            byte[] imageData = memoryStream.ToArray();
+                if (File.Exists(oldImagePath))
+                {
+                    File.Delete(oldImagePath);
+                }
+            }
+
+            string fileExtension = Path.GetExtension(image.FileName);
+
+            DateTime currentTime = DateTime.UtcNow;
+            string newImageName = $"{currentTime:yyyyMMddHHmmssfff}{fileExtension}";
+            string newImagePath = Path.Combine(Directory.GetCurrentDirectory(), "Images", newImageName);
+
+            using (var stream = new FileStream(newImagePath, FileMode.Create))
+            {
+                image.CopyTo(stream);
+            }
+
+            existingUser.Image = newImageName;
 
             try
             {
@@ -347,7 +368,18 @@ namespace FoodDeliveryApi.Services
                 throw new ResourceNotFoundException("User with this id doesn't exist");
             }
 
-            //existingUser.ImageData = new byte[0];
+            if (existingUser.Image != null)
+            {
+                string oldImageName = existingUser.Image;
+                string oldImagePath = Path.Combine(Directory.GetCurrentDirectory(), "Images", oldImageName);
+
+                if (File.Exists(oldImagePath))
+                {
+                    File.Delete(oldImagePath);
+                }
+            }
+
+            existingUser.Image = null;
 
             try
             {

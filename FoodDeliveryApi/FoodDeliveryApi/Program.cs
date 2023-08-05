@@ -152,6 +152,7 @@ app.UseFileServer(new FileServerOptions()
     FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), builder.Configuration["FileServerSettings:FolderName"])),
     RequestPath = $"/{builder.Configuration["FileServerSettings:FolderName"]}",
     EnableDefaultFiles = true,
+    EnableDirectoryBrowsing = true,
 });
 
 app.UseHttpsRedirection();

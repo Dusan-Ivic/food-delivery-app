@@ -13,11 +13,11 @@ export interface CustomerRequestDto extends CustomerBase {}
 export interface CustomerResponseDto extends CustomerBase {
   id: number;
   userType: UserType;
-  imageData: Uint8Array;
+  image: string | null;
 }
 
 export interface CustomerState extends CustomerBase {
   id: number;
   userType: UserType;
-  imageData: string | null;
+  image: string | null;
 }
