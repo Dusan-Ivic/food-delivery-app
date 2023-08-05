@@ -17,13 +17,14 @@ import {
   DeleteTokenRequestDto,
   TokenResponseDto,
 } from "../../interfaces/token";
+import apiClient from "../../config/apiClient";
 
 const generateToken = async (
   requestDto: CreateTokenRequestDto
 ): Promise<TokenResponseDto> => {
   try {
-    const response = await axios.post<TokenResponseDto>(
-      `${import.meta.env.VITE_API_URL}/api/auth/token`,
+    const response = await apiClient.post<TokenResponseDto>(
+      "/api/auth/token",
       requestDto
     );
     return response.data;
@@ -38,14 +39,11 @@ const generateToken = async (
 
 const getProfile = async (token: string | null): Promise<UserResponseDto> => {
   try {
-    const response = await axios.get<UserResponseDto>(
-      `${import.meta.env.VITE_API_URL}/api/auth/profile`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+    const response = await apiClient.get<UserResponseDto>("/api/auth/profile", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
@@ -61,15 +59,12 @@ const deleteRefreshToken = async (
   token: string | null
 ): Promise<void> => {
   try {
-    const response = await axios.delete(
-      `${import.meta.env.VITE_API_URL}/api/auth/token`,
-      {
-        data: requestDto,
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+    const response = await apiClient.delete("/api/auth/token", {
+      data: requestDto,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
@@ -84,8 +79,8 @@ const registerCustomer = async (
   requestDto: CustomerRequestDto
 ): Promise<CustomerResponseDto> => {
   try {
-    const response = await axios.post<CustomerResponseDto>(
-      `${import.meta.env.VITE_API_URL}/api/customers`,
+    const response = await apiClient.post<CustomerResponseDto>(
+      "/api/customers",
       requestDto
     );
     return response.data;
@@ -102,8 +97,8 @@ const registerPartner = async (
   requestDto: PartnerRequestDto
 ): Promise<PartnerResponseDto> => {
   try {
-    const response = await axios.post<PartnerResponseDto>(
-      `${import.meta.env.VITE_API_URL}/api/partners`,
+    const response = await apiClient.post<PartnerResponseDto>(
+      "/api/partners",
       requestDto
     );
     return response.data;
@@ -122,8 +117,8 @@ const updateCustomer = async (
   token: string | null
 ): Promise<CustomerResponseDto> => {
   try {
-    const response = await axios.put<CustomerResponseDto>(
-      `${import.meta.env.VITE_API_URL}/api/customers/${customerId}`,
+    const response = await apiClient.put<CustomerResponseDto>(
+      `/api/customers/${customerId}`,
       requestDto,
       {
         headers: {
@@ -147,8 +142,8 @@ const updatePartner = async (
   token: string | null
 ): Promise<PartnerResponseDto> => {
   try {
-    const response = await axios.put<PartnerResponseDto>(
-      `${import.meta.env.VITE_API_URL}/api/partners/${partnerId}`,
+    const response = await apiClient.put<PartnerResponseDto>(
+      `/api/partners/${partnerId}`,
       requestDto,
       {
         headers: {
@@ -171,8 +166,8 @@ const uploadImage = async (
   token: string | null
 ): Promise<ImageResponseDto> => {
   try {
-    const response = await axios.put<ImageResponseDto>(
-      `${import.meta.env.VITE_API_URL}/api/auth/image`,
+    const response = await apiClient.put<ImageResponseDto>(
+      "/api/auth/image",
       formData,
       {
         headers: {
@@ -193,14 +188,11 @@ const uploadImage = async (
 
 const removeImage = async (token: string | null): Promise<void> => {
   try {
-    const response = await axios.delete(
-      `${import.meta.env.VITE_API_URL}/api/auth/image`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+    const response = await apiClient.delete("/api/auth/image", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
@@ -216,8 +208,8 @@ const changePassword = async (
   token: string | null
 ): Promise<string> => {
   try {
-    const response = await axios.put<string>(
-      `${import.meta.env.VITE_API_URL}/api/auth/password`,
+    const response = await apiClient.put<string>(
+      "/api/auth/password",
       requestDto,
       {
         headers: {

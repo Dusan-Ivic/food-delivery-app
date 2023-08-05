@@ -3,13 +3,14 @@ import {
   PartnerResponseDto,
   VerifyPartnerRequestDto,
 } from "../../interfaces/partner";
+import apiClient from "../../config/apiClient";
 
 const getPartners = async (
   token: string | null
 ): Promise<PartnerResponseDto[]> => {
   try {
-    const response = await axios.get<PartnerResponseDto[]>(
-      `${import.meta.env.VITE_API_URL}/api/partners`,
+    const response = await apiClient.get<PartnerResponseDto[]>(
+      "/api/partners",
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -32,8 +33,8 @@ const verifyPartner = async (
   token: string | null
 ): Promise<PartnerResponseDto> => {
   try {
-    const response = await axios.put<PartnerResponseDto>(
-      `${import.meta.env.VITE_API_URL}/api/partners/${partnerId}/status`,
+    const response = await apiClient.put<PartnerResponseDto>(
+      `/api/partners/${partnerId}/status`,
       requestDto,
       {
         headers: {

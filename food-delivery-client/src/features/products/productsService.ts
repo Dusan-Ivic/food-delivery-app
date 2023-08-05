@@ -4,13 +4,14 @@ import {
   ProductResponseDto,
 } from "../../interfaces/product";
 import { ImageResponseDto } from "../../interfaces/image";
+import apiClient from "../../config/apiClient";
 
 const getProductsByStore = async (
   storeId: number
 ): Promise<ProductResponseDto[]> => {
   try {
-    const response = await axios.get<ProductResponseDto[]>(
-      `${import.meta.env.VITE_API_URL}/api/products?storeId=${storeId}`
+    const response = await apiClient.get<ProductResponseDto[]>(
+      `/api/products?storeId=${storeId}`
     );
     return response.data;
   } catch (error) {
@@ -27,8 +28,8 @@ const createProduct = async (
   token: string | null
 ): Promise<ProductResponseDto> => {
   try {
-    const response = await axios.post<ProductResponseDto>(
-      `${import.meta.env.VITE_API_URL}/api/products`,
+    const response = await apiClient.post<ProductResponseDto>(
+      "/api/products",
       requestDto,
       {
         headers: {
@@ -52,8 +53,8 @@ const updateProduct = async (
   token: string | null
 ): Promise<ProductResponseDto> => {
   try {
-    const response = await axios.put<ProductResponseDto>(
-      `${import.meta.env.VITE_API_URL}/api/products/${productId}`,
+    const response = await apiClient.put<ProductResponseDto>(
+      `/api/products/${productId}`,
       requestDto,
       {
         headers: {
@@ -76,8 +77,8 @@ const deleteProduct = async (
   token: string | null
 ): Promise<{ id: number }> => {
   try {
-    const response = await axios.delete<{ id: number }>(
-      `${import.meta.env.VITE_API_URL}/api/products/${productId}`,
+    const response = await apiClient.delete<{ id: number }>(
+      `/api/products/${productId}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -100,8 +101,8 @@ const uploadImage = async (
   token: string | null
 ): Promise<ImageResponseDto> => {
   try {
-    const response = await axios.put<ImageResponseDto>(
-      `${import.meta.env.VITE_API_URL}/api/products/${productId}/image`,
+    const response = await apiClient.put<ImageResponseDto>(
+      `/api/products/${productId}/image`,
       formData,
       {
         headers: {

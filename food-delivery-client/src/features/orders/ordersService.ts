@@ -1,16 +1,14 @@
 import axios from "axios";
 import { OrderRequestDto, OrderResponseDto } from "../../interfaces/order";
+import apiClient from "../../config/apiClient";
 
 const getOrders = async (token: string | null): Promise<OrderResponseDto[]> => {
   try {
-    const response = await axios.get<OrderResponseDto[]>(
-      `${import.meta.env.VITE_API_URL}/api/orders`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+    const response = await apiClient.get<OrderResponseDto[]>("/api/orders", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
@@ -26,8 +24,8 @@ const createOrder = async (
   token: string | null
 ): Promise<OrderResponseDto> => {
   try {
-    const response = await axios.post<OrderResponseDto>(
-      `${import.meta.env.VITE_API_URL}/api/orders`,
+    const response = await apiClient.post<OrderResponseDto>(
+      "/api/orders",
       requestDto,
       {
         headers: {
@@ -50,8 +48,8 @@ const cancelOrder = async (
   token: string | null
 ): Promise<{ id: number }> => {
   try {
-    const response = await axios.delete<{ id: number }>(
-      `${import.meta.env.VITE_API_URL}/api/orders/${orderId}`,
+    const response = await apiClient.delete<{ id: number }>(
+      `/api/orders/${orderId}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,

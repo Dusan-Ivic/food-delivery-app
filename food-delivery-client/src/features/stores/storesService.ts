@@ -1,14 +1,15 @@
 import axios from "axios";
 import { StoreRequestDto, StoreResponseDto } from "../../interfaces/store";
 import { ImageResponseDto } from "../../interfaces/image";
+import apiClient from "../../config/apiClient";
 
 const getStores = async (
   partnerId: number | null
 ): Promise<StoreResponseDto[]> => {
   try {
     const query = partnerId ? `?partnerId=${partnerId}` : "";
-    const response = await axios.get<StoreResponseDto[]>(
-      `${import.meta.env.VITE_API_URL}/api/stores${query}`
+    const response = await apiClient.get<StoreResponseDto[]>(
+      `/api/stores${query}`
     );
     return response.data;
   } catch (error) {
@@ -24,8 +25,8 @@ const getStoresByPartner = async (
   partnerId: number
 ): Promise<StoreResponseDto[]> => {
   try {
-    const response = await axios.get<StoreResponseDto[]>(
-      `${import.meta.env.VITE_API_URL}/api/stores?partnerId=${partnerId}`
+    const response = await apiClient.get<StoreResponseDto[]>(
+      `/api/stores?partnerId=${partnerId}`
     );
     return response.data;
   } catch (error) {
@@ -42,8 +43,8 @@ const createStore = async (
   token: string | null
 ): Promise<StoreResponseDto> => {
   try {
-    const response = await axios.post<StoreResponseDto>(
-      `${import.meta.env.VITE_API_URL}/api/stores`,
+    const response = await apiClient.post<StoreResponseDto>(
+      "/api/stores",
       requestDto,
       {
         headers: {
@@ -67,8 +68,8 @@ const uploadImage = async (
   token: string | null
 ): Promise<ImageResponseDto> => {
   try {
-    const response = await axios.put<ImageResponseDto>(
-      `${import.meta.env.VITE_API_URL}/api/stores/${storeId}/image`,
+    const response = await apiClient.put<ImageResponseDto>(
+      `/api/stores/${storeId}/image`,
       formData,
       {
         headers: {
@@ -93,8 +94,8 @@ const updateStore = async (
   token: string | null
 ): Promise<StoreResponseDto> => {
   try {
-    const response = await axios.put<StoreResponseDto>(
-      `${import.meta.env.VITE_API_URL}/api/stores/${storeId}`,
+    const response = await apiClient.put<StoreResponseDto>(
+      `/api/stores/${storeId}`,
       requestDto,
       {
         headers: {
