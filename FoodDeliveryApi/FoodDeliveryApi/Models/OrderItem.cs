@@ -12,7 +12,7 @@
         // Values at the time of order creation (may be changed later in Product)
         public string ProductName { get; set; } = string.Empty;
         public decimal ProductPrice { get; set; }
-        public byte[] ProductImage { get; set; } = default!;
+        public string? ProductImage { get; set; }
 
     }
 }

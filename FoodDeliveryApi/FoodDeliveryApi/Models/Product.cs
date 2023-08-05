@@ -11,6 +11,6 @@
         public long StoreId { get; set; }
         public Store Store { get; set; } = default!;
         public List<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
-        public byte[] ImageData { get; set; } = default!;
+        public string? Image { get; set; }
     }
 }

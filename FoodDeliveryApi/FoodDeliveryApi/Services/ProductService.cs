@@ -183,7 +183,7 @@ namespace FoodDeliveryApi.Services
 
             byte[] imageData = memoryStream.ToArray();
 
-            existingProduct.ImageData = imageData;
+            //existingProduct.ImageData = imageData;
 
             try
             {

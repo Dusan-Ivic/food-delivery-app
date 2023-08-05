@@ -314,8 +314,6 @@ namespace FoodDeliveryApi.Services
 
             byte[] imageData = memoryStream.ToArray();
 
-            existingUser.ImageData = imageData;
-
             try
             {
                 existingUser = await _authRepository.UpdateUser(existingUser);
@@ -349,7 +347,7 @@ namespace FoodDeliveryApi.Services
                 throw new ResourceNotFoundException("User with this id doesn't exist");
             }
 
-            existingUser.ImageData = new byte[0];
+            //existingUser.ImageData = new byte[0];
 
             try
             {
