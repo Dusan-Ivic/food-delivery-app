@@ -9,6 +9,7 @@ import { GrantType, StateStatus, UserType } from "../interfaces/enums";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import { CreateTokenRequestDto } from "../interfaces/token";
+import { Spinner } from "../components/Spinner";
 
 export function Login() {
   const navigate = useNavigate();
@@ -37,11 +38,17 @@ export function Login() {
         navigate("/dashboard");
       }
     }
+  }, [user, status, message]);
 
+  useEffect(() => {
     return () => {
       dispatch(reset());
     };
-  }, [user, status, message]);
+  }, []);
+
+  if (status === StateStatus.Loading) {
+    return <Spinner />;
+  }
 
   return (
     <Row className="d-flex justify-content-center">

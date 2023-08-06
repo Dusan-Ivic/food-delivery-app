@@ -113,20 +113,11 @@ export function StorePage() {
   }, [selectedProduct]);
 
   useEffect(() => {
-    if (!store) {
-      navigate("/");
-    }
-
-    return () => {
-      dispatch(clearProducts());
-      dispatch(closeCart());
-    };
-  }, [store]);
-
-  useEffect(() => {
     if (store) {
       dispatch(getProductsByStore(store.id));
       dispatch(openCart(store.id));
+    } else {
+      navigate("/");
     }
   }, [store]);
 
@@ -139,31 +130,29 @@ export function StorePage() {
       dispatch(clearCartItems());
       setCartVisible(false);
     }
-
-    return () => {
-      dispatch(resetOrdersState());
-    };
   }, [ordersStatus, ordersMessage]);
 
   useEffect(() => {
     if (productsStatus == StateStatus.Error && productsMessage) {
       toast.error(productsMessage);
     }
-
-    return () => {
-      dispatch(resetProductsState());
-    };
   }, [productsStatus, productsMessage]);
 
   useEffect(() => {
     if (storesStatus == StateStatus.Error && storesMessage) {
       toast.error(storesMessage);
     }
-
-    return () => {
-      dispatch(resetStoresState());
-    };
   }, [storesStatus, storesMessage]);
+
+  useEffect(() => {
+    return () => {
+      dispatch(resetOrdersState());
+      dispatch(resetProductsState());
+      dispatch(resetStoresState());
+      dispatch(closeCart());
+      dispatch(clearProducts());
+    };
+  }, []);
 
   const submitOrder = (store: StoreState, items: CartItem[]) => {
     const requestDto: OrderRequestDto = {
@@ -342,6 +331,7 @@ export function StorePage() {
           store={store}
           items={items}
           isOpen={isCartVisible}
+          isLoading={ordersStatus === StateStatus.Loading}
           closeCart={() => setCartVisible(false)}
           removeFromCart={(itemId) => dispatch(removeFromCart(itemId))}
           decreaseQuantity={(itemId) => dispatch(decreaseQuantity(itemId))}

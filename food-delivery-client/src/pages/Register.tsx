@@ -15,6 +15,7 @@ import { toast } from "react-toastify";
 import { RegisterCustomer } from "../components/forms/RegisterCustomer";
 import { RegisterPartner } from "../components/forms/RegisterPartner";
 import { IoArrowBack } from "react-icons/io5";
+import { Spinner } from "../components/Spinner";
 
 interface FormComponentProps {
   onSubmit: (data: CustomerRequestDto | PartnerRequestDto) => void;
@@ -37,11 +38,13 @@ export function Register() {
       toast.success(message);
       navigate("/login");
     }
+  }, [status, message]);
 
+  useEffect(() => {
     return () => {
       dispatch(reset());
     };
-  }, [status, message]);
+  }, []);
 
   const onRegister = (data: CustomerRequestDto | PartnerRequestDto) => {
     switch (registerType) {
@@ -62,6 +65,10 @@ export function Register() {
         return <RegisterPartner onSubmit={onSubmit} />;
     }
   };
+
+  if (status === StateStatus.Loading) {
+    return <Spinner />;
+  }
 
   return (
     <Row className="d-flex justify-content-center">

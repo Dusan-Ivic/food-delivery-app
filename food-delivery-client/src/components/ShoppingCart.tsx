@@ -4,11 +4,13 @@ import { CartItem } from "../interfaces/cart";
 import { ShoppingCartItem } from "./ShoppingCartItem";
 import { formatCurrency } from "../utils/currencyFormatter";
 import { StoreState } from "../interfaces/store";
+import { Spinner } from "./Spinner";
 
 interface ShoppingCartProps {
   store: StoreState;
   items: CartItem[];
   isOpen: boolean;
+  isLoading: boolean;
   closeCart: () => void;
   removeFromCart: (itemId: number) => void;
   decreaseQuantity: (itemId: number) => void;
@@ -23,6 +25,7 @@ export function ShoppingCart({
   removeFromCart,
   decreaseQuantity,
   submitOrder,
+  isLoading,
 }: ShoppingCartProps) {
   const totalPrice = useMemo(
     () =>
@@ -61,12 +64,16 @@ export function ShoppingCart({
               Total price:{" "}
               {formatCurrency(totalPrice + store.deliveryOptions.deliveryFee)}
             </div>
-            <Button
-              onClick={() => submitOrder(store, items)}
-              className="w-100 mt-2 mb-5"
-            >
-              Place an order
-            </Button>
+            {isLoading ? (
+              <Spinner />
+            ) : (
+              <Button
+                onClick={() => submitOrder(store, items)}
+                className="w-100 mt-2 mb-5"
+              >
+                Place an order
+              </Button>
+            )}
           </Stack>
         ) : (
           <p>Your shopping cart is empty. Add some items...</p>
