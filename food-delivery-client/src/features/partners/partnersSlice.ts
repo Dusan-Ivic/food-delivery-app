@@ -6,7 +6,6 @@ import {
   PartnerState,
   VerifyPartnerRequestDto,
 } from "../../interfaces/partner";
-import { convertByteArrayToBlob } from "../../utils/imageConverter";
 
 interface PartnersState {
   partners: PartnerState[];
@@ -87,12 +86,7 @@ export const partnersSlice = createSlice({
       })
       .addCase(getPartners.fulfilled, (state, action) => {
         state.status = StateStatus.Success;
-        state.partners = action.payload.map((partner) => {
-          return {
-            ...partner,
-            imageData: convertByteArrayToBlob(partner.imageData) ?? null,
-          };
-        });
+        state.partners = action.payload;
       })
       .addCase(verifyPartner.pending, (state) => {
         state.status = StateStatus.Loading;
@@ -105,11 +99,7 @@ export const partnersSlice = createSlice({
         state.status = StateStatus.Success;
         state.partners = state.partners.map((partner) => {
           if (partner.id === action.payload.id) {
-            const responseDto = action.payload;
-            return {
-              ...responseDto,
-              imageData: convertByteArrayToBlob(responseDto.imageData),
-            };
+            return action.payload;
           }
           return partner;
         });
