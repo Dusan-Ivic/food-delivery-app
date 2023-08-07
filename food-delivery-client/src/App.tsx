@@ -25,6 +25,33 @@ function App() {
   );
 
   useEffect(() => {
+    // Mechanism for refreshing access token before it expires
+    let expirationTimer: number | undefined;
+
+    if (refreshToken && accessToken) {
+      const expirationTimestamp = accessToken.issuedAt + accessToken.expiresIn;
+      const currentTimestamp = Math.floor(Date.now() / 1000);
+      const remainingTime = expirationTimestamp - currentTimestamp;
+
+      const refreshThreshold = import.meta.env.VITE_REFRESH_THRESHOLD;
+      const setThreshold =
+        remainingTime < refreshThreshold ? 0 : refreshThreshold;
+
+      expirationTimer = setTimeout(() => {
+        const requestDto: CreateTokenRequestDto = {
+          grantType: GrantType.RefreshToken,
+          refreshToken: refreshToken,
+        };
+        dispatch(generateToken(requestDto));
+      }, (expirationTimestamp - currentTimestamp - setThreshold) * 1000);
+    }
+
+    return () => {
+      clearTimeout(expirationTimer);
+    };
+  }, [refreshToken, accessToken]);
+
+  useEffect(() => {
     if (refreshToken && !accessToken) {
       const requestDto: CreateTokenRequestDto = {
         grantType: GrantType.RefreshToken,

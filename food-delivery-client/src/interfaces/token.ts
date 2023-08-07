@@ -12,6 +12,7 @@ export interface TokenResponseDto {
   accessToken: string;
   refreshToken: string;
   expiresIn: number;
+  issuedAt: number;
 }
 
 export interface DeleteTokenRequestDto {

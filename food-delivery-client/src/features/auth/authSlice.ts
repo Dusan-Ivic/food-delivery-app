@@ -20,9 +20,15 @@ import {
   DeleteTokenRequestDto,
 } from "../../interfaces/token";
 
+interface AccessTokenState {
+  payload: string;
+  issuedAt: number;
+  expiresIn: number;
+}
+
 interface AuthState {
   user: UserState | null;
-  accessToken: string | null;
+  accessToken: AccessTokenState | null;
   refreshToken: string | null;
   status: StateStatus;
   message: string;
@@ -56,7 +62,7 @@ export const getProfile = createAsyncThunk(
   async (_, thunkAPI) => {
     try {
       const { accessToken } = (thunkAPI.getState() as RootState).auth;
-      return await authService.getProfile(accessToken);
+      return await authService.getProfile(accessToken!.payload);
     } catch (error: unknown) {
       let message: string = "";
       if (error instanceof Error) {
@@ -76,7 +82,10 @@ export const logoutUser = createAsyncThunk(
       const requestDto: DeleteTokenRequestDto = {
         refreshToken: refreshToken || "",
       };
-      return await authService.deleteRefreshToken(requestDto, accessToken);
+      return await authService.deleteRefreshToken(
+        requestDto,
+        accessToken!.payload
+      );
     } catch (error: unknown) {
       let message: string = "";
       if (error instanceof Error) {
@@ -135,13 +144,13 @@ export const updateUser = createAsyncThunk(
           return await authService.updateCustomer(
             userId,
             userData as CustomerRequestDto,
-            accessToken
+            accessToken!.payload
           );
         case UserType.Partner:
           return await authService.updatePartner(
             userId,
             userData as PartnerRequestDto,
-            accessToken
+            accessToken!.payload
           );
       }
     } catch (error: unknown) {
@@ -159,7 +168,7 @@ export const uploadImage = createAsyncThunk(
   async (formData: FormData, thunkAPI) => {
     try {
       const { accessToken } = (thunkAPI.getState() as RootState).auth;
-      return await authService.uploadImage(formData, accessToken);
+      return await authService.uploadImage(formData, accessToken!.payload);
     } catch (error: unknown) {
       let message: string = "";
       if (error instanceof Error) {
@@ -175,7 +184,7 @@ export const removeImage = createAsyncThunk(
   async (_, thunkAPI) => {
     try {
       const { accessToken } = (thunkAPI.getState() as RootState).auth;
-      return await authService.removeImage(accessToken);
+      return await authService.removeImage(accessToken!.payload);
     } catch (error: unknown) {
       let message: string = "";
       if (error instanceof Error) {
@@ -191,7 +200,10 @@ export const changePassword = createAsyncThunk(
   async (passwordData: ChangePasswordRequestDto, thunkAPI) => {
     try {
       const { accessToken } = (thunkAPI.getState() as RootState).auth;
-      return await authService.changePassword(passwordData, accessToken);
+      return await authService.changePassword(
+        passwordData,
+        accessToken!.payload
+      );
     } catch (error: unknown) {
       let message: string = "";
       if (error instanceof Error) {
@@ -226,7 +238,11 @@ export const authSlice = createSlice({
       })
       .addCase(generateToken.fulfilled, (state, action) => {
         state.status = StateStatus.Success;
-        state.accessToken = action.payload.accessToken;
+        state.accessToken = {
+          payload: action.payload.accessToken,
+          issuedAt: action.payload.issuedAt,
+          expiresIn: action.payload.expiresIn,
+        };
         state.refreshToken = action.payload.refreshToken;
         localStorage.setItem("refreshToken", state.refreshToken);
       })

@@ -125,6 +125,7 @@ namespace FoodDeliveryApi.Services
                 {
                     AccessToken = accessTokenPayload,
                     ExpiresIn = accessTokenExpiresIn,
+                    IssuedAt = DateTimeOffset.UtcNow.ToUnixTimeSeconds()
                 };
 
                 RefreshToken? existingRefreshToken = await _authRepository.GetRefreshTokenByUser(user.Id);
@@ -215,7 +216,8 @@ namespace FoodDeliveryApi.Services
                 {
                     AccessToken = accessToken,
                     RefreshToken = existingRefreshToken.Token,
-                    ExpiresIn = accessTokenExpiresIn
+                    ExpiresIn = accessTokenExpiresIn,
+                    IssuedAt = DateTimeOffset.UtcNow.ToUnixTimeSeconds()
                 };
 
                 return responseDto;

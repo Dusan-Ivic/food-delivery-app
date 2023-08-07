@@ -41,7 +41,10 @@ export const createStore = createAsyncThunk(
         const partner = user as PartnerState;
         if (partner.status === PartnerStatus.Accepted) {
           const { accessToken } = (thunkAPI.getState() as RootState).auth;
-          return await storesService.createStore(storeData, accessToken);
+          return await storesService.createStore(
+            storeData,
+            accessToken!.payload
+          );
         }
       }
       return thunkAPI.rejectWithValue(
@@ -72,7 +75,7 @@ export const uploadImage = createAsyncThunk(
           return await storesService.uploadImage(
             storeId,
             formData,
-            accessToken
+            accessToken!.payload
           );
         }
       }
@@ -104,7 +107,7 @@ export const updateStore = createAsyncThunk(
           return await storesService.updateStore(
             storeId,
             requestDto,
-            accessToken
+            accessToken!.payload
           );
         }
       }

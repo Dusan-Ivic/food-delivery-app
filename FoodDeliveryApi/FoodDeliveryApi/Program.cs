@@ -4,7 +4,6 @@ using FoodDeliveryApi.Data;
 using FoodDeliveryApi.Interfaces.Repositories;
 using FoodDeliveryApi.Interfaces.Services;
 using FoodDeliveryApi.Mapping;
-using FoodDeliveryApi.Middleware;
 using FoodDeliveryApi.Models;
 using FoodDeliveryApi.Repositories;
 using FoodDeliveryApi.Services;
@@ -92,8 +91,6 @@ builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("VerifiedPartner", policy => policy.RequireClaim("Status", "Accepted"));
 });
-
-builder.Services.AddSingleton<IAuthorizationMiddlewareResultHandler, CustomAuthMiddlewareResultHandler>();
 
 builder.Services.AddScoped<IAdminService, AdminService>();
 builder.Services.AddScoped<IAdminRepository, AdminRepository>();
