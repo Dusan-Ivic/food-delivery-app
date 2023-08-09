@@ -9,7 +9,7 @@ interface StoreListProps {
 
 export function StoreList({ stores }: StoreListProps) {
   return (
-    <Row md={2} xs={1} lg={2} xl={3} className="g-3 justify-content-center">
+    <Row xs={1} md={2} lg={2} xl={4} className="g-3 justify-content-center">
       {stores.map((store) => (
         <Col key={store.id}>
           <Link to={`/stores/${store.id}`} style={{ textDecoration: "none" }}>

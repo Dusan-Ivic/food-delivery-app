@@ -32,11 +32,14 @@ export function Header() {
     <Navbar sticky="top" className="bg-white shadow-sm mb-3">
       <Container>
         <Navbar.Brand to="/" as={NavLink}>
-          FoodDelivery
+          FoodDeliverNow
         </Navbar.Brand>
         <Nav className="me-auto">
           <Nav.Link to="/" as={NavLink}>
             Home
+          </Nav.Link>
+          <Nav.Link to="/stores" as={NavLink}>
+            Stores
           </Nav.Link>
         </Nav>
         <Nav>
