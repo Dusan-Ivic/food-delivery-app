@@ -9,7 +9,7 @@ import { Link } from "react-router-dom";
 export function Home() {
   return (
     <Container>
-      <Row xs={1} sm={1} md={2}>
+      <Row xs={1} sm={1} md={1} lg={2}>
         <Col className="d-flex justify-content-center">
           <img src="/images/food-delivery.png" className="w-100" />
         </Col>
