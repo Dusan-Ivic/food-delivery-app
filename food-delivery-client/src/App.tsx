@@ -9,6 +9,7 @@ import {
   Store,
   Orders,
   Dashboard,
+  Stores,
 } from "./pages";
 import { PrivateRoute } from "./components/PrivateRoute";
 import { ToastContainer } from "react-toastify";
@@ -78,6 +79,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/stores" element={<Stores />} />
           <Route path="/stores/:id" element={<Store />} />
           <Route
             path="/orders"
