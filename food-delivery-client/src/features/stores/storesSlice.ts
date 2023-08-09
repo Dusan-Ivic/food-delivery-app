@@ -19,7 +19,7 @@ const initialState: StoresState = {
 
 export const getStores = createAsyncThunk(
   "stores/get-stores",
-  async (partnerId: number | null, thunkAPI) => {
+  async (partnerId: number | undefined, thunkAPI) => {
     try {
       return await storesService.getStores(partnerId ?? null);
     } catch (error: unknown) {

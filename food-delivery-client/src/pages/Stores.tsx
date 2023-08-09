@@ -11,7 +11,7 @@ export function Stores() {
   const { stores, status, message } = useAppSelector((state) => state.stores);
 
   useEffect(() => {
-    dispatch(getStores(null));
+    dispatch(getStores());
 
     return () => {
       dispatch(reset());

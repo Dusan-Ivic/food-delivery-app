@@ -45,7 +45,7 @@ export function AdminDashboard() {
 
   useEffect(() => {
     if (user) {
-      dispatch(getStores(null));
+      dispatch(getStores());
       dispatch(getPartners());
       dispatch(getOrders());
     }
