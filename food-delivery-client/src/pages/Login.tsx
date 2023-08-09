@@ -33,7 +33,7 @@ export function Login() {
 
     if (user) {
       if (user.userType == UserType.Customer) {
-        navigate("/");
+        navigate("/stores");
       } else {
         navigate("/dashboard");
       }
