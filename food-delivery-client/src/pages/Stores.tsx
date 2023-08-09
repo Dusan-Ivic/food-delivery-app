@@ -26,7 +26,7 @@ export function Stores() {
 
   return (
     <div>
-      <h1 className="text-center mt-3 mb-4">Available Stores</h1>
+      <h1 className="text-center mt-3 mb-4 display-4">Available Stores</h1>
 
       {status === StateStatus.Loading ? (
         <Spinner />
