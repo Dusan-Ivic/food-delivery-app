@@ -16,6 +16,8 @@ import { RegisterCustomer } from "../components/forms/RegisterCustomer";
 import { RegisterPartner } from "../components/forms/RegisterPartner";
 import { IoArrowBack } from "react-icons/io5";
 import { Spinner } from "../components/Spinner";
+import { FaRegHandshake } from "react-icons/fa";
+import { AiOutlineUser } from "react-icons/ai";
 
 interface FormComponentProps {
   onSubmit: (data: CustomerRequestDto | PartnerRequestDto) => void;
@@ -97,18 +99,18 @@ export function Register() {
             <p className="text-center mt-4">
               Create new customer or partner account
             </p>
-            <div className="d-flex flex-column justify-content-center align-items-center row-gap-1">
+            <div className="d-flex flex-column justify-content-center align-items-center gap-2">
               <Button
                 onClick={() => setRegisterType(AllowedUserType.Customer)}
-                className="w-75"
+                className="w-50"
               >
-                Customer
+                <AiOutlineUser /> Customer
               </Button>
               <Button
                 onClick={() => setRegisterType(AllowedUserType.Partner)}
-                className="w-75"
+                className="w-50"
               >
-                Partner
+                <FaRegHandshake /> Partner
               </Button>
             </div>
           </>
