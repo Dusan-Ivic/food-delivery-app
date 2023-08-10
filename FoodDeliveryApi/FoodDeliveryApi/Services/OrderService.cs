@@ -63,7 +63,12 @@ namespace FoodDeliveryApi.Services
 
             if (store == null)
             {
-                throw new ResourceNotFoundException($"Store with this id doesn't exist");
+                throw new ResourceNotFoundException("Store with this id doesn't exist");
+            }
+
+            if (store.City != order.City)
+            {
+                throw new AddressNotSupportedException("This store doesn't deliver to your address.");
             }
 
             foreach (OrderItem orderItem in order.Items)
