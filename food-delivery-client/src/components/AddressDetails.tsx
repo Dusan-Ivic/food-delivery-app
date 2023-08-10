@@ -5,7 +5,7 @@ import * as Yup from "yup";
 import { AddressInfo } from "../interfaces/user";
 
 interface AddressDetailsProps {
-  data: AddressInfo;
+  data: AddressInfo | null;
   onSubmit: (data: AddressInfo) => void;
 }
 
@@ -29,9 +29,9 @@ export function AddressDetails({ data, onSubmit }: AddressDetailsProps) {
   } = useForm<AddressInfo>({
     mode: "all",
     defaultValues: {
-      address: data.address,
-      city: data.city,
-      postalCode: data.postalCode,
+      address: data?.address || "",
+      city: data?.city || "",
+      postalCode: data?.postalCode || "",
     },
     resolver: yupResolver(validationSchema),
   });

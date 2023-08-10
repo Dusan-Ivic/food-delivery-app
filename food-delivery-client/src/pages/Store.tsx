@@ -47,7 +47,8 @@ import { FormModal, FormProps } from "../components/FormModal";
 import { StoreForm } from "../components/forms/StoreForm";
 import { ProductForm } from "../components/forms/ProductForm";
 import { Spinner } from "../components/Spinner";
-import { CustomerState } from "../interfaces/customer";
+import { AddressInfo } from "../interfaces/user";
+import { useLocalStorage } from "../hooks/useLocalStorage";
 
 interface ModalProps {
   isVisible: boolean;
@@ -89,10 +90,11 @@ export function StorePage() {
     action: null,
     payload: null,
   });
-
   const [isStoreModalVisible, setStoreModalVisible] = useState<boolean>(false);
   const [isProductModalVisible, setProductModalVisible] =
     useState<boolean>(false);
+  const [deliveryAddress, setDeliveryAddress] =
+    useLocalStorage<AddressInfo | null>("deliveryAddress", null);
 
   const store = useMemo<StoreState | null>(() => {
     const numberId = Number(id);
@@ -162,9 +164,9 @@ export function StorePage() {
         productId: item.id,
         quantity: item.quantity,
       })),
-      address: (user as CustomerState)?.address,
-      city: (user as CustomerState)?.city,
-      postalCode: (user as CustomerState)?.postalCode,
+      address: deliveryAddress?.address || "",
+      city: deliveryAddress?.city || "",
+      postalCode: deliveryAddress?.postalCode || "",
     };
 
     dispatch(createOrder(requestDto));
