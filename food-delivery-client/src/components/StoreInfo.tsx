@@ -4,6 +4,7 @@ import { TbTruckDelivery, TbClockHour4 } from "react-icons/tb";
 import { formatCurrency } from "../utils/currencyFormatter";
 import { useRef } from "react";
 import { getFullImageUrl } from "../utils/imageUrlGenerator";
+import { FaLocationDot } from "react-icons/fa6";
 
 interface StoreInfoProps {
   store: StoreState;
@@ -74,14 +75,19 @@ export function StoreInfo({
             <span className="ms-2">{store.category}</span>
           </Card.Title>
           <div>{store.description}</div>
-          <div className="d-flex align-items-center column-gap-3 text-warning">
-            <div className="d-flex align-items-center column-gap-1">
-              <TbClockHour4 />
-              {store.deliveryOptions.deliveryTimeInMinutes}'
+          <div className="d-flex justify-content-between">
+            <div className="d-flex align-items-center column-gap-3 text-warning">
+              <div className="d-flex align-items-center column-gap-1">
+                <TbClockHour4 />
+                {store.deliveryOptions.deliveryTimeInMinutes}'
+              </div>
+              <div className="d-flex align-items-center column-gap-1">
+                <TbTruckDelivery />
+                <div>{formatCurrency(store.deliveryOptions.deliveryFee)}</div>
+              </div>
             </div>
-            <div className="d-flex align-items-center column-gap-1">
-              <TbTruckDelivery />
-              <div>{formatCurrency(store.deliveryOptions.deliveryFee)}</div>
+            <div className="d-flex align-items-center gap-2">
+              <FaLocationDot /> <span>{store.city}</span>
             </div>
           </div>
         </Card.Body>

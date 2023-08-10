@@ -3,14 +3,9 @@ import { StoreRequestDto, StoreResponseDto } from "../../interfaces/store";
 import { ImageResponseDto } from "../../interfaces/image";
 import apiClient from "../../config/apiClient";
 
-const getStores = async (
-  partnerId: number | null
-): Promise<StoreResponseDto[]> => {
+const getStores = async (): Promise<StoreResponseDto[]> => {
   try {
-    const query = partnerId ? `?partnerId=${partnerId}` : "";
-    const response = await apiClient.get<StoreResponseDto[]>(
-      `/api/stores${query}`
-    );
+    const response = await apiClient.get<StoreResponseDto[]>("/api/stores");
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
@@ -27,6 +22,23 @@ const getStoresByPartner = async (
   try {
     const response = await apiClient.get<StoreResponseDto[]>(
       `/api/stores?partnerId=${partnerId}`
+    );
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw new Error(error.response?.data.message);
+    } else {
+      throw new Error("Unknown error occurred.");
+    }
+  }
+};
+
+const getStoresByCity = async (
+  cityName: string
+): Promise<StoreResponseDto[]> => {
+  try {
+    const response = await apiClient.get<StoreResponseDto[]>(
+      `/api/stores?city=${cityName}`
     );
     return response.data;
   } catch (error) {
@@ -116,6 +128,7 @@ const updateStore = async (
 const storesService = {
   getStores,
   getStoresByPartner,
+  getStoresByCity,
   createStore,
   uploadImage,
   updateStore,

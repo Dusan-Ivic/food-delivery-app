@@ -39,7 +39,7 @@ export function PartnerDashboard() {
 
   useEffect(() => {
     if (user) {
-      dispatch(getStores(user.id));
+      dispatch(getStores({ partnerId: user.id }));
       dispatch(getOrders());
     }
 

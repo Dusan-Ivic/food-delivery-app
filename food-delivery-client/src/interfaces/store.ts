@@ -27,3 +27,8 @@ export interface StoreState extends StoreBase {
   partnerId: number;
   image: string | null;
 }
+
+export interface GetStoresRequestDto {
+  partnerId?: number;
+  city?: string;
+}
