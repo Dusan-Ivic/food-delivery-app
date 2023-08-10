@@ -1,6 +1,7 @@
 import { Card } from "react-bootstrap";
 import { StoreState } from "../interfaces/store";
 import { getFullImageUrl } from "../utils/imageUrlGenerator";
+import { FaLocationDot } from "react-icons/fa6";
 
 interface StoreItemProps {
   store: StoreState;
@@ -24,6 +25,17 @@ export function StoreItem({ store }: StoreItemProps) {
           height="200px"
           style={{ objectFit: "cover" }}
         />
+        <div
+          className="d-flex align-items-center gap-1 text-white"
+          style={{
+            position: "absolute",
+            bottom: 5,
+            right: 5,
+            filter: "drop-shadow(0px 3px 4px rgba(0, 0, 0, 0.6))",
+          }}
+        >
+          <FaLocationDot /> <span>{store.city}</span>
+        </div>
         <div
           style={{
             position: "absolute",
