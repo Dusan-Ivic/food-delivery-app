@@ -47,6 +47,7 @@ import { FormModal, FormProps } from "../components/FormModal";
 import { StoreForm } from "../components/forms/StoreForm";
 import { ProductForm } from "../components/forms/ProductForm";
 import { Spinner } from "../components/Spinner";
+import { CustomerState } from "../interfaces/customer";
 
 interface ModalProps {
   isVisible: boolean;
@@ -161,6 +162,9 @@ export function StorePage() {
         productId: item.id,
         quantity: item.quantity,
       })),
+      address: (user as CustomerState)?.address,
+      city: (user as CustomerState)?.city,
+      postalCode: (user as CustomerState)?.postalCode,
     };
 
     dispatch(createOrder(requestDto));

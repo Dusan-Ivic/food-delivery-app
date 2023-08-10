@@ -136,23 +136,54 @@ export function OrderModal({
                   Delivery fee: {formatCurrency(order.deliveryFee)}
                 </div>
               </Col>
-              <Col className="d-flex flex-column justify-content-between">
-                <div className="text-center">
-                  {order.orderStatus === OrderStatus.Pending &&
-                    getDeliveryTime(order).isAfter() && (
-                      <>Delivering in {getFormattedDeliveryTime}</>
-                    )}
+              <Col className="d-flex flex-column justify-content-center align-items-baseline">
+                <div>
+                  {order.orderStatus === OrderStatus.Pending && (
+                    <>
+                      <div>
+                        Delivering to:
+                        <div className="text-muted">
+                          {order.address}, {order.city}
+                        </div>
+                      </div>
+                      <div>In: {getFormattedDeliveryTime}</div>
+                    </>
+                  )}
+                  {order.orderStatus === OrderStatus.Completed && (
+                    <>
+                      <div>
+                        Delivered to:
+                        <div className="text-muted">
+                          {order.address}, {order.city}
+                        </div>
+                      </div>
+                      <div>{getDeliveryTime(order).from(currentTime)}</div>
+                    </>
+                  )}
+                  {order.orderStatus === OrderStatus.Canceled && (
+                    <>
+                      <div>
+                        Delivery to:
+                        <div className="text-muted">
+                          {order.address}, {order.city}
+                        </div>
+                      </div>
+                      <div className="text-danger">Canceled</div>
+                    </>
+                  )}
                 </div>
-                {canCancelOrder && (
-                  <Button
-                    onClick={() => onCancelOrder!(order.id)}
-                    variant="danger text-white d-flex justify-content-center align-items-center"
-                  >
-                    Cancel Order <ImCancelCircle className="ms-2 fs-5" />
-                  </Button>
-                )}
               </Col>
             </Row>
+            {canCancelOrder && (
+              <Row>
+                <Button
+                  onClick={() => onCancelOrder!(order.id)}
+                  variant="danger text-white d-flex justify-content-center align-items-center"
+                >
+                  Cancel Order <ImCancelCircle className="ms-2 fs-5" />
+                </Button>
+              </Row>
+            )}
           </Stack>
         </Modal.Body>
       </Modal>
