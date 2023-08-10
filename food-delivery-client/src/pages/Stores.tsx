@@ -149,7 +149,7 @@ export function Stores() {
 
         {selectedCity || selectedCategory ? (
           <Col>
-            <h1 className="text-center mt-3 mb-4">Filtered Stores</h1>
+            <h1 className="text-center mt-3 mb-4 display-4">Filtered Stores</h1>
             {status === StateStatus.Loading ? (
               <Spinner />
             ) : (
@@ -166,7 +166,11 @@ export function Stores() {
           </Col>
         ) : (
           <Col>
-            <h1 className="text-center mt-3 mb-4">All Stores</h1>
+            <h1 className="text-center mt-3 mb-4 display-4">
+              {user && user.userType === UserType.Customer
+                ? `Stores delivering to ${deliveryAddress?.city}`
+                : "Available Stores"}
+            </h1>
             {status === StateStatus.Loading ? (
               <Spinner />
             ) : (
@@ -175,7 +179,9 @@ export function Stores() {
                   <StoreList stores={stores} />
                 ) : (
                   <p className="text-center mt-4">
-                    There are currently no registered stores
+                    {user && user.userType === UserType.Customer
+                      ? `There are currently no stores delivering to ${deliveryAddress?.city}`
+                      : "There are currently no registered stores"}
                   </p>
                 )}
               </>
