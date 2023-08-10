@@ -33,16 +33,16 @@ export function Stores() {
     } else {
       dispatch(getStores());
     }
-
-    return () => {
-      dispatch(reset());
-    };
   }, [deliveryAddress]);
 
   useEffect(() => {
     if (status == StateStatus.Error && message) {
       toast.error(message);
     }
+
+    return () => {
+      dispatch(reset());
+    };
   }, [status, message]);
 
   const DeliveryAddressFormComponent = ({
@@ -57,8 +57,8 @@ export function Stores() {
       {user && user.userType === UserType.Customer && (
         <div className="d-flex justify-content-center">
           <div
-            className="d-flex gap-1 align-items-center"
-            style={{ cursor: "pointer" }}
+            className="d-flex gap-1 align-items-center px-2 py-2 rounded"
+            style={{ cursor: "pointer", backgroundColor: "#ccc" }}
             onClick={() => setAddressModalVisible(true)}
           >
             <FaLocationDot style={{ fontSize: "24px" }} />
@@ -83,9 +83,7 @@ export function Stores() {
             ) : (
               <p className="text-center mt-4">
                 {user && user.userType === UserType.Customer
-                  ? `There are currently no stores delivering to ${
-                      (user as CustomerState).city
-                    }`
+                  ? `There are currently no stores delivering to ${deliveryAddress?.city}`
                   : "There are currently no registered stores"}
               </p>
             )}
