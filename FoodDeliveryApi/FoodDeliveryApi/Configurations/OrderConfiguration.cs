@@ -26,6 +26,12 @@ namespace FoodDeliveryApi.Configurations
             builder.HasOne(x => x.Store).WithMany(x => x.Orders).HasForeignKey(x => x.StoreId);
 
             builder.Ignore(x => x.OrderStatus);
+
+            builder.Property(x => x.Address).IsRequired().HasMaxLength(100);
+
+            builder.Property(x => x.City).IsRequired().HasMaxLength(50);
+
+            builder.Property(x => x.PostalCode).IsRequired().HasMaxLength(10);
         }
     }
 

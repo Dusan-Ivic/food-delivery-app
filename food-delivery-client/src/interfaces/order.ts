@@ -16,15 +16,20 @@ export interface OrderItemResponseDto {
   productImage: string | null;
 }
 
-export interface OrderRequestDto {
+export interface OrderBase {
   storeId: number;
+  address: string;
+  city: string;
+  postalCode: string;
+}
+
+export interface OrderRequestDto extends OrderBase {
   items: OrderItemRequestDto[];
 }
 
-export interface OrderResponseDto {
+export interface OrderResponseDto extends OrderBase {
   id: number;
   customerId: number;
-  storeId: number;
   store: StoreResponseDto;
   createdAt: Date;
   itemsPrice: number;
@@ -44,10 +49,9 @@ export interface OrderItemState {
   productImage: string | null;
 }
 
-export interface OrderState {
+export interface OrderState extends OrderBase {
   id: number;
   customerId: number;
-  storeId: number;
   store: StoreResponseDto;
   createdAt: Date;
   itemsPrice: number;

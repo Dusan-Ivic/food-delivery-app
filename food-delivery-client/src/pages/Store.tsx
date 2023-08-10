@@ -47,6 +47,10 @@ import { FormModal, FormProps } from "../components/FormModal";
 import { StoreForm } from "../components/forms/StoreForm";
 import { ProductForm } from "../components/forms/ProductForm";
 import { Spinner } from "../components/Spinner";
+import { AddressInfo } from "../interfaces/user";
+import { useLocalStorage } from "../hooks/useLocalStorage";
+import { FaLocationDot } from "react-icons/fa6";
+import { CustomerState } from "../interfaces/customer";
 
 interface ModalProps {
   isVisible: boolean;
@@ -88,10 +92,21 @@ export function StorePage() {
     action: null,
     payload: null,
   });
-
   const [isStoreModalVisible, setStoreModalVisible] = useState<boolean>(false);
   const [isProductModalVisible, setProductModalVisible] =
     useState<boolean>(false);
+  const [deliveryAddress, setDeliveryAddress] =
+    useLocalStorage<AddressInfo | null>("deliveryAddress", null);
+
+  useEffect(() => {
+    if (!deliveryAddress && user && user.userType === UserType.Customer) {
+      setDeliveryAddress({
+        address: (user as CustomerState).address,
+        city: (user as CustomerState).city,
+        postalCode: (user as CustomerState).postalCode,
+      });
+    }
+  }, [deliveryAddress]);
 
   const store = useMemo<StoreState | null>(() => {
     const numberId = Number(id);
@@ -161,6 +176,9 @@ export function StorePage() {
         productId: item.id,
         quantity: item.quantity,
       })),
+      address: deliveryAddress?.address || "",
+      city: deliveryAddress?.city || "",
+      postalCode: deliveryAddress?.postalCode || "",
     };
 
     dispatch(createOrder(requestDto));
@@ -255,6 +273,16 @@ export function StorePage() {
             <Link onClick={() => history.back()} to="" className="text-reset">
               <IoArrowBack className="fs-3" />
             </Link>
+
+            {user && user.userType === UserType.Customer && (
+              <div className="d-flex justify-content-center">
+                <div className="d-flex gap-1 align-items-center">
+                  <FaLocationDot style={{ fontSize: "24px" }} />
+                  <div>{`${deliveryAddress?.address}, ${deliveryAddress?.city}`}</div>
+                </div>
+              </div>
+            )}
+
             {canManageCart && (
               <Button
                 onClick={() => setCartVisible(true)}

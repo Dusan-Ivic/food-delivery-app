@@ -62,6 +62,10 @@ namespace FoodDeliveryApi.Controllers
             {
                 return NotFound(new ErrorResponseDto() { Message = ex.Message });
             }
+            catch (AddressNotSupportedException ex)
+            {
+                return BadRequest(new ErrorResponseDto() { Message = ex.Message });
+            }
             catch (InsufficientQuantityException ex)
             {
                 return Conflict(new ErrorResponseDto() { Message = ex.Message });
@@ -93,7 +97,10 @@ namespace FoodDeliveryApi.Controllers
             }
             catch (ActionNotAllowedException ex)
             {
-                return Unauthorized(new ErrorResponseDto() { Message = ex.Message });
+                return StatusCode(StatusCodes.Status403Forbidden, new ErrorResponseDto()
+                {
+                    Message = ex.Message
+                });
             }
             catch (OrderCancellationException ex)
             {

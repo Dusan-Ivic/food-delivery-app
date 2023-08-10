@@ -1,6 +1,10 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { PartnerStatus, StateStatus, UserType } from "../../interfaces/enums";
-import { StoreRequestDto, StoreState } from "../../interfaces/store";
+import {
+  GetStoresRequestDto,
+  StoreRequestDto,
+  StoreState,
+} from "../../interfaces/store";
 import { RootState } from "../../app/store";
 import storesService from "./storesService";
 import { PartnerState } from "../../interfaces/partner";
@@ -19,9 +23,15 @@ const initialState: StoresState = {
 
 export const getStores = createAsyncThunk(
   "stores/get-stores",
-  async (partnerId: number | undefined, thunkAPI) => {
+  async (requestDto: GetStoresRequestDto | undefined, thunkAPI) => {
     try {
-      return await storesService.getStores(partnerId ?? null);
+      if (requestDto && requestDto.partnerId) {
+        return await storesService.getStoresByPartner(requestDto.partnerId);
+      } else if (requestDto && requestDto.city) {
+        return await storesService.getStoresByCity(requestDto.city);
+      } else {
+        return await storesService.getStores();
+      }
     } catch (error: unknown) {
       let message: string = "";
       if (error instanceof Error) {
