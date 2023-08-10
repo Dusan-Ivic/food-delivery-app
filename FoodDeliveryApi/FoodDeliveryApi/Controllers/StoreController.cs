@@ -24,9 +24,9 @@ namespace FoodDeliveryApi.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetStores([FromQuery] long? partnerId = null)
+        public async Task<IActionResult> GetStores([FromQuery] long? partnerId = null, string? city = null)
         {
-            List<GetStoreResponseDto> responseDto = await _storeService.GetStores(partnerId ?? null);
+            List<GetStoreResponseDto> responseDto = await _storeService.GetStores(partnerId ?? null, city ?? null);
 
             return Ok(responseDto);
         }
