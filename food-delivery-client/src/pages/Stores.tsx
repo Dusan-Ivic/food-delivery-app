@@ -1,34 +1,26 @@
 import { useEffect, useMemo, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { getStores, reset } from "../features/stores/storesSlice";
-import { StateStatus, UserType } from "../interfaces/enums";
+import { StateStatus } from "../interfaces/enums";
 import { toast } from "react-toastify";
 import { Spinner } from "../components/Spinner";
 import { StoreList } from "../components/StoreList";
 import { FaLocationDot } from "react-icons/fa6";
-import { CustomerState } from "../interfaces/customer";
 import { Col, ListGroup, ListGroupItem, Row } from "react-bootstrap";
 import { useDeliveryLocation } from "../context/location/useDeliveryLocation";
 
 export function Stores() {
   const dispatch = useAppDispatch();
-  const { user } = useAppSelector((state) => state.auth);
   const { stores, status, message } = useAppSelector((state) => state.stores);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [selectedCity, setSelectedCity] = useState<string | null>(null);
-  const { deliveryLocation, changeLocation, openLocationModal } =
-    useDeliveryLocation();
+  const { deliveryLocation, openLocationModal } = useDeliveryLocation();
 
   useEffect(() => {
     if (deliveryLocation) {
       dispatch(getStores({ city: deliveryLocation.city }));
-    } else if (user && user.userType === UserType.Customer) {
-      changeLocation({
-        address: (user as CustomerState).address,
-        city: (user as CustomerState).city,
-        postalCode: (user as CustomerState).postalCode,
-      });
     } else {
+      openLocationModal();
       dispatch(getStores());
     }
   }, [deliveryLocation]);
@@ -122,18 +114,20 @@ export function Stores() {
       </Col>
 
       <Col>
-        {user && user.userType === UserType.Customer && (
-          <div className="d-flex justify-content-center">
-            <div
-              className="d-flex gap-1 align-items-center px-2 py-2 rounded"
-              style={{ cursor: "pointer", backgroundColor: "#ccc" }}
-              onClick={() => openLocationModal()}
-            >
-              <FaLocationDot style={{ fontSize: "24px" }} />
-              <div>{`${deliveryLocation?.address}, ${deliveryLocation?.city}`}</div>
-            </div>
+        <div className="d-flex justify-content-center">
+          <div
+            className="d-flex gap-1 align-items-center px-2 py-2 rounded"
+            style={{ cursor: "pointer" }}
+            onClick={() => openLocationModal()}
+          >
+            <FaLocationDot style={{ fontSize: "24px" }} />
+            {deliveryLocation ? (
+              <div className="lead">{`${deliveryLocation.address}, ${deliveryLocation.city}`}</div>
+            ) : (
+              <div className="lead">Set location</div>
+            )}
           </div>
-        )}
+        </div>
 
         {selectedCity || selectedCategory ? (
           <Col>
@@ -155,9 +149,9 @@ export function Stores() {
         ) : (
           <Col>
             <h1 className="text-center mt-3 mb-4 display-4">
-              {user && user.userType === UserType.Customer
+              {deliveryLocation
                 ? `Stores delivering to ${deliveryLocation?.city}`
-                : "Available Stores"}
+                : "All available Stores"}
             </h1>
             {status === StateStatus.Loading ? (
               <Spinner />
@@ -167,7 +161,7 @@ export function Stores() {
                   <StoreList stores={stores} />
                 ) : (
                   <p className="text-center mt-4">
-                    {user && user.userType === UserType.Customer
+                    {deliveryLocation
                       ? `There are currently no stores delivering to ${deliveryLocation?.city}`
                       : "There are currently no registered stores"}
                   </p>

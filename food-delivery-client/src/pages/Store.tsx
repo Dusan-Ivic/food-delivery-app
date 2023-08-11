@@ -18,7 +18,7 @@ import { HiOutlineShoppingCart } from "react-icons/hi";
 import { IoMdAddCircleOutline } from "react-icons/io";
 import { BiEdit } from "react-icons/bi";
 import { ProductList } from "../components/ProductList";
-import { Button } from "react-bootstrap";
+import { Button, Col, Row } from "react-bootstrap";
 import { ShoppingCart } from "../components/ShoppingCart";
 import {
   openCart,
@@ -267,61 +267,73 @@ export function StorePage() {
     store && (
       <>
         <div className="mb-4">
-          <div className="d-flex justify-content-between align-items-center mb-3">
-            <Link onClick={() => history.back()} to="" className="text-reset">
-              <IoArrowBack className="fs-3" />
-            </Link>
+          <Row className="d-flex justify-content-between align-items-center mb-3">
+            <Col>
+              <Link onClick={() => history.back()} to="" className="text-reset">
+                <IoArrowBack className="fs-3" />
+              </Link>
+            </Col>
 
-            {user && user.userType === UserType.Customer && (
-              <div className="d-flex justify-content-center">
-                <div className="d-flex gap-1 align-items-center">
-                  <FaLocationDot style={{ fontSize: "24px" }} />
-                  <div>{`${deliveryLocation?.address}, ${deliveryLocation?.city}`}</div>
-                </div>
+            <Col className="d-flex justify-content-center">
+              <div className="d-flex gap-1 align-items-center">
+                <FaLocationDot style={{ fontSize: "24px" }} />
+                {deliveryLocation ? (
+                  <div className="lead">{`${deliveryLocation.address}, ${deliveryLocation.city}`}</div>
+                ) : (
+                  <Link
+                    to="/stores"
+                    className="text-reset text-decoration-none lead"
+                  >
+                    Go back and set location
+                  </Link>
+                )}
               </div>
-            )}
+            </Col>
 
-            {canManageCart && (
-              <Button
-                onClick={() => setCartVisible(true)}
-                className="position-relative"
-              >
-                <HiOutlineShoppingCart className="fs-4" />
-                <div
-                  className="rounded-circle bg-danger d-flex justify-content-center align-items-center"
-                  style={{
-                    color: "white",
-                    width: "1.5rem",
-                    height: "1.5rem",
-                    position: "absolute",
-                    bottom: 0,
-                    right: 0,
-                    transform: "translate(40%, 40%)",
-                  }}
-                >
-                  {totalCartItems}
-                </div>
-              </Button>
-            )}
-            {canManageStore && (
-              <div>
+            <Col className="d-flex justify-content-end">
+              {canManageCart && (
                 <Button
-                  variant="warning"
-                  onClick={() => setStoreModalVisible(true)}
+                  onClick={() => setCartVisible(true)}
                   className="position-relative"
                 >
-                  <BiEdit className="fs-4" />
+                  <HiOutlineShoppingCart className="fs-4" />
+                  <div
+                    className="rounded-circle bg-danger d-flex justify-content-center align-items-center"
+                    style={{
+                      color: "white",
+                      width: "1.5rem",
+                      height: "1.5rem",
+                      position: "absolute",
+                      bottom: 0,
+                      right: 0,
+                      transform: "translate(40%, 40%)",
+                    }}
+                  >
+                    {totalCartItems}
+                  </div>
                 </Button>
-                <Button
-                  variant="success"
-                  onClick={() => setProductModalVisible(true)}
-                  className="position-relative ms-2"
-                >
-                  <IoMdAddCircleOutline className="fs-4" />
-                </Button>
-              </div>
-            )}
-          </div>
+              )}
+              {canManageStore && (
+                <div>
+                  <Button
+                    variant="warning"
+                    onClick={() => setStoreModalVisible(true)}
+                    className="position-relative"
+                  >
+                    <BiEdit className="fs-4" />
+                  </Button>
+                  <Button
+                    variant="success"
+                    onClick={() => setProductModalVisible(true)}
+                    className="position-relative ms-2"
+                  >
+                    <IoMdAddCircleOutline className="fs-4" />
+                  </Button>
+                </div>
+              )}
+            </Col>
+          </Row>
+
           <StoreInfo
             store={store}
             canManageStore={canManageStore}
