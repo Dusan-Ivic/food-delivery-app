@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { getStores, reset } from "../features/stores/storesSlice";
-import { StateStatus } from "../interfaces/enums";
+import { StateStatus, UserType } from "../interfaces/enums";
 import { toast } from "react-toastify";
 import { Spinner } from "../components/Spinner";
 import { StoreList } from "../components/StoreList";
@@ -11,6 +11,7 @@ import { useDeliveryLocation } from "../context/location/useDeliveryLocation";
 
 export function Stores() {
   const dispatch = useAppDispatch();
+  const { user } = useAppSelector((state) => state.auth);
   const { stores, status, message } = useAppSelector((state) => state.stores);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [selectedCity, setSelectedCity] = useState<string | null>(null);
@@ -19,8 +20,10 @@ export function Stores() {
   useEffect(() => {
     if (deliveryLocation) {
       dispatch(getStores({ city: deliveryLocation.city }));
-    } else {
+    } else if (!user || user?.userType === UserType.Customer) {
       openLocationModal();
+      dispatch(getStores());
+    } else {
       dispatch(getStores());
     }
   }, [deliveryLocation]);
@@ -114,20 +117,22 @@ export function Stores() {
       </Col>
 
       <Col>
-        <div className="d-flex justify-content-center">
-          <div
-            className="d-flex gap-1 align-items-center px-2 py-2 rounded"
-            style={{ cursor: "pointer" }}
-            onClick={() => openLocationModal()}
-          >
-            <FaLocationDot style={{ fontSize: "24px" }} />
-            {deliveryLocation ? (
-              <div className="lead">{`${deliveryLocation.address}, ${deliveryLocation.city}`}</div>
-            ) : (
-              <div className="lead">Set location</div>
-            )}
+        {(!user || user?.userType === UserType.Customer) && (
+          <div className="d-flex justify-content-center">
+            <div
+              className="d-flex gap-1 align-items-center px-2 py-2 rounded"
+              style={{ cursor: "pointer" }}
+              onClick={() => openLocationModal()}
+            >
+              <FaLocationDot style={{ fontSize: "24px" }} />
+              {deliveryLocation ? (
+                <div className="lead">{`${deliveryLocation.address}, ${deliveryLocation.city}`}</div>
+              ) : (
+                <div className="lead">Set location</div>
+              )}
+            </div>
           </div>
-        </div>
+        )}
 
         {selectedCity || selectedCategory ? (
           <Col>

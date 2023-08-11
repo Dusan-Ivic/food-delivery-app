@@ -274,21 +274,23 @@ export function StorePage() {
               </Link>
             </Col>
 
-            <Col className="d-flex justify-content-center">
-              <div className="d-flex gap-1 align-items-center">
-                <FaLocationDot style={{ fontSize: "24px" }} />
-                {deliveryLocation ? (
-                  <div className="lead">{`${deliveryLocation.address}, ${deliveryLocation.city}`}</div>
-                ) : (
-                  <Link
-                    to="/stores"
-                    className="text-reset text-decoration-none lead"
-                  >
-                    Go back and set location
-                  </Link>
-                )}
-              </div>
-            </Col>
+            {(!user || user?.userType === UserType.Customer) && (
+              <Col className="d-flex justify-content-center">
+                <div className="d-flex gap-1 align-items-center">
+                  <FaLocationDot style={{ fontSize: "24px" }} />
+                  {deliveryLocation ? (
+                    <div className="lead">{`${deliveryLocation.address}, ${deliveryLocation.city}`}</div>
+                  ) : (
+                    <Link
+                      to="/stores"
+                      className="text-reset text-decoration-none lead"
+                    >
+                      Go back and set location
+                    </Link>
+                  )}
+                </div>
+              </Col>
+            )}
 
             <Col className="d-flex justify-content-end">
               {canManageCart && (
