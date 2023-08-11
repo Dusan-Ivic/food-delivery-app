@@ -47,10 +47,9 @@ import { FormModal, FormProps } from "../components/FormModal";
 import { StoreForm } from "../components/forms/StoreForm";
 import { ProductForm } from "../components/forms/ProductForm";
 import { Spinner } from "../components/Spinner";
-import { AddressInfo } from "../interfaces/user";
-import { useLocalStorage } from "../hooks/useLocalStorage";
 import { FaLocationDot } from "react-icons/fa6";
 import { CustomerState } from "../interfaces/customer";
+import { useDeliveryLocation } from "../context/location/useDeliveryLocation";
 
 interface ModalProps {
   isVisible: boolean;
@@ -95,18 +94,17 @@ export function StorePage() {
   const [isStoreModalVisible, setStoreModalVisible] = useState<boolean>(false);
   const [isProductModalVisible, setProductModalVisible] =
     useState<boolean>(false);
-  const [deliveryAddress, setDeliveryAddress] =
-    useLocalStorage<AddressInfo | null>("deliveryAddress", null);
+  const { deliveryLocation, changeLocation } = useDeliveryLocation();
 
   useEffect(() => {
-    if (!deliveryAddress && user && user.userType === UserType.Customer) {
-      setDeliveryAddress({
+    if (!deliveryLocation && user && user.userType === UserType.Customer) {
+      changeLocation({
         address: (user as CustomerState).address,
         city: (user as CustomerState).city,
         postalCode: (user as CustomerState).postalCode,
       });
     }
-  }, [deliveryAddress]);
+  }, [deliveryLocation]);
 
   const store = useMemo<StoreState | null>(() => {
     const numberId = Number(id);
@@ -176,9 +174,9 @@ export function StorePage() {
         productId: item.id,
         quantity: item.quantity,
       })),
-      address: deliveryAddress?.address || "",
-      city: deliveryAddress?.city || "",
-      postalCode: deliveryAddress?.postalCode || "",
+      address: deliveryLocation?.address || "",
+      city: deliveryLocation?.city || "",
+      postalCode: deliveryLocation?.postalCode || "",
     };
 
     dispatch(createOrder(requestDto));
@@ -278,7 +276,7 @@ export function StorePage() {
               <div className="d-flex justify-content-center">
                 <div className="d-flex gap-1 align-items-center">
                   <FaLocationDot style={{ fontSize: "24px" }} />
-                  <div>{`${deliveryAddress?.address}, ${deliveryAddress?.city}`}</div>
+                  <div>{`${deliveryLocation?.address}, ${deliveryLocation?.city}`}</div>
                 </div>
               </div>
             )}

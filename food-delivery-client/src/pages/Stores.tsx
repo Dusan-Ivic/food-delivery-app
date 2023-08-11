@@ -7,28 +7,23 @@ import { Spinner } from "../components/Spinner";
 import { StoreList } from "../components/StoreList";
 import { FaLocationDot } from "react-icons/fa6";
 import { CustomerState } from "../interfaces/customer";
-import { FormModal, FormProps } from "../components/FormModal";
-import { AddressInfo } from "../interfaces/user";
-import { DeliveryAddressForm } from "../components/forms/DeliveryAddressForm";
-import { useLocalStorage } from "../hooks/useLocalStorage";
 import { Col, ListGroup, ListGroupItem, Row } from "react-bootstrap";
+import { useDeliveryLocation } from "../context/location/useDeliveryLocation";
 
 export function Stores() {
   const dispatch = useAppDispatch();
   const { user } = useAppSelector((state) => state.auth);
   const { stores, status, message } = useAppSelector((state) => state.stores);
-  const [isAddressModalVisible, setAddressModalVisible] =
-    useState<boolean>(false);
-  const [deliveryAddress, setDeliveryAddress] =
-    useLocalStorage<AddressInfo | null>("deliveryAddress", null);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [selectedCity, setSelectedCity] = useState<string | null>(null);
+  const { deliveryLocation, changeLocation, openLocationModal } =
+    useDeliveryLocation();
 
   useEffect(() => {
-    if (deliveryAddress) {
-      dispatch(getStores({ city: deliveryAddress.city }));
+    if (deliveryLocation) {
+      dispatch(getStores({ city: deliveryLocation.city }));
     } else if (user && user.userType === UserType.Customer) {
-      setDeliveryAddress({
+      changeLocation({
         address: (user as CustomerState).address,
         city: (user as CustomerState).city,
         postalCode: (user as CustomerState).postalCode,
@@ -36,7 +31,7 @@ export function Stores() {
     } else {
       dispatch(getStores());
     }
-  }, [deliveryAddress]);
+  }, [deliveryLocation]);
 
   useEffect(() => {
     if (status == StateStatus.Error && message) {
@@ -68,13 +63,6 @@ export function Stores() {
     stores.forEach((store) => citiesSet.add(store.city));
     return Array.from(citiesSet);
   }, [stores]);
-
-  const DeliveryAddressFormComponent = ({
-    data,
-    onSubmit,
-  }: FormProps<AddressInfo>) => {
-    return <DeliveryAddressForm user={user} data={data} onSubmit={onSubmit} />;
-  };
 
   const availableCategories = useMemo(() => {
     const categoriesSet = new Set<string>();
@@ -139,10 +127,10 @@ export function Stores() {
             <div
               className="d-flex gap-1 align-items-center px-2 py-2 rounded"
               style={{ cursor: "pointer", backgroundColor: "#ccc" }}
-              onClick={() => setAddressModalVisible(true)}
+              onClick={() => openLocationModal()}
             >
               <FaLocationDot style={{ fontSize: "24px" }} />
-              <div>{`${deliveryAddress?.address}, ${deliveryAddress?.city}`}</div>
+              <div>{`${deliveryLocation?.address}, ${deliveryLocation?.city}`}</div>
             </div>
           </div>
         )}
@@ -168,7 +156,7 @@ export function Stores() {
           <Col>
             <h1 className="text-center mt-3 mb-4 display-4">
               {user && user.userType === UserType.Customer
-                ? `Stores delivering to ${deliveryAddress?.city}`
+                ? `Stores delivering to ${deliveryLocation?.city}`
                 : "Available Stores"}
             </h1>
             {status === StateStatus.Loading ? (
@@ -180,7 +168,7 @@ export function Stores() {
                 ) : (
                   <p className="text-center mt-4">
                     {user && user.userType === UserType.Customer
-                      ? `There are currently no stores delivering to ${deliveryAddress?.city}`
+                      ? `There are currently no stores delivering to ${deliveryLocation?.city}`
                       : "There are currently no registered stores"}
                   </p>
                 )}
@@ -189,15 +177,6 @@ export function Stores() {
           </Col>
         )}
       </Col>
-
-      <FormModal
-        isVisible={isAddressModalVisible}
-        title="Set delivery address"
-        FormComponent={DeliveryAddressFormComponent}
-        data={deliveryAddress}
-        onSubmit={(data) => setDeliveryAddress(data)}
-        onClose={() => setAddressModalVisible(false)}
-      />
     </Row>
   );
 }
