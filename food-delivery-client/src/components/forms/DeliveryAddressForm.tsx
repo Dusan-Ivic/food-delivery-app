@@ -3,6 +3,7 @@ import { AddressInfo, UserState } from "../../interfaces/user";
 import { useState } from "react";
 import { CustomerState } from "../../interfaces/customer";
 import { AddressDetails } from "../AddressDetails";
+import { UserType } from "../../interfaces/enums";
 
 interface DeliveryAddressFormProps {
   data: AddressInfo | null;
@@ -23,17 +24,20 @@ export function DeliveryAddressForm({
         <Form.Check
           type="radio"
           name="option"
-          value="current"
-          label="Use address from your profile"
-          onChange={(e) => setOption(e.target.value)}
-        />
-        <Form.Check
-          type="radio"
-          name="option"
           value="new"
           label="Choose new address"
           onChange={(e) => setOption(e.target.value)}
         />
+
+        {user && user.userType === UserType.Customer && (
+          <Form.Check
+            type="radio"
+            name="option"
+            value="current"
+            label="Use address from your profile"
+            onChange={(e) => setOption(e.target.value)}
+          />
+        )}
       </div>
 
       {option === "current" && (

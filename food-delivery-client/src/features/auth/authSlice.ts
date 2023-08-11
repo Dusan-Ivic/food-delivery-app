@@ -270,7 +270,6 @@ export const authSlice = createSlice({
         state.refreshToken = null;
         state.message = action.payload as string;
         localStorage.removeItem("refreshToken");
-        localStorage.removeItem("deliveryAddress");
       })
       .addCase(logoutUser.fulfilled, (state) => {
         state.status = StateStatus.Success;
@@ -278,7 +277,6 @@ export const authSlice = createSlice({
         state.accessToken = null;
         state.refreshToken = null;
         localStorage.removeItem("refreshToken");
-        localStorage.removeItem("deliveryAddress");
       })
       .addCase(registerCustomer.pending, (state) => {
         state.status = StateStatus.Loading;

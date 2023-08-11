@@ -18,6 +18,7 @@ import { getProfile, generateToken, reset } from "./features/auth/authSlice";
 import { useEffect } from "react";
 import { CreateTokenRequestDto } from "./interfaces/token";
 import { GrantType } from "./interfaces/enums";
+import { DeliveryLocationProvider } from "./context/location/DeliveryLocationContext";
 
 function App() {
   const dispatch = useAppDispatch();
@@ -71,43 +72,45 @@ function App() {
   }, [accessToken, refreshToken, user]);
 
   return (
-    <div className="bg-light pb-5" style={{ minHeight: "100vh" }}>
-      <Header />
-      <ToastContainer style={{ width: "40%" }} position="top-left" />
-      <Container>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/stores" element={<Stores />} />
-          <Route path="/stores/:id" element={<Store />} />
-          <Route
-            path="/orders"
-            element={
-              <PrivateRoute>
-                <Orders />
-              </PrivateRoute>
-            }
-          />
-          <Route
-            path="/profile"
-            element={
-              <PrivateRoute>
-                <Profile />
-              </PrivateRoute>
-            }
-          />
-          <Route
-            path="/dashboard"
-            element={
-              <PrivateRoute>
-                <Dashboard />
-              </PrivateRoute>
-            }
-          />
-        </Routes>
-      </Container>
-    </div>
+    <DeliveryLocationProvider>
+      <div className="bg-light pb-5" style={{ minHeight: "100vh" }}>
+        <Header />
+        <ToastContainer style={{ width: "40%" }} position="top-left" />
+        <Container>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/stores" element={<Stores />} />
+            <Route path="/stores/:id" element={<Store />} />
+            <Route
+              path="/orders"
+              element={
+                <PrivateRoute>
+                  <Orders />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/profile"
+              element={
+                <PrivateRoute>
+                  <Profile />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/dashboard"
+              element={
+                <PrivateRoute>
+                  <Dashboard />
+                </PrivateRoute>
+              }
+            />
+          </Routes>
+        </Container>
+      </div>
+    </DeliveryLocationProvider>
   );
 }
 
