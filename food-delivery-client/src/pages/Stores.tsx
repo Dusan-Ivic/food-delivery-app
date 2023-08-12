@@ -16,7 +16,6 @@ export function Stores() {
   const { user } = useAppSelector((state) => state.auth);
   const { stores, status, message } = useAppSelector((state) => state.stores);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-  const [selectedCity, setSelectedCity] = useState<string | null>(null);
   const { deliveryLocation, openLocationModal } = useDeliveryLocation();
 
   useEffect(() => {
@@ -40,25 +39,12 @@ export function Stores() {
   }, [status, message]);
 
   const filteredStores = useMemo(() => {
-    if (selectedCity && selectedCategory) {
-      return stores.filter(
-        (store) =>
-          store.category === selectedCategory && store.city === selectedCity
-      );
-    } else if (selectedCity) {
-      return stores.filter((store) => store.city === selectedCity);
-    } else if (selectedCategory) {
+    if (selectedCategory) {
       return stores.filter((store) => store.category === selectedCategory);
-    } else {
-      return [];
     }
-  }, [stores, selectedCity, selectedCategory]);
 
-  const availableCities = useMemo(() => {
-    const citiesSet = new Set<string>();
-    stores.forEach((store) => citiesSet.add(store.city));
-    return Array.from(citiesSet);
-  }, [stores]);
+    return [];
+  }, [stores, selectedCategory]);
 
   const availableCategories = useMemo(() => {
     const categoriesSet = new Set<string>();
@@ -115,28 +101,6 @@ export function Stores() {
             </ListGroup>
           </div>
 
-          <div className="mb-3">
-            <div className="mb-1 lead">Cities</div>
-            <ListGroup>
-              {availableCities.map((city) => (
-                <ListGroupItem
-                  key={city}
-                  action={true}
-                  active={city === selectedCity}
-                  onClick={() => {
-                    if (selectedCity === city) {
-                      setSelectedCity(null);
-                    } else {
-                      setSelectedCity(city);
-                    }
-                  }}
-                >
-                  {city}
-                </ListGroupItem>
-              ))}
-            </ListGroup>
-          </div>
-
           <hr style={{ borderTop: "2px solid black" }} />
         </div>
       </Col>
@@ -159,7 +123,7 @@ export function Stores() {
           </div>
         )}
 
-        {selectedCity || selectedCategory ? (
+        {selectedCategory ? (
           <Col>
             <h1 className="text-center mt-3 mb-4 display-4">Filtered Stores</h1>
             {status === StateStatus.Loading ? (
