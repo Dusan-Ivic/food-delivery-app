@@ -11,6 +11,11 @@ import { useDeliveryLocation } from "../context/location/useDeliveryLocation";
 import { BiSolidSushi } from "react-icons/bi";
 import { GiTacos, GiFishEggs } from "react-icons/gi";
 
+interface CategoryItem {
+  name: string;
+  count: number;
+}
+
 export function Stores() {
   const dispatch = useAppDispatch();
   const { user } = useAppSelector((state) => state.auth);
@@ -46,11 +51,23 @@ export function Stores() {
     return [];
   }, [stores, selectedCategory]);
 
-  const availableCategories = useMemo(() => {
-    const categoriesSet = new Set<string>();
-    stores.forEach((store) => categoriesSet.add(store.category));
-    return Array.from(categoriesSet);
+  const allCategories = useMemo<CategoryItem[]>(() => {
+    const categoryMap = new Map<string, number>();
+    stores.forEach((store) => {
+      const count = categoryMap.get(store.category) ?? 0;
+      categoryMap.set(store.category, count + 1);
+    });
+
+    return Array.from(categoryMap.entries()).map(([name, count]) => ({
+      name,
+      count,
+    }));
   }, [stores]);
+
+  const popularCategories = useMemo(() => {
+    const sortedCategories = allCategories.sort((a, b) => b.count - a.count);
+    return sortedCategories.slice(0, 3);
+  }, [allCategories]);
 
   const categoryIconMapper = (category: string) => {
     switch (category.toLowerCase()) {
@@ -77,24 +94,51 @@ export function Stores() {
           <hr style={{ borderTop: "2px solid black" }} />
 
           <div className="mb-3">
-            <div className="mb-1 lead">Categories</div>
+            <div className="mb-1 lead">Popular Categories</div>
             <ListGroup>
-              {availableCategories.map((category) => (
+              {popularCategories.map((category) => (
                 <ListGroupItem
-                  key={category}
+                  key={category.name}
                   action={true}
-                  active={category === selectedCategory}
+                  active={category.name === selectedCategory}
                   onClick={() => {
-                    if (selectedCategory === category) {
+                    if (selectedCategory === category.name) {
                       setSelectedCategory(null);
                     } else {
-                      setSelectedCategory(category);
+                      setSelectedCategory(category.name);
                     }
                   }}
                 >
                   <div>
-                    <div>{categoryIconMapper(category)}</div>
-                    <div>{category}</div>
+                    <div>{categoryIconMapper(category.name)}</div>
+                    <div>{category.name}</div>
+                  </div>
+                </ListGroupItem>
+              ))}
+            </ListGroup>
+          </div>
+
+          <hr style={{ borderTop: "2px solid black" }} />
+
+          <div className="mb-3">
+            <div className="mb-1 lead">All Categories</div>
+            <ListGroup>
+              {allCategories.map((category) => (
+                <ListGroupItem
+                  key={category.name}
+                  action={true}
+                  active={category.name === selectedCategory}
+                  onClick={() => {
+                    if (selectedCategory === category.name) {
+                      setSelectedCategory(null);
+                    } else {
+                      setSelectedCategory(category.name);
+                    }
+                  }}
+                >
+                  <div>
+                    <div>{categoryIconMapper(category.name)}</div>
+                    <div>{category.name}</div>
                   </div>
                 </ListGroupItem>
               ))}
