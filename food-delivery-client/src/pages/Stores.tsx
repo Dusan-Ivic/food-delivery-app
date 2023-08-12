@@ -66,7 +66,7 @@ export function Stores() {
 
   const popularCategories = useMemo(() => {
     const sortedCategories = allCategories.sort((a, b) => b.count - a.count);
-    return sortedCategories.slice(0, 3);
+    return sortedCategories.slice(0, 4);
   }, [allCategories]);
 
   const categoryIconMapper = (category: string) => {
@@ -90,12 +90,12 @@ export function Stores() {
     <Row>
       <Col md={2}>
         <div className="text-center">
-          <div className="mb-1 lead">Filter By</div>
+          <div className="mb-1 lead">Categories</div>
           <hr style={{ borderTop: "2px solid black" }} />
 
           <div className="mb-3">
-            <div className="mb-1 lead">Popular Categories</div>
-            <ListGroup>
+            <div className="mb-1 lead">Popular</div>
+            <ListGroup className="flex-row flex-md-column rounded-0">
               {popularCategories.map((category) => (
                 <ListGroupItem
                   key={category.name}
@@ -116,13 +116,13 @@ export function Stores() {
                 </ListGroupItem>
               ))}
             </ListGroup>
+
+            <hr style={{ borderTop: "2px solid black" }} />
           </div>
 
-          <hr style={{ borderTop: "2px solid black" }} />
-
-          <div className="mb-3">
-            <div className="mb-1 lead">All Categories</div>
-            <ListGroup>
+          <div className="mb-3 d-none d-md-block">
+            <div className="mb-1 lead">All</div>
+            <ListGroup className="flex-row flex-md-column rounded-0">
               {allCategories.map((category) => (
                 <ListGroupItem
                   key={category.name}
@@ -143,9 +143,9 @@ export function Stores() {
                 </ListGroupItem>
               ))}
             </ListGroup>
-          </div>
 
-          <hr style={{ borderTop: "2px solid black" }} />
+            <hr style={{ borderTop: "2px solid black" }} />
+          </div>
         </div>
       </Col>
 
