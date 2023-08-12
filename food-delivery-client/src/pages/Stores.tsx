@@ -21,7 +21,6 @@ export function Stores() {
     if (deliveryLocation) {
       dispatch(getStores({ city: deliveryLocation.city }));
     } else if (!user || user?.userType === UserType.Customer) {
-      openLocationModal();
       dispatch(getStores());
     } else {
       dispatch(getStores());
