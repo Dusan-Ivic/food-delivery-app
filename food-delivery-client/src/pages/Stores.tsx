@@ -5,9 +5,11 @@ import { StateStatus, UserType } from "../interfaces/enums";
 import { toast } from "react-toastify";
 import { Spinner } from "../components/Spinner";
 import { StoreList } from "../components/StoreList";
-import { FaLocationDot } from "react-icons/fa6";
+import { FaBurger, FaLocationDot, FaPizzaSlice } from "react-icons/fa6";
 import { Col, ListGroup, ListGroupItem, Row } from "react-bootstrap";
 import { useDeliveryLocation } from "../context/location/useDeliveryLocation";
+import { BiSolidSushi } from "react-icons/bi";
+import { GiTacos, GiFishEggs } from "react-icons/gi";
 
 export function Stores() {
   const dispatch = useAppDispatch();
@@ -64,15 +66,32 @@ export function Stores() {
     return Array.from(categoriesSet);
   }, [stores]);
 
+  const categoryIconMapper = (category: string) => {
+    switch (category.toLowerCase()) {
+      case "pizza":
+        return <FaPizzaSlice />;
+      case "burgers":
+        return <FaBurger />;
+      case "sushi":
+        return <BiSolidSushi />;
+      case "mexican":
+        return <GiTacos />;
+      case "groceries":
+        return <GiFishEggs />;
+      default:
+        return null;
+    }
+  };
+
   return (
     <Row>
       <Col md={2}>
-        <div>
-          <div className="text-center mb-1 lead">Filter By</div>
+        <div className="text-center">
+          <div className="mb-1 lead">Filter By</div>
           <hr style={{ borderTop: "2px solid black" }} />
 
           <div className="mb-3">
-            <div className="text-center mb-1">Categories</div>
+            <div className="mb-1 lead">Categories</div>
             <ListGroup>
               {availableCategories.map((category) => (
                 <ListGroupItem
@@ -87,31 +106,38 @@ export function Stores() {
                     }
                   }}
                 >
-                  {category}
+                  <div>
+                    <div>{categoryIconMapper(category)}</div>
+                    <div>{category}</div>
+                  </div>
                 </ListGroupItem>
               ))}
             </ListGroup>
           </div>
 
-          <div className="text-center mb-1">Cities</div>
-          <ListGroup>
-            {availableCities.map((city) => (
-              <ListGroupItem
-                key={city}
-                action={true}
-                active={city === selectedCity}
-                onClick={() => {
-                  if (selectedCity === city) {
-                    setSelectedCity(null);
-                  } else {
-                    setSelectedCity(city);
-                  }
-                }}
-              >
-                {city}
-              </ListGroupItem>
-            ))}
-          </ListGroup>
+          <div className="mb-3">
+            <div className="mb-1 lead">Cities</div>
+            <ListGroup>
+              {availableCities.map((city) => (
+                <ListGroupItem
+                  key={city}
+                  action={true}
+                  active={city === selectedCity}
+                  onClick={() => {
+                    if (selectedCity === city) {
+                      setSelectedCity(null);
+                    } else {
+                      setSelectedCity(city);
+                    }
+                  }}
+                >
+                  {city}
+                </ListGroupItem>
+              ))}
+            </ListGroup>
+          </div>
+
+          <hr style={{ borderTop: "2px solid black" }} />
         </div>
       </Col>
 
