@@ -5,23 +5,28 @@ import { StateStatus, UserType } from "../interfaces/enums";
 import { toast } from "react-toastify";
 import { Spinner } from "../components/Spinner";
 import { StoreList } from "../components/StoreList";
-import { FaLocationDot } from "react-icons/fa6";
+import { FaBurger, FaLocationDot, FaPizzaSlice } from "react-icons/fa6";
 import { Col, ListGroup, ListGroupItem, Row } from "react-bootstrap";
 import { useDeliveryLocation } from "../context/location/useDeliveryLocation";
+import { BiSolidSushi } from "react-icons/bi";
+import { GiTacos, GiFishEggs } from "react-icons/gi";
+
+interface CategoryItem {
+  name: string;
+  count: number;
+}
 
 export function Stores() {
   const dispatch = useAppDispatch();
   const { user } = useAppSelector((state) => state.auth);
   const { stores, status, message } = useAppSelector((state) => state.stores);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-  const [selectedCity, setSelectedCity] = useState<string | null>(null);
   const { deliveryLocation, openLocationModal } = useDeliveryLocation();
 
   useEffect(() => {
     if (deliveryLocation) {
       dispatch(getStores({ city: deliveryLocation.city }));
     } else if (!user || user?.userType === UserType.Customer) {
-      openLocationModal();
       dispatch(getStores());
     } else {
       dispatch(getStores());
@@ -39,80 +44,108 @@ export function Stores() {
   }, [status, message]);
 
   const filteredStores = useMemo(() => {
-    if (selectedCity && selectedCategory) {
-      return stores.filter(
-        (store) =>
-          store.category === selectedCategory && store.city === selectedCity
-      );
-    } else if (selectedCity) {
-      return stores.filter((store) => store.city === selectedCity);
-    } else if (selectedCategory) {
+    if (selectedCategory) {
       return stores.filter((store) => store.category === selectedCategory);
-    } else {
-      return [];
     }
-  }, [stores, selectedCity, selectedCategory]);
 
-  const availableCities = useMemo(() => {
-    const citiesSet = new Set<string>();
-    stores.forEach((store) => citiesSet.add(store.city));
-    return Array.from(citiesSet);
+    return [];
+  }, [stores, selectedCategory]);
+
+  const allCategories = useMemo<CategoryItem[]>(() => {
+    const categoryMap = new Map<string, number>();
+    stores.forEach((store) => {
+      const count = categoryMap.get(store.category) ?? 0;
+      categoryMap.set(store.category, count + 1);
+    });
+
+    return Array.from(categoryMap.entries()).map(([name, count]) => ({
+      name,
+      count,
+    }));
   }, [stores]);
 
-  const availableCategories = useMemo(() => {
-    const categoriesSet = new Set<string>();
-    stores.forEach((store) => categoriesSet.add(store.category));
-    return Array.from(categoriesSet);
-  }, [stores]);
+  const popularCategories = useMemo(() => {
+    const sortedCategories = allCategories.sort((a, b) => b.count - a.count);
+    return sortedCategories.slice(0, 4);
+  }, [allCategories]);
+
+  const categoryIconMapper = (category: string) => {
+    switch (category.toLowerCase()) {
+      case "pizza":
+        return <FaPizzaSlice />;
+      case "burgers":
+        return <FaBurger />;
+      case "sushi":
+        return <BiSolidSushi />;
+      case "mexican":
+        return <GiTacos />;
+      case "groceries":
+        return <GiFishEggs />;
+      default:
+        return null;
+    }
+  };
 
   return (
     <Row>
       <Col md={2}>
-        <div>
-          <div className="text-center mb-1 lead">Filter By</div>
+        <div className="text-center">
+          <div className="mb-1 lead">Categories</div>
           <hr style={{ borderTop: "2px solid black" }} />
 
           <div className="mb-3">
-            <div className="text-center mb-1">Categories</div>
-            <ListGroup>
-              {availableCategories.map((category) => (
+            <div className="mb-1 lead">Popular</div>
+            <ListGroup className="flex-row flex-md-column rounded-0">
+              {popularCategories.map((category) => (
                 <ListGroupItem
-                  key={category}
+                  key={category.name}
                   action={true}
-                  active={category === selectedCategory}
+                  active={category.name === selectedCategory}
                   onClick={() => {
-                    if (selectedCategory === category) {
+                    if (selectedCategory === category.name) {
                       setSelectedCategory(null);
                     } else {
-                      setSelectedCategory(category);
+                      setSelectedCategory(category.name);
                     }
                   }}
                 >
-                  {category}
+                  <div>
+                    <div>{categoryIconMapper(category.name)}</div>
+                    <div>{category.name}</div>
+                  </div>
                 </ListGroupItem>
               ))}
             </ListGroup>
+
+            <hr style={{ borderTop: "2px solid black" }} />
           </div>
 
-          <div className="text-center mb-1">Cities</div>
-          <ListGroup>
-            {availableCities.map((city) => (
-              <ListGroupItem
-                key={city}
-                action={true}
-                active={city === selectedCity}
-                onClick={() => {
-                  if (selectedCity === city) {
-                    setSelectedCity(null);
-                  } else {
-                    setSelectedCity(city);
-                  }
-                }}
-              >
-                {city}
-              </ListGroupItem>
-            ))}
-          </ListGroup>
+          <div className="mb-3 d-none d-md-block">
+            <div className="mb-1 lead">All</div>
+            <ListGroup className="flex-row flex-md-column rounded-0">
+              {allCategories.map((category) => (
+                <ListGroupItem
+                  key={category.name}
+                  action={true}
+                  active={category.name === selectedCategory}
+                  onClick={() => {
+                    if (selectedCategory === category.name) {
+                      setSelectedCategory(null);
+                    } else {
+                      setSelectedCategory(category.name);
+                    }
+                  }}
+                >
+                  <div>
+                    <div>{categoryIconMapper(category.name)}</div>
+                    <div>{category.name}</div>
+                  </div>
+                </ListGroupItem>
+              ))}
+            </ListGroup>
+
+            <hr style={{ borderTop: "2px solid black" }} />
+          </div>
         </div>
       </Col>
 
@@ -134,7 +167,7 @@ export function Stores() {
           </div>
         )}
 
-        {selectedCity || selectedCategory ? (
+        {selectedCategory ? (
           <Col>
             <h1 className="text-center mt-3 mb-4 display-4">Filtered Stores</h1>
             {status === StateStatus.Loading ? (
