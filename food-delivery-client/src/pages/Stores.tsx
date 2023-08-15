@@ -5,11 +5,10 @@ import { StateStatus, UserType } from "../interfaces/enums";
 import { toast } from "react-toastify";
 import { Spinner } from "../components/Spinner";
 import { StoreList } from "../components/StoreList";
-import { FaBurger, FaLocationDot, FaPizzaSlice } from "react-icons/fa6";
+import { FaLocationDot } from "react-icons/fa6";
 import { Col, ListGroup, ListGroupItem, Row } from "react-bootstrap";
 import { useDeliveryLocation } from "../context/location/useDeliveryLocation";
-import { BiSolidSushi } from "react-icons/bi";
-import { GiTacos, GiFishEggs } from "react-icons/gi";
+import categoryIcons from "../data/categoryIcons";
 
 interface CategoryItem {
   name: string;
@@ -69,21 +68,16 @@ export function Stores() {
     return sortedCategories.slice(0, 4);
   }, [allCategories]);
 
-  const categoryIconMapper = (category: string) => {
-    switch (category.toLowerCase()) {
-      case "pizza":
-        return <FaPizzaSlice />;
-      case "burgers":
-        return <FaBurger />;
-      case "sushi":
-        return <BiSolidSushi />;
-      case "mexican":
-        return <GiTacos />;
-      case "groceries":
-        return <GiFishEggs />;
-      default:
-        return null;
+  const IconComponent = ({ categoryName }: { categoryName: string }) => {
+    const selectedIcon = categoryIcons.find((x) => x.name === categoryName);
+
+    if (!selectedIcon) {
+      return null;
     }
+
+    const SelectedIconComponent = selectedIcon.icon;
+
+    return <SelectedIconComponent />;
   };
 
   return (
@@ -110,7 +104,7 @@ export function Stores() {
                   }}
                 >
                   <div>
-                    <div>{categoryIconMapper(category.name)}</div>
+                    <IconComponent categoryName={category.name} />
                     <div>{category.name}</div>
                   </div>
                 </ListGroupItem>
@@ -137,7 +131,7 @@ export function Stores() {
                   }}
                 >
                   <div>
-                    <div>{categoryIconMapper(category.name)}</div>
+                    <IconComponent categoryName={category.name} />
                     <div>{category.name}</div>
                   </div>
                 </ListGroupItem>
