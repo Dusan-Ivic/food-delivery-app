@@ -9,9 +9,6 @@ import { BsHouseAddFill } from "react-icons/bs";
 import { Alert, Button, Col, Row } from "react-bootstrap";
 import { PartnerStatus, StateStatus } from "../interfaces/enums";
 import { toast } from "react-toastify";
-import { StoreRequestDto } from "../interfaces/store";
-import { FormModal, FormProps } from "../components/FormModal";
-import { StoreForm } from "../components/forms";
 import {
   getOrders,
   clearOrders,
@@ -21,6 +18,10 @@ import { OrderHistory } from "../components/OrderHistory";
 import { StoreTable } from "../components/StoreTable";
 import { PartnerState } from "../interfaces/partner";
 import { Spinner } from "../components/Spinner";
+import { StoreModal } from "../components/stores/StoreModal";
+import { BasicInfoForm } from "../components/stores/BasicInfoForm";
+import { ContactInfoForm } from "../components/stores/ContactInfoForm";
+import { DeliveryInfoForm } from "../components/stores/DeliveryInfoForm";
 
 export function PartnerDashboard() {
   const dispatch = useAppDispatch();
@@ -68,10 +69,6 @@ export function PartnerDashboard() {
       dispatch(resetOrdersState());
     };
   }, [ordersStatus, ordersMessage]);
-
-  const FormComponent = ({ data, onSubmit }: FormProps<StoreRequestDto>) => {
-    return <StoreForm store={data} onSubmit={onSubmit} />;
-  };
 
   const AlertComponent = ({
     status,
@@ -164,11 +161,10 @@ export function PartnerDashboard() {
         )}
       </Row>
 
-      <FormModal
+      <StoreModal
         isVisible={isModalVisible}
         title="Add new store"
-        FormComponent={FormComponent}
-        data={null}
+        steps={[BasicInfoForm, ContactInfoForm, DeliveryInfoForm]}
         onSubmit={(data) => dispatch(createStore(data))}
         onClose={() => setModalVisible(false)}
       />

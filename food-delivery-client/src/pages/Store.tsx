@@ -11,7 +11,7 @@ import {
   uploadImage as uploadProductImage,
 } from "../features/products/productsSlice";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
-import { StoreRequestDto, StoreState } from "../interfaces/store";
+import { StoreState } from "../interfaces/store";
 import { StoreInfo } from "../components/StoreInfo";
 import { IoArrowBack } from "react-icons/io5";
 import { HiOutlineShoppingCart } from "react-icons/hi";
@@ -44,12 +44,15 @@ import { toast } from "react-toastify";
 import { ConfirmationModal } from "../components/ConfirmationModal";
 import { ProductRequestDto, ProductState } from "../interfaces/product";
 import { FormModal, FormProps } from "../components/FormModal";
-import { StoreForm } from "../components/forms/StoreForm";
 import { ProductForm } from "../components/forms/ProductForm";
 import { Spinner } from "../components/Spinner";
 import { FaLocationDot } from "react-icons/fa6";
 import { CustomerState } from "../interfaces/customer";
 import { useDeliveryLocation } from "../context/location/useDeliveryLocation";
+import { StoreModal } from "../components/stores/StoreModal";
+import { BasicInfoForm } from "../components/stores/BasicInfoForm";
+import { ContactInfoForm } from "../components/stores/ContactInfoForm";
+import { DeliveryInfoForm } from "../components/stores/DeliveryInfoForm";
 
 interface ModalProps {
   isVisible: boolean;
@@ -249,13 +252,6 @@ export function StorePage() {
     }
   };
 
-  const StoreFormComponent = ({
-    data,
-    onSubmit,
-  }: FormProps<StoreRequestDto>) => {
-    return <StoreForm store={data} onSubmit={onSubmit} />;
-  };
-
   const ProductFormComponent = ({
     data,
     onSubmit,
@@ -406,11 +402,11 @@ export function StorePage() {
           }}
         />
 
-        <FormModal
+        <StoreModal
           isVisible={isStoreModalVisible}
           title="Update store"
-          FormComponent={StoreFormComponent}
-          data={store as StoreRequestDto}
+          steps={[BasicInfoForm, ContactInfoForm, DeliveryInfoForm]}
+          data={store}
           onSubmit={(data) =>
             dispatch(updateStore({ storeId: store.id, requestDto: data }))
           }
