@@ -19,9 +19,6 @@ import { StoreTable } from "../components/StoreTable";
 import { PartnerState } from "../interfaces/partner";
 import { Spinner } from "../components/Spinner";
 import { StoreModal } from "../components/stores/StoreModal";
-import { BasicInfoForm } from "../components/stores/BasicInfoForm";
-import { ContactInfoForm } from "../components/stores/ContactInfoForm";
-import { DeliveryInfoForm } from "../components/stores/DeliveryInfoForm";
 
 export function PartnerDashboard() {
   const dispatch = useAppDispatch();
@@ -164,7 +161,6 @@ export function PartnerDashboard() {
       <StoreModal
         isVisible={isModalVisible}
         title="Add new store"
-        steps={[BasicInfoForm, ContactInfoForm, DeliveryInfoForm]}
         onSubmit={(data) => dispatch(createStore(data))}
         onClose={() => setModalVisible(false)}
       />

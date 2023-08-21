@@ -50,9 +50,6 @@ import { FaLocationDot } from "react-icons/fa6";
 import { CustomerState } from "../interfaces/customer";
 import { useDeliveryLocation } from "../context/location/useDeliveryLocation";
 import { StoreModal } from "../components/stores/StoreModal";
-import { BasicInfoForm } from "../components/stores/BasicInfoForm";
-import { ContactInfoForm } from "../components/stores/ContactInfoForm";
-import { DeliveryInfoForm } from "../components/stores/DeliveryInfoForm";
 
 interface ModalProps {
   isVisible: boolean;
@@ -405,7 +402,6 @@ export function StorePage() {
         <StoreModal
           isVisible={isStoreModalVisible}
           title="Update store"
-          steps={[BasicInfoForm, ContactInfoForm, DeliveryInfoForm]}
           data={store}
           onSubmit={(data) =>
             dispatch(updateStore({ storeId: store.id, requestDto: data }))

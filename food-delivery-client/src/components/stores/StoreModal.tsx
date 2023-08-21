@@ -1,18 +1,18 @@
-import { ComponentType, useState } from "react";
+import { useState } from "react";
 import { useMultistepForm } from "../../hooks/useMultistepForm";
 import { StoreRequestDto, StoreState } from "../../interfaces/store";
 import { Modal, Button, Form } from "react-bootstrap";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
-import { BasicInfo } from "./BasicInfoForm";
-import { ContactInfo } from "./ContactInfoForm";
-import { DeliveryInfo } from "./DeliveryInfoForm";
+import { BasicInfo, BasicInfoForm } from "./BasicInfoForm";
+import { ContactInfo, ContactInfoForm } from "./ContactInfoForm";
+import { DeliveryInfo, DeliveryInfoForm } from "./DeliveryInfoForm";
 import { useForm, FormProvider } from "react-hook-form";
+import { Stepper, FormStep } from "../Stepper";
 
 interface StoreModalProps {
   isVisible: boolean;
   title: string;
-  steps: ComponentType[];
   data?: StoreState;
   onSubmit: (data: StoreRequestDto) => void;
   onClose: () => void;
@@ -23,12 +23,28 @@ type StoreInfo = BasicInfo & ContactInfo & DeliveryInfo;
 export function StoreModal({
   isVisible,
   title,
-  steps,
   data,
   onSubmit,
   onClose,
 }: StoreModalProps) {
   const [formData, setFormData] = useState<StoreInfo>({} as StoreInfo);
+  const formSteps: FormStep[] = [
+    {
+      index: 0,
+      title: "Basic Info",
+      component: BasicInfoForm,
+    },
+    {
+      index: 1,
+      title: "Contact Info",
+      component: ContactInfoForm,
+    },
+    {
+      index: 2,
+      title: "Delivery Info",
+      component: DeliveryInfoForm,
+    },
+  ];
 
   const {
     step,
@@ -38,7 +54,12 @@ export function StoreModal({
     goToStep,
     isFirstStep,
     isLastStep,
-  } = useMultistepForm(steps.map((Step) => <Step />));
+  } = useMultistepForm(
+    formSteps.map((step) => {
+      const StepComponent = step.component;
+      return <StepComponent />;
+    })
+  );
 
   const basicInfoValidationSchema = Yup.object<BasicInfo>().shape({
     name: Yup.string()
@@ -138,9 +159,14 @@ export function StoreModal({
         <Modal.Title>{title}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
+        <Stepper steps={formSteps} activeStep={currentStepIndex} />
+
+        <hr />
+
         <FormProvider {...methods}>
           <Form onSubmit={handleSubmit(submitFormPart)}>
             {step}
+            <hr />
             <div className="d-flex w-100 gap-3">
               <Button
                 type="button"
