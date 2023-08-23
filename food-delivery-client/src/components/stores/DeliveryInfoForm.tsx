@@ -2,10 +2,8 @@ import { Col, Form, Row } from "react-bootstrap";
 import { useFormContext } from "react-hook-form";
 
 export type DeliveryInfo = {
-  deliveryOptions: {
-    deliveryTimeInMinutes: number;
-    deliveryFee: number;
-  };
+  deliveryTimeInMinutes: number;
+  deliveryFee: number;
 };
 
 export function DeliveryInfoForm() {
@@ -26,15 +24,15 @@ export function DeliveryInfoForm() {
               defaultValue={0}
               min={0}
               step={0.1}
-              {...register("deliveryOptions.deliveryTimeInMinutes")}
+              {...register("deliveryTimeInMinutes")}
               isValid={
-                !errors.deliveryOptions?.deliveryTimeInMinutes &&
-                !!getValues("deliveryOptions.deliveryTimeInMinutes")
+                !errors.deliveryTimeInMinutes &&
+                !!getValues("deliveryTimeInMinutes")
               }
               placeholder="in minutes"
             />
             <div className="text-danger">
-              {errors.deliveryOptions?.deliveryTimeInMinutes?.message}
+              {errors.deliveryTimeInMinutes?.message}
             </div>
           </Form.Group>
         </Col>
@@ -46,16 +44,11 @@ export function DeliveryInfoForm() {
               defaultValue={0}
               min={0}
               step="any"
-              {...register("deliveryOptions.deliveryFee")}
-              isValid={
-                !errors.deliveryOptions?.deliveryFee &&
-                !!getValues("deliveryOptions.deliveryFee")
-              }
+              {...register("deliveryFee")}
+              isValid={!errors.deliveryFee && !!getValues("deliveryFee")}
               placeholder="$0"
             />
-            <div className="text-danger">
-              {errors.deliveryOptions?.deliveryFee?.message}
-            </div>
+            <div className="text-danger">{errors.deliveryFee?.message}</div>
           </Form.Group>
         </Col>
       </Row>

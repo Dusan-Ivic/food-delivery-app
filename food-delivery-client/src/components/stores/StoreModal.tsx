@@ -89,17 +89,15 @@ export function StoreModal({
   });
 
   const deliveryInfoValidationSchema = Yup.object<DeliveryInfo>().shape({
-    deliveryOptions: Yup.object().shape({
-      deliveryTimeInMinutes: Yup.number()
-        .typeError("Delivery time must be a number")
-        .required("Delivery time is required")
-        .moreThan(0, "Delivery time must be greater than 0"),
-      deliveryFee: Yup.number()
-        .typeError("Delivery fee must be a number")
-        .required("Delivery fee is required")
-        .min(0, "Delivery fee can't be a negative number")
-        .max(10, "Delivery fee can't be greater than $10"),
-    }),
+    deliveryTimeInMinutes: Yup.number()
+      .typeError("Delivery time must be a number")
+      .required("Delivery time is required")
+      .moreThan(0, "Delivery time must be greater than 0"),
+    deliveryFee: Yup.number()
+      .typeError("Delivery fee must be a number")
+      .required("Delivery fee is required")
+      .min(0, "Delivery fee can't be a negative number")
+      .max(10, "Delivery fee can't be greater than $10"),
   });
 
   const validationSchemas: Yup.ObjectSchema<
@@ -119,10 +117,8 @@ export function StoreModal({
     address: data?.address || "",
     city: data?.city || "",
     postalCode: data?.postalCode || "",
-    deliveryOptions: {
-      deliveryTimeInMinutes: data?.deliveryOptions.deliveryTimeInMinutes || 0,
-      deliveryFee: data?.deliveryOptions.deliveryFee || 0,
-    },
+    deliveryTimeInMinutes: data?.deliveryTimeInMinutes || 0,
+    deliveryFee: data?.deliveryFee || 0,
   };
 
   const currentStepValidationSchema = validationSchemas[currentStepIndex];

@@ -25,7 +25,7 @@ namespace FoodDeliveryApi.Models
                     return OrderStatus.Canceled;
                 }
 
-                DateTime deliveryDateTime = CreatedAt.AddMinutes(Store.DeliveryOptions.DeliveryTimeInMinutes);
+                DateTime deliveryDateTime = CreatedAt.AddMinutes(Store.DeliveryTimeInMinutes);
                 return DateTime.UtcNow >= deliveryDateTime ? OrderStatus.Completed : OrderStatus.Pending;
             }
         }

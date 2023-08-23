@@ -1,8 +1,3 @@
-export interface DeliveryOptions {
-  deliveryTimeInMinutes: number;
-  deliveryFee: number;
-}
-
 export interface StoreBase {
   name: string;
   description: string;
@@ -11,7 +6,8 @@ export interface StoreBase {
   postalCode: string;
   phone: string;
   category: string;
-  deliveryOptions: DeliveryOptions;
+  deliveryTimeInMinutes: number;
+  deliveryFee: number;
 }
 
 export interface StoreRequestDto extends StoreBase {}

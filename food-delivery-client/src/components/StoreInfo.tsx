@@ -79,11 +79,11 @@ export function StoreInfo({
             <div className="d-flex align-items-center column-gap-3 text-warning">
               <div className="d-flex align-items-center column-gap-1">
                 <TbClockHour4 />
-                {store.deliveryOptions.deliveryTimeInMinutes}'
+                {store.deliveryTimeInMinutes}'
               </div>
               <div className="d-flex align-items-center column-gap-1">
                 <TbTruckDelivery />
-                <div>{formatCurrency(store.deliveryOptions.deliveryFee)}</div>
+                <div>{formatCurrency(store.deliveryFee)}</div>
               </div>
             </div>
             <div className="d-flex align-items-center gap-2">

@@ -58,11 +58,10 @@ export function ShoppingCart({
               Items price: {formatCurrency(totalPrice)}
             </div>
             <div className="ms-auto fw-bold text-muted">
-              Delivery fee: {formatCurrency(store.deliveryOptions.deliveryFee)}
+              Delivery fee: {formatCurrency(store.deliveryFee)}
             </div>
             <div className="ms-auto fw-bold fs-5">
-              Total price:{" "}
-              {formatCurrency(totalPrice + store.deliveryOptions.deliveryFee)}
+              Total price: {formatCurrency(totalPrice + store.deliveryFee)}
             </div>
             {isLoading ? (
               <Spinner />
