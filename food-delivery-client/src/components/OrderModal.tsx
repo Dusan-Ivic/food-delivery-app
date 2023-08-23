@@ -46,7 +46,7 @@ export function OrderModal({
 
   const getDeliveryTime = (order: OrderState) => {
     return moment(order.createdAt).add(
-      order.store.deliveryOptions.deliveryTimeInMinutes,
+      order.store.deliveryTimeInMinutes,
       "minutes"
     );
   };

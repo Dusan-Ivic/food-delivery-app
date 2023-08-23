@@ -32,17 +32,15 @@ export function StoreForm({ onSubmit, store }: StoreFormProps) {
     category: Yup.string()
       .required("Category is required")
       .max(20, "Category is too long"),
-    deliveryOptions: Yup.object().shape({
-      deliveryTimeInMinutes: Yup.number()
-        .typeError("Delivery time must be a number")
-        .required("Delivery time is required")
-        .moreThan(0, "Delivery time must be greater than 0"),
-      deliveryFee: Yup.number()
-        .typeError("Delivery fee must be a number")
-        .required("Delivery fee is required")
-        .min(0, "Delivery fee can't be a negative number")
-        .max(10, "Delivery fee can't be greater than $10"),
-    }),
+    deliveryTimeInMinutes: Yup.number()
+      .typeError("Delivery time must be a number")
+      .required("Delivery time is required")
+      .moreThan(0, "Delivery time must be greater than 0"),
+    deliveryFee: Yup.number()
+      .typeError("Delivery fee must be a number")
+      .required("Delivery fee is required")
+      .min(0, "Delivery fee can't be a negative number")
+      .max(10, "Delivery fee can't be greater than $10"),
   });
 
   const initialValues: StoreRequestDto = {
@@ -53,10 +51,8 @@ export function StoreForm({ onSubmit, store }: StoreFormProps) {
     postalCode: store?.postalCode || "",
     phone: store?.phone || "",
     category: store?.category || "",
-    deliveryOptions: {
-      deliveryTimeInMinutes: store?.deliveryOptions?.deliveryTimeInMinutes || 0,
-      deliveryFee: store?.deliveryOptions?.deliveryFee || 0,
-    },
+    deliveryTimeInMinutes: store?.deliveryTimeInMinutes || 0,
+    deliveryFee: store?.deliveryFee || 0,
   };
 
   const {
@@ -182,15 +178,15 @@ export function StoreForm({ onSubmit, store }: StoreFormProps) {
               defaultValue={0}
               min={0}
               step={0.1}
-              {...register("deliveryOptions.deliveryTimeInMinutes")}
+              {...register("deliveryTimeInMinutes")}
               isValid={
-                touchedFields.deliveryOptions?.deliveryTimeInMinutes &&
-                !errors.deliveryOptions?.deliveryTimeInMinutes
+                touchedFields.deliveryTimeInMinutes &&
+                !errors.deliveryTimeInMinutes
               }
               placeholder="in minutes"
             />
             <div className="text-danger">
-              {errors.deliveryOptions?.deliveryTimeInMinutes?.message}
+              {errors.deliveryTimeInMinutes?.message}
             </div>
           </Form.Group>
         </Col>
@@ -202,16 +198,11 @@ export function StoreForm({ onSubmit, store }: StoreFormProps) {
               defaultValue={0}
               min={0}
               step="any"
-              {...register("deliveryOptions.deliveryFee")}
-              isValid={
-                touchedFields.deliveryOptions?.deliveryFee &&
-                !errors.deliveryOptions?.deliveryFee
-              }
+              {...register("deliveryFee")}
+              isValid={touchedFields.deliveryFee && !errors.deliveryFee}
               placeholder="$0"
             />
-            <div className="text-danger">
-              {errors.deliveryOptions?.deliveryFee?.message}
-            </div>
+            <div className="text-danger">{errors.deliveryFee?.message}</div>
           </Form.Group>
         </Col>
       </Row>
