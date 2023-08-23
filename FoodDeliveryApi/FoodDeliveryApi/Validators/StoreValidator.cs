@@ -30,20 +30,6 @@ namespace FoodDeliveryApi.Validators
                 .NotEmpty().WithMessage("Phone number is required")
                 .MaximumLength(20).WithMessage("Phone number is too long");
 
-            RuleFor(x => x.DeliveryOptions)
-                .NotNull().WithMessage("Delivery options are required")
-                .SetValidator(new DeliveryOptionsValidator());
-
-            RuleFor(x => x.Category)
-                .NotNull().WithMessage("Category is required")
-                .MaximumLength(20).WithMessage("Category is too long");
-        }
-    }
-
-    public class DeliveryOptionsValidator : AbstractValidator<DeliveryOptions>
-    {
-        public DeliveryOptionsValidator()
-        {
             RuleFor(x => x.DeliveryTimeInMinutes)
                 .NotNull().WithMessage("Delivery time is required")
                 .GreaterThan(0).WithMessage("Delivery time must be greater than zero");
@@ -51,6 +37,10 @@ namespace FoodDeliveryApi.Validators
             RuleFor(x => x.DeliveryFee)
                 .NotNull().WithMessage("Delivery fee is required")
                 .GreaterThanOrEqualTo(0).WithMessage("Delivery fee can't be a negative number");
+
+            RuleFor(x => x.Category)
+                .NotNull().WithMessage("Category is required")
+                .MaximumLength(20).WithMessage("Category is too long");
         }
     }
 }

@@ -101,7 +101,7 @@ namespace FoodDeliveryApi.Services
             }
 
             order.ItemsPrice = order.Items.Aggregate(0m, (total, item) => total + item.TotalPrice);
-            order.DeliveryFee = store.DeliveryOptions.DeliveryFee;
+            order.DeliveryFee = store.DeliveryFee;
             order.TotalPrice = order.ItemsPrice + order.DeliveryFee;
             order.CreatedAt = DateTime.UtcNow;
 
@@ -131,7 +131,7 @@ namespace FoodDeliveryApi.Services
                 throw new ActionNotAllowedException("Unauthorized to cancel this order. Only the creator can perform this action.");
             }
 
-            DateTime deliveryTime = order.CreatedAt.AddMinutes((int)order.Store.DeliveryOptions.DeliveryTimeInMinutes);
+            DateTime deliveryTime = order.CreatedAt.AddMinutes((int)order.Store.DeliveryTimeInMinutes);
 
             if (DateTime.UtcNow > deliveryTime)
             {

@@ -11,11 +11,6 @@ namespace FoodDeliveryApi.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<DeliveryOptions>(
-                name: "DeliveryOptions",
-                table: "Stores",
-                type: "json",
-                nullable: false);
         }
 
         /// <inheritdoc />

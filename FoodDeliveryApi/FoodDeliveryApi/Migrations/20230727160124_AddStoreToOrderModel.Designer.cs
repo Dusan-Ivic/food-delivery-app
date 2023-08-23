@@ -279,10 +279,6 @@ namespace FoodDeliveryApi.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("character varying(50)");
 
-                    b.Property<DeliveryOptions>("DeliveryOptions")
-                        .IsRequired()
-                        .HasColumnType("json");
-
                     b.Property<string>("Description")
                         .HasMaxLength(500)
                         .HasColumnType("character varying(500)");

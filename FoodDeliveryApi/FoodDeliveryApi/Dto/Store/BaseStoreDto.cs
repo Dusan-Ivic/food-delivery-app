@@ -10,7 +10,8 @@ namespace FoodDeliveryApi.Dto.Store
         public string City { get; set; } = string.Empty;
         public string PostalCode { get; set; } = string.Empty;
         public string Phone { get; set; } = string.Empty;
-        public DeliveryOptions DeliveryOptions { get; set; } = default!;
+        public int DeliveryTimeInMinutes { get; set; }
+        public decimal DeliveryFee { get; set; } = decimal.Zero;
         public string Category { get; set; } = string.Empty;
     }
 }
