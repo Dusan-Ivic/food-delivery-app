@@ -23,6 +23,12 @@ export function Stores() {
   const { deliveryLocation, openLocationModal } = useDeliveryLocation();
 
   useEffect(() => {
+    return () => {
+      dispatch(reset());
+    };
+  }, []);
+
+  useEffect(() => {
     if (deliveryLocation) {
       dispatch(getStores({ city: deliveryLocation.city }));
     } else if (!user || user?.userType === UserType.Customer) {
@@ -36,10 +42,6 @@ export function Stores() {
     if (status == StateStatus.Error && message) {
       toast.error(message);
     }
-
-    return () => {
-      dispatch(reset());
-    };
   }, [status, message]);
 
   const filteredStores = useMemo(() => {
