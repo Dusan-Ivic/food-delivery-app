@@ -1,8 +1,8 @@
 import { Button, Col, Form, Row } from "react-bootstrap";
 import { useAppSelector, useAppDispatch } from "../app/hooks";
 import { ChangePasswordRequestDto, UserBase } from "../interfaces/user";
-import { AddressDetails } from "../components/AddressDetails";
-import { UserDetails } from "../components/UserDetails";
+import { AddressDetails } from "../components/shared/AddressDetails";
+import { UserDetails } from "../components/users/UserDetails";
 import { AddressInfo } from "../interfaces/user";
 import {
   updateUser,
@@ -14,8 +14,8 @@ import {
 import { useEffect, useRef } from "react";
 import { UserType, StateStatus } from "../interfaces/enums";
 import { toast } from "react-toastify";
-import { UserAvatar } from "../components/UserAvatar";
-import { ChangePassword } from "../components/ChangePassword";
+import { UserAvatar } from "../components/users/UserAvatar";
+import { ChangePassword } from "../components/users/ChangePassword";
 
 export function Profile() {
   const { user, status, message } = useAppSelector((state) => state.auth);

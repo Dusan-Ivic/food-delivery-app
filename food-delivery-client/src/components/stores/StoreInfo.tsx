@@ -1,9 +1,9 @@
 import { Card, Form } from "react-bootstrap";
-import { StoreState } from "../interfaces/store";
+import { StoreState } from "../../interfaces/store";
 import { TbTruckDelivery, TbClockHour4 } from "react-icons/tb";
-import { formatCurrency } from "../utils/currencyFormatter";
+import { formatCurrency } from "../../utils/currencyFormatter";
 import { useRef } from "react";
-import { getFullImageUrl } from "../utils/imageUrlGenerator";
+import { getFullImageUrl } from "../../utils/imageUrlGenerator";
 import { FaLocationDot } from "react-icons/fa6";
 
 interface StoreInfoProps {

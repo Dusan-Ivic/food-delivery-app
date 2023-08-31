@@ -1,6 +1,6 @@
 import { Card } from "react-bootstrap";
-import { StoreState } from "../interfaces/store";
-import { getFullImageUrl } from "../utils/imageUrlGenerator";
+import { StoreState } from "../../interfaces/store";
+import { getFullImageUrl } from "../../utils/imageUrlGenerator";
 import { FaLocationDot } from "react-icons/fa6";
 
 interface StoreItemProps {

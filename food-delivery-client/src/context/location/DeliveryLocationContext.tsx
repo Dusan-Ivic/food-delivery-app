@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { useLocalStorage } from "../../hooks/useLocalStorage";
 import { DeliveryLocationContext } from "./useDeliveryLocation";
-import { FormModal, FormProps } from "../../components/FormModal";
-import { DeliveryAddressForm } from "../../components/forms/DeliveryAddressForm";
+import { FormModal, FormProps } from "../../components/shared/FormModal";
+import { DeliveryAddressForm } from "../../components/delivery/DeliveryAddressForm";
 import { useAppSelector } from "../../app/hooks";
 
 export function DeliveryLocationProvider({

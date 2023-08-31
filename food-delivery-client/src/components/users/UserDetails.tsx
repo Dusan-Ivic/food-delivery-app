@@ -2,7 +2,7 @@ import { Form, Row, Col, Button } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
-import { UserBase } from "../interfaces/user";
+import { UserBase } from "../../interfaces/user";
 
 interface UserDetailsProps {
   data: UserBase;

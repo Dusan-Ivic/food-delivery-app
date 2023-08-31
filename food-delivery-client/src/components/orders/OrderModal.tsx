@@ -1,12 +1,12 @@
 import { Button, Col, Modal, Row, Stack } from "react-bootstrap";
-import { OrderState } from "../interfaces/order";
-import { OrderStatus } from "../interfaces/enums";
-import { formatCurrency } from "../utils/currencyFormatter";
+import { OrderState } from "../../interfaces/order";
+import { OrderStatus } from "../../interfaces/enums";
+import { formatCurrency } from "../../utils/currencyFormatter";
 import { MdOutlineKeyboardDoubleArrowRight } from "react-icons/md";
 import { ImCancelCircle } from "react-icons/im";
 import { useEffect, useMemo, useState } from "react";
 import moment from "moment";
-import { getFullImageUrl } from "../utils/imageUrlGenerator";
+import { getFullImageUrl } from "../../utils/imageUrlGenerator";
 
 interface OrderModalProps {
   isVisible: boolean;

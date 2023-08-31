@@ -8,7 +8,7 @@ import { BasicInfo, BasicInfoForm } from "./BasicInfoForm";
 import { ContactInfo, ContactInfoForm } from "./ContactInfoForm";
 import { DeliveryInfo, DeliveryInfoForm } from "./DeliveryInfoForm";
 import { useForm, FormProvider } from "react-hook-form";
-import { Stepper, FormStep } from "../Stepper";
+import { Stepper, FormStep } from "../ui/Stepper";
 
 interface StoreModalProps {
   isVisible: boolean;

@@ -2,7 +2,7 @@ import { Button, Form } from "react-bootstrap";
 import { AddressInfo, UserState } from "../../interfaces/user";
 import { useState } from "react";
 import { CustomerState } from "../../interfaces/customer";
-import { AddressDetails } from "../AddressDetails";
+import { AddressDetails } from "../shared/AddressDetails";
 import { UserType } from "../../interfaces/enums";
 
 interface DeliveryAddressFormProps {

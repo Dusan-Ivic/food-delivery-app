@@ -1,6 +1,6 @@
 import { Button, Stack } from "react-bootstrap";
-import { CartItem } from "../interfaces/cart";
-import { formatCurrency } from "../utils/currencyFormatter";
+import { CartItem } from "../../interfaces/cart";
+import { formatCurrency } from "../../utils/currencyFormatter";
 
 interface ShoppingCartItemProps {
   item: CartItem;

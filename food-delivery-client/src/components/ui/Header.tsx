@@ -1,10 +1,10 @@
 import { Navbar, Nav, Container } from "react-bootstrap";
 import { NavLink } from "react-router-dom";
-import { logoutUser } from "../features/auth/authSlice";
-import { useAppDispatch, useAppSelector } from "../app/hooks";
+import { logoutUser } from "../../features/auth/authSlice";
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { useNavigate } from "react-router-dom";
 import { useMemo } from "react";
-import { UserType } from "../interfaces/enums";
+import { UserType } from "../../interfaces/enums";
 
 export function Header() {
   const navigate = useNavigate();

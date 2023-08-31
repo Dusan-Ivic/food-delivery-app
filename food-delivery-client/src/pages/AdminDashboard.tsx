@@ -17,12 +17,12 @@ import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { useEffect } from "react";
 import { PartnerStatus, StateStatus } from "../interfaces/enums";
 import { toast } from "react-toastify";
-import { PartnerTable } from "../components/PartnerTable";
+import { PartnerTable } from "../components/users/PartnerTable";
 import { Col, Row } from "react-bootstrap";
 import { PartnerState } from "../interfaces/partner";
-import { StoreTable } from "../components/StoreTable";
-import { OrderHistory } from "../components/OrderHistory";
-import { Spinner } from "../components/Spinner";
+import { StoreTable } from "../components/stores/StoreTable";
+import { OrderHistory } from "../components/orders/OrderHistory";
+import { Spinner } from "../components/ui/Spinner";
 
 export function AdminDashboard() {
   const dispatch = useAppDispatch();

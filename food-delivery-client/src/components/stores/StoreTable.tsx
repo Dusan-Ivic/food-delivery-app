@@ -1,8 +1,8 @@
 import { Table } from "react-bootstrap";
-import { StoreState } from "../interfaces/store";
+import { StoreState } from "../../interfaces/store";
 import { FaStoreAlt } from "react-icons/fa";
 import { Link } from "react-router-dom";
-import { getFullImageUrl } from "../utils/imageUrlGenerator";
+import { getFullImageUrl } from "../../utils/imageUrlGenerator";
 
 interface StoreTableProps {
   stores: StoreState[];

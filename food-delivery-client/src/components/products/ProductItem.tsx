@@ -1,10 +1,10 @@
 import { Card, Form } from "react-bootstrap";
-import { ProductState } from "../interfaces/product";
-import { formatCurrency } from "../utils/currencyFormatter";
+import { ProductState } from "../../interfaces/product";
+import { formatCurrency } from "../../utils/currencyFormatter";
 import { BiEdit } from "react-icons/bi";
 import { AiFillDelete, AiOutlinePlusSquare } from "react-icons/ai";
 import { useRef } from "react";
-import { getFullImageUrl } from "../utils/imageUrlGenerator";
+import { getFullImageUrl } from "../../utils/imageUrlGenerator";
 
 interface ProductItemProps {
   product: ProductState;

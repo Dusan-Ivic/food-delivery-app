@@ -12,14 +12,14 @@ import {
 } from "../features/products/productsSlice";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { StoreState } from "../interfaces/store";
-import { StoreInfo } from "../components/StoreInfo";
+import { StoreInfo } from "../components/stores/StoreInfo";
 import { IoArrowBack } from "react-icons/io5";
 import { HiOutlineShoppingCart } from "react-icons/hi";
 import { IoMdAddCircleOutline } from "react-icons/io";
 import { BiEdit } from "react-icons/bi";
-import { ProductList } from "../components/ProductList";
+import { ProductList } from "../components/products/ProductList";
 import { Button, Col, Row } from "react-bootstrap";
-import { ShoppingCart } from "../components/ShoppingCart";
+import { ShoppingCart } from "../components/cart/ShoppingCart";
 import {
   openCart,
   closeCart,
@@ -41,11 +41,11 @@ import { CartItem } from "../interfaces/cart";
 import { OrderRequestDto } from "../interfaces/order";
 import { StateStatus, UserType } from "../interfaces/enums";
 import { toast } from "react-toastify";
-import { ConfirmationModal } from "../components/ConfirmationModal";
+import { ConfirmationModal } from "../components/shared/ConfirmationModal";
 import { ProductRequestDto, ProductState } from "../interfaces/product";
-import { FormModal, FormProps } from "../components/FormModal";
-import { ProductForm } from "../components/forms/ProductForm";
-import { Spinner } from "../components/Spinner";
+import { FormModal, FormProps } from "../components/shared/FormModal";
+import { ProductForm } from "../components/products/ProductForm";
+import { Spinner } from "../components/ui/Spinner";
 import { FaLocationDot } from "react-icons/fa6";
 import { CustomerState } from "../interfaces/customer";
 import { useDeliveryLocation } from "../context/location/useDeliveryLocation";

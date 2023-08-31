@@ -1,6 +1,6 @@
 import { Card } from "react-bootstrap";
-import { UserType } from "../interfaces/enums";
-import { getFullImageUrl } from "../utils/imageUrlGenerator";
+import { UserType } from "../../interfaces/enums";
+import { getFullImageUrl } from "../../utils/imageUrlGenerator";
 
 interface UserAvatarProps {
   image: string | null;
