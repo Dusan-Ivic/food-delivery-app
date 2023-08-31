@@ -12,10 +12,10 @@ import {
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { RegisterCustomer } from "../components/forms/RegisterCustomer";
-import { RegisterPartner } from "../components/forms/RegisterPartner";
+import { RegisterCustomer } from "../components/users/RegisterCustomer";
+import { RegisterPartner } from "../components/users/RegisterPartner";
 import { IoArrowBack } from "react-icons/io5";
-import { Spinner } from "../components/Spinner";
+import { Spinner } from "../components/ui/Spinner";
 import { FaRegHandshake } from "react-icons/fa";
 import { AiOutlineUser } from "react-icons/ai";
 

@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { Col, Row } from "react-bootstrap";
-import { LoginForm } from "../components/forms/LoginForm";
+import { LoginForm } from "../components/users/LoginForm";
 import { LoginRequestDto } from "../interfaces/login";
 import { generateToken, reset } from "../features/auth/authSlice";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
@@ -9,7 +9,7 @@ import { GrantType, StateStatus, UserType } from "../interfaces/enums";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import { CreateTokenRequestDto } from "../interfaces/token";
-import { Spinner } from "../components/Spinner";
+import { Spinner } from "../components/ui/Spinner";
 
 export function Login() {
   const navigate = useNavigate();

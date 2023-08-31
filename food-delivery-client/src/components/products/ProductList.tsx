@@ -1,5 +1,5 @@
 import { Row, Col } from "react-bootstrap";
-import { ProductState } from "../interfaces/product";
+import { ProductState } from "../../interfaces/product";
 import { ProductItem } from "./ProductItem";
 
 interface ProductListProps {

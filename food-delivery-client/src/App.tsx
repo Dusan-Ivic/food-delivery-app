@@ -1,17 +1,9 @@
-import { Header } from "./components/Header";
+import { Header } from "./components/ui/Header";
 import { Container } from "react-bootstrap";
 import { Routes, Route } from "react-router-dom";
-import {
-  Home,
-  Login,
-  Profile,
-  Register,
-  Store,
-  Orders,
-  Dashboard,
-  Stores,
-} from "./pages";
-import { PrivateRoute } from "./components/PrivateRoute";
+import { Home, Login, Profile, Register, Store, Orders, Stores } from "./pages";
+import { Dashboard } from "./layouts";
+import { PrivateRoute } from "./components/ui/PrivateRoute";
 import { ToastContainer } from "react-toastify";
 import { useAppDispatch, useAppSelector } from "./app/hooks";
 import { getProfile, generateToken, reset } from "./features/auth/authSlice";

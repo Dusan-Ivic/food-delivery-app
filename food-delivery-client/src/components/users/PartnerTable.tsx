@@ -1,9 +1,9 @@
 import { Table } from "react-bootstrap";
-import { PartnerState } from "../interfaces/partner";
-import { PartnerStatus } from "../interfaces/enums";
+import { PartnerState } from "../../interfaces/partner";
+import { PartnerStatus } from "../../interfaces/enums";
 import { LuShieldCheck, LuShieldClose, LuShieldQuestion } from "react-icons/lu";
 import { HiOutlineX, HiOutlineCheck } from "react-icons/hi";
-import { getFullImageUrl } from "../utils/imageUrlGenerator";
+import { getFullImageUrl } from "../../utils/imageUrlGenerator";
 
 interface PartnerTableProps {
   partners: PartnerState[];

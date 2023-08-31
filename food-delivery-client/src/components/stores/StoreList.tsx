@@ -1,5 +1,5 @@
 import { Row, Col } from "react-bootstrap";
-import { StoreState } from "../interfaces/store";
+import { StoreState } from "../../interfaces/store";
 import { StoreItem } from "./StoreItem";
 import { Link } from "react-router-dom";
 

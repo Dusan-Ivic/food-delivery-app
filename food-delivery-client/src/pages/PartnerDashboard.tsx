@@ -14,10 +14,10 @@ import {
   clearOrders,
   reset as resetOrdersState,
 } from "../features/orders/ordersSlice";
-import { OrderHistory } from "../components/OrderHistory";
-import { StoreTable } from "../components/StoreTable";
+import { OrderHistory } from "../components/orders/OrderHistory";
+import { StoreTable } from "../components/stores/StoreTable";
 import { PartnerState } from "../interfaces/partner";
-import { Spinner } from "../components/Spinner";
+import { Spinner } from "../components/ui/Spinner";
 import { StoreModal } from "../components/stores/StoreModal";
 
 export function PartnerDashboard() {

@@ -1,7 +1,7 @@
 import { Table } from "react-bootstrap";
-import { OrderState } from "../interfaces/order";
-import { OrderStatus } from "../interfaces/enums";
-import { formatCurrency } from "../utils/currencyFormatter";
+import { OrderState } from "../../interfaces/order";
+import { OrderStatus } from "../../interfaces/enums";
+import { formatCurrency } from "../../utils/currencyFormatter";
 import moment from "moment";
 import { useState } from "react";
 import { OrderModal } from "./OrderModal";
