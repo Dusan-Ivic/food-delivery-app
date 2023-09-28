@@ -32,18 +32,6 @@ export function OrderModal({
     };
   }, []);
 
-  const canCancelOrder = useMemo(() => {
-    if (!order) {
-      return false;
-    }
-
-    if (!canManageOrders) {
-      return false;
-    }
-
-    return order.orderStatus === OrderStatus.Pending;
-  }, [order]);
-
   const getDeliveryTime = (order: OrderState) => {
     return moment(order.createdAt).add(
       order.store.deliveryTimeInMinutes,
@@ -64,6 +52,26 @@ export function OrderModal({
 
     return moment.utc(duration.asMilliseconds()).format("mm:ss");
   }, [currentTime, order]);
+
+  const getCurrentOrderStatus = (
+    order: OrderState,
+    timestamp: moment.Moment
+  ) => {
+    if (!order) return undefined;
+
+    if (order.orderStatus === OrderStatus.Canceled) {
+      return OrderStatus.Canceled;
+    } else if (getDeliveryTime(order).isAfter(timestamp)) {
+      return OrderStatus.Pending;
+    } else {
+      return OrderStatus.Completed;
+    }
+  };
+
+  const canCancelOrder =
+    order !== null &&
+    canManageOrders &&
+    getCurrentOrderStatus(order, currentTime) === OrderStatus.Pending;
 
   return (
     order && (
@@ -138,7 +146,8 @@ export function OrderModal({
               </Col>
               <Col className="d-flex flex-column justify-content-center align-items-baseline">
                 <div>
-                  {order.orderStatus === OrderStatus.Pending && (
+                  {getCurrentOrderStatus(order, currentTime) ===
+                    OrderStatus.Pending && (
                     <>
                       <div>
                         Delivering to:
@@ -149,7 +158,8 @@ export function OrderModal({
                       <div>In: {getFormattedDeliveryTime}</div>
                     </>
                   )}
-                  {order.orderStatus === OrderStatus.Completed && (
+                  {getCurrentOrderStatus(order, currentTime) ===
+                    OrderStatus.Completed && (
                     <>
                       <div>
                         Delivered to:
@@ -160,7 +170,8 @@ export function OrderModal({
                       <div>{getDeliveryTime(order).from(currentTime)}</div>
                     </>
                   )}
-                  {order.orderStatus === OrderStatus.Canceled && (
+                  {getCurrentOrderStatus(order, currentTime) ===
+                    OrderStatus.Canceled && (
                     <>
                       <div>
                         Delivery to:
