@@ -1,4 +1,5 @@
-﻿using FoodDeliveryApi.Models;
+﻿using FoodDeliveryApi.Dto.Geolocation;
+using FoodDeliveryApi.Models;
 
 namespace FoodDeliveryApi.Dto.Store
 {
