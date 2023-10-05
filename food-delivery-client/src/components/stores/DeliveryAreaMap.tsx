@@ -1,6 +1,6 @@
 import { MapContainer, TileLayer } from "react-leaflet";
 import { Coordinate } from "../../interfaces/geolocation";
-import { PolygonDrawer } from "./PolygonDrawer";
+import { PolygonDrawing } from "./PolygonDrawing";
 import { useFormContext } from "react-hook-form";
 import { FaUndo } from "react-icons/fa";
 import { FaDrawPolygon } from "react-icons/fa6";
@@ -93,7 +93,7 @@ export function DeliveryAreaMap() {
           attribution="&copy; <a href='https://www.openstreetmap.org/copyright'>OpenStreetMap</a> contributors"
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
-        <PolygonDrawer
+        <PolygonDrawing
           points={getValues("coordinates")}
           onSetPoint={addCoordinate}
         />

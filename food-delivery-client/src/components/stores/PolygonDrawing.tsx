@@ -1,12 +1,12 @@
 import { Coordinate } from "../../interfaces/geolocation";
 import { useMapEvents, Polyline } from "react-leaflet";
 
-interface PolygonDrawerProps {
+interface PolygonDrawingProps {
   points: Coordinate[];
   onSetPoint: (newPoint: Coordinate) => void;
 }
 
-export function PolygonDrawer({ points, onSetPoint }: PolygonDrawerProps) {
+export function PolygonDrawing({ points, onSetPoint }: PolygonDrawingProps) {
   useMapEvents({
     click(e) {
       const { lat, lng } = e.latlng;
