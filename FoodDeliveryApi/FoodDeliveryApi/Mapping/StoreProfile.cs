@@ -17,12 +17,15 @@ namespace FoodDeliveryApi.Mapping
             CreateMap<List<Coordinate>, Polygon>().ConvertUsing(new CoordinatesToPolygonConverter());
 
             CreateMap<CreateStoreRequestDto, Store>();
-            CreateMap<Store, CreateStoreResponseDto>();
+            CreateMap<Store, CreateStoreResponseDto>()
+                .ForMember(dest => dest.Coordinates, opt => opt.MapFrom(src => src.DeliveryArea.Coordinates));
 
-            CreateMap<Store, GetStoreResponseDto>();
+            CreateMap<Store, GetStoreResponseDto>()
+                .ForMember(dest => dest.Coordinates, opt => opt.MapFrom(src => src.DeliveryArea.Coordinates));
 
             CreateMap<UpdateStoreRequestDto, Store>();
-            CreateMap<Store, UpdateStoreResponseDto>();
+            CreateMap<Store, UpdateStoreResponseDto>()
+                .ForMember(dest => dest.Coordinates, opt => opt.MapFrom(src => src.DeliveryArea.Coordinates));
 
             CreateMap<Store, DeleteStoreResponseDto>();
 
