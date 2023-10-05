@@ -27,8 +27,8 @@ export const getStores = createAsyncThunk(
     try {
       if (requestDto && requestDto.partnerId) {
         return await storesService.getStoresByPartner(requestDto.partnerId);
-      } else if (requestDto && requestDto.city) {
-        return await storesService.getStoresByCity(requestDto.city);
+      } else if (requestDto && requestDto.coordinate) {
+        return await storesService.getStoresInArea(requestDto.coordinate);
       } else {
         return await storesService.getStores();
       }

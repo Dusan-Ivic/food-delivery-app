@@ -47,7 +47,6 @@ import { FormModal, FormProps } from "../components/shared/FormModal";
 import { ProductForm } from "../components/products/ProductForm";
 import { Spinner } from "../components/ui/Spinner";
 import { FaLocationDot } from "react-icons/fa6";
-import { CustomerState } from "../interfaces/customer";
 import { useDeliveryLocation } from "../context/location/useDeliveryLocation";
 import { StoreModal } from "../components/stores/StoreModal";
 
@@ -82,9 +81,9 @@ export function StorePage() {
     () => items.reduce((quantity, item) => item.quantity + quantity, 0),
     [items]
   );
-  const [selectedProduct, setSelectedProduct] = useState<ProductState | null>(
-    null
-  );
+  const [selectedProduct, setSelectedProduct] = useState<
+    ProductState | undefined
+  >(undefined);
   const [confirmModal, setConfirmModal] = useState<ModalProps>({
     isVisible: false,
     content: "",
@@ -94,17 +93,7 @@ export function StorePage() {
   const [isStoreModalVisible, setStoreModalVisible] = useState<boolean>(false);
   const [isProductModalVisible, setProductModalVisible] =
     useState<boolean>(false);
-  const { deliveryLocation, changeLocation } = useDeliveryLocation();
-
-  useEffect(() => {
-    if (!deliveryLocation && user && user.userType === UserType.Customer) {
-      changeLocation({
-        address: (user as CustomerState).address,
-        city: (user as CustomerState).city,
-        postalCode: (user as CustomerState).postalCode,
-      });
-    }
-  }, [deliveryLocation]);
+  const { deliveryLocation } = useDeliveryLocation();
 
   const store = useMemo<StoreState | null>(() => {
     const numberId = Number(id);
@@ -122,7 +111,7 @@ export function StorePage() {
   }, [id, stores]);
 
   useEffect(() => {
-    setProductModalVisible(selectedProduct != null);
+    setProductModalVisible(selectedProduct != undefined);
   }, [selectedProduct]);
 
   useEffect(() => {
@@ -174,9 +163,7 @@ export function StorePage() {
         productId: item.id,
         quantity: item.quantity,
       })),
-      address: deliveryLocation?.address || "",
-      city: deliveryLocation?.city || "",
-      postalCode: deliveryLocation?.postalCode || "",
+      location: deliveryLocation!.coordinate!,
     };
 
     dispatch(createOrder(requestDto));
@@ -272,7 +259,7 @@ export function StorePage() {
                 <div className="d-flex gap-1 align-items-center">
                   <FaLocationDot style={{ fontSize: "24px" }} />
                   {deliveryLocation ? (
-                    <div className="lead">{`${deliveryLocation.address}, ${deliveryLocation.city}`}</div>
+                    <div className="lead">Your location is set</div>
                   ) : (
                     <Link
                       to="/stores"
@@ -394,7 +381,7 @@ export function StorePage() {
               : dispatch(createProduct({ ...data, storeId: store.id }))
           }
           onClose={() => {
-            setSelectedProduct(null);
+            setSelectedProduct(undefined);
             setProductModalVisible(false);
           }}
         />

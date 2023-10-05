@@ -16,7 +16,7 @@ export function DeliveryAddressForm({
   user,
   onSubmit,
 }: DeliveryAddressFormProps) {
-  const [option, setOption] = useState<string>("current");
+  const [option, setOption] = useState<string>("profile_address");
 
   return (
     <div>
@@ -24,7 +24,7 @@ export function DeliveryAddressForm({
         <Form.Check
           type="radio"
           name="option"
-          value="new"
+          value="new_address"
           label="Choose new address"
           onChange={(e) => setOption(e.target.value)}
         />
@@ -33,14 +33,14 @@ export function DeliveryAddressForm({
           <Form.Check
             type="radio"
             name="option"
-            value="current"
+            value="profile_address"
             label="Use address from your profile"
             onChange={(e) => setOption(e.target.value)}
           />
         )}
       </div>
 
-      {option === "current" && (
+      {option === "profile_address" && (
         <Button
           variant="primary"
           className="w-100"
@@ -56,7 +56,9 @@ export function DeliveryAddressForm({
         </Button>
       )}
 
-      {option === "new" && <AddressDetails data={data} onSubmit={onSubmit} />}
+      {option === "new_address" && (
+        <AddressDetails data={data} onSubmit={onSubmit} />
+      )}
     </div>
   );
 }

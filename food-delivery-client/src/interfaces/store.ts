@@ -29,5 +29,5 @@ export interface StoreState extends StoreBase {
 
 export interface GetStoresRequestDto {
   partnerId?: number;
-  city?: string;
+  coordinate?: Coordinate;
 }

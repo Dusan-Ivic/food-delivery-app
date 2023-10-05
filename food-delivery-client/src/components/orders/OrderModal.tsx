@@ -150,10 +150,10 @@ export function OrderModal({
                     OrderStatus.Pending && (
                     <>
                       <div>
-                        Delivering to:
-                        <div className="text-muted">
+                        Delivering
+                        {/* <div className="text-muted">
                           {order.address}, {order.city}
-                        </div>
+                        </div> */}
                       </div>
                       <div>In: {getFormattedDeliveryTime}</div>
                     </>
@@ -162,10 +162,10 @@ export function OrderModal({
                     OrderStatus.Completed && (
                     <>
                       <div>
-                        Delivered to:
-                        <div className="text-muted">
+                        Delivered
+                        {/* <div className="text-muted">
                           {order.address}, {order.city}
-                        </div>
+                        </div> */}
                       </div>
                       <div>{getDeliveryTime(order).from(currentTime)}</div>
                     </>
@@ -174,10 +174,10 @@ export function OrderModal({
                     OrderStatus.Canceled && (
                     <>
                       <div>
-                        Delivery to:
-                        <div className="text-muted">
+                        Delivery
+                        {/* <div className="text-muted">
                           {order.address}, {order.city}
-                        </div>
+                        </div> */}
                       </div>
                       <div className="text-danger">Canceled</div>
                     </>

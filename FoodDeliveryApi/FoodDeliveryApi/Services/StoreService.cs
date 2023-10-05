@@ -27,7 +27,7 @@ namespace FoodDeliveryApi.Services
             _mapper = mapper;
         }
 
-        public async Task<List<GetStoreResponseDto>> GetStores(long? partnerId, string? city)
+        public async Task<List<GetStoreResponseDto>> GetStores(long? partnerId, double? latitude, double? longitude)
         {
             List<Store> allStores = await _storeRepository.GetAllStores();
             List<Store> stores = new List<Store>();
@@ -36,9 +36,10 @@ namespace FoodDeliveryApi.Services
             {
                 stores = allStores.Where(x => x.PartnerId == partnerId.Value).ToList();
             }
-            else if (!string.IsNullOrEmpty(city))
+            else if (latitude.HasValue && longitude.HasValue)
             {
-                stores = allStores.Where(x => x.City.ToLower() == city.ToLower()).ToList();
+                Point point = new Point(new Coordinate(longitude.Value, latitude.Value));
+                stores = allStores.Where(x => point.Within(x.DeliveryArea)).ToList();
             }
             else
             {

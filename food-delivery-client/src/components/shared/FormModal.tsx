@@ -5,13 +5,13 @@ export interface FormModalProps<T> {
   isVisible: boolean;
   title: string;
   FormComponent: ComponentType<FormProps<T>>;
-  data: T | null;
+  data: T | undefined;
   onSubmit: (data: T) => void;
   onClose: () => void;
 }
 
 export interface FormProps<T> {
-  data: T | null;
+  data: T | undefined;
   onSubmit: (data: T) => void;
 }
 
