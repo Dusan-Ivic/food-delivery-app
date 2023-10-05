@@ -7,6 +7,7 @@ using FoodDeliveryApi.Exceptions;
 using FoodDeliveryApi.Interfaces.Repositories;
 using FoodDeliveryApi.Interfaces.Services;
 using FoodDeliveryApi.Models;
+using NetTopologySuite.Geometries;
 
 namespace FoodDeliveryApi.Services
 {
@@ -52,12 +53,27 @@ namespace FoodDeliveryApi.Services
             Order order = _mapper.Map<Order>(requestDto);
             order.CustomerId = customerId;
 
+            // TODO - Replace this with real data later
+            order.Address = "TEST";
+            order.City = "TEST";
+            order.PostalCode = "TEST";
+
             ValidationResult validationResult = _validator.Validate(order);
 
             if (!validationResult.IsValid)
             {
                 throw new ValidationException(validationResult.Errors);
             }
+
+            Point deliveryLocationPoint = _mapper.Map<Point>(order.Coordinate);
+
+            if (!deliveryLocationPoint.IsValid)
+            {
+                throw new InvalidTopologyException("Delivery location is not a valid location");
+            }
+
+            deliveryLocationPoint.SRID = 4326;
+            order.DeliveryLocation = deliveryLocationPoint;
 
             Store? store = await _storeRepository.GetStoreById(order.StoreId);
 
@@ -66,9 +82,9 @@ namespace FoodDeliveryApi.Services
                 throw new ResourceNotFoundException("Store with this id doesn't exist");
             }
 
-            if (store.City != order.City)
+            if (!deliveryLocationPoint.Within(store.DeliveryArea))
             {
-                throw new AddressNotSupportedException("This store doesn't deliver to your address.");
+                throw new AddressNotSupportedException("This store doesn't deliver to your location.");
             }
 
             foreach (OrderItem orderItem in order.Items)

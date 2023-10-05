@@ -32,6 +32,10 @@ namespace FoodDeliveryApi.Configurations
             builder.Property(x => x.City).IsRequired().HasMaxLength(50);
 
             builder.Property(x => x.PostalCode).IsRequired().HasMaxLength(10);
+
+            builder.Property(x => x.DeliveryLocation).IsRequired().HasColumnType("geometry (point)");
+
+            builder.Ignore(x => x.Coordinate);
         }
     }
 

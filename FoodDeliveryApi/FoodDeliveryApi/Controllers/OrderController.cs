@@ -74,6 +74,10 @@ namespace FoodDeliveryApi.Controllers
             {
                 return BadRequest(new ErrorResponseDto() { Message = ex.Message });
             }
+            catch (InvalidTopologyException ex)
+            {
+                return BadRequest(new ErrorResponseDto() { Message = ex.Message });
+            }
 
             return Ok(responseDto);
         }

@@ -19,7 +19,7 @@ export interface OrderItemResponseDto {
 
 export interface OrderBase {
   storeId: number;
-  location: Coordinate;
+  coordinate: Coordinate;
 }
 
 export interface OrderRequestDto extends OrderBase {

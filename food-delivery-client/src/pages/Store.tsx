@@ -163,7 +163,7 @@ export function StorePage() {
         productId: item.id,
         quantity: item.quantity,
       })),
-      location: deliveryLocation!.coordinate!,
+      coordinate: deliveryLocation!.coordinate!,
     };
 
     dispatch(createOrder(requestDto));

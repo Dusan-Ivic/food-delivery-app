@@ -1,8 +1,11 @@
 ﻿using AutoMapper;
+using FoodDeliveryApi.Converters;
+using FoodDeliveryApi.Dto.Geolocation;
 using FoodDeliveryApi.Dto.Order;
 using FoodDeliveryApi.Enums;
 using FoodDeliveryApi.Models;
 using Microsoft.AspNetCore.Routing.Constraints;
+using NetTopologySuite.Geometries;
 
 namespace FoodDeliveryApi.Mapping
 {
@@ -10,6 +13,9 @@ namespace FoodDeliveryApi.Mapping
     {
         public OrderProfile()
         {
+            CreateMap<CoordinateDto, Coordinate>().ReverseMap();
+            CreateMap<Coordinate, Point>().ConvertUsing(new CoordinateToPointConverter());
+
             CreateMap<OrderItemRequestDto, OrderItem>();
             CreateMap<OrderItem, OrderItemResponseDto>();
 
@@ -17,9 +23,11 @@ namespace FoodDeliveryApi.Mapping
             CreateMap<Order, OrderItemResponseDto>();
 
             CreateMap<CreateOrderRequestDto, Order>();
-            CreateMap<Order, CreateOrderResponseDto>();
+            CreateMap<Order, CreateOrderResponseDto>()
+                .ForMember(dest => dest.Coordinate, opt => opt.MapFrom(src => src.DeliveryLocation.Coordinate));
 
-            CreateMap<Order, GetOrderResponseDto>();
+            CreateMap<Order, GetOrderResponseDto>()
+                .ForMember(dest => dest.Coordinate, opt => opt.MapFrom(src => src.DeliveryLocation.Coordinate));
 
             CreateMap<OrderItem, GetOrderItemResponseDto>();
 

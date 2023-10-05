@@ -73,7 +73,7 @@ namespace FoodDeliveryApi.Controllers
             {
                 return BadRequest(new ErrorResponseDto() { Message = ex.Message });
             }
-            catch (InvalidPolygonException ex)
+            catch (InvalidTopologyException ex)
             {
                 return BadRequest(new ErrorResponseDto() { Message = ex.Message });
             }
@@ -112,6 +112,10 @@ namespace FoodDeliveryApi.Controllers
                 {
                     Message = ex.Message
                 });
+            }
+            catch (InvalidTopologyException ex)
+            {
+                return BadRequest(new ErrorResponseDto() { Message = ex.Message });
             }
 
             return Ok(responseDto);

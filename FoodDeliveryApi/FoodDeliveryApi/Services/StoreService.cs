@@ -77,7 +77,7 @@ namespace FoodDeliveryApi.Services
 
             if (!deliveryAreaPolygon.IsValid)
             {
-                throw new InvalidPolygonException("Delivery area is not a valid polygon");
+                throw new InvalidTopologyException("Delivery area is not a valid polygon");
             }
 
             deliveryAreaPolygon.SRID = 4326;
@@ -131,7 +131,7 @@ namespace FoodDeliveryApi.Services
 
             if (!deliveryAreaPolygon.IsValid)
             {
-                throw new InvalidPolygonException("Delivery area is not a valid polygon");
+                throw new InvalidTopologyException("Delivery area is not a valid polygon");
             }
 
             deliveryAreaPolygon.SRID = 4326;
