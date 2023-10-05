@@ -14,9 +14,6 @@ namespace FoodDeliveryApi.Migrations
             migrationBuilder.DropTable(
                 name: "User");
 
-            migrationBuilder.DropSequence(
-                name: "UserSequence");
-
             migrationBuilder.AlterColumn<long>(
                 name: "Id",
                 table: "Admins",
@@ -63,9 +60,6 @@ namespace FoodDeliveryApi.Migrations
         {
             migrationBuilder.DropTable(
                 name: "Partners");
-
-            migrationBuilder.CreateSequence(
-                name: "UserSequence");
 
             migrationBuilder.AlterColumn<long>(
                 name: "Id",
