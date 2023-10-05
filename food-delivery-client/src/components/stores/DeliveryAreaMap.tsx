@@ -38,10 +38,20 @@ export function DeliveryAreaMap() {
   const completePolygon = () => {
     const currentCoordinates = getValues("coordinates");
     if (currentCoordinates.length > 3) {
-      setValue("coordinates", [...currentCoordinates, currentCoordinates[0]], {
-        shouldValidate: true,
-        shouldDirty: true,
-      });
+      const firstPoint = currentCoordinates[0];
+      const lastPoint = currentCoordinates[currentCoordinates.length - 1];
+      const isClosedPolygon =
+        firstPoint.x === lastPoint.x && firstPoint.y === lastPoint.y;
+      if (!isClosedPolygon) {
+        setValue(
+          "coordinates",
+          [...currentCoordinates, currentCoordinates[0]],
+          {
+            shouldValidate: true,
+            shouldDirty: true,
+          }
+        );
+      }
     }
   };
 
