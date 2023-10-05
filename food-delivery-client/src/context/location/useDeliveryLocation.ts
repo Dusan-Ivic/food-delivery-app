@@ -2,7 +2,7 @@ import { createContext, useContext } from "react";
 import { DeliveryLocation } from "./DeliveryLocationContext";
 
 interface DeliveryLocationContextType {
-  deliveryLocation: DeliveryLocation | undefined;
+  deliveryLocation: DeliveryLocation | null;
   changeLocation: (newLocation: DeliveryLocation) => void;
   openLocationModal: () => void;
 }

@@ -17,9 +17,8 @@ export function DeliveryLocationProvider({
   children,
 }: DeliveryLocationProviderProps) {
   const [isModalVisible, setModalVisible] = useState<boolean>(false);
-  const [deliveryLocation, setDeliveryLocation] = useLocalStorage<
-    DeliveryLocation | undefined
-  >("deliveryLocation", undefined);
+  const [deliveryLocation, setDeliveryLocation] =
+    useLocalStorage<DeliveryLocation | null>("deliveryLocation", null);
 
   const changeLocation = (newLocation: DeliveryLocation) => {
     setDeliveryLocation(newLocation);
