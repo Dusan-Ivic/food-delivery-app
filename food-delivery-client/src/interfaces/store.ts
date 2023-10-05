@@ -1,3 +1,5 @@
+import { Coordinate } from "./geolocation";
+
 export interface StoreBase {
   name: string;
   description: string;
@@ -8,6 +10,7 @@ export interface StoreBase {
   category: string;
   deliveryTimeInMinutes: number;
   deliveryFee: number;
+  coordinates: Coordinate[];
 }
 
 export interface StoreRequestDto extends StoreBase {}

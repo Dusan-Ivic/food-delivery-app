@@ -9,6 +9,8 @@ import { ContactInfo, ContactInfoForm } from "./ContactInfoForm";
 import { DeliveryInfo, DeliveryInfoForm } from "./DeliveryInfoForm";
 import { useForm, FormProvider } from "react-hook-form";
 import { Stepper, FormStep } from "../ui/Stepper";
+import { DeliveryArea, DeliveryAreaMap } from "./DeliveryAreaMap";
+import { Coordinate } from "../../interfaces/geolocation";
 
 interface StoreModalProps {
   isVisible: boolean;
@@ -18,7 +20,7 @@ interface StoreModalProps {
   onClose: () => void;
 }
 
-type StoreInfo = BasicInfo & ContactInfo & DeliveryInfo;
+type StoreInfo = BasicInfo & ContactInfo & DeliveryInfo & DeliveryArea;
 
 export function StoreModal({
   isVisible,
@@ -43,6 +45,11 @@ export function StoreModal({
       index: 2,
       title: "Delivery Info",
       component: DeliveryInfoForm,
+    },
+    {
+      index: 3,
+      title: "Delivery Area",
+      component: DeliveryAreaMap,
     },
   ];
 
@@ -100,13 +107,31 @@ export function StoreModal({
       .max(10, "Delivery fee can't be greater than $10"),
   });
 
+  const deliveryAreaValidationSchema = Yup.object<DeliveryArea>().shape({
+    coordinates: Yup.array()
+      .required("Coordinates are required")
+      .min(4, "Coordinates must have at least 4 points")
+      .test(
+        "closedPolygon",
+        "Coordinates must form a closed ring",
+        function (value: Coordinate[]) {
+          if (value.length > 3) {
+            const firstPoint = value[0];
+            const lastPoint = value[value.length - 1];
+            return firstPoint.x === lastPoint.x && firstPoint.y === lastPoint.y;
+          }
+        }
+      ),
+  });
+
   const validationSchemas: Yup.ObjectSchema<
-    BasicInfo | ContactInfo | DeliveryInfo,
+    BasicInfo | ContactInfo | DeliveryInfo | DeliveryArea,
     any
   >[] = [
     basicInfoValidationSchema,
     contactInfoValidationSchema,
     deliveryInfoValidationSchema,
+    deliveryAreaValidationSchema,
   ];
 
   const initialValues = {
@@ -119,6 +144,7 @@ export function StoreModal({
     postalCode: data?.postalCode || "",
     deliveryTimeInMinutes: data?.deliveryTimeInMinutes || 0,
     deliveryFee: data?.deliveryFee || 0,
+    coordinates: data?.coordinates || [],
   };
 
   const currentStepValidationSchema = validationSchemas[currentStepIndex];
@@ -129,7 +155,9 @@ export function StoreModal({
   });
   const { handleSubmit, reset } = methods;
 
-  function submitFormPart(partialData: BasicInfo | ContactInfo | DeliveryInfo) {
+  function submitFormPart(
+    partialData: BasicInfo | ContactInfo | DeliveryInfo | DeliveryArea
+  ) {
     if (!isLastStep) {
       setFormData((prevData) => ({ ...prevData, ...partialData }));
       return stepForward();
@@ -150,7 +178,12 @@ export function StoreModal({
   }
 
   return (
-    <Modal show={isVisible} onHide={closeModal}>
+    <Modal
+      show={isVisible}
+      onHide={closeModal}
+      className="modal-lg"
+      style={{ height: "100%" }}
+    >
       <Modal.Header closeButton>
         <Modal.Title>{title}</Modal.Title>
       </Modal.Header>
