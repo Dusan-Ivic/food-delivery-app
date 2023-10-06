@@ -21,10 +21,6 @@ export function DeliveryLocationProvider({
   const [deliveryLocation, setDeliveryLocation] =
     useLocalStorage<DeliveryLocation | null>("deliveryLocation", null);
 
-  const changeLocation = (newLocation: DeliveryLocation) => {
-    setDeliveryLocation(newLocation);
-  };
-
   const openLocationModal = () => {
     setModalVisible(true);
   };
@@ -38,7 +34,7 @@ export function DeliveryLocationProvider({
 
   return (
     <DeliveryLocationContext.Provider
-      value={{ deliveryLocation, changeLocation, openLocationModal }}
+      value={{ deliveryLocation, openLocationModal }}
     >
       {children}
       <FormModal
