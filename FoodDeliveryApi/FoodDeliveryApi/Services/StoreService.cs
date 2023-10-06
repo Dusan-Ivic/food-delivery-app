@@ -10,7 +10,6 @@ using FoodDeliveryApi.Interfaces.Services;
 using FoodDeliveryApi.Models;
 using FoodDeliveryApi.Repositories;
 using NetTopologySuite.Geometries;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace FoodDeliveryApi.Services
 {

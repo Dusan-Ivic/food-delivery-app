@@ -7,6 +7,7 @@ import { Coordinate } from "../../interfaces/geolocation";
 
 export interface DeliveryLocation {
   coordinate: Coordinate | undefined;
+  address: string | undefined;
 }
 
 interface DeliveryLocationProviderProps {
@@ -28,10 +29,10 @@ export function DeliveryLocationProvider({
     setModalVisible(true);
   };
 
-  const DeliveryAddressFormComponent = ({
+  const DeliveryLocationMapComponent = ({
     data,
     onSubmit,
-  }: FormProps<Coordinate>) => {
+  }: FormProps<DeliveryLocation>) => {
     return <DeliveryLocationMap location={data} onSetLocation={onSubmit} />;
   };
 
@@ -43,13 +44,15 @@ export function DeliveryLocationProvider({
       <FormModal
         isVisible={isModalVisible}
         title="Set delivery location"
-        FormComponent={DeliveryAddressFormComponent}
-        data={deliveryLocation?.coordinate}
-        onSubmit={(newLocation) =>
+        FormComponent={DeliveryLocationMapComponent}
+        data={deliveryLocation}
+        onSubmit={(data) => {
           setDeliveryLocation({
-            coordinate: newLocation,
-          })
-        }
+            coordinate: data.coordinate,
+            address: data.address,
+          });
+          setModalVisible(false);
+        }}
         onClose={() => setModalVisible(false)}
       />
     </DeliveryLocationContext.Provider>

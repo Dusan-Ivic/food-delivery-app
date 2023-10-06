@@ -5,13 +5,13 @@ export interface FormModalProps<T> {
   isVisible: boolean;
   title: string;
   FormComponent: ComponentType<FormProps<T>>;
-  data: T | undefined;
+  data: T | null;
   onSubmit: (data: T) => void;
   onClose: () => void;
 }
 
 export interface FormProps<T> {
-  data: T | undefined;
+  data: T | null;
   onSubmit: (data: T) => void;
 }
 
@@ -23,18 +23,13 @@ export function FormModal<T extends object>({
   onSubmit,
   onClose,
 }: FormModalProps<T>) {
-  const handleOwnSubmit = (data: T) => {
-    onSubmit(data);
-    onClose();
-  };
-
   return (
     <Modal show={isVisible} onHide={onClose}>
       <Modal.Header closeButton>
         <Modal.Title>{title}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <FormComponent data={data} onSubmit={handleOwnSubmit} />
+        <FormComponent data={data} onSubmit={onSubmit} />
       </Modal.Body>
     </Modal>
   );

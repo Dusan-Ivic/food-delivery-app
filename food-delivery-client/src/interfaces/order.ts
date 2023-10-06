@@ -20,6 +20,7 @@ export interface OrderItemResponseDto {
 export interface OrderBase {
   storeId: number;
   coordinate: Coordinate;
+  address: string;
 }
 
 export interface OrderRequestDto extends OrderBase {
@@ -36,9 +37,6 @@ export interface OrderResponseDto extends OrderBase {
   totalPrice: number;
   orderStatus: OrderStatus;
   items: OrderItemResponseDto[];
-  address: string;
-  city: string;
-  postalCode: string;
 }
 
 export interface OrderItemState {

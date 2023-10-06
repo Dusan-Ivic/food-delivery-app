@@ -81,9 +81,9 @@ export function StorePage() {
     () => items.reduce((quantity, item) => item.quantity + quantity, 0),
     [items]
   );
-  const [selectedProduct, setSelectedProduct] = useState<
-    ProductState | undefined
-  >(undefined);
+  const [selectedProduct, setSelectedProduct] = useState<ProductState | null>(
+    null
+  );
   const [confirmModal, setConfirmModal] = useState<ModalProps>({
     isVisible: false,
     content: "",
@@ -111,7 +111,7 @@ export function StorePage() {
   }, [id, stores]);
 
   useEffect(() => {
-    setProductModalVisible(selectedProduct != undefined);
+    setProductModalVisible(selectedProduct != null);
   }, [selectedProduct]);
 
   useEffect(() => {
@@ -157,14 +157,15 @@ export function StorePage() {
   }, []);
 
   const submitOrder = (store: StoreState, items: CartItem[]) => {
-    if (deliveryLocation) {
+    if (deliveryLocation?.coordinate && deliveryLocation?.address) {
       const requestDto: OrderRequestDto = {
         storeId: store.id,
         items: items.map((item) => ({
           productId: item.id,
           quantity: item.quantity,
         })),
-        coordinate: deliveryLocation.coordinate!,
+        coordinate: deliveryLocation.coordinate,
+        address: deliveryLocation.address,
       };
 
       dispatch(createOrder(requestDto));
@@ -374,7 +375,7 @@ export function StorePage() {
           title={selectedProduct ? "Update product" : "Add new product"}
           FormComponent={ProductFormComponent}
           data={selectedProduct as ProductRequestDto}
-          onSubmit={(data) =>
+          onSubmit={(data) => {
             selectedProduct
               ? dispatch(
                   updateProduct({
@@ -382,10 +383,12 @@ export function StorePage() {
                     requestDto: { ...data, storeId: store.id },
                   })
                 )
-              : dispatch(createProduct({ ...data, storeId: store.id }))
-          }
+              : dispatch(createProduct({ ...data, storeId: store.id }));
+            setSelectedProduct(null);
+            setProductModalVisible(false);
+          }}
           onClose={() => {
-            setSelectedProduct(undefined);
+            setSelectedProduct(null);
             setProductModalVisible(false);
           }}
         />

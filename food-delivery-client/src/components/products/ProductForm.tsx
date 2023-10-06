@@ -6,7 +6,7 @@ import { ProductRequestDto } from "../../interfaces/product";
 
 interface ProductFormProps {
   onSubmit: (data: ProductRequestDto) => void;
-  product: ProductRequestDto | undefined;
+  product: ProductRequestDto | null;
 }
 
 export function ProductForm({ onSubmit, product }: ProductFormProps) {

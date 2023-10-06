@@ -53,11 +53,6 @@ namespace FoodDeliveryApi.Services
             Order order = _mapper.Map<Order>(requestDto);
             order.CustomerId = customerId;
 
-            // TODO - Replace this with real data later
-            order.Address = "TEST";
-            order.City = "TEST";
-            order.PostalCode = "TEST";
-
             ValidationResult validationResult = _validator.Validate(order);
 
             if (!validationResult.IsValid)
