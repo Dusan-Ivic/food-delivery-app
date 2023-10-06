@@ -157,16 +157,20 @@ export function StorePage() {
   }, []);
 
   const submitOrder = (store: StoreState, items: CartItem[]) => {
-    const requestDto: OrderRequestDto = {
-      storeId: store.id,
-      items: items.map((item) => ({
-        productId: item.id,
-        quantity: item.quantity,
-      })),
-      coordinate: deliveryLocation!.coordinate!,
-    };
+    if (deliveryLocation) {
+      const requestDto: OrderRequestDto = {
+        storeId: store.id,
+        items: items.map((item) => ({
+          productId: item.id,
+          quantity: item.quantity,
+        })),
+        coordinate: deliveryLocation.coordinate!,
+      };
 
-    dispatch(createOrder(requestDto));
+      dispatch(createOrder(requestDto));
+    } else {
+      toast.warn("Please go back and set your location");
+    }
   };
 
   const canManageCart = useMemo(() => {
