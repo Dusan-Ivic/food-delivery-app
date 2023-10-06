@@ -24,9 +24,9 @@ namespace FoodDeliveryApi.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetStores([FromQuery] long? partnerId = null, string? city = null)
+        public async Task<IActionResult> GetStores([FromQuery] long? partnerId = null, double? latitude = null, double? longitude = null)
         {
-            List<GetStoreResponseDto> responseDto = await _storeService.GetStores(partnerId ?? null, city ?? null);
+            List<GetStoreResponseDto> responseDto = await _storeService.GetStores(partnerId ?? null, latitude ?? null, longitude ?? null);
 
             return Ok(responseDto);
         }
@@ -73,6 +73,10 @@ namespace FoodDeliveryApi.Controllers
             {
                 return BadRequest(new ErrorResponseDto() { Message = ex.Message });
             }
+            catch (InvalidTopologyException ex)
+            {
+                return BadRequest(new ErrorResponseDto() { Message = ex.Message });
+            }
 
             return Ok(responseDto);
         }
@@ -108,6 +112,10 @@ namespace FoodDeliveryApi.Controllers
                 {
                     Message = ex.Message
                 });
+            }
+            catch (InvalidTopologyException ex)
+            {
+                return BadRequest(new ErrorResponseDto() { Message = ex.Message });
             }
 
             return Ok(responseDto);

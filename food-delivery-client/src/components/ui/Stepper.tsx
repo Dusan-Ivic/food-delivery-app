@@ -13,7 +13,7 @@ interface StepperProps {
 
 export function Stepper({ steps, activeStep }: StepperProps) {
   return (
-    <div className="d-flex justify-content-between align-items-center mb-2 bg-light p-2 rounded">
+    <div className="d-flex justify-content-around align-items-center mb-2 bg-light p-2 rounded">
       {steps.map((step) => (
         <div
           key={step.index}
@@ -27,7 +27,7 @@ export function Stepper({ steps, activeStep }: StepperProps) {
           >
             {step.index + 1}
           </div>
-          <div>{step.title}</div>
+          <div className="d-none d-lg-block">{step.title}</div>
         </div>
       ))}
     </div>

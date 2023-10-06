@@ -47,7 +47,6 @@ import { FormModal, FormProps } from "../components/shared/FormModal";
 import { ProductForm } from "../components/products/ProductForm";
 import { Spinner } from "../components/ui/Spinner";
 import { FaLocationDot } from "react-icons/fa6";
-import { CustomerState } from "../interfaces/customer";
 import { useDeliveryLocation } from "../context/location/useDeliveryLocation";
 import { StoreModal } from "../components/stores/StoreModal";
 
@@ -94,17 +93,7 @@ export function StorePage() {
   const [isStoreModalVisible, setStoreModalVisible] = useState<boolean>(false);
   const [isProductModalVisible, setProductModalVisible] =
     useState<boolean>(false);
-  const { deliveryLocation, changeLocation } = useDeliveryLocation();
-
-  useEffect(() => {
-    if (!deliveryLocation && user && user.userType === UserType.Customer) {
-      changeLocation({
-        address: (user as CustomerState).address,
-        city: (user as CustomerState).city,
-        postalCode: (user as CustomerState).postalCode,
-      });
-    }
-  }, [deliveryLocation]);
+  const { deliveryLocation } = useDeliveryLocation();
 
   const store = useMemo<StoreState | null>(() => {
     const numberId = Number(id);
@@ -168,18 +157,21 @@ export function StorePage() {
   }, []);
 
   const submitOrder = (store: StoreState, items: CartItem[]) => {
-    const requestDto: OrderRequestDto = {
-      storeId: store.id,
-      items: items.map((item) => ({
-        productId: item.id,
-        quantity: item.quantity,
-      })),
-      address: deliveryLocation?.address || "",
-      city: deliveryLocation?.city || "",
-      postalCode: deliveryLocation?.postalCode || "",
-    };
+    if (deliveryLocation?.coordinate && deliveryLocation?.address) {
+      const requestDto: OrderRequestDto = {
+        storeId: store.id,
+        items: items.map((item) => ({
+          productId: item.id,
+          quantity: item.quantity,
+        })),
+        coordinate: deliveryLocation.coordinate,
+        address: deliveryLocation.address,
+      };
 
-    dispatch(createOrder(requestDto));
+      dispatch(createOrder(requestDto));
+    } else {
+      toast.warn("Please go back and set your location");
+    }
   };
 
   const canManageCart = useMemo(() => {
@@ -272,7 +264,7 @@ export function StorePage() {
                 <div className="d-flex gap-1 align-items-center">
                   <FaLocationDot style={{ fontSize: "24px" }} />
                   {deliveryLocation ? (
-                    <div className="lead">{`${deliveryLocation.address}, ${deliveryLocation.city}`}</div>
+                    <div className="lead">Your location is set</div>
                   ) : (
                     <Link
                       to="/stores"
@@ -383,7 +375,7 @@ export function StorePage() {
           title={selectedProduct ? "Update product" : "Add new product"}
           FormComponent={ProductFormComponent}
           data={selectedProduct as ProductRequestDto}
-          onSubmit={(data) =>
+          onSubmit={(data) => {
             selectedProduct
               ? dispatch(
                   updateProduct({
@@ -391,8 +383,10 @@ export function StorePage() {
                     requestDto: { ...data, storeId: store.id },
                   })
                 )
-              : dispatch(createProduct({ ...data, storeId: store.id }))
-          }
+              : dispatch(createProduct({ ...data, storeId: store.id }));
+            setSelectedProduct(null);
+            setProductModalVisible(false);
+          }}
           onClose={() => {
             setSelectedProduct(null);
             setProductModalVisible(false);

@@ -2,6 +2,7 @@ import axios from "axios";
 import { StoreRequestDto, StoreResponseDto } from "../../interfaces/store";
 import { ImageResponseDto } from "../../interfaces/image";
 import apiClient from "../../config/apiClient";
+import { Coordinate } from "../../interfaces/geolocation";
 
 const getStores = async (): Promise<StoreResponseDto[]> => {
   try {
@@ -33,12 +34,12 @@ const getStoresByPartner = async (
   }
 };
 
-const getStoresByCity = async (
-  cityName: string
+const getStoresInArea = async (
+  coordinate: Coordinate
 ): Promise<StoreResponseDto[]> => {
   try {
     const response = await apiClient.get<StoreResponseDto[]>(
-      `/api/stores?city=${cityName}`
+      `/api/stores?latitude=${coordinate.y}&longitude=${coordinate.x}`
     );
     return response.data;
   } catch (error) {
@@ -128,7 +129,7 @@ const updateStore = async (
 const storesService = {
   getStores,
   getStoresByPartner,
-  getStoresByCity,
+  getStoresInArea,
   createStore,
   uploadImage,
   updateStore,

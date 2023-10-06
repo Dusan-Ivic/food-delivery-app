@@ -16,15 +16,10 @@ namespace FoodDeliveryApi.Validators
 
             RuleFor(x => x.Address)
                 .NotEmpty().WithMessage("Address is required")
-                .MaximumLength(100).WithMessage("Address is too long");
+                .MaximumLength(200).WithMessage("Address is too long");
 
-            RuleFor(x => x.City)
-                .NotEmpty().WithMessage("City is required")
-                .MaximumLength(50).WithMessage("City is too long");
-
-            RuleFor(x => x.PostalCode)
-                .NotEmpty().WithMessage("Postal code is required")
-                .MaximumLength(10).WithMessage("Postal code is too long");
+            RuleFor(x => x.Coordinate)
+                .NotNull().WithMessage("Coordinate is required");
         }
     }
 

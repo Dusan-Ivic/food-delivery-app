@@ -1,7 +1,10 @@
 ﻿using AutoMapper;
+using FoodDeliveryApi.Converters;
 using FoodDeliveryApi.Dto.Auth;
+using FoodDeliveryApi.Dto.Geolocation;
 using FoodDeliveryApi.Dto.Store;
 using FoodDeliveryApi.Models;
+using NetTopologySuite.Geometries;
 
 namespace FoodDeliveryApi.Mapping
 {
@@ -9,13 +12,20 @@ namespace FoodDeliveryApi.Mapping
     {
         public StoreProfile()
         {
-            CreateMap<CreateStoreRequestDto, Store>();
-            CreateMap<Store, CreateStoreResponseDto>();
+            CreateMap<CoordinateDto, Coordinate>().ReverseMap();
 
-            CreateMap<Store, GetStoreResponseDto>();
+            CreateMap<List<Coordinate>, Polygon>().ConvertUsing(new CoordinatesToPolygonConverter());
+
+            CreateMap<CreateStoreRequestDto, Store>();
+            CreateMap<Store, CreateStoreResponseDto>()
+                .ForMember(dest => dest.Coordinates, opt => opt.MapFrom(src => src.DeliveryArea.Coordinates));
+
+            CreateMap<Store, GetStoreResponseDto>()
+                .ForMember(dest => dest.Coordinates, opt => opt.MapFrom(src => src.DeliveryArea.Coordinates));
 
             CreateMap<UpdateStoreRequestDto, Store>();
-            CreateMap<Store, UpdateStoreResponseDto>();
+            CreateMap<Store, UpdateStoreResponseDto>()
+                .ForMember(dest => dest.Coordinates, opt => opt.MapFrom(src => src.DeliveryArea.Coordinates));
 
             CreateMap<Store, DeleteStoreResponseDto>();
 

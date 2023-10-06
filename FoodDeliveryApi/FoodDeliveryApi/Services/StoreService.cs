@@ -9,7 +9,7 @@ using FoodDeliveryApi.Interfaces.Repositories;
 using FoodDeliveryApi.Interfaces.Services;
 using FoodDeliveryApi.Models;
 using FoodDeliveryApi.Repositories;
-using static System.Net.Mime.MediaTypeNames;
+using NetTopologySuite.Geometries;
 
 namespace FoodDeliveryApi.Services
 {
@@ -26,7 +26,7 @@ namespace FoodDeliveryApi.Services
             _mapper = mapper;
         }
 
-        public async Task<List<GetStoreResponseDto>> GetStores(long? partnerId, string? city)
+        public async Task<List<GetStoreResponseDto>> GetStores(long? partnerId, double? latitude, double? longitude)
         {
             List<Store> allStores = await _storeRepository.GetAllStores();
             List<Store> stores = new List<Store>();
@@ -35,9 +35,10 @@ namespace FoodDeliveryApi.Services
             {
                 stores = allStores.Where(x => x.PartnerId == partnerId.Value).ToList();
             }
-            else if (!string.IsNullOrEmpty(city))
+            else if (latitude.HasValue && longitude.HasValue)
             {
-                stores = allStores.Where(x => x.City.ToLower() == city.ToLower()).ToList();
+                Point point = new Point(new Coordinate(longitude.Value, latitude.Value));
+                stores = allStores.Where(x => point.Within(x.DeliveryArea)).ToList();
             }
             else
             {
@@ -70,6 +71,16 @@ namespace FoodDeliveryApi.Services
             {
                 throw new ValidationException(validationResult.Errors);
             }
+
+            Polygon deliveryAreaPolygon = _mapper.Map<Polygon>(store.Coordinates);
+
+            if (!deliveryAreaPolygon.IsValid)
+            {
+                throw new InvalidTopologyException("Delivery area is not a valid polygon");
+            }
+
+            deliveryAreaPolygon.SRID = 4326;
+            store.DeliveryArea = deliveryAreaPolygon;
 
             try
             {
@@ -107,6 +118,7 @@ namespace FoodDeliveryApi.Services
                 options.IncludeProperties(x => x.City);
                 options.IncludeProperties(x => x.PostalCode);
                 options.IncludeProperties(x => x.Phone);
+                options.IncludeProperties(x => x.Coordinates);
             });
 
             if (!validationResult.IsValid)
@@ -114,9 +126,19 @@ namespace FoodDeliveryApi.Services
                 throw new ValidationException(validationResult.Errors);
             }
 
+            Polygon deliveryAreaPolygon = _mapper.Map<Polygon>(updatedStore.Coordinates);
+
+            if (!deliveryAreaPolygon.IsValid)
+            {
+                throw new InvalidTopologyException("Delivery area is not a valid polygon");
+            }
+
+            deliveryAreaPolygon.SRID = 4326;
+
             try
             {
                 _mapper.Map(requestDto, store);
+                store.DeliveryArea = deliveryAreaPolygon;
                 store = await _storeRepository.UpdateStore(store);
             }
             catch (Exception)

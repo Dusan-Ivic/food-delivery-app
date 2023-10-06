@@ -1,4 +1,5 @@
 import { OrderStatus } from "./enums";
+import { Coordinate } from "./geolocation";
 import { StoreResponseDto } from "./store";
 
 export interface OrderItemRequestDto {
@@ -18,9 +19,8 @@ export interface OrderItemResponseDto {
 
 export interface OrderBase {
   storeId: number;
+  coordinate: Coordinate;
   address: string;
-  city: string;
-  postalCode: string;
 }
 
 export interface OrderRequestDto extends OrderBase {

@@ -3,6 +3,7 @@ using System;
 using FoodDeliveryApi.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NetTopologySuite.Geometries;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
@@ -12,9 +13,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace FoodDeliveryApi.Migrations
 {
     [DbContext(typeof(FoodDeliveryDbContext))]
-    partial class FoodDeliveryDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231003193013_AddStoreDeliveryArea")]
+    partial class AddStoreDeliveryArea
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -143,8 +146,13 @@ namespace FoodDeliveryApi.Migrations
 
                     b.Property<string>("Address")
                         .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("character varying(200)");
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<string>("City")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
@@ -155,10 +163,6 @@ namespace FoodDeliveryApi.Migrations
                     b.Property<decimal>("DeliveryFee")
                         .HasColumnType("numeric");
 
-                    b.Property<Point>("DeliveryLocation")
-                        .IsRequired()
-                        .HasColumnType("geometry (point)");
-
                     b.Property<bool>("IsCanceled")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("boolean")
@@ -166,6 +170,11 @@ namespace FoodDeliveryApi.Migrations
 
                     b.Property<decimal>("ItemsPrice")
                         .HasColumnType("numeric");
+
+                    b.Property<string>("PostalCode")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("character varying(10)");
 
                     b.Property<long>("StoreId")
                         .HasColumnType("bigint");
@@ -367,7 +376,6 @@ namespace FoodDeliveryApi.Migrations
                         .HasColumnType("character varying(50)");
 
                     b.Property<Polygon>("DeliveryArea")
-                        .IsRequired()
                         .HasColumnType("geometry (polygon)");
 
                     b.Property<decimal>("DeliveryFee")

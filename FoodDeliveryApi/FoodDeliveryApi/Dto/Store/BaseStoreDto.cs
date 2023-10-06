@@ -1,4 +1,5 @@
-﻿using FoodDeliveryApi.Models;
+﻿using FoodDeliveryApi.Dto.Geolocation;
+using FoodDeliveryApi.Models;
 
 namespace FoodDeliveryApi.Dto.Store
 {
@@ -13,5 +14,6 @@ namespace FoodDeliveryApi.Dto.Store
         public int DeliveryTimeInMinutes { get; set; }
         public decimal DeliveryFee { get; set; } = decimal.Zero;
         public string Category { get; set; } = string.Empty;
+        public List<CoordinateDto> Coordinates { get; set; } = default!;
     }
 }

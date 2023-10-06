@@ -2,43 +2,53 @@ import { useState } from "react";
 import { useLocalStorage } from "../../hooks/useLocalStorage";
 import { DeliveryLocationContext } from "./useDeliveryLocation";
 import { FormModal, FormProps } from "../../components/shared/FormModal";
-import { DeliveryAddressForm } from "../../components/delivery/DeliveryAddressForm";
-import { useAppSelector } from "../../app/hooks";
+import { DeliveryLocationMap } from "../../components/delivery/DeliveryLocationMap";
+import { Coordinate } from "../../interfaces/geolocation";
+
+export interface DeliveryLocation {
+  coordinate: Coordinate | undefined;
+  address: string | undefined;
+}
+
+interface DeliveryLocationProviderProps {
+  children: React.ReactNode;
+}
 
 export function DeliveryLocationProvider({
   children,
 }: DeliveryLocationProviderProps) {
-  const { user } = useAppSelector((state) => state.auth);
   const [isModalVisible, setModalVisible] = useState<boolean>(false);
   const [deliveryLocation, setDeliveryLocation] =
     useLocalStorage<DeliveryLocation | null>("deliveryLocation", null);
-
-  const changeLocation = (newLocation: DeliveryLocation) => {
-    setDeliveryLocation(newLocation);
-  };
 
   const openLocationModal = () => {
     setModalVisible(true);
   };
 
-  const DeliveryAddressFormComponent = ({
+  const DeliveryLocationMapComponent = ({
     data,
     onSubmit,
   }: FormProps<DeliveryLocation>) => {
-    return <DeliveryAddressForm user={user} data={data} onSubmit={onSubmit} />;
+    return <DeliveryLocationMap location={data} onSetLocation={onSubmit} />;
   };
 
   return (
     <DeliveryLocationContext.Provider
-      value={{ deliveryLocation, changeLocation, openLocationModal }}
+      value={{ deliveryLocation, openLocationModal }}
     >
       {children}
       <FormModal
         isVisible={isModalVisible}
-        title="Set delivery address"
-        FormComponent={DeliveryAddressFormComponent}
+        title="Set delivery location"
+        FormComponent={DeliveryLocationMapComponent}
         data={deliveryLocation}
-        onSubmit={(data) => setDeliveryLocation(data)}
+        onSubmit={(data) => {
+          setDeliveryLocation({
+            coordinate: data.coordinate,
+            address: data.address,
+          });
+          setModalVisible(false);
+        }}
         onClose={() => setModalVisible(false)}
       />
     </DeliveryLocationContext.Provider>

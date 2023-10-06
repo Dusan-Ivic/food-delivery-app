@@ -30,7 +30,7 @@ export function Stores() {
 
   useEffect(() => {
     if (deliveryLocation) {
-      dispatch(getStores({ city: deliveryLocation.city }));
+      dispatch(getStores({ coordinate: deliveryLocation.coordinate }));
     } else if (!user || user?.userType === UserType.Customer) {
       dispatch(getStores());
     } else {
@@ -155,9 +155,9 @@ export function Stores() {
             >
               <FaLocationDot style={{ fontSize: "24px" }} />
               {deliveryLocation ? (
-                <div className="lead">{`${deliveryLocation.address}, ${deliveryLocation.city}`}</div>
+                <div className="lead">See your current location</div>
               ) : (
-                <div className="lead">Set location</div>
+                <div className="lead">Set your location</div>
               )}
             </div>
           </div>
@@ -184,7 +184,7 @@ export function Stores() {
           <Col>
             <h1 className="text-center mt-3 mb-4 display-4">
               {deliveryLocation
-                ? `Stores delivering to ${deliveryLocation?.city}`
+                ? "Stores delivering to your location"
                 : "All available Stores"}
             </h1>
             {status === StateStatus.Loading ? (
@@ -196,7 +196,7 @@ export function Stores() {
                 ) : (
                   <p className="text-center mt-4">
                     {deliveryLocation
-                      ? `There are currently no stores delivering to ${deliveryLocation?.city}`
+                      ? "There are currently no stores delivering to your location"
                       : "There are currently no registered stores"}
                   </p>
                 )}

@@ -27,11 +27,11 @@ namespace FoodDeliveryApi.Configurations
 
             builder.Ignore(x => x.OrderStatus);
 
-            builder.Property(x => x.Address).IsRequired().HasMaxLength(100);
+            builder.Property(x => x.Address).IsRequired().HasMaxLength(200);
 
-            builder.Property(x => x.City).IsRequired().HasMaxLength(50);
+            builder.Property(x => x.DeliveryLocation).IsRequired().HasColumnType("geometry (point)");
 
-            builder.Property(x => x.PostalCode).IsRequired().HasMaxLength(10);
+            builder.Ignore(x => x.Coordinate);
         }
     }
 

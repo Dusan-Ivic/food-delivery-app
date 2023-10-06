@@ -31,6 +31,10 @@ namespace FoodDeliveryApi.Configurations
             builder.Property(x => x.DeliveryFee).IsRequired();
 
             builder.Property(x => x.Category).IsRequired().HasMaxLength(20);
+
+            builder.Property(x => x.DeliveryArea).IsRequired().HasColumnType("geometry (polygon)");
+
+            builder.Ignore(x => x.Coordinates);
         }
     }
 }

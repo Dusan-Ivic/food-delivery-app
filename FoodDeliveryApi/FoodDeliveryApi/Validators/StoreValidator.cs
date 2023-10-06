@@ -41,6 +41,26 @@ namespace FoodDeliveryApi.Validators
             RuleFor(x => x.Category)
                 .NotNull().WithMessage("Category is required")
                 .MaximumLength(20).WithMessage("Category is too long");
+
+            RuleFor(x => x.Coordinates)
+                .NotNull().WithMessage("Coordinates are required")
+                .Custom((coordinates, context) =>
+                {
+                    if (coordinates.Count < 4)
+                    {
+                        context.AddFailure("Coordinates must have at least 4 points");
+                    }
+                })
+                .Custom((coordinates, context) =>
+                {
+                    var firstPoint = coordinates[0];
+                    var lastPoint = coordinates[coordinates.Count - 1];
+
+                    if (firstPoint.X != lastPoint.X || firstPoint.Y != lastPoint.Y)
+                    {
+                        context.AddFailure("Coordinates must form a closed ring");
+                    }
+                });
         }
     }
 }
