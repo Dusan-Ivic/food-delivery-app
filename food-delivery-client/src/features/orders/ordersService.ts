@@ -77,7 +77,7 @@ const cancelOrder = async (
 ): Promise<{ id: number }> => {
   try {
     const response = await apiClient.delete<{ id: number }>(
-      `/api/orders/${orderId}`,
+      `/api/orders/${orderId}/refund`,
       {
         headers: {
           Authorization: `Bearer ${token}`,

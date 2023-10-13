@@ -9,6 +9,7 @@ namespace FoodDeliveryApi.Interfaces.Services
         public Task<List<GetOrderResponseDto>> GetOrders(long userId, UserType userType);
         public Task<CheckoutResponseDto> CreateCheckoutSession(long customerId, CreateOrderRequestDto requestDto);
         public Task<CreateOrderResponseDto> CreateOrder(long customerId, CreateOrderRequestDto requestDto);
+        public Task<DeleteOrderResponseDto> RefundOrder(long orderId, long customerId);
         public Task<DeleteOrderResponseDto> CancelOrder(long orderId, long customerId);
     }
 }

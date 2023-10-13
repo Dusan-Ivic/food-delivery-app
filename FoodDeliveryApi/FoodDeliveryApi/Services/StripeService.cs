@@ -64,6 +64,24 @@ namespace FoodDeliveryApi.Services
                     long customerId = long.Parse(extendedSession.Metadata["CustomerId"]);
                     _ = await _orderService.CreateOrder(customerId, requestDto);
                 }
+                else if (stripeEvent.Type == Events.ChargeRefunded)
+                {
+                    var charge = stripeEvent.Data.Object as Charge;
+
+                    var options = new ChargeGetOptions();
+                    options.AddExpand("refunds");
+
+                    var service = new ChargeService();
+
+                    Charge extendedCharge  = service.Get(charge!.Id, options);
+
+                    Refund refund = extendedCharge.Refunds.First();
+
+                    long customerId = long.Parse(refund.Metadata["CustomerId"]);
+                    long orderId = long.Parse(refund.Metadata["OrderId"]);
+
+                    _ = await _orderService.CancelOrder(orderId, customerId);
+                }
 
                 return;
             }

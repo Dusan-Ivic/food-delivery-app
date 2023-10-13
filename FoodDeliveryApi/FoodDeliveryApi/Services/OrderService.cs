@@ -8,7 +8,9 @@ using FoodDeliveryApi.Interfaces.Repositories;
 using FoodDeliveryApi.Interfaces.Services;
 using FoodDeliveryApi.Models;
 using NetTopologySuite.Geometries;
+using Stripe;
 using Stripe.Checkout;
+using Product = FoodDeliveryApi.Models.Product;
 
 namespace FoodDeliveryApi.Services
 {
@@ -252,6 +254,44 @@ namespace FoodDeliveryApi.Services
             }
 
             return _mapper.Map<CreateOrderResponseDto>(order);
+        }
+
+        public async Task<DeleteOrderResponseDto> RefundOrder(long orderId, long customerId)
+        {
+            Order? order = await _orderRepository.GetOrderById(orderId);
+
+            if (order == null)
+            {
+                throw new ResourceNotFoundException("Order with this id doesn't exist");
+            }
+
+            if (order.CustomerId != customerId)
+            {
+                throw new ActionNotAllowedException("Unauthorized to cancel this order. Only the creator can perform this action.");
+            }
+
+            DateTime deliveryTime = order.CreatedAt.AddMinutes((int)order.Store.DeliveryTimeInMinutes);
+
+            if (DateTime.UtcNow > deliveryTime)
+            {
+                throw new OrderCancellationException("Cannot cancel the order because it has already been completed.");
+            }
+
+            var options = new RefundCreateOptions()
+            {
+                PaymentIntent = order.PaymentIntentId,
+                Metadata = new Dictionary<string, string>()
+                {
+                    { "CustomerId", order.CustomerId.ToString() },
+                    { "OrderId", order.Id.ToString() },
+                }
+            };
+
+            var service = new RefundService();
+
+            service.Create(options);
+
+            return _mapper.Map<DeleteOrderResponseDto>(order);
         }
 
         public async Task<DeleteOrderResponseDto> CancelOrder(long orderId, long customerId)
