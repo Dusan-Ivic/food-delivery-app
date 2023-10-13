@@ -54,6 +54,8 @@ namespace FoodDeliveryApi.Configurations
             builder.Property(x => x.ProductName).IsRequired().HasMaxLength(100);
 
             builder.Property(x => x.ProductPrice).IsRequired();
+
+            builder.Ignore(x => x.ProductDescription);
         }
     }
 }

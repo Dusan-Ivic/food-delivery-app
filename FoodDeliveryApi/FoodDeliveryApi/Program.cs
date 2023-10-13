@@ -16,7 +16,12 @@ using Microsoft.Extensions.FileProviders;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Npgsql;
+using Stripe;
 using System.Text;
+using Customer = FoodDeliveryApi.Models.Customer;
+using CustomerService = FoodDeliveryApi.Services.CustomerService;
+using Product = FoodDeliveryApi.Models.Product;
+using ProductService = FoodDeliveryApi.Services.ProductService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -121,6 +126,8 @@ builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped<IValidator<Order>, OrderValidator>();
 
+builder.Services.AddScoped<IStripeService, StripeService>();
+
 builder.Services.AddDbContext<FoodDeliveryDbContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("FoodDeliveryDbConnectionString"), npgsqlOptionsAction: options => options.UseNetTopologySuite()));
 
 MapperConfiguration mapperConfig = new MapperConfiguration(config =>
@@ -152,6 +159,8 @@ app.UseFileServer(new FileServerOptions()
     EnableDefaultFiles = true,
     EnableDirectoryBrowsing = true,
 });
+
+StripeConfiguration.ApiKey = builder.Configuration["StripeSettings:StripeApiKey"];
 
 app.UseHttpsRedirection();
 app.UseCors(builder.Configuration["CorsSettings:Name"]);
