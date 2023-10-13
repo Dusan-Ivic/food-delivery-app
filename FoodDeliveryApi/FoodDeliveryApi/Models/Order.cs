@@ -33,5 +33,6 @@ namespace FoodDeliveryApi.Models
         public string Address { get; set; } = string.Empty;
         public Point DeliveryLocation { get; set; } = default!;
         public Coordinate Coordinate { get; set; } = default!;
+        public string PaymentIntentId { get; set; } = string.Empty;
     }
 }

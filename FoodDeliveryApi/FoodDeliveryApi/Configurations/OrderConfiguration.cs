@@ -32,6 +32,8 @@ namespace FoodDeliveryApi.Configurations
             builder.Property(x => x.DeliveryLocation).IsRequired().HasColumnType("geometry (point)");
 
             builder.Ignore(x => x.Coordinate);
+
+            builder.Property(x => x.PaymentIntentId).IsRequired().HasMaxLength(255);
         }
     }
 
