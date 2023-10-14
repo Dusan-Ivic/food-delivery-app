@@ -29,7 +29,7 @@ const createCheckout = async (
 ): Promise<CheckoutResponseDto> => {
   try {
     const response = await apiClient.post<CheckoutResponseDto>(
-      "/api/orders/checkout",
+      "/api/orders",
       requestDto,
       {
         headers: {
@@ -77,7 +77,7 @@ const cancelOrder = async (
 ): Promise<{ id: number }> => {
   try {
     const response = await apiClient.delete<{ id: number }>(
-      `/api/orders/${orderId}/refund`,
+      `/api/orders/${orderId}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,

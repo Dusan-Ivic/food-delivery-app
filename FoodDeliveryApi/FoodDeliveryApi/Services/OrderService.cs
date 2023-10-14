@@ -53,7 +53,7 @@ namespace FoodDeliveryApi.Services
             return _mapper.Map<List<GetOrderResponseDto>>(orders);
         }
 
-        public async Task<CheckoutResponseDto> CreateCheckoutSession(long customerId, CreateOrderRequestDto requestDto)
+        public async Task<CheckoutResponseDto> CreateCheckout(long customerId, CreateOrderRequestDto requestDto)
         {
             Order order = _mapper.Map<Order>(requestDto);
             order.CustomerId = customerId;
