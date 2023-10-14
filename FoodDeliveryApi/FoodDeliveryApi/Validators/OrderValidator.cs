@@ -20,6 +20,10 @@ namespace FoodDeliveryApi.Validators
 
             RuleFor(x => x.Coordinate)
                 .NotNull().WithMessage("Coordinate is required");
+
+            RuleFor(x => x.PaymentIntentId)
+                .NotNull().WithMessage("Payment intent is required")
+                .MaximumLength(255).WithMessage("Payment intent id is too long");
         }
     }
 

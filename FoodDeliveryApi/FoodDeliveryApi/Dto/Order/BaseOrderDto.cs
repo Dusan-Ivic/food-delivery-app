@@ -10,5 +10,6 @@ namespace FoodDeliveryApi.Dto.Order
         public List<T> Items { get; set; } = new List<T>();
         public string Address { get; set; } = string.Empty;
         public CoordinateDto Coordinate { get; set; } = default!;
+        public string PaymentIntentId { get; set; } = string.Empty;
     }
 }

@@ -1,5 +1,9 @@
 import axios from "axios";
-import { OrderRequestDto, OrderResponseDto } from "../../interfaces/order";
+import {
+  CheckoutResponseDto,
+  OrderRequestDto,
+  OrderResponseDto,
+} from "../../interfaces/order";
 import apiClient from "../../config/apiClient";
 
 const getOrders = async (token: string | null): Promise<OrderResponseDto[]> => {
@@ -9,6 +13,30 @@ const getOrders = async (token: string | null): Promise<OrderResponseDto[]> => {
         Authorization: `Bearer ${token}`,
       },
     });
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw new Error(error.response?.data.message);
+    } else {
+      throw new Error("Unknown error occurred.");
+    }
+  }
+};
+
+const createCheckout = async (
+  requestDto: OrderRequestDto,
+  token: string | null
+): Promise<CheckoutResponseDto> => {
+  try {
+    const response = await apiClient.post<CheckoutResponseDto>(
+      "/api/orders",
+      requestDto,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
@@ -68,6 +96,7 @@ const cancelOrder = async (
 
 const ordersService = {
   getOrders,
+  createCheckout,
   createOrder,
   cancelOrder,
 };

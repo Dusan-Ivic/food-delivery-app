@@ -1,7 +1,16 @@
 import { Header } from "./components/ui/Header";
 import { Container } from "react-bootstrap";
 import { Routes, Route } from "react-router-dom";
-import { Home, Login, Profile, Register, Store, Orders, Stores } from "./pages";
+import {
+  Home,
+  Login,
+  Profile,
+  Register,
+  Store,
+  Orders,
+  Stores,
+  PaymentStatus,
+} from "./pages";
 import { Dashboard } from "./layouts";
 import { PrivateRoute } from "./components/ui/PrivateRoute";
 import { ToastContainer } from "react-toastify";
@@ -99,6 +108,7 @@ function App() {
                 </PrivateRoute>
               }
             />
+            <Route path="/payment" element={<PaymentStatus />} />
           </Routes>
         </Container>
       </div>

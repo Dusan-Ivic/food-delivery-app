@@ -60,3 +60,8 @@ export interface OrderState extends OrderBase {
   orderStatus: OrderStatus;
   items: OrderItemState[];
 }
+
+export interface CheckoutResponseDto {
+  order: OrderResponseDto;
+  sessionUrl: string;
+}

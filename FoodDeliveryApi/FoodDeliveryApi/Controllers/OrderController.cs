@@ -39,16 +39,16 @@ namespace FoodDeliveryApi.Controllers
 
         [HttpPost]
         [Authorize(Roles = "Customer")]
-        public async Task<IActionResult> CreateOrder([FromBody] CreateOrderRequestDto requestDto)
+        public async Task<IActionResult> CreateCheckout([FromBody] CreateOrderRequestDto requestDto)
         {
             Claim? idClaim = User.Claims.FirstOrDefault(x => x.Type == "UserId");
             long userId = long.Parse(idClaim!.Value);
 
-            CreateOrderResponseDto responseDto;
+            CheckoutResponseDto responseDto;
 
             try
             {
-                responseDto = await _orderService.CreateOrder(userId, requestDto);
+                responseDto = await _orderService.CreateCheckout(userId, requestDto);
             }
             catch (ValidationException ex)
             {
@@ -84,7 +84,7 @@ namespace FoodDeliveryApi.Controllers
 
         [HttpDelete("{id}")]
         [Authorize(Roles = "Customer")]
-        public async Task<IActionResult> CancelOrder(long id)
+        public async Task<IActionResult> RefundOrder(long id)
         {
             Claim? idClaim = User.Claims.FirstOrDefault(x => x.Type == "UserId");
             long userId = long.Parse(idClaim!.Value);
@@ -93,7 +93,7 @@ namespace FoodDeliveryApi.Controllers
 
             try
             {
-                responseDto = await _orderService.CancelOrder(id, userId);
+                responseDto = await _orderService.RefundOrder(id, userId);
             }
             catch (ResourceNotFoundException ex)
             {

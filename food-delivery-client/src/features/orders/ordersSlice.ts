@@ -29,6 +29,25 @@ export const getOrders = createAsyncThunk("orders/get", async (_, thunkAPI) => {
   }
 });
 
+export const createCheckout = createAsyncThunk(
+  "orders/checkout",
+  async (orderData: OrderRequestDto, thunkAPI) => {
+    try {
+      const { accessToken } = (thunkAPI.getState() as RootState).auth;
+      return await ordersService.createCheckout(
+        orderData,
+        accessToken!.payload
+      );
+    } catch (error: unknown) {
+      let message: string = "";
+      if (error instanceof Error) {
+        message = error.message;
+      }
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
 export const createOrder = createAsyncThunk(
   "orders/create",
   async (orderData: OrderRequestDto, thunkAPI) => {

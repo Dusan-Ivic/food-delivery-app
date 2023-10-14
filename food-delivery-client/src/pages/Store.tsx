@@ -29,6 +29,7 @@ import {
   decreaseQuantity,
 } from "../features/cart/cartSlice";
 import {
+  createCheckout,
   createOrder,
   reset as resetOrdersState,
 } from "../features/orders/ordersSlice";
@@ -38,7 +39,7 @@ import {
   reset as resetStoresState,
 } from "../features/stores/storesSlice";
 import { CartItem } from "../interfaces/cart";
-import { OrderRequestDto } from "../interfaces/order";
+import { CheckoutResponseDto, OrderRequestDto } from "../interfaces/order";
 import { StateStatus, UserType } from "../interfaces/enums";
 import { toast } from "react-toastify";
 import { ConfirmationModal } from "../components/shared/ConfirmationModal";
@@ -168,7 +169,11 @@ export function StorePage() {
         address: deliveryLocation.address,
       };
 
-      dispatch(createOrder(requestDto));
+      dispatch(createCheckout(requestDto)).then((value) => {
+        console.log(value);
+        const payload = value.payload as CheckoutResponseDto;
+        window.location.href = payload.sessionUrl;
+      });
     } else {
       toast.warn("Please go back and set your location");
     }
