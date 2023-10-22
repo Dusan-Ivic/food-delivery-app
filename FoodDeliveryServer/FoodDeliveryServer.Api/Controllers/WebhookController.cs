@@ -3,7 +3,7 @@ using FoodDeliveryServer.Common.Dto.Geolocation;
 using Microsoft.AspNetCore.Mvc;
 using Stripe;
 using Stripe.Checkout;
-using FoodDeliveryServer.Api.Interfaces.Services;
+using FoodDeliveryServer.Core.Interfaces;
 
 namespace FoodDeliveryServer.Api.Controllers
 {

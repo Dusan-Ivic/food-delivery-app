@@ -2,7 +2,7 @@
 using FoodDeliveryServer.Common.Dto.Admin;
 using FoodDeliveryServer.Common.Dto.Error;
 using FoodDeliveryServer.Common.Exceptions;
-using FoodDeliveryServer.Api.Interfaces.Services;
+using FoodDeliveryServer.Core.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
