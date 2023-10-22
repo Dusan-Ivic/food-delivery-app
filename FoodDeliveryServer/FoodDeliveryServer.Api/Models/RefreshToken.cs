@@ -1,4 +1,4 @@
-﻿using FoodDeliveryServer.Api.Enums;
+﻿using FoodDeliveryServer.Common.Enums;
 
 namespace FoodDeliveryServer.Api.Models
 {

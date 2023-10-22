@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using FoodDeliveryServer.Api.Converters;
-using FoodDeliveryServer.Api.Dto.Auth;
-using FoodDeliveryServer.Api.Dto.Geolocation;
-using FoodDeliveryServer.Api.Dto.Store;
+using FoodDeliveryServer.Common.Dto.Auth;
+using FoodDeliveryServer.Common.Dto.Geolocation;
+using FoodDeliveryServer.Common.Dto.Store;
 using FoodDeliveryServer.Api.Models;
 using NetTopologySuite.Geometries;
 

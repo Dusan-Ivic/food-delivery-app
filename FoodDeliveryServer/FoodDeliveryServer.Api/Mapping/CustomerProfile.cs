@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using FoodDeliveryServer.Api.Dto.Customer;
+using FoodDeliveryServer.Common.Dto.Customer;
 using FoodDeliveryServer.Api.Models;
 
 namespace FoodDeliveryServer.Api.Mapping

@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
-using FoodDeliveryServer.Api.Dto.Admin;
-using FoodDeliveryServer.Api.Dto.Auth;
-using FoodDeliveryServer.Api.Dto.Customer;
-using FoodDeliveryServer.Api.Dto.Partner;
-using FoodDeliveryServer.Api.Dto.User;
+using FoodDeliveryServer.Common.Dto.Admin;
+using FoodDeliveryServer.Common.Dto.Auth;
+using FoodDeliveryServer.Common.Dto.Customer;
+using FoodDeliveryServer.Common.Dto.Partner;
+using FoodDeliveryServer.Common.Dto.User;
 using FoodDeliveryServer.Api.Models;
 
 namespace FoodDeliveryServer.Api.Mapping

@@ -1,8 +1,8 @@
 ﻿using FluentValidation;
-using FoodDeliveryServer.Api.Dto.Error;
-using FoodDeliveryServer.Api.Dto.Order;
-using FoodDeliveryServer.Api.Enums;
-using FoodDeliveryServer.Api.Exceptions;
+using FoodDeliveryServer.Common.Dto.Error;
+using FoodDeliveryServer.Common.Dto.Order;
+using FoodDeliveryServer.Common.Enums;
+using FoodDeliveryServer.Common.Exceptions;
 using FoodDeliveryServer.Api.Interfaces.Services;
 using FoodDeliveryServer.Api.Services;
 using Microsoft.AspNetCore.Authorization;

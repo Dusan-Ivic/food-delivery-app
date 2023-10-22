@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
 using FluentValidation;
 using FluentValidation.Results;
-using FoodDeliveryServer.Api.Dto.Admin;
-using FoodDeliveryServer.Api.Dto.Partner;
-using FoodDeliveryServer.Api.Enums;
-using FoodDeliveryServer.Api.Exceptions;
+using FoodDeliveryServer.Common.Dto.Admin;
+using FoodDeliveryServer.Common.Dto.Partner;
+using FoodDeliveryServer.Common.Enums;
+using FoodDeliveryServer.Common.Exceptions;
 using FoodDeliveryServer.Api.Interfaces.Repositories;
 using FoodDeliveryServer.Api.Interfaces.Services;
 using FoodDeliveryServer.Api.Models;

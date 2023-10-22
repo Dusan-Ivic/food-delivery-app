@@ -27,4 +27,8 @@
     <Folder Include="Images\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\FoodDeliveryServer.Common\FoodDeliveryServer.Common.csproj" />
+  </ItemGroup>
+
 </Project>

@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
 using FluentValidation;
 using FluentValidation.Results;
-using FoodDeliveryServer.Api.Dto.Customer;
-using FoodDeliveryServer.Api.Enums;
-using FoodDeliveryServer.Api.Exceptions;
+using FoodDeliveryServer.Common.Dto.Customer;
+using FoodDeliveryServer.Common.Enums;
+using FoodDeliveryServer.Common.Exceptions;
 using FoodDeliveryServer.Api.Interfaces.Repositories;
 using FoodDeliveryServer.Api.Interfaces.Services;
 using FoodDeliveryServer.Api.Models;

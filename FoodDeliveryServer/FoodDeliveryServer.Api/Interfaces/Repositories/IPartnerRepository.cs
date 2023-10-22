@@ -1,4 +1,4 @@
-﻿using FoodDeliveryServer.Api.Enums;
+﻿using FoodDeliveryServer.Common.Enums;
 using FoodDeliveryServer.Api.Models;
 
 namespace FoodDeliveryServer.Api.Interfaces.Repositories

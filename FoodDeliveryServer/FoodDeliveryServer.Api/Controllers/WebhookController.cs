@@ -1,5 +1,5 @@
-﻿using FoodDeliveryServer.Api.Dto.Order;
-using FoodDeliveryServer.Api.Dto.Geolocation;
+﻿using FoodDeliveryServer.Common.Dto.Order;
+using FoodDeliveryServer.Common.Dto.Geolocation;
 using Microsoft.AspNetCore.Mvc;
 using Stripe;
 using Stripe.Checkout;

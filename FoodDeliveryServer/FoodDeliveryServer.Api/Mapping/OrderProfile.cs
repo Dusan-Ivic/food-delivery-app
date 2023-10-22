@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using FoodDeliveryServer.Api.Converters;
-using FoodDeliveryServer.Api.Dto.Geolocation;
-using FoodDeliveryServer.Api.Dto.Order;
-using FoodDeliveryServer.Api.Enums;
+using FoodDeliveryServer.Common.Dto.Geolocation;
+using FoodDeliveryServer.Common.Dto.Order;
+using FoodDeliveryServer.Common.Enums;
 using FoodDeliveryServer.Api.Models;
 using Microsoft.AspNetCore.Routing.Constraints;
 using NetTopologySuite.Geometries;

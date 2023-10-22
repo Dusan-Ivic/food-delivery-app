@@ -1,4 +1,4 @@
-﻿using FoodDeliveryServer.Api.Dto.Partner;
+﻿using FoodDeliveryServer.Common.Dto.Partner;
 
 namespace FoodDeliveryServer.Api.Interfaces.Services
 {

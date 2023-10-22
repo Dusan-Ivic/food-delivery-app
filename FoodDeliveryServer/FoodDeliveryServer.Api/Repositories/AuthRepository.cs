@@ -1,5 +1,5 @@
 ﻿using FoodDeliveryServer.Api.Data;
-using FoodDeliveryServer.Api.Enums;
+using FoodDeliveryServer.Common.Enums;
 using FoodDeliveryServer.Api.Interfaces.Repositories;
 using FoodDeliveryServer.Api.Models;
 using Microsoft.EntityFrameworkCore;

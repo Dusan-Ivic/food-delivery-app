@@ -1,5 +1,5 @@
-﻿using FoodDeliveryServer.Api.Dto.Geolocation;
-using FoodDeliveryServer.Api.Dto.Order;
+﻿using FoodDeliveryServer.Common.Dto.Geolocation;
+using FoodDeliveryServer.Common.Dto.Order;
 using FoodDeliveryServer.Api.Interfaces.Services;
 using Microsoft.Extensions.Primitives;
 using Stripe;

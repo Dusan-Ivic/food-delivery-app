@@ -1,9 +1,9 @@
 ﻿using FluentValidation;
-using FoodDeliveryServer.Api.Dto.Auth;
-using FoodDeliveryServer.Api.Dto.Error;
-using FoodDeliveryServer.Api.Dto.Product;
-using FoodDeliveryServer.Api.Enums;
-using FoodDeliveryServer.Api.Exceptions;
+using FoodDeliveryServer.Common.Dto.Auth;
+using FoodDeliveryServer.Common.Dto.Error;
+using FoodDeliveryServer.Common.Dto.Product;
+using FoodDeliveryServer.Common.Enums;
+using FoodDeliveryServer.Common.Exceptions;
 using FoodDeliveryServer.Api.Interfaces.Services;
 using FoodDeliveryServer.Api.Models;
 using FoodDeliveryServer.Api.Services;

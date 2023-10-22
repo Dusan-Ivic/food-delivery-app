@@ -1,6 +1,6 @@
-﻿using FoodDeliveryServer.Api.Dto.Auth;
-using FoodDeliveryServer.Api.Dto.User;
-using FoodDeliveryServer.Api.Enums;
+﻿using FoodDeliveryServer.Common.Dto.Auth;
+using FoodDeliveryServer.Common.Dto.User;
+using FoodDeliveryServer.Common.Enums;
 
 namespace FoodDeliveryServer.Api.Interfaces.Services
 {

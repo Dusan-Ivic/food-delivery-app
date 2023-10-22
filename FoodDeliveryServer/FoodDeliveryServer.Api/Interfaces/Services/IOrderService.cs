@@ -1,6 +1,6 @@
-﻿using FoodDeliveryServer.Api.Dto.Order;
-using FoodDeliveryServer.Api.Dto.Product;
-using FoodDeliveryServer.Api.Enums;
+﻿using FoodDeliveryServer.Common.Dto.Order;
+using FoodDeliveryServer.Common.Dto.Product;
+using FoodDeliveryServer.Common.Enums;
 
 namespace FoodDeliveryServer.Api.Interfaces.Services
 {
