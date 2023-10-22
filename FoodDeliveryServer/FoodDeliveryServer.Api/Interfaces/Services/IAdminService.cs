@@ -1,5 +1,5 @@
 ﻿using FoodDeliveryServer.Common.Dto.Admin;
-using FoodDeliveryServer.Api.Models;
+using FoodDeliveryServer.Data.Models;
 
 namespace FoodDeliveryServer.Api.Interfaces.Services
 {

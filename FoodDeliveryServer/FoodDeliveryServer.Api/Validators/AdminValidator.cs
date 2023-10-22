@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 using FluentValidation.Validators;
-using FoodDeliveryServer.Api.Models;
+using FoodDeliveryServer.Data.Models;
 
 namespace FoodDeliveryServer.Api.Validators
 {

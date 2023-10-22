@@ -4,9 +4,9 @@ using FluentValidation.Results;
 using FoodDeliveryServer.Common.Dto.Admin;
 using FoodDeliveryServer.Common.Enums;
 using FoodDeliveryServer.Common.Exceptions;
-using FoodDeliveryServer.Api.Interfaces.Repositories;
+using FoodDeliveryServer.Data.Interfaces;
 using FoodDeliveryServer.Api.Interfaces.Services;
-using FoodDeliveryServer.Api.Models;
+using FoodDeliveryServer.Data.Models;
 
 namespace FoodDeliveryServer.Api.Services
 {

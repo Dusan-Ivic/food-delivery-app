@@ -1,11 +1,11 @@
 using AutoMapper;
 using FluentValidation;
-using FoodDeliveryServer.Api.Data;
-using FoodDeliveryServer.Api.Interfaces.Repositories;
+using FoodDeliveryServer.Data.Contexts;
+using FoodDeliveryServer.Data.Interfaces;
 using FoodDeliveryServer.Api.Interfaces.Services;
 using FoodDeliveryServer.Api.Mapping;
-using FoodDeliveryServer.Api.Models;
-using FoodDeliveryServer.Api.Repositories;
+using FoodDeliveryServer.Data.Models;
+using FoodDeliveryServer.Data.Repositories;
 using FoodDeliveryServer.Api.Services;
 using FoodDeliveryServer.Api.Validators;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -18,9 +18,9 @@ using Microsoft.OpenApi.Models;
 using Npgsql;
 using Stripe;
 using System.Text;
-using Customer = FoodDeliveryServer.Api.Models.Customer;
+using Customer = FoodDeliveryServer.Data.Models.Customer;
 using CustomerService = FoodDeliveryServer.Api.Services.CustomerService;
-using Product = FoodDeliveryServer.Api.Models.Product;
+using Product = FoodDeliveryServer.Data.Models.Product;
 using ProductService = FoodDeliveryServer.Api.Services.ProductService;
 
 var builder = WebApplication.CreateBuilder(args);

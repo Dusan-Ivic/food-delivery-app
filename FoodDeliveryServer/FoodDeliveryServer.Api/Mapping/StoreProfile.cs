@@ -3,7 +3,7 @@ using FoodDeliveryServer.Api.Converters;
 using FoodDeliveryServer.Common.Dto.Auth;
 using FoodDeliveryServer.Common.Dto.Geolocation;
 using FoodDeliveryServer.Common.Dto.Store;
-using FoodDeliveryServer.Api.Models;
+using FoodDeliveryServer.Data.Models;
 using NetTopologySuite.Geometries;
 
 namespace FoodDeliveryServer.Api.Mapping

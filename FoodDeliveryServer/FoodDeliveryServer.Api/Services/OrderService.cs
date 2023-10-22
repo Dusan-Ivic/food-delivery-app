@@ -4,13 +4,13 @@ using FluentValidation.Results;
 using FoodDeliveryServer.Common.Dto.Order;
 using FoodDeliveryServer.Common.Enums;
 using FoodDeliveryServer.Common.Exceptions;
-using FoodDeliveryServer.Api.Interfaces.Repositories;
+using FoodDeliveryServer.Data.Interfaces;
 using FoodDeliveryServer.Api.Interfaces.Services;
-using FoodDeliveryServer.Api.Models;
+using FoodDeliveryServer.Data.Models;
 using NetTopologySuite.Geometries;
 using Stripe;
 using Stripe.Checkout;
-using Product = FoodDeliveryServer.Api.Models.Product;
+using Product = FoodDeliveryServer.Data.Models.Product;
 
 namespace FoodDeliveryServer.Api.Services
 {

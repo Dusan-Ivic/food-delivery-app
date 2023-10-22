@@ -4,7 +4,7 @@ using FoodDeliveryServer.Common.Dto.Auth;
 using FoodDeliveryServer.Common.Dto.Customer;
 using FoodDeliveryServer.Common.Dto.Partner;
 using FoodDeliveryServer.Common.Dto.User;
-using FoodDeliveryServer.Api.Models;
+using FoodDeliveryServer.Data.Models;
 
 namespace FoodDeliveryServer.Api.Mapping
 {

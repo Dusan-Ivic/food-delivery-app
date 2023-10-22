@@ -3,7 +3,7 @@ using FoodDeliveryServer.Api.Converters;
 using FoodDeliveryServer.Common.Dto.Geolocation;
 using FoodDeliveryServer.Common.Dto.Order;
 using FoodDeliveryServer.Common.Enums;
-using FoodDeliveryServer.Api.Models;
+using FoodDeliveryServer.Data.Models;
 using Microsoft.AspNetCore.Routing.Constraints;
 using NetTopologySuite.Geometries;
 

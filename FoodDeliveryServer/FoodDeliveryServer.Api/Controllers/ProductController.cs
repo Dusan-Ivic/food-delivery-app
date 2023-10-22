@@ -5,7 +5,7 @@ using FoodDeliveryServer.Common.Dto.Product;
 using FoodDeliveryServer.Common.Enums;
 using FoodDeliveryServer.Common.Exceptions;
 using FoodDeliveryServer.Api.Interfaces.Services;
-using FoodDeliveryServer.Api.Models;
+using FoodDeliveryServer.Data.Models;
 using FoodDeliveryServer.Api.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

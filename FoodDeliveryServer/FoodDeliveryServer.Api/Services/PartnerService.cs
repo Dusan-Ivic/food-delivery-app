@@ -5,10 +5,10 @@ using FoodDeliveryServer.Common.Dto.Admin;
 using FoodDeliveryServer.Common.Dto.Partner;
 using FoodDeliveryServer.Common.Enums;
 using FoodDeliveryServer.Common.Exceptions;
-using FoodDeliveryServer.Api.Interfaces.Repositories;
+using FoodDeliveryServer.Data.Interfaces;
 using FoodDeliveryServer.Api.Interfaces.Services;
-using FoodDeliveryServer.Api.Models;
-using FoodDeliveryServer.Api.Repositories;
+using FoodDeliveryServer.Data.Models;
+using FoodDeliveryServer.Data.Repositories;
 
 namespace FoodDeliveryServer.Api.Services
 {
