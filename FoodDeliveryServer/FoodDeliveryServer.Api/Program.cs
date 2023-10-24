@@ -8,7 +8,6 @@ using FoodDeliveryServer.Data.Repositories;
 using FoodDeliveryServer.Core.Validators;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.FileProviders;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Npgsql;
@@ -149,14 +148,6 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
-app.UseFileServer(new FileServerOptions()
-{
-    FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), builder.Configuration["FileServerSettings:FolderName"])),
-    RequestPath = $"/{builder.Configuration["FileServerSettings:FolderName"]}",
-    EnableDefaultFiles = true,
-    EnableDirectoryBrowsing = true,
-});
 
 StripeConfiguration.ApiKey = builder.Configuration["StripeSettings:StripeApiKey"];
 
