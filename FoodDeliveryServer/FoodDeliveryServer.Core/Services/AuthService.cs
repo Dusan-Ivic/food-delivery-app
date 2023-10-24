@@ -337,7 +337,8 @@ namespace FoodDeliveryServer.Core.Services
 
             ImageUploadParams uploadParams = new ImageUploadParams()
             {
-                File = new FileDescription(newImageName, imageStream)
+                File = new FileDescription(newImageName, imageStream),
+                Tags = "users"
             };
 
             ImageUploadResult uploadResult = _cloudinary.Upload(uploadParams);
