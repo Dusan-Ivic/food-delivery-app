@@ -8,6 +8,9 @@ using FoodDeliveryServer.Data.Interfaces;
 using FoodDeliveryServer.Core.Interfaces;
 using FoodDeliveryServer.Data.Models;
 using Microsoft.AspNetCore.Http;
+using CloudinaryDotNet;
+using Microsoft.Extensions.Configuration;
+using CloudinaryDotNet.Actions;
 
 namespace FoodDeliveryServer.Core.Services
 {
@@ -17,13 +20,18 @@ namespace FoodDeliveryServer.Core.Services
         private readonly IStoreRepository _storeRepository;
         private readonly IValidator<Product> _validator;
         private readonly IMapper _mapper;
+        private readonly Cloudinary _cloudinary;
 
-        public ProductService(IProductRepository productRepository, IStoreRepository storeRepository, IValidator<Product> validator, IMapper mapper)
+        public ProductService(IConfiguration config, IProductRepository productRepository, IStoreRepository storeRepository, IValidator<Product> validator, IMapper mapper)
         {
             _productRepository = productRepository;
             _storeRepository = storeRepository;
             _validator = validator;
             _mapper = mapper;
+
+            IConfigurationSection cloudinarySettings = config.GetSection("CloudinarySettings");
+            string cloudinaryUrl = cloudinarySettings.GetValue<string>("CloudinaryUrl");
+            _cloudinary = new Cloudinary(cloudinaryUrl);
         }
 
         public async Task<List<GetProductResponseDto>> GetProducts(long? storeId)
@@ -178,29 +186,33 @@ namespace FoodDeliveryServer.Core.Services
                 throw new ActionNotAllowedException("Unauthorized to update this store. Only the creator can perform this action.");
             }
 
-            if (existingProduct.Image != null)
+            if (existingProduct.ImagePublicId != null)
             {
-                string oldImageName = existingProduct.Image;
-                string oldImagePath = Path.Combine(Directory.GetCurrentDirectory(), "Images", oldImageName);
-
-                if (File.Exists(oldImagePath))
+                DeletionParams deletionParams = new DeletionParams(existingProduct.ImagePublicId)
                 {
-                    File.Delete(oldImagePath);
-                }
+                    ResourceType = ResourceType.Image
+                };
+
+                _cloudinary.Destroy(deletionParams);
             }
 
             string fileExtension = Path.GetExtension(image.FileName);
 
             DateTime currentTime = DateTime.UtcNow;
             string newImageName = $"{currentTime:yyyyMMddHHmmssfff}{fileExtension}";
-            string newImagePath = Path.Combine(Directory.GetCurrentDirectory(), "Images", newImageName);
 
-            using (var stream = new FileStream(newImagePath, FileMode.Create))
+            using Stream imageStream = image.OpenReadStream();
+
+            ImageUploadParams uploadParams = new ImageUploadParams()
             {
-                image.CopyTo(stream);
-            }
+                File = new FileDescription(newImageName, imageStream),
+                Tags = "products"
+            };
 
-            existingProduct.Image = newImageName;
+            ImageUploadResult uploadResult = _cloudinary.Upload(uploadParams);
+
+            existingProduct.ImagePublicId = uploadResult.PublicId;
+            existingProduct.Image = uploadResult.Url.ToString();
 
             try
             {

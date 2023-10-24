@@ -1,6 +1,5 @@
 import { Card } from "react-bootstrap";
 import { UserType } from "../../interfaces/enums";
-import { getFullImageUrl } from "../../utils/imageUrlGenerator";
 
 interface UserAvatarProps {
   image: string | null;
@@ -18,7 +17,7 @@ export function UserAvatar({ image, userType }: UserAvatarProps) {
     <Card>
       <Card.Img
         variant="top"
-        src={image ? getFullImageUrl(image) : "/images/blank-profile-image.png"}
+        src={image ? image : "/images/blank-profile-image.png"}
         width="150px"
         style={{ objectFit: "cover" }}
       />

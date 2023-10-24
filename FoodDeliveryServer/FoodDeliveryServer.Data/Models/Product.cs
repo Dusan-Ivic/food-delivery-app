@@ -12,5 +12,6 @@
         public Store Store { get; set; } = default!;
         public List<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
         public string? Image { get; set; }
+        public string? ImagePublicId { get; set; }
     }
 }

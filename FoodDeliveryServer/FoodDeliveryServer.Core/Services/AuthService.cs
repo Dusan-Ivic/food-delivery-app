@@ -15,6 +15,8 @@ using System.Security.Claims;
 using Microsoft.Extensions.Configuration;
 using FoodDeliveryServer.Core.Helpers;
 using Microsoft.AspNetCore.Http;
+using CloudinaryDotNet;
+using CloudinaryDotNet.Actions;
 
 namespace FoodDeliveryServer.Core.Services
 {
@@ -25,6 +27,7 @@ namespace FoodDeliveryServer.Core.Services
         private readonly IAuthRepository _authRepository;
         private readonly IValidator<User> _validator;
         private readonly IMapper _mapper;
+        private readonly Cloudinary _cloudinary;
 
         public AuthService(IConfiguration config, IAuthRepository authRepository, IValidator<User> validator, IMapper mapper)
         {
@@ -33,6 +36,10 @@ namespace FoodDeliveryServer.Core.Services
             _authRepository = authRepository;
             _validator = validator;
             _mapper = mapper;
+
+            IConfigurationSection cloudinarySettings = config.GetSection("CloudinarySettings");
+            string cloudinaryUrl = cloudinarySettings.GetValue<string>("CloudinaryUrl");
+            _cloudinary = new Cloudinary(cloudinaryUrl);
         }
 
         public async Task<UserResponseDto> GetProfile(long userId, UserType userType)
@@ -311,29 +318,33 @@ namespace FoodDeliveryServer.Core.Services
                 throw new ResourceNotFoundException("User with this id doesn't exist");
             }
 
-            if (existingUser.Image != null)
+            if (existingUser.ImagePublicId != null)
             {
-                string oldImageName = existingUser.Image;
-                string oldImagePath = Path.Combine(Directory.GetCurrentDirectory(), "Images", oldImageName);
-
-                if (File.Exists(oldImagePath))
+                DeletionParams deletionParams = new DeletionParams(existingUser.ImagePublicId)
                 {
-                    File.Delete(oldImagePath);
-                }
+                    ResourceType = ResourceType.Image
+                };
+
+                _cloudinary.Destroy(deletionParams);
             }
 
             string fileExtension = Path.GetExtension(image.FileName);
 
             DateTime currentTime = DateTime.UtcNow;
             string newImageName = $"{currentTime:yyyyMMddHHmmssfff}{fileExtension}";
-            string newImagePath = Path.Combine(Directory.GetCurrentDirectory(), "Images", newImageName);
 
-            using (var stream = new FileStream(newImagePath, FileMode.Create))
+            using Stream imageStream = image.OpenReadStream();
+
+            ImageUploadParams uploadParams = new ImageUploadParams()
             {
-                image.CopyTo(stream);
-            }
+                File = new FileDescription(newImageName, imageStream),
+                Tags = "users"
+            };
 
-            existingUser.Image = newImageName;
+            ImageUploadResult uploadResult = _cloudinary.Upload(uploadParams);
+
+            existingUser.ImagePublicId = uploadResult.PublicId;
+            existingUser.Image = uploadResult.Url.ToString();
 
             try
             {
@@ -342,18 +353,6 @@ namespace FoodDeliveryServer.Core.Services
             catch (Exception)
             {
                 throw;
-            }
-
-            return _mapper.Map<ImageResponseDto>(existingUser);
-        }
-
-        public async Task<ImageResponseDto> GetImage(long id, UserType userType)
-        {
-            User? existingUser = await _authRepository.GetUserById(id, userType);
-
-            if (existingUser == null)
-            {
-                throw new ResourceNotFoundException("User with this id doesn't exist");
             }
 
             return _mapper.Map<ImageResponseDto>(existingUser);
@@ -368,17 +367,17 @@ namespace FoodDeliveryServer.Core.Services
                 throw new ResourceNotFoundException("User with this id doesn't exist");
             }
 
-            if (existingUser.Image != null)
+            if (existingUser.ImagePublicId != null)
             {
-                string oldImageName = existingUser.Image;
-                string oldImagePath = Path.Combine(Directory.GetCurrentDirectory(), "Images", oldImageName);
-
-                if (File.Exists(oldImagePath))
+                DeletionParams deletionParams = new DeletionParams(existingUser.ImagePublicId)
                 {
-                    File.Delete(oldImagePath);
-                }
+                    ResourceType = ResourceType.Image
+                };
+
+                _cloudinary.Destroy(deletionParams);
             }
 
+            existingUser.ImagePublicId = null;
             existingUser.Image = null;
 
             try
