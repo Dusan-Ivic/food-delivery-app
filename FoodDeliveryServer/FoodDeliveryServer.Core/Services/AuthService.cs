@@ -71,18 +71,6 @@ namespace FoodDeliveryServer.Core.Services
 
             responseDto.UserType = userType;
 
-            if (existingUser.ImagePublicId != null)
-            {
-                GetResourceParams getResourceParams = new GetResourceParams(existingUser.ImagePublicId)
-                {
-                    ResourceType = ResourceType.Image
-                };
-
-                GetResourceResult getResourceResult = await _cloudinary.GetResourceAsync(getResourceParams);
-
-                responseDto.Image = getResourceResult.Url.ToString();
-            }
-
             return responseDto;
         }
 
@@ -355,6 +343,7 @@ namespace FoodDeliveryServer.Core.Services
             ImageUploadResult uploadResult = _cloudinary.Upload(uploadParams);
 
             existingUser.ImagePublicId = uploadResult.PublicId;
+            existingUser.Image = uploadResult.Url.ToString();
 
             try
             {
@@ -365,10 +354,7 @@ namespace FoodDeliveryServer.Core.Services
                 throw;
             }
 
-            ImageResponseDto responseDto = _mapper.Map<ImageResponseDto>(existingUser);
-            responseDto.Image = uploadResult.Url.ToString();
-
-            return responseDto;
+            return _mapper.Map<ImageResponseDto>(existingUser);
         }
 
         public async Task RemoveImage(long userId, UserType userType)
@@ -391,6 +377,7 @@ namespace FoodDeliveryServer.Core.Services
             }
 
             existingUser.ImagePublicId = null;
+            existingUser.Image = null;
 
             try
             {

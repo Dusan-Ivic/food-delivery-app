@@ -3,7 +3,6 @@ import { PartnerState } from "../../interfaces/partner";
 import { PartnerStatus } from "../../interfaces/enums";
 import { LuShieldCheck, LuShieldClose, LuShieldQuestion } from "react-icons/lu";
 import { HiOutlineX, HiOutlineCheck } from "react-icons/hi";
-import { getFullImageUrl } from "../../utils/imageUrlGenerator";
 
 interface PartnerTableProps {
   partners: PartnerState[];
@@ -53,7 +52,7 @@ export function PartnerTable({ partners, onVerify }: PartnerTableProps) {
                   style={{ height: "48px", width: "48px", objectFit: "cover" }}
                   src={
                     partner.image
-                      ? getFullImageUrl(partner.image)
+                      ? partner.image
                       : "/images/blank-profile-image.png"
                   }
                 />
