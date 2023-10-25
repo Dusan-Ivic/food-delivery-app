@@ -11,6 +11,6 @@ namespace FoodDeliveryServer.Core.Interfaces
         public Task<CreateStoreResponseDto> CreateStore(long partnerId, CreateStoreRequestDto requestDto);
         public Task<UpdateStoreResponseDto> UpdateStore(long id, long partnerId, UpdateStoreRequestDto requestDto);
         public Task<DeleteStoreResponseDto> DeleteStore(long id);
-        public Task<ImageResponseDto> UploadImage(long storeId, long partnerId, IFormFile image);
+        public Task<ImageResponseDto> UploadImage(long storeId, long partnerId, Stream imageStream, string imageName);
     }
 }

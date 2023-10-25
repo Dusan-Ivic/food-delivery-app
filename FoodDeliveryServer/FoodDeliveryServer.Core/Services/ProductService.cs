@@ -167,9 +167,9 @@ namespace FoodDeliveryServer.Core.Services
             return _mapper.Map<DeleteProductResponseDto>(product);
         }
 
-        public async Task<ImageResponseDto> UploadImage(long productId, long partnerId, IFormFile image)
+        public async Task<ImageResponseDto> UploadImage(long productId, long partnerId, Stream imageStream, string imageName)
         {
-            if (image == null || image.Length == 0)
+            if (imageStream == null || imageStream.Length == 0)
             {
                 throw new InvalidImageException("Provided image is invalid. Please ensure that the image has valid content");
             }
@@ -196,16 +196,9 @@ namespace FoodDeliveryServer.Core.Services
                 _cloudinary.Destroy(deletionParams);
             }
 
-            string fileExtension = Path.GetExtension(image.FileName);
-
-            DateTime currentTime = DateTime.UtcNow;
-            string newImageName = $"{currentTime:yyyyMMddHHmmssfff}{fileExtension}";
-
-            using Stream imageStream = image.OpenReadStream();
-
             ImageUploadParams uploadParams = new ImageUploadParams()
             {
-                File = new FileDescription(newImageName, imageStream),
+                File = new FileDescription(imageName, imageStream),
                 Tags = "products"
             };
 

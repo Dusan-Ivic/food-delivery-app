@@ -139,7 +139,11 @@ namespace FoodDeliveryServer.Api.Controllers
 
             try
             {
-               responseDto = await _authService.UploadImage(userId, userType, image);
+                string imageName = image.FileName;
+
+                using Stream imageStream = image.OpenReadStream();
+
+                responseDto = await _authService.UploadImage(userId, userType, imageStream, imageName);
             }
             catch (InvalidImageException ex)
             {

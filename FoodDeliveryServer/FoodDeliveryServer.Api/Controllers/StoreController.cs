@@ -153,7 +153,11 @@ namespace FoodDeliveryServer.Api.Controllers
 
             try
             {
-                responseDto = await _storeService.UploadImage(id, userId, image);
+                string imageName = image.FileName;
+
+                using Stream imageStream = image.OpenReadStream();
+
+                responseDto = await _storeService.UploadImage(id, userId, imageStream, imageName);
             }
             catch (InvalidImageException ex)
             {
