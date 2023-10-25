@@ -304,9 +304,9 @@ namespace FoodDeliveryServer.Core.Services
             return;
         }
 
-        public async Task<ImageResponseDto> UploadImage(long id, UserType userType, IFormFile image)
+        public async Task<ImageResponseDto> UploadImage(long id, UserType userType, Stream imageStream, string imageName)
         {
-            if (image == null || image.Length == 0)
+            if (imageStream == null || imageStream.Length == 0)
             {
                 throw new InvalidImageException("Provided image is invalid. Please ensure that the image has valid content");
             }
@@ -325,23 +325,16 @@ namespace FoodDeliveryServer.Core.Services
                     ResourceType = ResourceType.Image
                 };
 
-                _cloudinary.Destroy(deletionParams);
+                await _cloudinary.DestroyAsync(deletionParams);
             }
-
-            string fileExtension = Path.GetExtension(image.FileName);
-
-            DateTime currentTime = DateTime.UtcNow;
-            string newImageName = $"{currentTime:yyyyMMddHHmmssfff}{fileExtension}";
-
-            using Stream imageStream = image.OpenReadStream();
 
             ImageUploadParams uploadParams = new ImageUploadParams()
             {
-                File = new FileDescription(newImageName, imageStream),
+                File = new FileDescription(imageName, imageStream),
                 Tags = "users"
             };
 
-            ImageUploadResult uploadResult = _cloudinary.Upload(uploadParams);
+            ImageUploadResult uploadResult = await _cloudinary.UploadAsync(uploadParams);
 
             existingUser.ImagePublicId = uploadResult.PublicId;
             existingUser.Image = uploadResult.Url.ToString();
@@ -374,7 +367,7 @@ namespace FoodDeliveryServer.Core.Services
                     ResourceType = ResourceType.Image
                 };
 
-                _cloudinary.Destroy(deletionParams);
+                await _cloudinary.DestroyAsync(deletionParams);
             }
 
             existingUser.ImagePublicId = null;

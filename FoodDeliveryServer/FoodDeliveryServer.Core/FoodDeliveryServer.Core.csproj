@@ -12,7 +12,6 @@
     <PackageReference Include="CloudinaryDotNet" Version="1.22.0" />
     <PackageReference Include="FluentValidation" Version="11.8.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.23" />
-    <PackageReference Include="Microsoft.AspNetCore.Http.Features" Version="5.0.17" />
     <PackageReference Include="Stripe.net" Version="43.0.0" />
   </ItemGroup>
 
