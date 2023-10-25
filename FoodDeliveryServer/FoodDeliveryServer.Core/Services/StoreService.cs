@@ -204,7 +204,7 @@ namespace FoodDeliveryServer.Core.Services
                     ResourceType = ResourceType.Image
                 };
 
-                _cloudinary.Destroy(deletionParams);
+                await _cloudinary.DestroyAsync(deletionParams);
             }
 
             ImageUploadParams uploadParams = new ImageUploadParams()
@@ -213,7 +213,7 @@ namespace FoodDeliveryServer.Core.Services
                 Tags = "stores"
             };
 
-            ImageUploadResult uploadResult = _cloudinary.Upload(uploadParams);
+            ImageUploadResult uploadResult = await _cloudinary.UploadAsync(uploadParams);
 
             existingStore.ImagePublicId = uploadResult.PublicId;
             existingStore.Image = uploadResult.Url.ToString();

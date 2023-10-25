@@ -325,7 +325,7 @@ namespace FoodDeliveryServer.Core.Services
                     ResourceType = ResourceType.Image
                 };
 
-                _cloudinary.Destroy(deletionParams);
+                await _cloudinary.DestroyAsync(deletionParams);
             }
 
             ImageUploadParams uploadParams = new ImageUploadParams()
@@ -334,7 +334,7 @@ namespace FoodDeliveryServer.Core.Services
                 Tags = "users"
             };
 
-            ImageUploadResult uploadResult = _cloudinary.Upload(uploadParams);
+            ImageUploadResult uploadResult = await _cloudinary.UploadAsync(uploadParams);
 
             existingUser.ImagePublicId = uploadResult.PublicId;
             existingUser.Image = uploadResult.Url.ToString();
@@ -367,7 +367,7 @@ namespace FoodDeliveryServer.Core.Services
                     ResourceType = ResourceType.Image
                 };
 
-                _cloudinary.Destroy(deletionParams);
+                await _cloudinary.DestroyAsync(deletionParams);
             }
 
             existingUser.ImagePublicId = null;
