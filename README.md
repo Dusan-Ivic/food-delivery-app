@@ -40,6 +40,12 @@ Full-stack food delivery platform built with ASP.NET Core Web API and React
 
 ---
 
+## Set Delivery Location (Customer)
+
+![Delivery Location](/screenshots/location-1.png)
+
+---
+
 ## Store (Customer)
 
 ![Store!](/screenshots/store_customer.png)
@@ -58,15 +64,21 @@ Full-stack food delivery platform built with ASP.NET Core Web API and React
 
 ---
 
-## Order (Customer)
+## Set Delivery Area (Store)
 
-![Order!](/screenshots/order.png)
+![Store](/screenshots/location-2.png)
 
 ---
 
-## Dashboard (Partner)
+## Add Product (Partner)
 
-![Partner Dashboard!](/screenshots/partner_dashboard.png)
+![Add Product!](/screenshots/product_add.png)
+
+---
+
+## Order (Customer)
+
+![Order!](/screenshots/order.png)
 
 ---
 
@@ -76,15 +88,15 @@ Full-stack food delivery platform built with ASP.NET Core Web API and React
 
 ---
 
-## Add Store (Partner)
+## Dashboard (Partner)
 
-![Add Store!](/screenshots/store_add.png)
+![Partner Dashboard!](/screenshots/partner_dashboard.png)
 
 ---
 
-## Add Product (Partner)
+## Add Store (Partner)
 
-![Add Product!](/screenshots/product_add.png)
+![Add Store!](/screenshots/store_add.png)
 
 ---
 
