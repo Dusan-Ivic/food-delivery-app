@@ -13,5 +13,16 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data
 
+  backend:
+    build:
+      context: ./FoodDeliveryServer
+      dockerfile: Dockerfile
+    ports:
+      - "8080:80"
+    environment:
+      ConnectionStrings__FoodDeliveryDbConnectionString: Host=db;Database=FoodDeliveryDb;Username=postgres;Password=postgres;
+    depends_on:
+      - db
+
 volumes:
   pgdata:
