@@ -38,9 +38,7 @@ export function DeliveryLocationMap({
       point.x
     }&type=amenity&format=json&apiKey=${import.meta.env.VITE_GEOAPIFY_API_KEY}`;
     axios
-      .get(
-        `${import.meta.env.VITE_GEOAPIFY_API_URL}/v1/geocode/reverse?${query}`
-      )
+      .get(`https://api.geoapify.com/v1/geocode/reverse?${query}`)
       .then((res) => res.data)
       .then((data) => {
         const result = data.results[0];

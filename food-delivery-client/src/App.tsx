@@ -36,7 +36,7 @@ function App() {
       const currentTimestamp = Math.floor(Date.now() / 1000);
       const remainingTime = expirationTimestamp - currentTimestamp;
 
-      const refreshThreshold = import.meta.env.VITE_REFRESH_THRESHOLD;
+      const refreshThreshold = import.meta.env.VITE_TOKEN_REFRESH_THRESHOLD;
       const setThreshold =
         remainingTime < refreshThreshold ? 0 : refreshThreshold;
 

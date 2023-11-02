@@ -30,7 +30,6 @@ import {
 } from "../features/cart/cartSlice";
 import {
   createCheckout,
-  createOrder,
   reset as resetOrdersState,
 } from "../features/orders/ordersSlice";
 import {
