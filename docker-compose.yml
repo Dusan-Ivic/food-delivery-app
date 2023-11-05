@@ -21,6 +21,12 @@ services:
       - "8080:80"
     environment:
       ConnectionStrings__FoodDeliveryDbConnectionString: Host=db;Database=FoodDeliveryDb;Username=postgres;Password=postgres;
+      StripeSettings__SecretKey: STRIPE_API_SECRET_KEY
+      StripeSettings__WebhookSecret: STRIPE_API_WEBHOOK_SECRET
+      CloudinarySettings__CloudinaryUrl: CLOUDINARY_API_URL
+      JWTSettings__SecretKey: JWT_SECRET_KEY
+      JWTSettings__ValidIssuer: JWT_VALID_ISSUER
+      ClientSettings__ClientDomain: http://localhost:3000
     depends_on:
       - db
 
@@ -30,7 +36,7 @@ services:
       dockerfile: Dockerfile
       args:
         VITE_BACKEND_API_URL: http://localhost:8080
-        VITE_GEOAPIFY_API_KEY: API_KEY
+        VITE_GEOAPIFY_API_KEY: GEOAPIFY_API_KEY
     ports:
       - "3000:3000"
     depends_on:

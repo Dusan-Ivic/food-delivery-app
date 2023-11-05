@@ -69,21 +69,19 @@ builder.Services.AddAuthentication(options =>
         ValidateAudience = false,
         ValidateLifetime = true,
         ValidateIssuerSigningKey = true,
-        ValidIssuer = builder.Configuration["JWTSettings:Issuer"],
+        ValidIssuer = builder.Configuration["JWTSettings:ValidIssuer"],
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWTSettings:SecretKey"]))
     };
 });
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy(name: builder.Configuration["CorsSettings:Name"], corsBuilder =>
+    options.AddPolicy(name: "AllowClientApplication", corsBuilder =>
     {
-        var clientSettings = builder.Configuration.GetSection("ClientSettings");
-        var clientAddress = clientSettings.GetValue<string>("Address");
-        var clientPort = clientSettings.GetValue<int>("Port");
+        var clientDomain = builder.Configuration["ClientSettings:ClientDomain"];
 
         corsBuilder
-            .WithOrigins($"{clientAddress}:{clientPort}")
+            .WithOrigins(clientDomain)
             .AllowAnyHeader()
             .AllowAnyMethod()
             .AllowCredentials();
@@ -155,10 +153,10 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-StripeConfiguration.ApiKey = builder.Configuration["StripeSettings:StripeApiKey"];
+StripeConfiguration.ApiKey = builder.Configuration["StripeSettings:SecretKey"];
 
 app.UseHttpsRedirection();
-app.UseCors(builder.Configuration["CorsSettings:Name"]);
+app.UseCors("AllowClientApplication");
 
 app.UseAuthentication();
 app.UseAuthorization();

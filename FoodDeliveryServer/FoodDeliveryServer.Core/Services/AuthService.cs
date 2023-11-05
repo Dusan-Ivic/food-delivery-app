@@ -23,7 +23,6 @@ namespace FoodDeliveryServer.Core.Services
     public class AuthService : IAuthService
     {
         private readonly IConfigurationSection _jwtSettings;
-        private readonly IConfigurationSection _fsSettings;
         private readonly IAuthRepository _authRepository;
         private readonly IValidator<User> _validator;
         private readonly IMapper _mapper;
@@ -32,7 +31,6 @@ namespace FoodDeliveryServer.Core.Services
         public AuthService(IConfiguration config, IAuthRepository authRepository, IValidator<User> validator, IMapper mapper)
         {
             _jwtSettings = config.GetSection("JWTSettings");
-            _fsSettings = config.GetSection("FileServerSettings");
             _authRepository = authRepository;
             _validator = validator;
             _mapper = mapper;
@@ -118,7 +116,7 @@ namespace FoodDeliveryServer.Core.Services
                 }
 
                 string jwtSecretKey = _jwtSettings.GetValue<string>("SecretKey");
-                string jwtIssuer = _jwtSettings.GetValue<string>("Issuer");
+                string jwtIssuer = _jwtSettings.GetValue<string>("ValidIssuer");
 
                 int accessTokenExpiresIn = 1800;
                 int refreshTokenExpiresIn = 2592000;
