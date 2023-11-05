@@ -209,7 +209,7 @@ namespace FoodDeliveryServer.Core.Services
                 }
 
                 string jwtSecretKey = _jwtSettings.GetValue<string>("SecretKey");
-                string jwtIssuer = _jwtSettings.GetValue<string>("Issuer");
+                string jwtIssuer = _jwtSettings.GetValue<string>("ValidIssuer");
 
                 int accessTokenExpiresIn = 1800;
 

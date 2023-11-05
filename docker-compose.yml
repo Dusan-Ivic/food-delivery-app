@@ -42,5 +42,13 @@ services:
     depends_on:
       - backend
 
+  stripe-cli:
+    image: stripe/stripe-cli
+    container_name: stripe-cli
+    network_mode: host
+    environment:
+      STRIPE_API_KEY: STRIPE_API_SECRET_KEY
+    command: "listen --forward-to http://localhost:8080/api/webhooks/stripe"
+
 volumes:
   pgdata:
