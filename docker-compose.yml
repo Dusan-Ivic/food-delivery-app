@@ -28,6 +28,9 @@ services:
     build:
       context: ./food-delivery-client
       dockerfile: Dockerfile
+      args:
+        VITE_BACKEND_API_URL: http://localhost:8080
+        VITE_GEOAPIFY_API_KEY: API_KEY
     ports:
       - "3000:3000"
     depends_on:
