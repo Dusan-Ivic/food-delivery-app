@@ -1,0 +1,19 @@
+FROM node:18.18-alpine
+
+WORKDIR /app
+
+COPY package*.json .
+
+RUN npm install
+
+COPY . .
+
+ARG VITE_BACKEND_API_URL
+ARG VITE_GEOAPIFY_API_KEY
+
+ENV VITE_BACKEND_API_URL=$VITE_BACKEND_API_URL
+ENV VITE_GEOAPIFY_API_KEY=$VITE_GEOAPIFY_API_KEY
+
+RUN npm run build
+
+CMD [ "npm", "run", "preview" ]

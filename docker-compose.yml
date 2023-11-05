@@ -1,0 +1,54 @@
+version: "3"
+
+services:
+  db:
+    image: postgis/postgis:15-3.4
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: FoodDeliveryDb
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  backend:
+    build:
+      context: ./FoodDeliveryServer
+      dockerfile: Dockerfile
+    ports:
+      - "8080:80"
+    environment:
+      ConnectionStrings__FoodDeliveryDbConnectionString: Host=db;Database=FoodDeliveryDb;Username=postgres;Password=postgres;
+      StripeSettings__SecretKey: STRIPE_API_SECRET_KEY
+      StripeSettings__WebhookSecret: STRIPE_API_WEBHOOK_SECRET
+      CloudinarySettings__CloudinaryUrl: CLOUDINARY_API_URL
+      JWTSettings__SecretKey: JWT_SECRET_KEY
+      JWTSettings__ValidIssuer: JWT_VALID_ISSUER
+      ClientSettings__ClientDomain: http://localhost:3000
+    depends_on:
+      - db
+
+  frontend:
+    build:
+      context: ./food-delivery-client
+      dockerfile: Dockerfile
+      args:
+        VITE_BACKEND_API_URL: http://localhost:8080
+        VITE_GEOAPIFY_API_KEY: GEOAPIFY_API_KEY
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+
+  stripe-cli:
+    image: stripe/stripe-cli
+    container_name: stripe-cli
+    network_mode: host
+    environment:
+      STRIPE_API_KEY: STRIPE_API_SECRET_KEY
+    command: "listen --forward-to http://localhost:8080/api/webhooks/stripe"
+
+volumes:
+  pgdata:

@@ -147,9 +147,7 @@ namespace FoodDeliveryServer.Core.Services
                 };
             }).ToList();
 
-            var clientAddress = _clientSettings.GetValue<string>("Address");
-            var clientPort = _clientSettings.GetValue<int>("Port");
-            var clientDomain = $"{clientAddress}:{clientPort}";
+            var clientDomain = _clientSettings.GetValue<string>("ClientDomain");
 
             var options = new SessionCreateOptions()
             {

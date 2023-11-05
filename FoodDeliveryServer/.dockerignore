@@ -1,0 +1,27 @@
+# Ignore build and temporary files
+**/bin/
+**/obj/
+**/node_modules/
+.vscode/
+.vs/
+
+# Ignore source control files
+.git/
+.gitignore
+
+# Ignore user-specific and system files
+.vscode/
+.suo
+.userprefs
+*.user
+*.suo
+*.sln.docstates
+*.userprefs
+*.suo
+*.user
+*.suo
+Thumbs.db
+ehthumbs.db
+
+# Ignore Visual Studio Code settings
+.vscode/
