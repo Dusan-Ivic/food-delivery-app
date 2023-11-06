@@ -126,6 +126,13 @@ namespace FoodDeliveryServer.Core.Services
 
             List<SessionLineItemOptions> lineItems = order.Items.Select(item =>
             {
+                List<string> lineItemImages = new List<string>();
+
+                if (item.ProductImage != null)
+                {
+                    lineItemImages.Add(item.ProductImage);
+                }
+
                 return new SessionLineItemOptions()
                 {
                     PriceData = new SessionLineItemPriceDataOptions()
@@ -134,6 +141,7 @@ namespace FoodDeliveryServer.Core.Services
                         {
                             Name = item.ProductName,
                             Description = item.ProductDescription,
+                            Images = lineItemImages,
                             Metadata = new Dictionary<string, string>()
                             {
                                 { "ProductId", item.ProductId.ToString() },
