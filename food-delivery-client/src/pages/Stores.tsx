@@ -26,7 +26,7 @@ export function Stores() {
     return () => {
       dispatch(reset());
     };
-  }, []);
+  }, [dispatch]);
 
   useEffect(() => {
     if (deliveryLocation) {
@@ -36,7 +36,7 @@ export function Stores() {
     } else {
       dispatch(getStores());
     }
-  }, [deliveryLocation]);
+  }, [deliveryLocation, dispatch, user]);
 
   useEffect(() => {
     if (status == StateStatus.Error && message) {
@@ -173,9 +173,7 @@ export function Stores() {
                 {filteredStores.length > 0 ? (
                   <StoreList stores={filteredStores} />
                 ) : (
-                  <p className="text-center mt-4">
-                    There are no stores found for this criteria
-                  </p>
+                  <p className="text-center mt-4">There are no stores found for this criteria</p>
                 )}
               </>
             )}
@@ -183,9 +181,7 @@ export function Stores() {
         ) : (
           <Col>
             <h1 className="text-center mt-3 mb-4 display-4">
-              {deliveryLocation
-                ? "Stores delivering to your location"
-                : "All available Stores"}
+              {deliveryLocation ? "Stores delivering to your location" : "All available Stores"}
             </h1>
             {status === StateStatus.Loading ? (
               <Spinner />
