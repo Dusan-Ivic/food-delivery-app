@@ -38,13 +38,13 @@ export function Login() {
         navigate("/dashboard");
       }
     }
-  }, [user, status, message]);
+  }, [user, status, message, navigate]);
 
   useEffect(() => {
     return () => {
       dispatch(reset());
     };
-  }, []);
+  }, [dispatch]);
 
   if (status === StateStatus.Loading) {
     return <Spinner />;
@@ -54,9 +54,7 @@ export function Login() {
     <Row className="d-flex justify-content-center">
       <Col xs={10} sm={12} md={10} lg={7} xl={6}>
         <h1 className="text-center mt-3 mb-4">Login</h1>
-        <p className="text-center mt-4">
-          Sign in with data you entered during registration
-        </p>
+        <p className="text-center mt-4">Sign in with data you entered during registration</p>
         <LoginForm onSubmit={onSubmit} />
         <p className="text-center mt-4">
           Don't have an account?{" "}

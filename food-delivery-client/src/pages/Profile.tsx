@@ -34,7 +34,7 @@ export function Profile() {
     return () => {
       dispatch(reset());
     };
-  }, [status, message]);
+  }, [status, message, dispatch]);
 
   const handleUpdateDetails = (data: UserBase) => {
     if (!user) {
@@ -97,11 +97,7 @@ export function Profile() {
           <div className="w-50 mx-auto">
             <UserAvatar image={user.image} userType={user.userType} />
             <div className="w-100 d-flex justify-content-around mt-3 gap-3">
-              <Button
-                variant="primary"
-                className="w-50"
-                onClick={handleImageClick}
-              >
+              <Button variant="primary" className="w-50" onClick={handleImageClick}>
                 <Form.Control
                   type="file"
                   ref={fileInputRef}
@@ -111,11 +107,7 @@ export function Profile() {
                 />
                 Upload
               </Button>
-              <Button
-                variant="secondary"
-                className="w-50"
-                onClick={handleImageRemove}
-              >
+              <Button variant="secondary" className="w-50" onClick={handleImageRemove}>
                 Remove
               </Button>
             </div>
@@ -125,10 +117,7 @@ export function Profile() {
 
           <div className="mt-3">
             <h1 className="text-center mt-3 mb-4">User Details</h1>
-            <UserDetails
-              data={user as UserBase}
-              onSubmit={(data) => handleUpdateDetails(data)}
-            />
+            <UserDetails data={user as UserBase} onSubmit={(data) => handleUpdateDetails(data)} />
           </div>
 
           {user?.userType == UserType.Customer && (

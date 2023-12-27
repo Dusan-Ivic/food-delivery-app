@@ -1,19 +1,11 @@
-import {
-  getStores,
-  createStore,
-  reset as resetStoresState,
-} from "../features/stores/storesSlice";
+import { getStores, createStore, reset as resetStoresState } from "../features/stores/storesSlice";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { useEffect, useState } from "react";
 import { BsHouseAddFill } from "react-icons/bs";
 import { Alert, Button, Col, Row } from "react-bootstrap";
 import { PartnerStatus, StateStatus } from "../interfaces/enums";
 import { toast } from "react-toastify";
-import {
-  getOrders,
-  clearOrders,
-  reset as resetOrdersState,
-} from "../features/orders/ordersSlice";
+import { getOrders, clearOrders, reset as resetOrdersState } from "../features/orders/ordersSlice";
 import { OrderHistory } from "../components/orders/OrderHistory";
 import { StoreTable } from "../components/stores/StoreTable";
 import { PartnerState } from "../interfaces/partner";
@@ -45,7 +37,7 @@ export function PartnerDashboard() {
       dispatch(resetStoresState());
       dispatch(clearOrders());
     };
-  }, []);
+  }, [dispatch, user]);
 
   useEffect(() => {
     if (storesStatus == StateStatus.Error && storesMessage) {
@@ -55,7 +47,7 @@ export function PartnerDashboard() {
     return () => {
       dispatch(resetStoresState());
     };
-  }, [storesStatus, storesMessage]);
+  }, [storesStatus, storesMessage, dispatch]);
 
   useEffect(() => {
     if (ordersStatus == StateStatus.Error && ordersMessage) {
@@ -65,7 +57,7 @@ export function PartnerDashboard() {
     return () => {
       dispatch(resetOrdersState());
     };
-  }, [ordersStatus, ordersMessage]);
+  }, [ordersStatus, ordersMessage, dispatch]);
 
   const AlertComponent = ({
     status,
@@ -96,8 +88,7 @@ export function PartnerDashboard() {
       case PartnerStatus.Accepted:
         return (
           <Alert variant="success">
-            {children} You can now perform all store and product related
-            actions.
+            {children} You can now perform all store and product related actions.
           </Alert>
         );
     }
@@ -107,10 +98,7 @@ export function PartnerDashboard() {
     <Col>
       <Row>
         <AlertComponent status={(user as PartnerState).status}>
-          <>
-            Your current status is:{" "}
-            {PartnerStatus[(user as PartnerState).status]}.
-          </>
+          <>Your current status is: {PartnerStatus[(user as PartnerState).status]}.</>
         </AlertComponent>
       </Row>
 
@@ -129,10 +117,7 @@ export function PartnerDashboard() {
             {stores.length > 0 ? (
               <StoreTable stores={stores} />
             ) : (
-              <p className="text-center mt-4">
-                {" "}
-                You don't have any registered stores
-              </p>
+              <p className="text-center mt-4"> You don't have any registered stores</p>
             )}
           </>
         )}

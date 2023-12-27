@@ -2,11 +2,7 @@ import { useEffect, useMemo } from "react";
 import { Row, Col } from "react-bootstrap";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { OrderHistory } from "../components/orders/OrderHistory";
-import {
-  getOrders,
-  clearOrders,
-  cancelOrder,
-} from "../features/orders/ordersSlice";
+import { getOrders, clearOrders, cancelOrder } from "../features/orders/ordersSlice";
 import { UserType, StateStatus } from "../interfaces/enums";
 import { Spinner } from "../components/ui/Spinner";
 
@@ -21,7 +17,7 @@ export function Orders() {
     return () => {
       dispatch(clearOrders());
     };
-  }, []);
+  }, [dispatch]);
 
   const handleCancelOrder = (orderId: number) => {
     dispatch(cancelOrder(orderId));

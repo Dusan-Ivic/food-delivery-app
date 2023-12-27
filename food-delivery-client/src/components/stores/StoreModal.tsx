@@ -22,13 +22,7 @@ interface StoreModalProps {
 
 type StoreInfo = BasicInfo & ContactInfo & DeliveryInfo & DeliveryArea;
 
-export function StoreModal({
-  isVisible,
-  title,
-  data,
-  onSubmit,
-  onClose,
-}: StoreModalProps) {
+export function StoreModal({ isVisible, title, data, onSubmit, onClose }: StoreModalProps) {
   const [formData, setFormData] = useState<StoreInfo>({} as StoreInfo);
   const formSteps: FormStep[] = [
     {
@@ -53,46 +47,27 @@ export function StoreModal({
     },
   ];
 
-  const {
-    step,
-    currentStepIndex,
-    stepBackward,
-    stepForward,
-    goToStep,
-    isFirstStep,
-    isLastStep,
-  } = useMultistepForm(
-    formSteps.map((step) => {
-      const StepComponent = step.component;
-      return <StepComponent />;
-    })
-  );
+  const { step, currentStepIndex, stepBackward, stepForward, goToStep, isFirstStep, isLastStep } =
+    useMultistepForm(
+      formSteps.map((step) => {
+        const StepComponent = step.component;
+        return <StepComponent />;
+      })
+    );
 
   const basicInfoValidationSchema = Yup.object<BasicInfo>().shape({
-    name: Yup.string()
-      .required("Name is required")
-      .max(100, "Name is too long"),
-    category: Yup.string()
-      .required("Category is required")
-      .max(20, "Category is too long"),
+    name: Yup.string().required("Name is required").max(100, "Name is too long"),
+    category: Yup.string().required("Category is required").max(20, "Category is too long"),
     description: Yup.string()
       .required("Description is required")
       .max(500, "Description is too long"),
   });
 
   const contactInfoValidationSchema = Yup.object<ContactInfo>().shape({
-    address: Yup.string()
-      .required("Address is required")
-      .max(100, "Address is too long"),
-    city: Yup.string()
-      .required("City is required")
-      .max(50, "City name is too long"),
-    postalCode: Yup.string()
-      .required("Postal code is required")
-      .max(10, "Postal code is too long"),
-    phone: Yup.string()
-      .required("Phone number is required")
-      .max(20, "Phone number is too long"),
+    address: Yup.string().required("Address is required").max(100, "Address is too long"),
+    city: Yup.string().required("City is required").max(50, "City name is too long"),
+    postalCode: Yup.string().required("Postal code is required").max(10, "Postal code is too long"),
+    phone: Yup.string().required("Phone number is required").max(20, "Phone number is too long"),
   });
 
   const deliveryInfoValidationSchema = Yup.object<DeliveryInfo>().shape({
@@ -111,22 +86,17 @@ export function StoreModal({
     coordinates: Yup.array()
       .required("Coordinates are required")
       .min(4, "Coordinates must have at least 4 points")
-      .test(
-        "closedPolygon",
-        "Coordinates must form a closed ring",
-        function (value: Coordinate[]) {
-          if (value.length > 3) {
-            const firstPoint = value[0];
-            const lastPoint = value[value.length - 1];
-            return firstPoint.x === lastPoint.x && firstPoint.y === lastPoint.y;
-          }
+      .test("closedPolygon", "Coordinates must form a closed ring", function (value: Coordinate[]) {
+        if (value.length > 3) {
+          const firstPoint = value[0];
+          const lastPoint = value[value.length - 1];
+          return firstPoint.x === lastPoint.x && firstPoint.y === lastPoint.y;
         }
-      ),
+      }),
   });
 
   const validationSchemas: Yup.ObjectSchema<
-    BasicInfo | ContactInfo | DeliveryInfo | DeliveryArea,
-    any
+    BasicInfo | ContactInfo | DeliveryInfo | DeliveryArea
   >[] = [
     basicInfoValidationSchema,
     contactInfoValidationSchema,
@@ -155,9 +125,7 @@ export function StoreModal({
   });
   const { handleSubmit, reset } = methods;
 
-  function submitFormPart(
-    partialData: BasicInfo | ContactInfo | DeliveryInfo | DeliveryArea
-  ) {
+  function submitFormPart(partialData: BasicInfo | ContactInfo | DeliveryInfo | DeliveryArea) {
     if (!isLastStep) {
       setFormData((prevData) => ({ ...prevData, ...partialData }));
       return stepForward();
@@ -178,12 +146,7 @@ export function StoreModal({
   }
 
   return (
-    <Modal
-      show={isVisible}
-      onHide={closeModal}
-      className="modal-lg"
-      style={{ height: "100%" }}
-    >
+    <Modal show={isVisible} onHide={closeModal} className="modal-lg" style={{ height: "100%" }}>
       <Modal.Header closeButton>
         <Modal.Title>{title}</Modal.Title>
       </Modal.Header>
@@ -206,11 +169,7 @@ export function StoreModal({
               >
                 Previous
               </Button>
-              <Button
-                type="submit"
-                className="w-50"
-                variant={isLastStep ? "success" : "primary"}
-              >
+              <Button type="submit" className="w-50" variant={isLastStep ? "success" : "primary"}>
                 {isLastStep ? "Submit" : "Next"}
               </Button>
             </div>

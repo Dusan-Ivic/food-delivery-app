@@ -1,18 +1,11 @@
-import {
-  getStores,
-  reset as resetStores,
-} from "../features/stores/storesSlice";
+import { getStores, reset as resetStores } from "../features/stores/storesSlice";
 import {
   getPartners,
   clearPartners,
   verifyPartner,
   reset as resetPartners,
 } from "../features/partners/partnersSlice";
-import {
-  getOrders,
-  clearOrders,
-  reset as resetOrders,
-} from "../features/orders/ordersSlice";
+import { getOrders, clearOrders, reset as resetOrders } from "../features/orders/ordersSlice";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { useEffect } from "react";
 import { PartnerStatus, StateStatus } from "../interfaces/enums";
@@ -55,7 +48,7 @@ export function AdminDashboard() {
       dispatch(clearPartners());
       dispatch(clearOrders());
     };
-  }, []);
+  }, [user, dispatch]);
 
   useEffect(() => {
     if (storesStatus == StateStatus.Error && storesMessage) {
@@ -65,7 +58,7 @@ export function AdminDashboard() {
     return () => {
       dispatch(resetStores());
     };
-  }, [storesStatus, storesMessage]);
+  }, [storesStatus, storesMessage, dispatch]);
 
   useEffect(() => {
     if (partnersStatus == StateStatus.Error && partnersMessage) {
@@ -75,7 +68,7 @@ export function AdminDashboard() {
     return () => {
       dispatch(resetPartners());
     };
-  }, [partnersStatus, partnersMessage]);
+  }, [partnersStatus, partnersMessage, dispatch]);
 
   useEffect(() => {
     if (ordersStatus == StateStatus.Error && ordersMessage) {
@@ -85,7 +78,7 @@ export function AdminDashboard() {
     return () => {
       dispatch(resetOrders());
     };
-  }, [ordersStatus, ordersMessage]);
+  }, [ordersStatus, ordersMessage, dispatch]);
 
   const handleVerify = (partner: PartnerState, status: PartnerStatus) => {
     if (partner.status === status) {
@@ -109,9 +102,7 @@ export function AdminDashboard() {
             {partners.length > 0 ? (
               <PartnerTable partners={partners} onVerify={handleVerify} />
             ) : (
-              <p className="text-center mt-4">
-                There are currently no registered partners
-              </p>
+              <p className="text-center mt-4">There are currently no registered partners</p>
             )}
           </>
         )}
@@ -131,9 +122,7 @@ export function AdminDashboard() {
             {stores.length > 0 ? (
               <StoreTable stores={stores} />
             ) : (
-              <p className="text-center mt-4">
-                There are currently no registered stores
-              </p>
+              <p className="text-center mt-4">There are currently no registered stores</p>
             )}
           </>
         )}

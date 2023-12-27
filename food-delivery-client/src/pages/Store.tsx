@@ -28,10 +28,7 @@ import {
   removeFromCart,
   decreaseQuantity,
 } from "../features/cart/cartSlice";
-import {
-  createCheckout,
-  reset as resetOrdersState,
-} from "../features/orders/ordersSlice";
+import { createCheckout, reset as resetOrdersState } from "../features/orders/ordersSlice";
 import {
   uploadImage as uploadStoreImage,
   updateStore,
@@ -50,11 +47,10 @@ import { FaLocationDot } from "react-icons/fa6";
 import { useDeliveryLocation } from "../context/location/useDeliveryLocation";
 import { StoreModal } from "../components/stores/StoreModal";
 
-interface ModalProps {
+interface ConfirmDeleteModalProps {
   isVisible: boolean;
-  content: any;
-  action: any;
-  payload: any;
+  content: string;
+  payload?: number;
 }
 
 export function StorePage() {
@@ -72,27 +68,20 @@ export function StorePage() {
     status: productsStatus,
     message: productsMessage,
   } = useAppSelector((state) => state.products);
-  const { status: ordersStatus, message: ordersMessage } = useAppSelector(
-    (state) => state.orders
-  );
+  const { status: ordersStatus, message: ordersMessage } = useAppSelector((state) => state.orders);
   const { items } = useAppSelector((state) => state.cart);
   const [isCartVisible, setCartVisible] = useState<boolean>(false);
   const totalCartItems = useMemo(
     () => items.reduce((quantity, item) => item.quantity + quantity, 0),
     [items]
   );
-  const [selectedProduct, setSelectedProduct] = useState<ProductState | null>(
-    null
-  );
-  const [confirmModal, setConfirmModal] = useState<ModalProps>({
+  const [selectedProduct, setSelectedProduct] = useState<ProductState | null>(null);
+  const [confirmModal, setConfirmModal] = useState<ConfirmDeleteModalProps>({
     isVisible: false,
     content: "",
-    action: null,
-    payload: null,
   });
   const [isStoreModalVisible, setStoreModalVisible] = useState<boolean>(false);
-  const [isProductModalVisible, setProductModalVisible] =
-    useState<boolean>(false);
+  const [isProductModalVisible, setProductModalVisible] = useState<boolean>(false);
   const { deliveryLocation } = useDeliveryLocation();
 
   const store = useMemo<StoreState | null>(() => {
@@ -121,7 +110,7 @@ export function StorePage() {
     } else {
       navigate("/");
     }
-  }, [store]);
+  }, [store, dispatch, navigate]);
 
   useEffect(() => {
     if (ordersStatus == StateStatus.Error && ordersMessage) {
@@ -132,7 +121,7 @@ export function StorePage() {
       dispatch(clearCartItems());
       setCartVisible(false);
     }
-  }, [ordersStatus, ordersMessage]);
+  }, [ordersStatus, ordersMessage, dispatch]);
 
   useEffect(() => {
     if (productsStatus == StateStatus.Error && productsMessage) {
@@ -154,7 +143,7 @@ export function StorePage() {
       dispatch(closeCart());
       dispatch(clearProducts());
     };
-  }, []);
+  }, [dispatch]);
 
   const submitOrder = (store: StoreState, items: CartItem[]) => {
     if (deliveryLocation?.coordinate && deliveryLocation?.address) {
@@ -202,18 +191,19 @@ export function StorePage() {
     setConfirmModal({
       isVisible: true,
       content: `You are about to delete product '${product.name}'`,
-      action: deleteProduct,
       payload: product.id,
     });
   };
 
   const handleConfirm = () => {
-    dispatch(confirmModal.action(confirmModal.payload));
+    const { payload } = confirmModal;
+    if (payload) {
+      dispatch(deleteProduct(payload));
+    }
+
     setConfirmModal({
       isVisible: false,
       content: "",
-      action: null,
-      payload: null,
     });
   };
 
@@ -221,8 +211,6 @@ export function StorePage() {
     setConfirmModal({
       isVisible: false,
       content: "",
-      action: null,
-      payload: null,
     });
   };
 
@@ -234,10 +222,7 @@ export function StorePage() {
     }
   };
 
-  const handleProductImageChange = (
-    productId: number,
-    imageFile: File | null
-  ) => {
+  const handleProductImageChange = (productId: number, imageFile: File | null) => {
     if (imageFile) {
       const formData = new FormData();
       formData.append("image", imageFile);
@@ -245,10 +230,7 @@ export function StorePage() {
     }
   };
 
-  const ProductFormComponent = ({
-    data,
-    onSubmit,
-  }: FormProps<ProductRequestDto>) => {
+  const ProductFormComponent = ({ data, onSubmit }: FormProps<ProductRequestDto>) => {
     return <ProductForm product={data} onSubmit={onSubmit} />;
   };
 
@@ -270,10 +252,7 @@ export function StorePage() {
                   {deliveryLocation ? (
                     <div className="lead">Your location is set</div>
                   ) : (
-                    <Link
-                      to="/stores"
-                      className="text-reset text-decoration-none lead"
-                    >
+                    <Link to="/stores" className="text-reset text-decoration-none lead">
                       Go back and set location
                     </Link>
                   )}
@@ -283,10 +262,7 @@ export function StorePage() {
 
             <Col className="d-flex justify-content-end">
               {canManageCart && (
-                <Button
-                  onClick={() => setCartVisible(true)}
-                  className="position-relative"
-                >
+                <Button onClick={() => setCartVisible(true)} className="position-relative">
                   <HiOutlineShoppingCart className="fs-4" />
                   <div
                     className="rounded-circle bg-danger d-flex justify-content-center align-items-center"
@@ -349,9 +325,7 @@ export function StorePage() {
                 }
               />
             ) : (
-              <p className="text-center mt-4">
-                There are currently no products in this store
-              </p>
+              <p className="text-center mt-4">There are currently no products in this store</p>
             )}
           </>
         )}
@@ -401,9 +375,7 @@ export function StorePage() {
           isVisible={isStoreModalVisible}
           title="Update store"
           data={store}
-          onSubmit={(data) =>
-            dispatch(updateStore({ storeId: store.id, requestDto: data }))
-          }
+          onSubmit={(data) => dispatch(updateStore({ storeId: store.id, requestDto: data }))}
           onClose={() => setStoreModalVisible(false)}
         />
       </>
