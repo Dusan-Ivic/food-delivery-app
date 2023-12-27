@@ -2,7 +2,7 @@ import { Button, Modal } from "react-bootstrap";
 
 interface ConfirmationModalProps {
   isVisible: boolean;
-  content: any;
+  content: string;
   onConfirm: () => void;
   onCancel: () => void;
 }

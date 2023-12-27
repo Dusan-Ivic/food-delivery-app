@@ -47,11 +47,10 @@ import { FaLocationDot } from "react-icons/fa6";
 import { useDeliveryLocation } from "../context/location/useDeliveryLocation";
 import { StoreModal } from "../components/stores/StoreModal";
 
-interface ModalProps {
+interface ConfirmDeleteModalProps {
   isVisible: boolean;
-  content: any;
-  action: any;
-  payload: any;
+  content: string;
+  payload?: number;
 }
 
 export function StorePage() {
@@ -77,11 +76,9 @@ export function StorePage() {
     [items]
   );
   const [selectedProduct, setSelectedProduct] = useState<ProductState | null>(null);
-  const [confirmModal, setConfirmModal] = useState<ModalProps>({
+  const [confirmModal, setConfirmModal] = useState<ConfirmDeleteModalProps>({
     isVisible: false,
     content: "",
-    action: null,
-    payload: null,
   });
   const [isStoreModalVisible, setStoreModalVisible] = useState<boolean>(false);
   const [isProductModalVisible, setProductModalVisible] = useState<boolean>(false);
@@ -194,18 +191,19 @@ export function StorePage() {
     setConfirmModal({
       isVisible: true,
       content: `You are about to delete product '${product.name}'`,
-      action: deleteProduct,
       payload: product.id,
     });
   };
 
   const handleConfirm = () => {
-    dispatch(confirmModal.action(confirmModal.payload));
+    const { payload } = confirmModal;
+    if (payload) {
+      dispatch(deleteProduct(payload));
+    }
+
     setConfirmModal({
       isVisible: false,
       content: "",
-      action: null,
-      payload: null,
     });
   };
 
@@ -213,8 +211,6 @@ export function StorePage() {
     setConfirmModal({
       isVisible: false,
       content: "",
-      action: null,
-      payload: null,
     });
   };
 
