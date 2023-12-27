@@ -1,0 +1,9 @@
+{
+  "recommendations": [
+    "esbenp.prettier-vscode",
+    "dsznajder.es7-react-js-snippets",
+    "pkief.material-icon-theme",
+    "gruntfuggly.todo-tree",
+    "dbaeumer.vscode-eslint"
+  ]
+}
