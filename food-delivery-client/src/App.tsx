@@ -1,9 +1,6 @@
 import { Header } from "./components/ui/Header";
 import { Container } from "react-bootstrap";
-import { Routes, Route } from "react-router-dom";
-import { Home, Login, Profile, Register, Store, Orders, Stores, PaymentStatus } from "./pages";
-import { Dashboard } from "./layouts";
-import { PrivateRoute } from "./components/ui/PrivateRoute";
+import { Outlet } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import { useAppDispatch, useAppSelector } from "./app/hooks";
 import { getProfile, generateToken, reset } from "./features/auth/authSlice";
@@ -14,7 +11,9 @@ import { DeliveryLocationProvider } from "./context/location/DeliveryLocationCon
 
 function App() {
   const dispatch = useAppDispatch();
-  const { user, accessToken, refreshToken } = useAppSelector((state) => state.auth);
+  const { user, accessToken, refreshToken } = useAppSelector(
+    (state) => state.auth
+  );
 
   useEffect(() => {
     // Mechanism for refreshing access token before it expires
@@ -26,7 +25,8 @@ function App() {
       const remainingTime = expirationTimestamp - currentTimestamp;
 
       const refreshThreshold = import.meta.env.VITE_TOKEN_REFRESH_THRESHOLD;
-      const setThreshold = remainingTime < refreshThreshold ? 0 : refreshThreshold;
+      const setThreshold =
+        remainingTime < refreshThreshold ? 0 : refreshThreshold;
 
       expirationTimer = setTimeout(() => {
         const requestDto: CreateTokenRequestDto = {
@@ -66,38 +66,7 @@ function App() {
         <Header />
         <ToastContainer style={{ width: "40%" }} position="top-left" />
         <Container>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/stores" element={<Stores />} />
-            <Route path="/stores/:id" element={<Store />} />
-            <Route
-              path="/orders"
-              element={
-                <PrivateRoute>
-                  <Orders />
-                </PrivateRoute>
-              }
-            />
-            <Route
-              path="/profile"
-              element={
-                <PrivateRoute>
-                  <Profile />
-                </PrivateRoute>
-              }
-            />
-            <Route
-              path="/dashboard"
-              element={
-                <PrivateRoute>
-                  <Dashboard />
-                </PrivateRoute>
-              }
-            />
-            <Route path="/payment" element={<PaymentStatus />} />
-          </Routes>
+          <Outlet />
         </Container>
       </div>
     </DeliveryLocationProvider>
