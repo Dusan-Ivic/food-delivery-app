@@ -2,10 +2,10 @@ import { Form, Button, Row, Col } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
-import { RegisterCustomerRequestDto } from "../../interfaces/customer";
+import { CustomerRequestDto } from "@/interfaces/customer";
 
 interface RegisterCustomerProps {
-  onSubmit: (data: RegisterCustomerRequestDto) => void;
+  onSubmit: (data: CustomerRequestDto) => void;
 }
 
 export function RegisterCustomer({ onSubmit }: RegisterCustomerProps) {
@@ -13,9 +13,7 @@ export function RegisterCustomer({ onSubmit }: RegisterCustomerProps) {
     username: Yup.string()
       .required("Username is required")
       .min(6, "Username must be at least 6 characters long"),
-    email: Yup.string()
-      .required("Email is required")
-      .email("Email is not valid"),
+    email: Yup.string().required("Email is required").email("Email is not valid"),
     password: Yup.string()
       .required("Password is required")
       .min(8, "Password must be at least 8 characters long"),
@@ -25,22 +23,16 @@ export function RegisterCustomer({ onSubmit }: RegisterCustomerProps) {
       .oneOf([Yup.ref("password")], "Passwords don't match"),
     firstName: Yup.string().required("First name is required"),
     lastName: Yup.string().required("Last name is required"),
-    address: Yup.string()
-      .required("Address is required")
-      .max(100, "Address is too long"),
-    city: Yup.string()
-      .required("City is required")
-      .max(50, "City name is too long"),
-    postalCode: Yup.string()
-      .required("Postal code is required")
-      .max(10, "Postal code is too long"),
+    address: Yup.string().required("Address is required").max(100, "Address is too long"),
+    city: Yup.string().required("City is required").max(50, "City name is too long"),
+    postalCode: Yup.string().required("Postal code is required").max(10, "Postal code is too long"),
   });
 
   const {
     register,
     handleSubmit,
     formState: { errors, touchedFields },
-  } = useForm<RegisterCustomerRequestDto>({
+  } = useForm<CustomerRequestDto>({
     mode: "all",
     resolver: yupResolver(validationSchema),
   });

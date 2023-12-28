@@ -1,32 +1,18 @@
 import axios from "axios";
-import {
-  CustomerRequestDto,
-  CustomerResponseDto,
-} from "../../interfaces/customer";
-import {
-  PartnerRequestDto,
-  PartnerResponseDto,
-} from "../../interfaces/partner";
-import { ImageResponseDto } from "../../interfaces/image";
-import {
-  ChangePasswordRequestDto,
-  UserResponseDto,
-} from "../../interfaces/user";
+import { CustomerRequestDto, CustomerResponseDto } from "@/interfaces/customer";
+import { PartnerRequestDto, PartnerResponseDto } from "@/interfaces/partner";
+import { ImageResponseDto } from "@/interfaces/image";
+import apiClient from "@/config/apiClient";
 import {
   CreateTokenRequestDto,
   DeleteTokenRequestDto,
-  TokenResponseDto,
-} from "../../interfaces/token";
-import apiClient from "../../config/apiClient";
+  ChangePasswordRequestDto,
+} from "@/features/auth/types/request";
+import { TokenResponseDto, UserResponseDto } from "@/features/auth/types/response";
 
-const generateToken = async (
-  requestDto: CreateTokenRequestDto
-): Promise<TokenResponseDto> => {
+const generateToken = async (requestDto: CreateTokenRequestDto): Promise<TokenResponseDto> => {
   try {
-    const response = await apiClient.post<TokenResponseDto>(
-      "/api/auth/token",
-      requestDto
-    );
+    const response = await apiClient.post<TokenResponseDto>("/api/auth/token", requestDto);
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
@@ -75,14 +61,9 @@ const deleteRefreshToken = async (
   }
 };
 
-const registerCustomer = async (
-  requestDto: CustomerRequestDto
-): Promise<CustomerResponseDto> => {
+const registerCustomer = async (requestDto: CustomerRequestDto): Promise<CustomerResponseDto> => {
   try {
-    const response = await apiClient.post<CustomerResponseDto>(
-      "/api/customers",
-      requestDto
-    );
+    const response = await apiClient.post<CustomerResponseDto>("/api/customers", requestDto);
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
@@ -93,14 +74,9 @@ const registerCustomer = async (
   }
 };
 
-const registerPartner = async (
-  requestDto: PartnerRequestDto
-): Promise<PartnerResponseDto> => {
+const registerPartner = async (requestDto: PartnerRequestDto): Promise<PartnerResponseDto> => {
   try {
-    const response = await apiClient.post<PartnerResponseDto>(
-      "/api/partners",
-      requestDto
-    );
+    const response = await apiClient.post<PartnerResponseDto>("/api/partners", requestDto);
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
@@ -161,21 +137,14 @@ const updatePartner = async (
   }
 };
 
-const uploadImage = async (
-  formData: FormData,
-  token: string | null
-): Promise<ImageResponseDto> => {
+const uploadImage = async (formData: FormData, token: string | null): Promise<ImageResponseDto> => {
   try {
-    const response = await apiClient.put<ImageResponseDto>(
-      "/api/auth/image",
-      formData,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "multipart/form-data",
-        },
-      }
-    );
+    const response = await apiClient.put<ImageResponseDto>("/api/auth/image", formData, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "multipart/form-data",
+      },
+    });
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
@@ -208,15 +177,11 @@ const changePassword = async (
   token: string | null
 ): Promise<string> => {
   try {
-    const response = await apiClient.put<string>(
-      "/api/auth/password",
-      requestDto,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+    const response = await apiClient.put<string>("/api/auth/password", requestDto, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {

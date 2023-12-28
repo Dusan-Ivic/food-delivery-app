@@ -2,13 +2,10 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { PartnerStatus, StateStatus } from "../../interfaces/enums";
 import { RootState } from "../../app/store";
 import partnersService from "./partnersService";
-import {
-  PartnerState,
-  VerifyPartnerRequestDto,
-} from "../../interfaces/partner";
+import { PartnerResponseDto, VerifyPartnerRequestDto } from "@/interfaces/partner";
 
 interface PartnersState {
-  partners: PartnerState[];
+  partners: PartnerResponseDto[];
   status: StateStatus;
   message: string;
 }
@@ -19,38 +16,28 @@ const initialState: PartnersState = {
   message: "",
 };
 
-export const getPartners = createAsyncThunk(
-  "partners/get",
-  async (_, thunkAPI) => {
-    try {
-      const { accessToken } = (thunkAPI.getState() as RootState).auth;
-      return await partnersService.getPartners(accessToken!.payload);
-    } catch (error: unknown) {
-      let message: string = "";
-      if (error instanceof Error) {
-        message = error.message;
-      }
-      return thunkAPI.rejectWithValue(message);
+export const getPartners = createAsyncThunk("partners/get", async (_, thunkAPI) => {
+  try {
+    const { accessToken } = (thunkAPI.getState() as RootState).auth;
+    return await partnersService.getPartners(accessToken!.payload);
+  } catch (error: unknown) {
+    let message: string = "";
+    if (error instanceof Error) {
+      message = error.message;
     }
+    return thunkAPI.rejectWithValue(message);
   }
-);
+});
 
 export const verifyPartner = createAsyncThunk(
   "partners/verify",
-  async (
-    { partnerId, newStatus }: { partnerId: number; newStatus: PartnerStatus },
-    thunkAPI
-  ) => {
+  async ({ partnerId, newStatus }: { partnerId: number; newStatus: PartnerStatus }, thunkAPI) => {
     try {
       const { accessToken } = (thunkAPI.getState() as RootState).auth;
       const requestDto: VerifyPartnerRequestDto = {
         status: newStatus,
       };
-      return await partnersService.verifyPartner(
-        partnerId,
-        requestDto,
-        accessToken!.payload
-      );
+      return await partnersService.verifyPartner(partnerId, requestDto, accessToken!.payload);
     } catch (error: unknown) {
       let message: string = "";
       if (error instanceof Error) {

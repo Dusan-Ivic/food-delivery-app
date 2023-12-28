@@ -1,9 +1,10 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { PartnerStatus, StateStatus, UserType } from "../../interfaces/enums";
+import { PartnerStatus, StateStatus } from "../../interfaces/enums";
 import { RootState } from "../../app/store";
 import { ProductRequestDto, ProductState } from "../../interfaces/product";
 import productsService from "./productsService";
-import { PartnerState } from "../../interfaces/partner";
+import { PartnerResponseDto } from "@/interfaces/partner";
+import { UserType } from "@/features/auth/types/enums";
 
 interface ProductsState {
   products: ProductState[];
@@ -38,18 +39,13 @@ export const createProduct = createAsyncThunk(
     try {
       const { user } = (thunkAPI.getState() as RootState).auth;
       if (user?.userType === UserType.Partner) {
-        const partner = user as PartnerState;
+        const partner = user as PartnerResponseDto;
         if (partner.status === PartnerStatus.Accepted) {
           const { accessToken } = (thunkAPI.getState() as RootState).auth;
-          return await productsService.createProduct(
-            requestDto,
-            accessToken!.payload
-          );
+          return await productsService.createProduct(requestDto, accessToken!.payload);
         }
       }
-      return thunkAPI.rejectWithValue(
-        "You are not verified to perform this action!"
-      );
+      return thunkAPI.rejectWithValue("You are not verified to perform this action!");
     } catch (error: unknown) {
       let message: string = "";
       if (error instanceof Error) {
@@ -62,14 +58,11 @@ export const createProduct = createAsyncThunk(
 
 export const updateProduct = createAsyncThunk(
   "products/update",
-  async (
-    product: { productId: number; requestDto: ProductRequestDto },
-    thunkAPI
-  ) => {
+  async (product: { productId: number; requestDto: ProductRequestDto }, thunkAPI) => {
     try {
       const { user } = (thunkAPI.getState() as RootState).auth;
       if (user?.userType === UserType.Partner) {
-        const partner = user as PartnerState;
+        const partner = user as PartnerResponseDto;
         if (partner.status === PartnerStatus.Accepted) {
           const { accessToken } = (thunkAPI.getState() as RootState).auth;
           return await productsService.updateProduct(
@@ -79,9 +72,7 @@ export const updateProduct = createAsyncThunk(
           );
         }
       }
-      return thunkAPI.rejectWithValue(
-        "You are not verified to perform this action!"
-      );
+      return thunkAPI.rejectWithValue("You are not verified to perform this action!");
     } catch (error: unknown) {
       let message: string = "";
       if (error instanceof Error) {
@@ -98,18 +89,13 @@ export const deleteProduct = createAsyncThunk(
     try {
       const { user } = (thunkAPI.getState() as RootState).auth;
       if (user?.userType === UserType.Partner) {
-        const partner = user as PartnerState;
+        const partner = user as PartnerResponseDto;
         if (partner.status === PartnerStatus.Accepted) {
           const { accessToken } = (thunkAPI.getState() as RootState).auth;
-          return await productsService.deleteProduct(
-            productId,
-            accessToken!.payload
-          );
+          return await productsService.deleteProduct(productId, accessToken!.payload);
         }
       }
-      return thunkAPI.rejectWithValue(
-        "You are not verified to perform this action!"
-      );
+      return thunkAPI.rejectWithValue("You are not verified to perform this action!");
     } catch (error: unknown) {
       let message: string = "";
       if (error instanceof Error) {
@@ -122,26 +108,17 @@ export const deleteProduct = createAsyncThunk(
 
 export const uploadImage = createAsyncThunk(
   "products/upload-image",
-  async (
-    { productId, formData }: { productId: number; formData: FormData },
-    thunkAPI
-  ) => {
+  async ({ productId, formData }: { productId: number; formData: FormData }, thunkAPI) => {
     try {
       const { user } = (thunkAPI.getState() as RootState).auth;
       if (user?.userType === UserType.Partner) {
-        const partner = user as PartnerState;
+        const partner = user as PartnerResponseDto;
         if (partner.status === PartnerStatus.Accepted) {
           const { accessToken } = (thunkAPI.getState() as RootState).auth;
-          return await productsService.uploadImage(
-            productId,
-            formData,
-            accessToken!.payload
-          );
+          return await productsService.uploadImage(productId, formData, accessToken!.payload);
         }
       }
-      return thunkAPI.rejectWithValue(
-        "You are not verified to perform this action!"
-      );
+      return thunkAPI.rejectWithValue("You are not verified to perform this action!");
     } catch (error: unknown) {
       let message: string = "";
       if (error instanceof Error) {
@@ -215,9 +192,7 @@ export const productsSlice = createSlice({
       })
       .addCase(deleteProduct.fulfilled, (state, action) => {
         state.status = StateStatus.Success;
-        state.products = state.products.filter(
-          (product) => product.id !== action.payload.id
-        );
+        state.products = state.products.filter((product) => product.id !== action.payload.id);
       })
       .addCase(uploadImage.pending, (state) => {
         state.status = StateStatus.Loading;

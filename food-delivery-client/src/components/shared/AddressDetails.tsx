@@ -1,8 +1,8 @@
 import { Row, Col, Form, Button } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import * as Yup from "yup";
-import { AddressInfo } from "../../interfaces/user";
+import { AddressInfo } from "@/interfaces/address";
+import { addressSchema } from "@/interfaces/schemas";
 
 interface AddressDetailsProps {
   data: AddressInfo | null;
@@ -10,18 +10,6 @@ interface AddressDetailsProps {
 }
 
 export function AddressDetails({ data, onSubmit }: AddressDetailsProps) {
-  const validationSchema = Yup.object().shape({
-    address: Yup.string()
-      .required("Address is required")
-      .max(100, "Address is too long"),
-    city: Yup.string()
-      .required("City is required")
-      .max(50, "City name is too long"),
-    postalCode: Yup.string()
-      .required("Postal code is required")
-      .max(10, "Postal code is too long"),
-  });
-
   const {
     register,
     handleSubmit,
@@ -33,7 +21,7 @@ export function AddressDetails({ data, onSubmit }: AddressDetailsProps) {
       city: data?.city || "",
       postalCode: data?.postalCode || "",
     },
-    resolver: yupResolver(validationSchema),
+    resolver: yupResolver(addressSchema),
   });
 
   return (

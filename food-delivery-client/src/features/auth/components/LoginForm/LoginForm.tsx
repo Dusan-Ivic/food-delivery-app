@@ -1,34 +1,21 @@
 import { Form, Button } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import * as Yup from "yup";
-import { LoginRequestDto } from "../../interfaces/login";
-import { UserType } from "../../interfaces/enums";
+import { loginSchema } from "@/features/auth/types/schemas";
+import { LoginRequestDto } from "@/features/auth/types/request";
 
 interface LoginFormProps {
   onSubmit: (data: LoginRequestDto) => void;
 }
 
 export function LoginForm({ onSubmit }: LoginFormProps) {
-  const validationSchema = Yup.object().shape({
-    username: Yup.string()
-      .required("Username is required")
-      .min(6, "Username must be at least 6 characters long"),
-    password: Yup.string()
-      .required("Password is required")
-      .min(8, "Password must be at least 8 characters long"),
-    userType: Yup.number()
-      .required("User type is required")
-      .oneOf(Object.values(UserType) as number[], "User type is not valid"),
-  });
-
   const {
     register,
     handleSubmit,
     formState: { errors, touchedFields },
   } = useForm<LoginRequestDto>({
     mode: "all",
-    resolver: yupResolver(validationSchema),
+    resolver: yupResolver(loginSchema),
   });
 
   return (

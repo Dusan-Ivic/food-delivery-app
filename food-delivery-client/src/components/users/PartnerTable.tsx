@@ -1,37 +1,25 @@
 import { Table } from "react-bootstrap";
-import { PartnerState } from "../../interfaces/partner";
-import { PartnerStatus } from "../../interfaces/enums";
+import { PartnerStatus } from "@/interfaces/enums";
 import { LuShieldCheck, LuShieldClose, LuShieldQuestion } from "react-icons/lu";
 import { HiOutlineX, HiOutlineCheck } from "react-icons/hi";
+import { PartnerResponseDto } from "@/interfaces/partner";
 
 interface PartnerTableProps {
-  partners: PartnerState[];
-  onVerify: (partner: PartnerState, status: PartnerStatus) => void;
+  partners: PartnerResponseDto[];
+  onVerify: (partner: PartnerResponseDto, status: PartnerStatus) => void;
 }
 
 export function PartnerTable({ partners, onVerify }: PartnerTableProps) {
   const statusToIconMap = {
-    [PartnerStatus.Pending]: (
-      <LuShieldQuestion className="fs-4" style={{ color: "orange" }} />
-    ),
-    [PartnerStatus.Rejected]: (
-      <LuShieldClose className="fs-4" style={{ color: "red" }} />
-    ),
-    [PartnerStatus.Suspended]: (
-      <LuShieldClose className="fs-4" style={{ color: "red" }} />
-    ),
-    [PartnerStatus.Accepted]: (
-      <LuShieldCheck className="fs-4" style={{ color: "green" }} />
-    ),
+    [PartnerStatus.Pending]: <LuShieldQuestion className="fs-4" style={{ color: "orange" }} />,
+    [PartnerStatus.Rejected]: <LuShieldClose className="fs-4" style={{ color: "red" }} />,
+    [PartnerStatus.Suspended]: <LuShieldClose className="fs-4" style={{ color: "red" }} />,
+    [PartnerStatus.Accepted]: <LuShieldCheck className="fs-4" style={{ color: "green" }} />,
   };
 
   return (
     <>
-      <Table
-        striped
-        hover
-        className="text-center rounded rounded-3 overflow-hidden"
-      >
+      <Table striped hover className="text-center rounded rounded-3 overflow-hidden">
         <thead>
           <tr>
             <th>ID</th>
@@ -50,20 +38,14 @@ export function PartnerTable({ partners, onVerify }: PartnerTableProps) {
               <td>
                 <img
                   style={{ height: "48px", width: "48px", objectFit: "cover" }}
-                  src={
-                    partner.image
-                      ? partner.image
-                      : "/images/blank-profile-image.png"
-                  }
+                  src={partner.image ? partner.image : "/images/blank-profile-image.png"}
                 />
               </td>
               <td>{partner.username}</td>
               <td>{partner.firstName}</td>
               <td>{partner.lastName}</td>
               <td>
-                <div style={{ cursor: "pointer" }}>
-                  {statusToIconMap[partner.status]}
-                </div>
+                <div style={{ cursor: "pointer" }}>{statusToIconMap[partner.status]}</div>
               </td>
               <td>
                 <div className="d-md-flex justify-content-center">

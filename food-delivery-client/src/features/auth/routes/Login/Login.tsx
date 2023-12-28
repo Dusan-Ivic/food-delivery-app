@@ -1,15 +1,15 @@
 import { useEffect } from "react";
 import { Col, Row } from "react-bootstrap";
-import { LoginForm } from "../components/users/LoginForm";
-import { LoginRequestDto } from "../interfaces/login";
-import { generateToken, reset } from "../features/auth/authSlice";
-import { useAppDispatch, useAppSelector } from "../app/hooks";
+import { LoginForm } from "@/features/auth/components";
+import { generateToken, reset } from "@/features/auth/slices";
+import { useAppDispatch, useAppSelector } from "@/app/hooks";
 import { useNavigate } from "react-router-dom";
-import { GrantType, StateStatus, UserType } from "../interfaces/enums";
+import { StateStatus } from "@/interfaces/enums";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
-import { CreateTokenRequestDto } from "../interfaces/token";
-import { Spinner } from "../components/ui/Spinner";
+import { Spinner } from "@/components/ui/Spinner";
+import { CreateTokenRequestDto, LoginRequestDto } from "@/features/auth/types/request";
+import { GrantType, UserType } from "@/features/auth/types/enums";
 
 export function Login() {
   const navigate = useNavigate();

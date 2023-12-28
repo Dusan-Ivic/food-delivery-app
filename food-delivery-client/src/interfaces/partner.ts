@@ -1,29 +1,16 @@
-import { PartnerStatus, UserType } from "./enums";
-import { UserBase } from "./user";
+import { UserRequestDto } from "@/features/auth/types/request";
+import { UserResponseDto } from "@/features/auth/types/response";
+import { PartnerStatus } from "@/interfaces/enums";
 
-export interface PartnerBase extends UserBase {}
-
-export interface RegisterPartnerRequestDto extends PartnerBase {
+export type PartnerRequestDto = UserRequestDto & {
   password: string;
   confirmPassword: string;
-}
+};
 
-export interface PartnerRequestDto extends PartnerBase {}
-
-export interface PartnerResponseDto extends PartnerBase {
-  id: number;
+export type PartnerResponseDto = UserResponseDto & {
   status: PartnerStatus;
-  userType: UserType;
-  image: string | null;
-}
+};
 
-export interface PartnerState extends PartnerBase {
-  id: number;
+export type VerifyPartnerRequestDto = {
   status: PartnerStatus;
-  userType: UserType;
-  image: string | null;
-}
-
-export interface VerifyPartnerRequestDto {
-  status: PartnerStatus;
-}
+};

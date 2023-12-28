@@ -1,38 +1,17 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { RootState } from "../../app/store";
-import authService from "./authService";
+import { RootState } from "@/app/store";
+import authService from "@/features/auth/api";
 import {
   ChangePasswordRequestDto,
   UserRequestDto,
-  UserState,
-} from "../../interfaces/user";
-import { StateStatus, UserType } from "../../interfaces/enums";
-import {
-  CustomerRequestDto,
-  CustomerResponseDto,
-} from "../../interfaces/customer";
-import {
-  PartnerRequestDto,
-  PartnerResponseDto,
-} from "../../interfaces/partner";
-import {
   CreateTokenRequestDto,
   DeleteTokenRequestDto,
-} from "../../interfaces/token";
-
-interface AccessTokenState {
-  payload: string;
-  issuedAt: number;
-  expiresIn: number;
-}
-
-interface AuthState {
-  user: UserState | null;
-  accessToken: AccessTokenState | null;
-  refreshToken: string | null;
-  status: StateStatus;
-  message: string;
-}
+} from "@/features/auth/types/request";
+import { StateStatus } from "@/interfaces/enums";
+import { CustomerRequestDto, CustomerResponseDto } from "@/interfaces/customer";
+import { PartnerRequestDto, PartnerResponseDto } from "@/interfaces/partner";
+import { AuthState } from "@/features/auth/types/state";
+import { UserType } from "@/features/auth/types/enums";
 
 const initialState: AuthState = {
   user: null,
@@ -57,44 +36,34 @@ export const generateToken = createAsyncThunk(
   }
 );
 
-export const getProfile = createAsyncThunk(
-  "auth/profile",
-  async (_, thunkAPI) => {
-    try {
-      const { accessToken } = (thunkAPI.getState() as RootState).auth;
-      return await authService.getProfile(accessToken!.payload);
-    } catch (error: unknown) {
-      let message: string = "";
-      if (error instanceof Error) {
-        message = error.message;
-      }
-      return thunkAPI.rejectWithValue(message);
+export const getProfile = createAsyncThunk("auth/profile", async (_, thunkAPI) => {
+  try {
+    const { accessToken } = (thunkAPI.getState() as RootState).auth;
+    return await authService.getProfile(accessToken!.payload);
+  } catch (error: unknown) {
+    let message: string = "";
+    if (error instanceof Error) {
+      message = error.message;
     }
+    return thunkAPI.rejectWithValue(message);
   }
-);
+});
 
-export const logoutUser = createAsyncThunk(
-  "auth/logout",
-  async (_, thunkAPI) => {
-    try {
-      const { accessToken, refreshToken } = (thunkAPI.getState() as RootState)
-        .auth;
-      const requestDto: DeleteTokenRequestDto = {
-        refreshToken: refreshToken || "",
-      };
-      return await authService.deleteRefreshToken(
-        requestDto,
-        accessToken!.payload
-      );
-    } catch (error: unknown) {
-      let message: string = "";
-      if (error instanceof Error) {
-        message = error.message;
-      }
-      return thunkAPI.rejectWithValue(message);
+export const logoutUser = createAsyncThunk("auth/logout", async (_, thunkAPI) => {
+  try {
+    const { accessToken, refreshToken } = (thunkAPI.getState() as RootState).auth;
+    const requestDto: DeleteTokenRequestDto = {
+      refreshToken: refreshToken || "",
+    };
+    return await authService.deleteRefreshToken(requestDto, accessToken!.payload);
+  } catch (error: unknown) {
+    let message: string = "";
+    if (error instanceof Error) {
+      message = error.message;
     }
+    return thunkAPI.rejectWithValue(message);
   }
-);
+});
 
 export const registerCustomer = createAsyncThunk(
   "auth/register-customer",
@@ -179,31 +148,25 @@ export const uploadImage = createAsyncThunk(
   }
 );
 
-export const removeImage = createAsyncThunk(
-  "auth/remove-image",
-  async (_, thunkAPI) => {
-    try {
-      const { accessToken } = (thunkAPI.getState() as RootState).auth;
-      return await authService.removeImage(accessToken!.payload);
-    } catch (error: unknown) {
-      let message: string = "";
-      if (error instanceof Error) {
-        message = error.message;
-      }
-      return thunkAPI.rejectWithValue(message);
+export const removeImage = createAsyncThunk("auth/remove-image", async (_, thunkAPI) => {
+  try {
+    const { accessToken } = (thunkAPI.getState() as RootState).auth;
+    return await authService.removeImage(accessToken!.payload);
+  } catch (error: unknown) {
+    let message: string = "";
+    if (error instanceof Error) {
+      message = error.message;
     }
+    return thunkAPI.rejectWithValue(message);
   }
-);
+});
 
 export const changePassword = createAsyncThunk(
   "auth/change-password",
   async (passwordData: ChangePasswordRequestDto, thunkAPI) => {
     try {
       const { accessToken } = (thunkAPI.getState() as RootState).auth;
-      return await authService.changePassword(
-        passwordData,
-        accessToken!.payload
-      );
+      return await authService.changePassword(passwordData, accessToken!.payload);
     } catch (error: unknown) {
       let message: string = "";
       if (error instanceof Error) {
@@ -244,7 +207,7 @@ export const authSlice = createSlice({
           expiresIn: action.payload.expiresIn,
         };
         state.refreshToken = action.payload.refreshToken;
-        localStorage.setItem("refreshToken", state.refreshToken);
+        localStorage.setItem("refreshToken", action.payload.refreshToken);
       })
       .addCase(getProfile.pending, (state) => {
         state.status = StateStatus.Loading;

@@ -1,13 +1,10 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { PartnerStatus, StateStatus, UserType } from "../../interfaces/enums";
-import {
-  GetStoresRequestDto,
-  StoreRequestDto,
-  StoreState,
-} from "../../interfaces/store";
+import { PartnerStatus, StateStatus } from "../../interfaces/enums";
+import { GetStoresRequestDto, StoreRequestDto, StoreState } from "../../interfaces/store";
 import { RootState } from "../../app/store";
 import storesService from "./storesService";
-import { PartnerState } from "../../interfaces/partner";
+import { UserType } from "@/features/auth/types/enums";
+import { PartnerResponseDto } from "@/interfaces/partner";
 
 interface StoresState {
   stores: StoreState[];
@@ -48,18 +45,13 @@ export const createStore = createAsyncThunk(
     try {
       const { user } = (thunkAPI.getState() as RootState).auth;
       if (user?.userType === UserType.Partner) {
-        const partner = user as PartnerState;
+        const partner = user as PartnerResponseDto;
         if (partner.status === PartnerStatus.Accepted) {
           const { accessToken } = (thunkAPI.getState() as RootState).auth;
-          return await storesService.createStore(
-            storeData,
-            accessToken!.payload
-          );
+          return await storesService.createStore(storeData, accessToken!.payload);
         }
       }
-      return thunkAPI.rejectWithValue(
-        "You are not verified to perform this action!"
-      );
+      return thunkAPI.rejectWithValue("You are not verified to perform this action!");
     } catch (error: unknown) {
       let message: string = "";
       if (error instanceof Error) {
@@ -72,26 +64,17 @@ export const createStore = createAsyncThunk(
 
 export const uploadImage = createAsyncThunk(
   "stores/upload-image",
-  async (
-    { storeId, formData }: { storeId: number; formData: FormData },
-    thunkAPI
-  ) => {
+  async ({ storeId, formData }: { storeId: number; formData: FormData }, thunkAPI) => {
     try {
       const { user } = (thunkAPI.getState() as RootState).auth;
       if (user?.userType === UserType.Partner) {
-        const partner = user as PartnerState;
+        const partner = user as PartnerResponseDto;
         if (partner.status === PartnerStatus.Accepted) {
           const { accessToken } = (thunkAPI.getState() as RootState).auth;
-          return await storesService.uploadImage(
-            storeId,
-            formData,
-            accessToken!.payload
-          );
+          return await storesService.uploadImage(storeId, formData, accessToken!.payload);
         }
       }
-      return thunkAPI.rejectWithValue(
-        "You are not verified to perform this action!"
-      );
+      return thunkAPI.rejectWithValue("You are not verified to perform this action!");
     } catch (error: unknown) {
       let message: string = "";
       if (error instanceof Error) {
@@ -104,26 +87,17 @@ export const uploadImage = createAsyncThunk(
 
 export const updateStore = createAsyncThunk(
   "stores/update",
-  async (
-    { storeId, requestDto }: { storeId: number; requestDto: StoreRequestDto },
-    thunkAPI
-  ) => {
+  async ({ storeId, requestDto }: { storeId: number; requestDto: StoreRequestDto }, thunkAPI) => {
     try {
       const { user } = (thunkAPI.getState() as RootState).auth;
       if (user?.userType === UserType.Partner) {
-        const partner = user as PartnerState;
+        const partner = user as PartnerResponseDto;
         if (partner.status === PartnerStatus.Accepted) {
           const { accessToken } = (thunkAPI.getState() as RootState).auth;
-          return await storesService.updateStore(
-            storeId,
-            requestDto,
-            accessToken!.payload
-          );
+          return await storesService.updateStore(storeId, requestDto, accessToken!.payload);
         }
       }
-      return thunkAPI.rejectWithValue(
-        "You are not verified to perform this action!"
-      );
+      return thunkAPI.rejectWithValue("You are not verified to perform this action!");
     } catch (error: unknown) {
       let message: string = "";
       if (error instanceof Error) {

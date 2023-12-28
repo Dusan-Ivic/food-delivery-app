@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { getStores, reset } from "../features/stores/storesSlice";
-import { StateStatus, UserType } from "../interfaces/enums";
+import { StateStatus } from "../interfaces/enums";
 import { toast } from "react-toastify";
 import { Spinner } from "../components/ui/Spinner";
 import { StoreList } from "../components/stores/StoreList";
@@ -9,6 +9,7 @@ import { FaLocationDot } from "react-icons/fa6";
 import { Col, ListGroup, ListGroupItem, Row } from "react-bootstrap";
 import { useDeliveryLocation } from "../context/location/useDeliveryLocation";
 import categoryIcons from "../data/categoryIcons";
+import { UserType } from "@/features/auth/types/enums";
 
 interface CategoryItem {
   name: string;

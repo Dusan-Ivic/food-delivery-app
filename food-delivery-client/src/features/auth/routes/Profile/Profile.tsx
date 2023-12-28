@@ -1,21 +1,20 @@
 import { Button, Col, Form, Row } from "react-bootstrap";
-import { useAppSelector, useAppDispatch } from "../app/hooks";
-import { ChangePasswordRequestDto, UserBase } from "../interfaces/user";
-import { AddressDetails } from "../components/shared/AddressDetails";
-import { UserDetails } from "../components/users/UserDetails";
-import { AddressInfo } from "../interfaces/user";
+import { useAppSelector, useAppDispatch } from "@/app/hooks";
+import { AddressDetails } from "@/components/shared/AddressDetails";
+import { UserDetails, UserAvatar, ChangePassword } from "@/features/auth/components";
 import {
   updateUser,
   reset,
   uploadImage,
   removeImage,
   changePassword,
-} from "../features/auth/authSlice";
+} from "@/features/auth/slices";
 import { useEffect, useRef } from "react";
-import { UserType, StateStatus } from "../interfaces/enums";
+import { StateStatus } from "@/interfaces/enums";
 import { toast } from "react-toastify";
-import { UserAvatar } from "../components/users/UserAvatar";
-import { ChangePassword } from "../components/users/ChangePassword";
+import { AddressInfo } from "@/interfaces/address";
+import { ChangePasswordRequestDto, UserRequestDto } from "@/features/auth/types/request";
+import { UserType } from "@/features/auth/types/enums";
 
 export function Profile() {
   const { user, status, message } = useAppSelector((state) => state.auth);
@@ -36,7 +35,7 @@ export function Profile() {
     };
   }, [status, message, dispatch]);
 
-  const handleUpdateDetails = (data: UserBase) => {
+  const handleUpdateDetails = (data: UserRequestDto) => {
     if (!user) {
       return;
     }
@@ -117,7 +116,10 @@ export function Profile() {
 
           <div className="mt-3">
             <h1 className="text-center mt-3 mb-4">User Details</h1>
-            <UserDetails data={user as UserBase} onSubmit={(data) => handleUpdateDetails(data)} />
+            <UserDetails
+              data={user as UserRequestDto}
+              onSubmit={(data) => handleUpdateDetails(data)}
+            />
           </div>
 
           {user?.userType == UserType.Customer && (

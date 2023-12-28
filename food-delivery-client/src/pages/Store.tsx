@@ -36,7 +36,7 @@ import {
 } from "../features/stores/storesSlice";
 import { CartItem } from "../interfaces/cart";
 import { CheckoutResponseDto, OrderRequestDto } from "../interfaces/order";
-import { StateStatus, UserType } from "../interfaces/enums";
+import { StateStatus } from "../interfaces/enums";
 import { toast } from "react-toastify";
 import { ConfirmationModal } from "../components/shared/ConfirmationModal";
 import { ProductRequestDto, ProductState } from "../interfaces/product";
@@ -46,6 +46,7 @@ import { Spinner } from "../components/ui/Spinner";
 import { FaLocationDot } from "react-icons/fa6";
 import { useDeliveryLocation } from "../context/location/useDeliveryLocation";
 import { StoreModal } from "../components/stores/StoreModal";
+import { UserType } from "@/features/auth/types/enums";
 
 interface ConfirmDeleteModalProps {
   isVisible: boolean;

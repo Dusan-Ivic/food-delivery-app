@@ -1,17 +1,9 @@
 import { RouteObject } from "react-router-dom";
 import App from "@/App";
-import {
-  Home,
-  Login,
-  Orders,
-  PaymentStatus,
-  Profile,
-  Register,
-  Store,
-  Stores,
-} from "@/pages";
+import { Home, Orders, PaymentStatus, Store, Stores } from "@/pages";
 import { Dashboard } from "@/layouts";
 import { PrivateRoute } from "@/components/ui/PrivateRoute";
+import { Register, Login, Profile } from "@/features/auth";
 
 export const applicationRoutes: RouteObject[] = [
   {

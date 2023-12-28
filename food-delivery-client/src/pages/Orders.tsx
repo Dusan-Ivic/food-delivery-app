@@ -3,8 +3,9 @@ import { Row, Col } from "react-bootstrap";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { OrderHistory } from "../components/orders/OrderHistory";
 import { getOrders, clearOrders, cancelOrder } from "../features/orders/ordersSlice";
-import { UserType, StateStatus } from "../interfaces/enums";
+import { StateStatus } from "../interfaces/enums";
 import { Spinner } from "../components/ui/Spinner";
+import { UserType } from "@/features/auth/types/enums";
 
 export function Orders() {
   const dispatch = useAppDispatch();

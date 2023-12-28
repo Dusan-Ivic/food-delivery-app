@@ -2,10 +2,10 @@ import { Form, Button, Row, Col } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
-import { RegisterPartnerRequestDto } from "../../interfaces/partner";
+import { PartnerRequestDto } from "@/interfaces/partner";
 
 interface RegisterPartnerProps {
-  onSubmit: (data: RegisterPartnerRequestDto) => void;
+  onSubmit: (data: PartnerRequestDto) => void;
 }
 
 export function RegisterPartner({ onSubmit }: RegisterPartnerProps) {
@@ -13,9 +13,7 @@ export function RegisterPartner({ onSubmit }: RegisterPartnerProps) {
     username: Yup.string()
       .required("Username is required")
       .min(6, "Username must be at least 6 characters long"),
-    email: Yup.string()
-      .required("Email is required")
-      .email("Email is not valid"),
+    email: Yup.string().required("Email is required").email("Email is not valid"),
     password: Yup.string()
       .required("Password is required")
       .min(8, "Password must be at least 8 characters long"),
@@ -31,7 +29,7 @@ export function RegisterPartner({ onSubmit }: RegisterPartnerProps) {
     register,
     handleSubmit,
     formState: { errors, touchedFields },
-  } = useForm<RegisterPartnerRequestDto>({
+  } = useForm<PartnerRequestDto>({
     mode: "all",
     resolver: yupResolver(validationSchema),
   });

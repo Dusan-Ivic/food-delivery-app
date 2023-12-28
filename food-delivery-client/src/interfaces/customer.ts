@@ -1,23 +1,11 @@
-import { UserType } from "./enums";
-import { AddressInfo, UserBase } from "./user";
+import { UserRequestDto } from "@/features/auth/types/request";
+import { UserResponseDto } from "@/features/auth/types/response";
+import { AddressInfo } from "@/interfaces/address";
 
-export interface CustomerBase extends UserBase, AddressInfo {}
+export type CustomerRequestDto = UserRequestDto &
+  AddressInfo & {
+    password: string;
+    confirmPassword: string;
+  };
 
-export interface RegisterCustomerRequestDto extends CustomerBase {
-  password: string;
-  confirmPassword: string;
-}
-
-export interface CustomerRequestDto extends CustomerBase {}
-
-export interface CustomerResponseDto extends CustomerBase {
-  id: number;
-  userType: UserType;
-  image: string | null;
-}
-
-export interface CustomerState extends CustomerBase {
-  id: number;
-  userType: UserType;
-  image: string | null;
-}
+export type CustomerResponseDto = UserResponseDto & AddressInfo;

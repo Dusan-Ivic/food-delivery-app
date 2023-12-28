@@ -8,9 +8,9 @@ import { toast } from "react-toastify";
 import { getOrders, clearOrders, reset as resetOrdersState } from "../features/orders/ordersSlice";
 import { OrderHistory } from "../components/orders/OrderHistory";
 import { StoreTable } from "../components/stores/StoreTable";
-import { PartnerState } from "../interfaces/partner";
 import { Spinner } from "../components/ui/Spinner";
 import { StoreModal } from "../components/stores/StoreModal";
+import { PartnerResponseDto } from "@/interfaces/partner";
 
 export function PartnerDashboard() {
   const dispatch = useAppDispatch();
@@ -97,8 +97,8 @@ export function PartnerDashboard() {
   return (
     <Col>
       <Row>
-        <AlertComponent status={(user as PartnerState).status}>
-          <>Your current status is: {PartnerStatus[(user as PartnerState).status]}.</>
+        <AlertComponent status={(user as PartnerResponseDto).status}>
+          <>Your current status is: {PartnerStatus[(user as PartnerResponseDto).status]}.</>
         </AlertComponent>
       </Row>
 

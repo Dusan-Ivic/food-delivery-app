@@ -1,19 +1,20 @@
 import { useState, useEffect } from "react";
 import { Button, Col, Row } from "react-bootstrap";
-import { CustomerRequestDto } from "../interfaces/customer";
-import { PartnerRequestDto } from "../interfaces/partner";
+import { CustomerRequestDto } from "@/interfaces/customer";
+import { PartnerRequestDto } from "@/interfaces/partner";
 import { Link } from "react-router-dom";
-import { AllowedUserType, StateStatus } from "../interfaces/enums";
-import { registerCustomer, registerPartner, reset } from "../features/auth/authSlice";
-import { useAppDispatch, useAppSelector } from "../app/hooks";
+import { StateStatus } from "@/interfaces/enums";
+import { registerCustomer, registerPartner, reset } from "@/features/auth/slices";
+import { useAppDispatch, useAppSelector } from "@/app/hooks";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { RegisterCustomer } from "../components/users/RegisterCustomer";
-import { RegisterPartner } from "../components/users/RegisterPartner";
+import { RegisterCustomer } from "@/components/users/RegisterCustomer";
+import { RegisterPartner } from "@/components/users/RegisterPartner";
 import { IoArrowBack } from "react-icons/io5";
-import { Spinner } from "../components/ui/Spinner";
+import { Spinner } from "@/components/ui/Spinner";
 import { FaRegHandshake } from "react-icons/fa";
 import { AiOutlineUser } from "react-icons/ai";
+import { AllowedUserType } from "@/features/auth/types/enums";
 
 interface FormComponentProps {
   onSubmit: (data: CustomerRequestDto | PartnerRequestDto) => void;
