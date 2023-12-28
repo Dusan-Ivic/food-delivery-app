@@ -1,14 +1,10 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { StateStatus, OrderStatus } from "../../interfaces/enums";
-import { RootState } from "../../app/store";
-import { OrderRequestDto, OrderState } from "../../interfaces/order";
-import ordersService from "./ordersService";
-
-interface OrdersState {
-  orders: OrderState[];
-  status: StateStatus;
-  message: string;
-}
+import { StateStatus } from "@/interfaces/enums";
+import { RootState } from "@/app/store";
+import ordersService from "@/features/orders/api";
+import { OrderRequestDto } from "@/features/orders/types/request";
+import { OrderStatus } from "@/features/orders/types/enums";
+import { OrdersState } from "@/features/orders/types/state";
 
 const initialState: OrdersState = {
   orders: [],
@@ -34,10 +30,7 @@ export const createCheckout = createAsyncThunk(
   async (orderData: OrderRequestDto, thunkAPI) => {
     try {
       const { accessToken } = (thunkAPI.getState() as RootState).auth;
-      return await ordersService.createCheckout(
-        orderData,
-        accessToken!.payload
-      );
+      return await ordersService.createCheckout(orderData, accessToken!.payload);
     } catch (error: unknown) {
       let message: string = "";
       if (error instanceof Error) {
@@ -64,21 +57,18 @@ export const createOrder = createAsyncThunk(
   }
 );
 
-export const cancelOrder = createAsyncThunk(
-  "orders/cancel",
-  async (orderId: number, thunkAPI) => {
-    try {
-      const { accessToken } = (thunkAPI.getState() as RootState).auth;
-      return await ordersService.cancelOrder(orderId, accessToken!.payload);
-    } catch (error: unknown) {
-      let message: string = "";
-      if (error instanceof Error) {
-        message = error.message;
-      }
-      return thunkAPI.rejectWithValue(message);
+export const cancelOrder = createAsyncThunk("orders/cancel", async (orderId: number, thunkAPI) => {
+  try {
+    const { accessToken } = (thunkAPI.getState() as RootState).auth;
+    return await ordersService.cancelOrder(orderId, accessToken!.payload);
+  } catch (error: unknown) {
+    let message: string = "";
+    if (error instanceof Error) {
+      message = error.message;
     }
+    return thunkAPI.rejectWithValue(message);
   }
-);
+});
 
 export const ordersSlice = createSlice({
   name: "orders",

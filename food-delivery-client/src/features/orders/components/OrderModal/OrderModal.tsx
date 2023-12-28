@@ -1,15 +1,15 @@
 import { Button, Col, Modal, Row, Stack } from "react-bootstrap";
-import { OrderState } from "../../interfaces/order";
-import { OrderStatus } from "../../interfaces/enums";
-import { formatCurrency } from "../../utils/currencyFormatter";
+import { formatCurrency } from "@/utils/currencyFormatter";
 import { MdOutlineKeyboardDoubleArrowRight } from "react-icons/md";
 import { ImCancelCircle } from "react-icons/im";
 import { useEffect, useMemo, useState } from "react";
+import { OrderResponseDto } from "@/features/orders/types/response";
+import { OrderStatus } from "@/features/orders/types/enums";
 import moment from "moment";
 
 interface OrderModalProps {
   isVisible: boolean;
-  order: OrderState | null;
+  order: OrderResponseDto | null;
   handleClose: () => void;
   canManageOrders: boolean;
   onCancelOrder?: (orderId: number) => void;
@@ -31,11 +31,8 @@ export function OrderModal({
     };
   }, []);
 
-  const getDeliveryTime = (order: OrderState) => {
-    return moment(order.createdAt).add(
-      order.store.deliveryTimeInMinutes,
-      "minutes"
-    );
+  const getDeliveryTime = (order: OrderResponseDto) => {
+    return moment(order.createdAt).add(order.store.deliveryTimeInMinutes, "minutes");
   };
 
   const getFormattedDeliveryTime = useMemo(() => {
@@ -44,18 +41,12 @@ export function OrderModal({
     }
 
     const deliveryTime = getDeliveryTime(order);
-    const duration = moment.duration(
-      deliveryTime.diff(currentTime),
-      "milliseconds"
-    );
+    const duration = moment.duration(deliveryTime.diff(currentTime), "milliseconds");
 
     return moment.utc(duration.asMilliseconds()).format("mm:ss");
   }, [currentTime, order]);
 
-  const getCurrentOrderStatus = (
-    order: OrderState,
-    timestamp: moment.Moment
-  ) => {
+  const getCurrentOrderStatus = (order: OrderResponseDto, timestamp: moment.Moment) => {
     if (!order) return undefined;
 
     if (order.orderStatus === OrderStatus.Canceled) {
@@ -91,11 +82,7 @@ export function OrderModal({
                     }}
                   >
                     <img
-                      src={
-                        item.productImage
-                          ? item.productImage
-                          : "/images/no-image.svg"
-                      }
+                      src={item.productImage ? item.productImage : "/images/no-image.svg"}
                       style={{
                         width: "100%",
                         height: "100%",
@@ -125,9 +112,7 @@ export function OrderModal({
                       <Col className="text-center fs-4">
                         <MdOutlineKeyboardDoubleArrowRight />
                       </Col>
-                      <Col className="text-end fw-bold">
-                        {formatCurrency(item.totalPrice)}
-                      </Col>
+                      <Col className="text-end fw-bold">{formatCurrency(item.totalPrice)}</Col>
                     </Row>
                   </div>
                 </div>
@@ -135,18 +120,13 @@ export function OrderModal({
             ))}
             <Row className="fw-bold">
               <Col>
-                <div className="ms-auto fs-4">
-                  Total: {formatCurrency(order.totalPrice)}
-                </div>
+                <div className="ms-auto fs-4">Total: {formatCurrency(order.totalPrice)}</div>
                 <div>Items: {formatCurrency(order.itemsPrice)}</div>
-                <div className="text-muted">
-                  Delivery fee: {formatCurrency(order.deliveryFee)}
-                </div>
+                <div className="text-muted">Delivery fee: {formatCurrency(order.deliveryFee)}</div>
               </Col>
               <Col className="d-flex flex-column justify-content-center align-items-baseline">
                 <div>
-                  {getCurrentOrderStatus(order, currentTime) ===
-                    OrderStatus.Pending && (
+                  {getCurrentOrderStatus(order, currentTime) === OrderStatus.Pending && (
                     <>
                       <div>
                         Delivering to:
@@ -155,8 +135,7 @@ export function OrderModal({
                       <div>In: {getFormattedDeliveryTime}</div>
                     </>
                   )}
-                  {getCurrentOrderStatus(order, currentTime) ===
-                    OrderStatus.Completed && (
+                  {getCurrentOrderStatus(order, currentTime) === OrderStatus.Completed && (
                     <>
                       <div>
                         Delivered to:
@@ -165,8 +144,7 @@ export function OrderModal({
                       <div>{getDeliveryTime(order).from(currentTime)}</div>
                     </>
                   )}
-                  {getCurrentOrderStatus(order, currentTime) ===
-                    OrderStatus.Canceled && (
+                  {getCurrentOrderStatus(order, currentTime) === OrderStatus.Canceled && (
                     <>
                       <div>
                         Delivery to

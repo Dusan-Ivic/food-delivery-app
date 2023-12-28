@@ -1,10 +1,7 @@
 import axios from "axios";
-import {
-  CheckoutResponseDto,
-  OrderRequestDto,
-  OrderResponseDto,
-} from "../../interfaces/order";
-import apiClient from "../../config/apiClient";
+import apiClient from "@/config/apiClient";
+import { OrderRequestDto } from "@/features/orders/types/request";
+import { OrderResponseDto, CheckoutResponseDto } from "@/features/orders/types/response";
 
 const getOrders = async (token: string | null): Promise<OrderResponseDto[]> => {
   try {
@@ -28,15 +25,11 @@ const createCheckout = async (
   token: string | null
 ): Promise<CheckoutResponseDto> => {
   try {
-    const response = await apiClient.post<CheckoutResponseDto>(
-      "/api/orders",
-      requestDto,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+    const response = await apiClient.post<CheckoutResponseDto>("/api/orders", requestDto, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
@@ -52,15 +45,11 @@ const createOrder = async (
   token: string | null
 ): Promise<OrderResponseDto> => {
   try {
-    const response = await apiClient.post<OrderResponseDto>(
-      "/api/orders",
-      requestDto,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+    const response = await apiClient.post<OrderResponseDto>("/api/orders", requestDto, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
@@ -71,19 +60,13 @@ const createOrder = async (
   }
 };
 
-const cancelOrder = async (
-  orderId: number,
-  token: string | null
-): Promise<{ id: number }> => {
+const cancelOrder = async (orderId: number, token: string | null): Promise<{ id: number }> => {
   try {
-    const response = await apiClient.delete<{ id: number }>(
-      `/api/orders/${orderId}`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+    const response = await apiClient.delete<{ id: number }>(`/api/orders/${orderId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {

@@ -27,14 +27,13 @@ import {
   removeFromCart,
   decreaseQuantity,
 } from "@/features/cart/cartSlice";
-import { createCheckout, reset as resetOrdersState } from "@/features/orders/ordersSlice";
+import { createCheckout, reset as resetOrdersState } from "@/features/orders/slices";
 import {
   uploadImage as uploadStoreImage,
   updateStore,
   reset as resetStoresState,
 } from "@/features/stores/slices";
 import { CartItem } from "@/interfaces/cart";
-import { CheckoutResponseDto, OrderRequestDto } from "@/interfaces/order";
 import { StateStatus } from "@/interfaces/enums";
 import { toast } from "react-toastify";
 import { ConfirmationModal } from "@/components/shared/ConfirmationModal";
@@ -46,6 +45,8 @@ import { FaLocationDot } from "react-icons/fa6";
 import { useDeliveryLocation } from "@/context/location/useDeliveryLocation";
 import { UserType } from "@/features/auth/types/enums";
 import { StoreResponseDto } from "@/features/stores/types/response";
+import { OrderRequestDto } from "@/features/orders/types/request";
+import { CheckoutResponseDto } from "@/features/orders/types/response";
 
 interface ConfirmDeleteModalProps {
   isVisible: boolean;

@@ -5,14 +5,14 @@ import {
   verifyPartner,
   reset as resetPartners,
 } from "../features/partners/partnersSlice";
-import { getOrders, clearOrders, reset as resetOrders } from "../features/orders/ordersSlice";
+import { getOrders, clearOrders, reset as resetOrders } from "../features/orders/slices";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { useEffect } from "react";
 import { PartnerStatus, StateStatus } from "../interfaces/enums";
 import { toast } from "react-toastify";
 import { PartnerTable } from "../components/users/PartnerTable";
 import { Col, Row } from "react-bootstrap";
-import { OrderHistory } from "../components/orders/OrderHistory";
+import { OrderHistory } from "../features/orders/components/OrderHistory/OrderHistory";
 import { Spinner } from "../components/ui/Spinner";
 import { PartnerResponseDto } from "@/interfaces/partner";
 import { StoreTable } from "@/features/stores/components";

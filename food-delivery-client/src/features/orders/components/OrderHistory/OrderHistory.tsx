@@ -1,28 +1,24 @@
 import { Table } from "react-bootstrap";
-import { OrderState } from "../../interfaces/order";
-import { OrderStatus } from "../../interfaces/enums";
-import { formatCurrency } from "../../utils/currencyFormatter";
-import moment from "moment";
+import { formatCurrency } from "@/utils/currencyFormatter";
 import { useState } from "react";
-import { OrderModal } from "./OrderModal";
 import { HiOutlineDotsHorizontal } from "react-icons/hi";
 import { HiOutlineX, HiOutlineCheck } from "react-icons/hi";
+import { OrderResponseDto } from "@/features/orders/types/response";
+import { OrderStatus } from "@/features/orders/types/enums";
+import { OrderModal } from "@/features/orders/components";
+import moment from "moment";
 
 interface OrderHistoryProps {
-  orders: OrderState[];
+  orders: OrderResponseDto[];
   canManageOrders: boolean;
   onCancelOrder?: (orderId: number) => void;
 }
 
-export function OrderHistory({
-  orders,
-  canManageOrders,
-  onCancelOrder,
-}: OrderHistoryProps) {
-  const [modalOrder, setModalOrder] = useState<OrderState | null>(null);
+export function OrderHistory({ orders, canManageOrders, onCancelOrder }: OrderHistoryProps) {
+  const [modalOrder, setModalOrder] = useState<OrderResponseDto | null>(null);
   const [modalVisible, setModalVisible] = useState<boolean>(false);
 
-  const handleOpenOrder = (order: OrderState) => {
+  const handleOpenOrder = (order: OrderResponseDto) => {
     if (order) {
       setModalVisible(true);
       setModalOrder(order);
@@ -41,15 +37,9 @@ export function OrderHistory({
   };
 
   const statusToIconMap = {
-    [OrderStatus.Pending]: (
-      <HiOutlineDotsHorizontal className="fs-5" style={{ color: "orange" }} />
-    ),
-    [OrderStatus.Canceled]: (
-      <HiOutlineX className="fs-5" style={{ color: "red" }} />
-    ),
-    [OrderStatus.Completed]: (
-      <HiOutlineCheck className="fs-4" style={{ color: "green" }} />
-    ),
+    [OrderStatus.Pending]: <HiOutlineDotsHorizontal className="fs-5" style={{ color: "orange" }} />,
+    [OrderStatus.Canceled]: <HiOutlineX className="fs-5" style={{ color: "red" }} />,
+    [OrderStatus.Completed]: <HiOutlineCheck className="fs-4" style={{ color: "green" }} />,
   };
 
   return (
