@@ -1,10 +1,10 @@
+import { StoreItem } from "@/features/stores/components";
+import { StoreResponseDto } from "@/features/stores/types/response";
 import { Row, Col } from "react-bootstrap";
-import { StoreState } from "../../interfaces/store";
-import { StoreItem } from "./StoreItem";
 import { Link } from "react-router-dom";
 
 interface StoreListProps {
-  stores: StoreState[];
+  stores: StoreResponseDto[];
 }
 
 export function StoreList({ stores }: StoreListProps) {

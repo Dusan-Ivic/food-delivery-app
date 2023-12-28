@@ -1,20 +1,16 @@
 import { useEffect, useMemo, useState } from "react";
-import { useAppDispatch, useAppSelector } from "../app/hooks";
-import { getStores, reset } from "../features/stores/storesSlice";
-import { StateStatus } from "../interfaces/enums";
+import { useAppDispatch, useAppSelector } from "@/app/hooks";
+import { getStores, reset } from "@/features/stores/slices";
+import { StateStatus } from "@/interfaces/enums";
 import { toast } from "react-toastify";
-import { Spinner } from "../components/ui/Spinner";
-import { StoreList } from "../components/stores/StoreList";
+import { Spinner } from "@/components/ui/Spinner";
+import { StoreList } from "@/features/stores/components";
 import { FaLocationDot } from "react-icons/fa6";
 import { Col, ListGroup, ListGroupItem, Row } from "react-bootstrap";
-import { useDeliveryLocation } from "../context/location/useDeliveryLocation";
-import categoryIcons from "../data/categoryIcons";
+import { useDeliveryLocation } from "@/context/location/useDeliveryLocation";
+import categoryIcons from "@/features/stores/data/categoryIcons";
 import { UserType } from "@/features/auth/types/enums";
-
-interface CategoryItem {
-  name: string;
-  count: number;
-}
+import { StoreCategory } from "@/features/stores/types/category";
 
 export function Stores() {
   const dispatch = useAppDispatch();
@@ -53,7 +49,7 @@ export function Stores() {
     return [];
   }, [stores, selectedCategory]);
 
-  const allCategories = useMemo<CategoryItem[]>(() => {
+  const allCategories = useMemo<StoreCategory[]>(() => {
     const categoryMap = new Map<string, number>();
     stores.forEach((store) => {
       const count = categoryMap.get(store.category) ?? 0;

@@ -1,10 +1,6 @@
+import { DeliveryInfo } from "@/features/stores/types/request";
 import { Col, Form, Row } from "react-bootstrap";
 import { useFormContext } from "react-hook-form";
-
-export type DeliveryInfo = {
-  deliveryTimeInMinutes: number;
-  deliveryFee: number;
-};
 
 export function DeliveryInfoForm() {
   const {
@@ -25,15 +21,10 @@ export function DeliveryInfoForm() {
               min={0}
               step={0.1}
               {...register("deliveryTimeInMinutes")}
-              isValid={
-                !errors.deliveryTimeInMinutes &&
-                !!getValues("deliveryTimeInMinutes")
-              }
+              isValid={!errors.deliveryTimeInMinutes && !!getValues("deliveryTimeInMinutes")}
               placeholder="in minutes"
             />
-            <div className="text-danger">
-              {errors.deliveryTimeInMinutes?.message}
-            </div>
+            <div className="text-danger">{errors.deliveryTimeInMinutes?.message}</div>
           </Form.Group>
         </Col>
         <Col>

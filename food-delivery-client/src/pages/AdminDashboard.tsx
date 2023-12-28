@@ -1,4 +1,4 @@
-import { getStores, reset as resetStores } from "../features/stores/storesSlice";
+import { getStores, reset as resetStores } from "../features/stores/slices";
 import {
   getPartners,
   clearPartners,
@@ -12,10 +12,10 @@ import { PartnerStatus, StateStatus } from "../interfaces/enums";
 import { toast } from "react-toastify";
 import { PartnerTable } from "../components/users/PartnerTable";
 import { Col, Row } from "react-bootstrap";
-import { StoreTable } from "../components/stores/StoreTable";
 import { OrderHistory } from "../components/orders/OrderHistory";
 import { Spinner } from "../components/ui/Spinner";
 import { PartnerResponseDto } from "@/interfaces/partner";
+import { StoreTable } from "@/features/stores/components";
 
 export function AdminDashboard() {
   const dispatch = useAppDispatch();

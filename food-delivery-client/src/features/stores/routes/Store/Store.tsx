@@ -9,17 +9,16 @@ import {
   clearProducts,
   deleteProduct,
   uploadImage as uploadProductImage,
-} from "../features/products/productsSlice";
-import { useAppDispatch, useAppSelector } from "../app/hooks";
-import { StoreState } from "../interfaces/store";
-import { StoreInfo } from "../components/stores/StoreInfo";
+} from "@/features/products/productsSlice";
+import { useAppDispatch, useAppSelector } from "@/app/hooks";
+import { StoreInfo, StoreModal } from "@/features/stores/components";
 import { IoArrowBack } from "react-icons/io5";
 import { HiOutlineShoppingCart } from "react-icons/hi";
 import { IoMdAddCircleOutline } from "react-icons/io";
 import { BiEdit } from "react-icons/bi";
-import { ProductList } from "../components/products/ProductList";
+import { ProductList } from "@/components/products/ProductList";
 import { Button, Col, Row } from "react-bootstrap";
-import { ShoppingCart } from "../components/cart/ShoppingCart";
+import { ShoppingCart } from "@/components/cart/ShoppingCart";
 import {
   openCart,
   closeCart,
@@ -27,26 +26,26 @@ import {
   addToCart,
   removeFromCart,
   decreaseQuantity,
-} from "../features/cart/cartSlice";
-import { createCheckout, reset as resetOrdersState } from "../features/orders/ordersSlice";
+} from "@/features/cart/cartSlice";
+import { createCheckout, reset as resetOrdersState } from "@/features/orders/ordersSlice";
 import {
   uploadImage as uploadStoreImage,
   updateStore,
   reset as resetStoresState,
-} from "../features/stores/storesSlice";
-import { CartItem } from "../interfaces/cart";
-import { CheckoutResponseDto, OrderRequestDto } from "../interfaces/order";
-import { StateStatus } from "../interfaces/enums";
+} from "@/features/stores/slices";
+import { CartItem } from "@/interfaces/cart";
+import { CheckoutResponseDto, OrderRequestDto } from "@/interfaces/order";
+import { StateStatus } from "@/interfaces/enums";
 import { toast } from "react-toastify";
-import { ConfirmationModal } from "../components/shared/ConfirmationModal";
-import { ProductRequestDto, ProductState } from "../interfaces/product";
-import { FormModal, FormProps } from "../components/shared/FormModal";
-import { ProductForm } from "../components/products/ProductForm";
-import { Spinner } from "../components/ui/Spinner";
+import { ConfirmationModal } from "@/components/shared/ConfirmationModal";
+import { ProductRequestDto, ProductState } from "@/interfaces/product";
+import { FormModal, FormProps } from "@/components/shared/FormModal";
+import { ProductForm } from "@/components/products/ProductForm";
+import { Spinner } from "@/components/ui/Spinner";
 import { FaLocationDot } from "react-icons/fa6";
-import { useDeliveryLocation } from "../context/location/useDeliveryLocation";
-import { StoreModal } from "../components/stores/StoreModal";
+import { useDeliveryLocation } from "@/context/location/useDeliveryLocation";
 import { UserType } from "@/features/auth/types/enums";
+import { StoreResponseDto } from "@/features/stores/types/response";
 
 interface ConfirmDeleteModalProps {
   isVisible: boolean;
@@ -85,7 +84,7 @@ export function StorePage() {
   const [isProductModalVisible, setProductModalVisible] = useState<boolean>(false);
   const { deliveryLocation } = useDeliveryLocation();
 
-  const store = useMemo<StoreState | null>(() => {
+  const store = useMemo<StoreResponseDto | null>(() => {
     const numberId = Number(id);
     if (!numberId) {
       return null;
@@ -146,7 +145,7 @@ export function StorePage() {
     };
   }, [dispatch]);
 
-  const submitOrder = (store: StoreState, items: CartItem[]) => {
+  const submitOrder = (store: StoreResponseDto, items: CartItem[]) => {
     if (deliveryLocation?.coordinate && deliveryLocation?.address) {
       const requestDto: OrderRequestDto = {
         storeId: store.id,

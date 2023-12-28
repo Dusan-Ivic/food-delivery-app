@@ -1,4 +1,4 @@
-import { getStores, createStore, reset as resetStoresState } from "../features/stores/storesSlice";
+import { getStores, createStore, reset as resetStoresState } from "../features/stores/slices";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { useEffect, useState } from "react";
 import { BsHouseAddFill } from "react-icons/bs";
@@ -7,9 +7,8 @@ import { PartnerStatus, StateStatus } from "../interfaces/enums";
 import { toast } from "react-toastify";
 import { getOrders, clearOrders, reset as resetOrdersState } from "../features/orders/ordersSlice";
 import { OrderHistory } from "../components/orders/OrderHistory";
-import { StoreTable } from "../components/stores/StoreTable";
+import { StoreTable, StoreModal } from "@/features/stores/components";
 import { Spinner } from "../components/ui/Spinner";
-import { StoreModal } from "../components/stores/StoreModal";
 import { PartnerResponseDto } from "@/interfaces/partner";
 
 export function PartnerDashboard() {

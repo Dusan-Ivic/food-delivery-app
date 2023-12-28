@@ -1,21 +1,17 @@
 import { Card, Form } from "react-bootstrap";
-import { StoreState } from "../../interfaces/store";
 import { TbTruckDelivery, TbClockHour4 } from "react-icons/tb";
-import { formatCurrency } from "../../utils/currencyFormatter";
 import { useRef } from "react";
 import { FaLocationDot } from "react-icons/fa6";
+import { formatCurrency } from "@/utils/currencyFormatter";
+import { StoreResponseDto } from "@/features/stores/types/response";
 
 interface StoreInfoProps {
-  store: StoreState;
+  store: StoreResponseDto;
   canManageStore: boolean;
   onImageChange: (imageFile: File | null) => void;
 }
 
-export function StoreInfo({
-  store,
-  canManageStore,
-  onImageChange,
-}: StoreInfoProps) {
+export function StoreInfo({ store, canManageStore, onImageChange }: StoreInfoProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleClick = () => {

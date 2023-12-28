@@ -1,11 +1,6 @@
+import { BasicInfo } from "@/features/stores/types/request";
 import { Col, Form, Row } from "react-bootstrap";
 import { useFormContext } from "react-hook-form";
-
-export type BasicInfo = {
-  name: string;
-  category: string;
-  description: string;
-};
 
 export function BasicInfoForm() {
   const {

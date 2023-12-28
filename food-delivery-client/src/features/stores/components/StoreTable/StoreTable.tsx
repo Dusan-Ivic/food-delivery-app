@@ -1,20 +1,16 @@
+import { StoreResponseDto } from "@/features/stores/types/response";
 import { Table } from "react-bootstrap";
-import { StoreState } from "../../interfaces/store";
 import { FaStoreAlt } from "react-icons/fa";
 import { Link } from "react-router-dom";
 
 interface StoreTableProps {
-  stores: StoreState[];
+  stores: StoreResponseDto[];
 }
 
 export function StoreTable({ stores }: StoreTableProps) {
   return (
     <>
-      <Table
-        striped
-        hover
-        className="text-center rounded rounded-3 overflow-hidden"
-      >
+      <Table striped hover className="text-center rounded rounded-3 overflow-hidden">
         <thead>
           <tr>
             <th>ID</th>

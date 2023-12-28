@@ -1,9 +1,9 @@
 import { Card } from "react-bootstrap";
-import { StoreState } from "../../interfaces/store";
 import { FaLocationDot } from "react-icons/fa6";
+import { StoreResponseDto } from "@/features/stores/types/response";
 
 interface StoreItemProps {
-  store: StoreState;
+  store: StoreResponseDto;
 }
 
 export function StoreItem({ store }: StoreItemProps) {

@@ -1,6 +1,6 @@
+import { StoreResponseDto } from "@/features/stores/types/response";
 import { OrderStatus } from "./enums";
 import { Coordinate } from "./geolocation";
-import { StoreResponseDto } from "./store";
 
 export interface OrderItemRequestDto {
   productId: number;

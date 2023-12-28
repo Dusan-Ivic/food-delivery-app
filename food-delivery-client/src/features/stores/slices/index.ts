@@ -1,16 +1,11 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { PartnerStatus, StateStatus } from "../../interfaces/enums";
-import { GetStoresRequestDto, StoreRequestDto, StoreState } from "../../interfaces/store";
-import { RootState } from "../../app/store";
-import storesService from "./storesService";
+import { PartnerStatus, StateStatus } from "@/interfaces/enums";
+import { RootState } from "@/app/store";
 import { UserType } from "@/features/auth/types/enums";
 import { PartnerResponseDto } from "@/interfaces/partner";
-
-interface StoresState {
-  stores: StoreState[];
-  status: StateStatus;
-  message: string;
-}
+import storesService from "@/features/stores/api";
+import { StoresState } from "@/features/stores/types/state";
+import { GetStoresRequestDto, StoreRequestDto } from "@/features/stores/types/request";
 
 const initialState: StoresState = {
   stores: [],

@@ -1,14 +1,11 @@
 import { MapContainer, TileLayer } from "react-leaflet";
-import { Coordinate } from "../../interfaces/geolocation";
-import { PolygonDrawing } from "./PolygonDrawing";
 import { useFormContext } from "react-hook-form";
 import { FaUndo } from "react-icons/fa";
 import { FaDrawPolygon } from "react-icons/fa6";
 import { GrClear } from "react-icons/gr";
-
-export type DeliveryArea = {
-  coordinates: Coordinate[];
-};
+import { Coordinate } from "@/interfaces/geolocation";
+import { PolygonDrawing } from "@/components/PolygonDrawing/PolygonDrawing";
+import { DeliveryArea } from "@/features/stores/types/request";
 
 export function DeliveryAreaMap() {
   const {
@@ -40,17 +37,12 @@ export function DeliveryAreaMap() {
     if (currentCoordinates.length > 3) {
       const firstPoint = currentCoordinates[0];
       const lastPoint = currentCoordinates[currentCoordinates.length - 1];
-      const isClosedPolygon =
-        firstPoint.x === lastPoint.x && firstPoint.y === lastPoint.y;
+      const isClosedPolygon = firstPoint.x === lastPoint.x && firstPoint.y === lastPoint.y;
       if (!isClosedPolygon) {
-        setValue(
-          "coordinates",
-          [...currentCoordinates, currentCoordinates[0]],
-          {
-            shouldValidate: true,
-            shouldDirty: true,
-          }
-        );
+        setValue("coordinates", [...currentCoordinates, currentCoordinates[0]], {
+          shouldValidate: true,
+          shouldDirty: true,
+        });
       }
     }
   };
@@ -67,36 +59,17 @@ export function DeliveryAreaMap() {
       <div className="d-flex justify-content-between align-items-center mb-2">
         <span>Start by adding some points on the map</span>
         <div className="d-flex gap-2">
-          <FaDrawPolygon
-            onClick={completePolygon}
-            className="fs-5"
-            style={{ cursor: "pointer" }}
-          />
-          <FaUndo
-            onClick={undoLastCoordinate}
-            className="fs-5"
-            style={{ cursor: "pointer" }}
-          />
-          <GrClear
-            onClick={clearCoordinates}
-            className="fs-5"
-            style={{ cursor: "pointer" }}
-          />
+          <FaDrawPolygon onClick={completePolygon} className="fs-5" style={{ cursor: "pointer" }} />
+          <FaUndo onClick={undoLastCoordinate} className="fs-5" style={{ cursor: "pointer" }} />
+          <GrClear onClick={clearCoordinates} className="fs-5" style={{ cursor: "pointer" }} />
         </div>
       </div>
-      <MapContainer
-        center={[50, 15]}
-        zoom={3}
-        style={{ cursor: "crosshair", height: "50vh" }}
-      >
+      <MapContainer center={[50, 15]} zoom={3} style={{ cursor: "crosshair", height: "50vh" }}>
         <TileLayer
           attribution="&copy; <a href='https://www.openstreetmap.org/copyright'>OpenStreetMap</a> contributors"
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
-        <PolygonDrawing
-          points={getValues("coordinates")}
-          onSetPoint={addCoordinate}
-        />
+        <PolygonDrawing points={getValues("coordinates")} onSetPoint={addCoordinate} />
       </MapContainer>
       <div className="text-danger">{errors.coordinates?.message}</div>
     </div>

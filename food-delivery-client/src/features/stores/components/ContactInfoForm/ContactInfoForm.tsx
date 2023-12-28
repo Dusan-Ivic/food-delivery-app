@@ -1,12 +1,6 @@
+import { ContactInfo } from "@/features/stores/types/request";
 import { Col, Form, Row } from "react-bootstrap";
 import { useFormContext } from "react-hook-form";
-
-export type ContactInfo = {
-  address: string;
-  city: string;
-  postalCode: string;
-  phone: string;
-};
 
 export function ContactInfoForm() {
   const {

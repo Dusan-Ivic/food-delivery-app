@@ -3,18 +3,18 @@ import { Button, Offcanvas, Stack } from "react-bootstrap";
 import { CartItem } from "../../interfaces/cart";
 import { ShoppingCartItem } from "./ShoppingCartItem";
 import { formatCurrency } from "../../utils/currencyFormatter";
-import { StoreState } from "../../interfaces/store";
 import { Spinner } from "../ui/Spinner";
+import { StoreResponseDto } from "@/features/stores/types/response";
 
 interface ShoppingCartProps {
-  store: StoreState;
+  store: StoreResponseDto;
   items: CartItem[];
   isOpen: boolean;
   isLoading: boolean;
   closeCart: () => void;
   removeFromCart: (itemId: number) => void;
   decreaseQuantity: (itemId: number) => void;
-  submitOrder: (store: StoreState, items: CartItem[]) => void;
+  submitOrder: (store: StoreResponseDto, items: CartItem[]) => void;
 }
 
 export function ShoppingCart({
@@ -66,10 +66,7 @@ export function ShoppingCart({
             {isLoading ? (
               <Spinner />
             ) : (
-              <Button
-                onClick={() => submitOrder(store, items)}
-                className="w-100 mt-2 mb-5"
-              >
+              <Button onClick={() => submitOrder(store, items)} className="w-100 mt-2 mb-5">
                 Place an order
               </Button>
             )}
