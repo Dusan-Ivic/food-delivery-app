@@ -1,19 +1,17 @@
-import { Header } from "./components/ui/Header";
+import { Header } from "@/components";
 import { Container } from "react-bootstrap";
 import { Outlet } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
-import { useAppDispatch, useAppSelector } from "./app/hooks";
-import { getProfile, generateToken, reset } from "./features/auth/authSlice";
+import { useAppDispatch, useAppSelector } from "@/app/hooks";
+import { getProfile, generateToken, reset } from "@/features/auth/slices";
 import { useEffect } from "react";
-import { CreateTokenRequestDto } from "./interfaces/token";
-import { GrantType } from "./interfaces/enums";
-import { DeliveryLocationProvider } from "./context/location/DeliveryLocationContext";
+import { CreateTokenRequestDto } from "@/features/auth/types/request";
+import { GrantType } from "@/features/auth/types/enums";
+import { DeliveryLocationProvider } from "@/features/delivery/context";
 
 function App() {
   const dispatch = useAppDispatch();
-  const { user, accessToken, refreshToken } = useAppSelector(
-    (state) => state.auth
-  );
+  const { user, accessToken, refreshToken } = useAppSelector((state) => state.auth);
 
   useEffect(() => {
     // Mechanism for refreshing access token before it expires
@@ -25,8 +23,7 @@ function App() {
       const remainingTime = expirationTimestamp - currentTimestamp;
 
       const refreshThreshold = import.meta.env.VITE_TOKEN_REFRESH_THRESHOLD;
-      const setThreshold =
-        remainingTime < refreshThreshold ? 0 : refreshThreshold;
+      const setThreshold = remainingTime < refreshThreshold ? 0 : refreshThreshold;
 
       expirationTimer = setTimeout(() => {
         const requestDto: CreateTokenRequestDto = {
