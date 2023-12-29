@@ -1,14 +1,14 @@
-import { getStores, createStore, reset as resetStoresState } from "../features/stores/slices";
-import { useAppDispatch, useAppSelector } from "../app/hooks";
+import { getStores, createStore, reset as resetStoresState } from "@/features/stores/slices";
+import { useAppDispatch, useAppSelector } from "@/app/hooks";
 import { useEffect, useState } from "react";
 import { BsHouseAddFill } from "react-icons/bs";
 import { Alert, Button, Col, Row } from "react-bootstrap";
-import { StateStatus } from "../interfaces/enums";
+import { StateStatus } from "@/interfaces/enums";
 import { toast } from "react-toastify";
-import { getOrders, clearOrders, reset as resetOrdersState } from "../features/orders/slices";
-import { OrderHistory } from "../features/orders/components/OrderHistory/OrderHistory";
+import { getOrders, clearOrders, reset as resetOrdersState } from "@/features/orders/slices";
+import { OrderHistory } from "@/features/orders/components";
 import { StoreTable, StoreModal } from "@/features/stores/components";
-import { Spinner } from "../components/Spinner/Spinner";
+import { Spinner } from "@/components";
 import { PartnerStatus } from "@/features/partners/types/enums";
 import { PartnerResponseDto } from "@/features/partners/types/response";
 

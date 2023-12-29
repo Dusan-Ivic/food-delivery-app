@@ -1,7 +1,6 @@
 import { UserType } from "@/features/auth/types/enums";
-import { useAppSelector } from "../app/hooks";
-import { AdminDashboard } from "../pages/AdminDashboard";
-import { PartnerDashboard } from "../pages/PartnerDashboard";
+import { useAppSelector } from "@/app/hooks";
+import { AdminDashboard, PartnerDashboard } from "@/features/dashboard/components";
 
 export function Dashboard() {
   const { user } = useAppSelector((state) => state.auth);
