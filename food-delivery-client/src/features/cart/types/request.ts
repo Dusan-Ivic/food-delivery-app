@@ -1,11 +1,11 @@
-export interface CartItem {
+export type CartItem = {
   id: number;
   name: string;
   price: number;
   quantity: number;
-}
+};
 
-export interface Cart {
+export type Cart = {
   storeId: number;
   items: CartItem[];
-}
+};

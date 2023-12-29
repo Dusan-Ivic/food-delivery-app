@@ -1,10 +1,10 @@
 import { useMemo } from "react";
 import { Button, Offcanvas, Stack } from "react-bootstrap";
-import { CartItem } from "../../interfaces/cart";
-import { ShoppingCartItem } from "./ShoppingCartItem";
-import { formatCurrency } from "../../utils/currencyFormatter";
-import { Spinner } from "../ui/Spinner";
+import { formatCurrency } from "@/utils/currencyFormatter";
+import { Spinner } from "@/components/ui/Spinner";
 import { StoreResponseDto } from "@/features/stores/types/response";
+import { CartItem } from "@/features/cart/types/request";
+import { ShoppingCartItem } from "@/features/cart/components";
 
 interface ShoppingCartProps {
   store: StoreResponseDto;

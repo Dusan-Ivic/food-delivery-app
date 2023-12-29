@@ -18,7 +18,7 @@ import { IoMdAddCircleOutline } from "react-icons/io";
 import { BiEdit } from "react-icons/bi";
 import { ProductList, ProductForm } from "@/features/products/components";
 import { Button, Col, Row } from "react-bootstrap";
-import { ShoppingCart } from "@/components/cart/ShoppingCart";
+import { ShoppingCart } from "@/features/cart/components/ShoppingCart/ShoppingCart";
 import {
   openCart,
   closeCart,
@@ -26,14 +26,14 @@ import {
   addToCart,
   removeFromCart,
   decreaseQuantity,
-} from "@/features/cart/cartSlice";
+} from "@/features/cart/slices";
 import { createCheckout, reset as resetOrdersState } from "@/features/orders/slices";
 import {
   uploadImage as uploadStoreImage,
   updateStore,
   reset as resetStoresState,
 } from "@/features/stores/slices";
-import { CartItem } from "@/interfaces/cart";
+import { CartItem } from "@/features/cart/types/request";
 import { StateStatus } from "@/interfaces/enums";
 import { toast } from "react-toastify";
 import { ConfirmationModal } from "@/components/shared/ConfirmationModal";

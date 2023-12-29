@@ -1,6 +1,6 @@
 import { Button, Stack } from "react-bootstrap";
-import { CartItem } from "../../interfaces/cart";
-import { formatCurrency } from "../../utils/currencyFormatter";
+import { formatCurrency } from "@/utils/currencyFormatter";
+import { CartItem } from "@/features/cart/types/request";
 
 interface ShoppingCartItemProps {
   item: CartItem;
@@ -27,18 +27,10 @@ export function ShoppingCartItem({
         </div>
       </div>
       <div> {formatCurrency(item.price * item.quantity)}</div>
-      <Button
-        variant="outline-warning"
-        size="sm"
-        onClick={() => decreaseQuantity(item.id)}
-      >
+      <Button variant="outline-warning" size="sm" onClick={() => decreaseQuantity(item.id)}>
         &minus;
       </Button>
-      <Button
-        variant="outline-danger"
-        size="sm"
-        onClick={() => removeFromCart(item.id)}
-      >
+      <Button variant="outline-danger" size="sm" onClick={() => removeFromCart(item.id)}>
         &times;
       </Button>
     </Stack>
