@@ -1,17 +1,17 @@
 import { Card, Form } from "react-bootstrap";
-import { ProductState } from "../../interfaces/product";
-import { formatCurrency } from "../../utils/currencyFormatter";
+import { formatCurrency } from "@/utils/currencyFormatter";
 import { BiEdit } from "react-icons/bi";
 import { AiFillDelete, AiOutlinePlusSquare } from "react-icons/ai";
 import { useRef } from "react";
+import { ProductResponseDto } from "@/features/products/types/response";
 
 interface ProductItemProps {
-  product: ProductState;
+  product: ProductResponseDto;
   canAddToCart: boolean;
-  addToCart: (product: ProductState) => void;
+  addToCart: (product: ProductResponseDto) => void;
   canManageProduct: boolean;
-  editProduct: (product: ProductState) => void;
-  deleteProduct: (product: ProductState) => void;
+  editProduct: (product: ProductResponseDto) => void;
+  deleteProduct: (product: ProductResponseDto) => void;
   onImageChange: (productId: number, imageFile: File | null) => void;
 }
 
@@ -128,9 +128,7 @@ export function ProductItem({
       <Card.Body className="d-flex flex-column">
         <Card.Title className="d-flex justify-content-between align-items-baseline mb-4">
           <span className="fs-5">{product.name}</span>
-          <span className="ms-2 text-muted">
-            {formatCurrency(product.price)}
-          </span>
+          <span className="ms-2 text-muted">{formatCurrency(product.price)}</span>
         </Card.Title>
         <div>{product.description}</div>
       </Card.Body>

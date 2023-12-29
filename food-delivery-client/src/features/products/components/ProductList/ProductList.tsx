@@ -1,14 +1,14 @@
+import { ProductItem } from "@/features/products/components";
+import { ProductResponseDto } from "@/features/products/types/response";
 import { Row, Col } from "react-bootstrap";
-import { ProductState } from "../../interfaces/product";
-import { ProductItem } from "./ProductItem";
 
 interface ProductListProps {
-  products: ProductState[];
+  products: ProductResponseDto[];
   canAddToCart: boolean;
-  addToCart: (product: ProductState) => void;
+  addToCart: (product: ProductResponseDto) => void;
   canManageProduct: boolean;
-  editProduct: (product: ProductState) => void;
-  deleteProduct: (product: ProductState) => void;
+  editProduct: (product: ProductResponseDto) => void;
+  deleteProduct: (product: ProductResponseDto) => void;
   onImageChange: (productId: number, imageFile: File | null) => void;
 }
 

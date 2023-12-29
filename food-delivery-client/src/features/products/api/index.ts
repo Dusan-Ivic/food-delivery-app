@@ -1,18 +1,12 @@
 import axios from "axios";
-import {
-  ProductRequestDto,
-  ProductResponseDto,
-} from "../../interfaces/product";
-import { ImageResponseDto } from "../../interfaces/image";
-import apiClient from "../../config/apiClient";
+import { ImageResponseDto } from "@/interfaces/image";
+import apiClient from "@/config/apiClient";
+import { ProductResponseDto } from "@/features/products/types/response";
+import { ProductRequestDto } from "@/features/products/types/request";
 
-const getProductsByStore = async (
-  storeId: number
-): Promise<ProductResponseDto[]> => {
+const getProductsByStore = async (storeId: number): Promise<ProductResponseDto[]> => {
   try {
-    const response = await apiClient.get<ProductResponseDto[]>(
-      `/api/products?storeId=${storeId}`
-    );
+    const response = await apiClient.get<ProductResponseDto[]>(`/api/products?storeId=${storeId}`);
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
@@ -28,15 +22,11 @@ const createProduct = async (
   token: string | null
 ): Promise<ProductResponseDto> => {
   try {
-    const response = await apiClient.post<ProductResponseDto>(
-      "/api/products",
-      requestDto,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+    const response = await apiClient.post<ProductResponseDto>("/api/products", requestDto, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
@@ -72,19 +62,13 @@ const updateProduct = async (
   }
 };
 
-const deleteProduct = async (
-  productId: number,
-  token: string | null
-): Promise<{ id: number }> => {
+const deleteProduct = async (productId: number, token: string | null): Promise<{ id: number }> => {
   try {
-    const response = await apiClient.delete<{ id: number }>(
-      `/api/products/${productId}`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+    const response = await apiClient.delete<{ id: number }>(`/api/products/${productId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {

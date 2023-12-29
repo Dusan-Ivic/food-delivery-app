@@ -9,14 +9,14 @@ import {
   clearProducts,
   deleteProduct,
   uploadImage as uploadProductImage,
-} from "@/features/products/productsSlice";
+} from "@/features/products/slices";
 import { useAppDispatch, useAppSelector } from "@/app/hooks";
 import { StoreInfo, StoreModal } from "@/features/stores/components";
 import { IoArrowBack } from "react-icons/io5";
 import { HiOutlineShoppingCart } from "react-icons/hi";
 import { IoMdAddCircleOutline } from "react-icons/io";
 import { BiEdit } from "react-icons/bi";
-import { ProductList } from "@/components/products/ProductList";
+import { ProductList, ProductForm } from "@/features/products/components";
 import { Button, Col, Row } from "react-bootstrap";
 import { ShoppingCart } from "@/components/cart/ShoppingCart";
 import {
@@ -37,9 +37,7 @@ import { CartItem } from "@/interfaces/cart";
 import { StateStatus } from "@/interfaces/enums";
 import { toast } from "react-toastify";
 import { ConfirmationModal } from "@/components/shared/ConfirmationModal";
-import { ProductRequestDto, ProductState } from "@/interfaces/product";
 import { FormModal, FormProps } from "@/components/shared/FormModal";
-import { ProductForm } from "@/components/products/ProductForm";
 import { Spinner } from "@/components/ui/Spinner";
 import { FaLocationDot } from "react-icons/fa6";
 import { useDeliveryLocation } from "@/context/location/useDeliveryLocation";
@@ -47,6 +45,8 @@ import { UserType } from "@/features/auth/types/enums";
 import { StoreResponseDto } from "@/features/stores/types/response";
 import { OrderRequestDto } from "@/features/orders/types/request";
 import { CheckoutResponseDto } from "@/features/orders/types/response";
+import { ProductResponseDto } from "@/features/products/types/response";
+import { ProductRequestDto } from "@/features/products/types/request";
 
 interface ConfirmDeleteModalProps {
   isVisible: boolean;
@@ -76,7 +76,7 @@ export function StorePage() {
     () => items.reduce((quantity, item) => item.quantity + quantity, 0),
     [items]
   );
-  const [selectedProduct, setSelectedProduct] = useState<ProductState | null>(null);
+  const [selectedProduct, setSelectedProduct] = useState<ProductResponseDto | null>(null);
   const [confirmModal, setConfirmModal] = useState<ConfirmDeleteModalProps>({
     isVisible: false,
     content: "",
@@ -188,7 +188,7 @@ export function StorePage() {
     return store?.partnerId === user.id;
   }, [user, store]);
 
-  const handleDeleteProduct = (product: ProductState) => {
+  const handleDeleteProduct = (product: ProductResponseDto) => {
     setConfirmModal({
       isVisible: true,
       content: `You are about to delete product '${product.name}'`,

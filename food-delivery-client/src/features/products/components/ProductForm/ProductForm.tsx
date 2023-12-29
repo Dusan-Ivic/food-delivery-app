@@ -1,8 +1,8 @@
 import { Button, Col, Form, Row } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import * as Yup from "yup";
-import { ProductRequestDto } from "../../interfaces/product";
+import { ProductRequestDto } from "@/features/products/types/request";
+import { productSchema } from "@/features/products/types/schemas";
 
 interface ProductFormProps {
   onSubmit: (data: ProductRequestDto) => void;
@@ -10,38 +10,20 @@ interface ProductFormProps {
 }
 
 export function ProductForm({ onSubmit, product }: ProductFormProps) {
-  const validationSchema = Yup.object().shape({
-    name: Yup.string()
-      .required("Name is required")
-      .max(100, "Name is too long"),
-    description: Yup.string()
-      .required("Description is required")
-      .max(500, "Description is too long"),
-    price: Yup.number()
-      .typeError("Price must be a number")
-      .required("Price is required")
-      .moreThan(0, "Price must be greater than 0"),
-    quantity: Yup.number()
-      .typeError("Quantity must be a number")
-      .required("Quantity is required")
-      .moreThan(0, "Quantity must be greater than 0"),
-  });
-
-  const initialValues: ProductRequestDto = {
-    name: product?.name || "",
-    description: product?.description || "",
-    price: product?.price || 0,
-    quantity: product?.quantity || 0,
-  };
-
   const {
     register,
     handleSubmit,
     formState: { errors, touchedFields },
   } = useForm<ProductRequestDto>({
     mode: "all",
-    defaultValues: initialValues,
-    resolver: yupResolver(validationSchema),
+    defaultValues: {
+      name: product?.name || "",
+      description: product?.description || "",
+      price: product?.price || 0,
+      quantity: product?.quantity || 0,
+      storeId: product?.storeId || 0,
+    },
+    resolver: yupResolver(productSchema),
   });
 
   return (
