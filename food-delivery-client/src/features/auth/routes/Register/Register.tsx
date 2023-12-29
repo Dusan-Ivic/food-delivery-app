@@ -1,8 +1,7 @@
 import { useState, useEffect } from "react";
 import { Button, Col, Row } from "react-bootstrap";
-import { CustomerRequestDto } from "@/interfaces/customer";
 import { Link } from "react-router-dom";
-import { StateStatus } from "@/interfaces/enums";
+import { StateStatus } from "@/types/state";
 import { registerCustomer, registerPartner, reset } from "@/features/auth/slices";
 import { useAppDispatch, useAppSelector } from "@/app/hooks";
 import { useNavigate } from "react-router-dom";
@@ -15,6 +14,7 @@ import { FaRegHandshake } from "react-icons/fa";
 import { AiOutlineUser } from "react-icons/ai";
 import { AllowedUserType } from "@/features/auth/types/enums";
 import { PartnerRequestDto } from "@/features/partners/types/request";
+import { CustomerRequestDto } from "@/features/auth/types/request";
 
 interface FormComponentProps {
   onSubmit: (data: CustomerRequestDto | PartnerRequestDto) => void;

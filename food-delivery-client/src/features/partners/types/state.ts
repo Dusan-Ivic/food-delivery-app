@@ -1,5 +1,5 @@
 import { PartnerResponseDto } from "@/features/partners/types/response";
-import { StateStatus } from "@/interfaces/enums";
+import { StateStatus } from "@/types/state";
 
 export type PartnersState = {
   partners: PartnerResponseDto[];

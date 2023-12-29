@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { StateStatus } from "@/interfaces/enums";
+import { StateStatus } from "@/types/state";
 import { RootState } from "@/app/store";
 import ordersService from "@/features/orders/api";
 import { OrderRequestDto } from "@/features/orders/types/request";

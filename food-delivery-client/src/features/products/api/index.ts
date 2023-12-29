@@ -1,5 +1,5 @@
 import axios from "axios";
-import { ImageResponseDto } from "@/interfaces/image";
+import { ImageResponseDto } from "@/types/image";
 import apiClient from "@/config/apiClient";
 import { ProductResponseDto } from "@/features/products/types/response";
 import { ProductRequestDto } from "@/features/products/types/request";

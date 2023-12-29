@@ -1,3 +1,4 @@
+import { AddressInfo } from "@/features/auth/types/address";
 import { GrantType, UserType } from "@/features/auth/types/enums";
 
 export type LoginRequestDto = {
@@ -30,3 +31,9 @@ export type CreateTokenRequestDto = {
 export type DeleteTokenRequestDto = {
   refreshToken: string;
 };
+
+export type CustomerRequestDto = UserRequestDto &
+  AddressInfo & {
+    password: string;
+    confirmPassword: string;
+  };

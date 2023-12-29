@@ -1,4 +1,4 @@
-export interface ImageResponseDto {
+export type ImageResponseDto = {
   id: number;
   image: string | null;
-}
+};

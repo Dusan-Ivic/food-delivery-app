@@ -3,7 +3,7 @@ import { useFormContext } from "react-hook-form";
 import { FaUndo } from "react-icons/fa";
 import { FaDrawPolygon } from "react-icons/fa6";
 import { GrClear } from "react-icons/gr";
-import { Coordinate } from "@/interfaces/geolocation";
+import { Coordinate } from "@/types/geolocation";
 import { PolygonDrawing } from "@/components";
 import { DeliveryArea } from "@/features/stores/types/request";
 

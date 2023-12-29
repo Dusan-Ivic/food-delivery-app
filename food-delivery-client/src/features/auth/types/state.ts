@@ -1,7 +1,6 @@
+import { AdminResponseDto, CustomerResponseDto } from "@/features/auth/types/response";
 import { PartnerResponseDto } from "@/features/partners/types/response";
-import { AdminResponseDto } from "@/interfaces/admin";
-import { CustomerResponseDto } from "@/interfaces/customer";
-import { StateStatus } from "@/interfaces/enums";
+import { StateStatus } from "@/types/state";
 
 type UserState = CustomerResponseDto | PartnerResponseDto | AdminResponseDto;
 

@@ -1,8 +1,8 @@
 import { Form, Button, Row, Col } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { CustomerRequestDto } from "@/interfaces/customer";
 import { registerCustomerSchema } from "@/features/auth/types/schemas";
+import { CustomerRequestDto } from "@/features/auth/types/request";
 
 interface RegisterCustomerProps {
   onSubmit: (data: CustomerRequestDto) => void;

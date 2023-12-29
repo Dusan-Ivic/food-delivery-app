@@ -34,7 +34,7 @@ import {
   reset as resetStoresState,
 } from "@/features/stores/slices";
 import { CartItem } from "@/features/cart/types/request";
-import { StateStatus } from "@/interfaces/enums";
+import { StateStatus } from "@/types/state";
 import { toast } from "react-toastify";
 import { ConfirmationModal, FormModal, FormProps, Spinner } from "@/components";
 import { FaLocationDot } from "react-icons/fa6";

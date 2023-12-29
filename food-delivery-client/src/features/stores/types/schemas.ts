@@ -4,7 +4,7 @@ import {
   DeliveryInfo,
   DeliveryArea,
 } from "@/features/stores/types/request";
-import { Coordinate } from "@/interfaces/geolocation";
+import { Coordinate } from "@/types/geolocation";
 import * as yup from "yup";
 
 export const basicInfoSchema = yup.object<BasicInfo>().shape({

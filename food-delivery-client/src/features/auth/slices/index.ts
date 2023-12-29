@@ -6,13 +6,14 @@ import {
   UserRequestDto,
   CreateTokenRequestDto,
   DeleteTokenRequestDto,
+  CustomerRequestDto,
 } from "@/features/auth/types/request";
-import { StateStatus } from "@/interfaces/enums";
-import { CustomerRequestDto, CustomerResponseDto } from "@/interfaces/customer";
+import { StateStatus } from "@/types/state";
 import { AuthState } from "@/features/auth/types/state";
 import { UserType } from "@/features/auth/types/enums";
 import { PartnerRequestDto } from "@/features/partners/types/request";
 import { PartnerResponseDto } from "@/features/partners/types/response";
+import { CustomerResponseDto } from "@/features/auth/types/response";
 
 const initialState: AuthState = {
   user: null,

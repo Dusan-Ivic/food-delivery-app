@@ -3,7 +3,7 @@ import { Row, Col } from "react-bootstrap";
 import { useAppDispatch, useAppSelector } from "@/app/hooks";
 import { OrderHistory } from "@/features/orders/components";
 import { getOrders, clearOrders, cancelOrder } from "@/features/orders/slices";
-import { StateStatus } from "@/interfaces/enums";
+import { StateStatus } from "@/types/state";
 import { Spinner } from "@/components";
 import { UserType } from "@/features/auth/types/enums";
 

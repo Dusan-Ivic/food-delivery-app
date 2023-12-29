@@ -1,7 +1,7 @@
 import axios from "axios";
-import { ImageResponseDto } from "@/interfaces/image";
+import { ImageResponseDto } from "@/types/image";
 import apiClient from "@/config/apiClient";
-import { Coordinate } from "@/interfaces/geolocation";
+import { Coordinate } from "@/types/geolocation";
 import { StoreRequestDto } from "@/features/stores/types/request";
 import { StoreResponseDto } from "@/features/stores/types/response";
 

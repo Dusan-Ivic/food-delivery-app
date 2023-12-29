@@ -10,9 +10,9 @@ import {
   changePassword,
 } from "@/features/auth/slices";
 import { useEffect, useRef } from "react";
-import { StateStatus } from "@/interfaces/enums";
+import { StateStatus } from "@/types/state";
 import { toast } from "react-toastify";
-import { AddressInfo } from "@/interfaces/address";
+import { AddressInfo } from "@/features/auth/types/address";
 import { ChangePasswordRequestDto, UserRequestDto } from "@/features/auth/types/request";
 import { UserType } from "@/features/auth/types/enums";
 

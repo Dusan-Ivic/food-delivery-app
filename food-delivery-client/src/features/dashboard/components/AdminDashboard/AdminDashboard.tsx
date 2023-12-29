@@ -8,7 +8,7 @@ import {
 import { getOrders, clearOrders, reset as resetOrders } from "@/features/orders/slices";
 import { useAppDispatch, useAppSelector } from "@/app/hooks";
 import { useEffect } from "react";
-import { StateStatus } from "@/interfaces/enums";
+import { StateStatus } from "@/types/state";
 import { toast } from "react-toastify";
 import { PartnerTable } from "@/features/partners/components";
 import { Col, Row } from "react-bootstrap";

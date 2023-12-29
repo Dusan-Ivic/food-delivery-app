@@ -4,7 +4,7 @@ import { LoginForm } from "@/features/auth/components";
 import { generateToken, reset } from "@/features/auth/slices";
 import { useAppDispatch, useAppSelector } from "@/app/hooks";
 import { useNavigate } from "react-router-dom";
-import { StateStatus } from "@/interfaces/enums";
+import { StateStatus } from "@/types/state";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import { Spinner } from "@/components";

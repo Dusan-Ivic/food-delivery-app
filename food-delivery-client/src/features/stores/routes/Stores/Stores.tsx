@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useAppDispatch, useAppSelector } from "@/app/hooks";
 import { getStores, reset } from "@/features/stores/slices";
-import { StateStatus } from "@/interfaces/enums";
+import { StateStatus } from "@/types/state";
 import { toast } from "react-toastify";
 import { Spinner } from "@/components";
 import { StoreList } from "@/features/stores/components";

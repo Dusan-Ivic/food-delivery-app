@@ -1,4 +1,4 @@
-import { Coordinate } from "@/interfaces/geolocation";
+import { Coordinate } from "@/types/geolocation";
 import { useMapEvents, Polyline } from "react-leaflet";
 
 interface PolygonDrawingProps {

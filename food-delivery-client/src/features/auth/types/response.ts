@@ -1,3 +1,4 @@
+import { AddressInfo } from "@/features/auth/types/address";
 import { UserType } from "@/features/auth/types/enums";
 
 export type UserResponseDto = {
@@ -16,3 +17,7 @@ export type TokenResponseDto = {
   expiresIn: number;
   issuedAt: number;
 };
+
+export type CustomerResponseDto = UserResponseDto & AddressInfo;
+
+export type AdminResponseDto = UserResponseDto;

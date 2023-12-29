@@ -1,4 +1,4 @@
-import { Coordinate } from "@/interfaces/geolocation";
+import { Coordinate } from "@/types/geolocation";
 
 export type StoreResponseDto = {
   id: number;

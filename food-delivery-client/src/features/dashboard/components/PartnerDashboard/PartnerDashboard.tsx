@@ -3,7 +3,7 @@ import { useAppDispatch, useAppSelector } from "@/app/hooks";
 import { useEffect, useState } from "react";
 import { BsHouseAddFill } from "react-icons/bs";
 import { Alert, Button, Col, Row } from "react-bootstrap";
-import { StateStatus } from "@/interfaces/enums";
+import { StateStatus } from "@/types/state";
 import { toast } from "react-toastify";
 import { getOrders, clearOrders, reset as resetOrdersState } from "@/features/orders/slices";
 import { OrderHistory } from "@/features/orders/components";

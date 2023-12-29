@@ -1,5 +1,5 @@
 import { OrderResponseDto } from "@/features/orders/types/response";
-import { StateStatus } from "@/interfaces/enums";
+import { StateStatus } from "@/types/state";
 
 export type OrdersState = {
   orders: OrderResponseDto[];

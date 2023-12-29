@@ -1,13 +1,17 @@
 import axios from "axios";
-import { CustomerRequestDto, CustomerResponseDto } from "@/interfaces/customer";
-import { ImageResponseDto } from "@/interfaces/image";
+import { ImageResponseDto } from "@/types/image";
 import apiClient from "@/config/apiClient";
 import {
   CreateTokenRequestDto,
   DeleteTokenRequestDto,
   ChangePasswordRequestDto,
+  CustomerRequestDto,
 } from "@/features/auth/types/request";
-import { TokenResponseDto, UserResponseDto } from "@/features/auth/types/response";
+import {
+  CustomerResponseDto,
+  TokenResponseDto,
+  UserResponseDto,
+} from "@/features/auth/types/response";
 import { PartnerRequestDto } from "@/features/partners/types/request";
 import { PartnerResponseDto } from "@/features/partners/types/response";
 

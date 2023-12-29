@@ -1,8 +1,8 @@
 import { Row, Col, Form, Button } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { AddressInfo } from "@/interfaces/address";
-import { addressSchema } from "@/interfaces/schemas";
+import { AddressInfo } from "@/features/auth/types/address";
+import { addressSchema } from "@/features/auth/types/schemas";
 
 interface AddressDetailsProps {
   data: AddressInfo | null;
