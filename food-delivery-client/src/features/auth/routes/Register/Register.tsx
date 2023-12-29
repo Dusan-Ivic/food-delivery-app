@@ -10,7 +10,7 @@ import { toast } from "react-toastify";
 import { RegisterCustomer } from "@/features/auth/components";
 import { RegisterPartner } from "@/features/auth/components";
 import { IoArrowBack } from "react-icons/io5";
-import { Spinner } from "@/components/ui/Spinner";
+import { Spinner } from "@/components";
 import { FaRegHandshake } from "react-icons/fa";
 import { AiOutlineUser } from "react-icons/ai";
 import { AllowedUserType } from "@/features/auth/types/enums";

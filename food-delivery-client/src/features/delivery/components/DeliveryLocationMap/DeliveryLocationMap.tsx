@@ -1,6 +1,6 @@
 import { MapContainer, TileLayer } from "react-leaflet";
 import { Coordinate } from "@/interfaces/geolocation";
-import { LocationMarker } from "@/components/LocationMarker/LocationMarker";
+import { LocationMarker } from "@/components";
 import { Button } from "react-bootstrap";
 import { useState } from "react";
 import { LatLngExpression } from "leaflet";

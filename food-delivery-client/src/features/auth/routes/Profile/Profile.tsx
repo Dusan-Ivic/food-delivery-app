@@ -1,6 +1,6 @@
 import { Button, Col, Form, Row } from "react-bootstrap";
 import { useAppSelector, useAppDispatch } from "@/app/hooks";
-import { AddressDetails } from "@/components/shared/AddressDetails";
+import { AddressDetails } from "@/features/auth/components";
 import { UserDetails, UserAvatar, ChangePassword } from "@/features/auth/components";
 import {
   updateUser,

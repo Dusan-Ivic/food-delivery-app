@@ -8,7 +8,7 @@ import { toast } from "react-toastify";
 import { getOrders, clearOrders, reset as resetOrdersState } from "../features/orders/slices";
 import { OrderHistory } from "../features/orders/components/OrderHistory/OrderHistory";
 import { StoreTable, StoreModal } from "@/features/stores/components";
-import { Spinner } from "../components/ui/Spinner";
+import { Spinner } from "../components/Spinner/Spinner";
 import { PartnerStatus } from "@/features/partners/types/enums";
 import { PartnerResponseDto } from "@/features/partners/types/response";
 

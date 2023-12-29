@@ -13,7 +13,7 @@ import { toast } from "react-toastify";
 import { PartnerTable } from "../features/partners/components/PartnerTable/PartnerTable";
 import { Col, Row } from "react-bootstrap";
 import { OrderHistory } from "../features/orders/components/OrderHistory/OrderHistory";
-import { Spinner } from "../components/ui/Spinner";
+import { Spinner } from "../components/Spinner/Spinner";
 import { StoreTable } from "@/features/stores/components";
 import { PartnerResponseDto } from "@/features/partners/types/response";
 import { PartnerStatus } from "@/features/partners/types/enums";

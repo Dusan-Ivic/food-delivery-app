@@ -36,9 +36,7 @@ import {
 import { CartItem } from "@/features/cart/types/request";
 import { StateStatus } from "@/interfaces/enums";
 import { toast } from "react-toastify";
-import { ConfirmationModal } from "@/components/shared/ConfirmationModal";
-import { FormModal, FormProps } from "@/components/shared/FormModal";
-import { Spinner } from "@/components/ui/Spinner";
+import { ConfirmationModal, FormModal, FormProps, Spinner } from "@/components";
 import { FaLocationDot } from "react-icons/fa6";
 import { useDeliveryLocation } from "@/features/delivery/hooks";
 import { UserType } from "@/features/auth/types/enums";

@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { StateStatus } from "@/interfaces/enums";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
-import { Spinner } from "@/components/ui/Spinner";
+import { Spinner } from "@/components";
 import { CreateTokenRequestDto, LoginRequestDto } from "@/features/auth/types/request";
 import { GrantType, UserType } from "@/features/auth/types/enums";
 

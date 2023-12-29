@@ -1,10 +1,10 @@
 import { useEffect, useMemo } from "react";
 import { Row, Col } from "react-bootstrap";
 import { useAppDispatch, useAppSelector } from "@/app/hooks";
-import { OrderHistory } from "@/features/orders/components/OrderHistory/OrderHistory";
+import { OrderHistory } from "@/features/orders/components";
 import { getOrders, clearOrders, cancelOrder } from "@/features/orders/slices";
 import { StateStatus } from "@/interfaces/enums";
-import { Spinner } from "@/components/ui/Spinner";
+import { Spinner } from "@/components";
 import { UserType } from "@/features/auth/types/enums";
 
 export function Orders() {

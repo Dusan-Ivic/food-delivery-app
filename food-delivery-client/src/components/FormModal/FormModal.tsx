@@ -1,6 +1,11 @@
 import { ComponentType } from "react";
 import { Modal } from "react-bootstrap";
 
+export interface FormProps<T> {
+  data: T | null;
+  onSubmit: (data: T) => void;
+}
+
 export interface FormModalProps<T> {
   isVisible: boolean;
   title: string;
@@ -8,11 +13,6 @@ export interface FormModalProps<T> {
   data: T | null;
   onSubmit: (data: T) => void;
   onClose: () => void;
-}
-
-export interface FormProps<T> {
-  data: T | null;
-  onSubmit: (data: T) => void;
 }
 
 export function FormModal<T extends object>({

@@ -9,7 +9,7 @@ import {
   DeliveryAreaMap,
   DeliveryInfoForm,
 } from "@/features/stores/components";
-import { FormStep, Stepper } from "@/components/ui/Stepper";
+import { FormStep, Stepper } from "@/components";
 import {
   BasicInfo,
   ContactInfo,

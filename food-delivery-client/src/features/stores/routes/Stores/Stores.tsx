@@ -3,7 +3,7 @@ import { useAppDispatch, useAppSelector } from "@/app/hooks";
 import { getStores, reset } from "@/features/stores/slices";
 import { StateStatus } from "@/interfaces/enums";
 import { toast } from "react-toastify";
-import { Spinner } from "@/components/ui/Spinner";
+import { Spinner } from "@/components";
 import { StoreList } from "@/features/stores/components";
 import { FaLocationDot } from "react-icons/fa6";
 import { Col, ListGroup, ListGroupItem, Row } from "react-bootstrap";
