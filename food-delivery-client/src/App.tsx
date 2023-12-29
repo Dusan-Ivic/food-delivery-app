@@ -1,13 +1,13 @@
-import { Header } from "./components/ui/Header";
+import { Header } from "@/components/ui/Header";
 import { Container } from "react-bootstrap";
 import { Outlet } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
-import { useAppDispatch, useAppSelector } from "./app/hooks";
-import { getProfile, generateToken, reset } from "./features/auth/slices";
+import { useAppDispatch, useAppSelector } from "@/app/hooks";
+import { getProfile, generateToken, reset } from "@/features/auth/slices";
 import { useEffect } from "react";
-import { DeliveryLocationProvider } from "./context/location/DeliveryLocationContext";
 import { CreateTokenRequestDto } from "@/features/auth/types/request";
 import { GrantType } from "@/features/auth/types/enums";
+import { DeliveryLocationProvider } from "@/features/delivery/context";
 
 function App() {
   const dispatch = useAppDispatch();

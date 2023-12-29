@@ -1,6 +1,5 @@
 import axios from "axios";
 import { CustomerRequestDto, CustomerResponseDto } from "@/interfaces/customer";
-import { PartnerRequestDto, PartnerResponseDto } from "@/interfaces/partner";
 import { ImageResponseDto } from "@/interfaces/image";
 import apiClient from "@/config/apiClient";
 import {
@@ -9,6 +8,8 @@ import {
   ChangePasswordRequestDto,
 } from "@/features/auth/types/request";
 import { TokenResponseDto, UserResponseDto } from "@/features/auth/types/response";
+import { PartnerRequestDto } from "@/features/partners/types/request";
+import { PartnerResponseDto } from "@/features/partners/types/response";
 
 const generateToken = async (requestDto: CreateTokenRequestDto): Promise<TokenResponseDto> => {
   try {

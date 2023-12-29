@@ -1,7 +1,7 @@
+import { PartnerResponseDto } from "@/features/partners/types/response";
 import { AdminResponseDto } from "@/interfaces/admin";
 import { CustomerResponseDto } from "@/interfaces/customer";
 import { StateStatus } from "@/interfaces/enums";
-import { PartnerResponseDto } from "@/interfaces/partner";
 
 type UserState = CustomerResponseDto | PartnerResponseDto | AdminResponseDto;
 

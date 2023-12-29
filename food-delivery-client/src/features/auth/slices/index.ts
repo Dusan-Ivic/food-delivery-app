@@ -9,9 +9,10 @@ import {
 } from "@/features/auth/types/request";
 import { StateStatus } from "@/interfaces/enums";
 import { CustomerRequestDto, CustomerResponseDto } from "@/interfaces/customer";
-import { PartnerRequestDto, PartnerResponseDto } from "@/interfaces/partner";
 import { AuthState } from "@/features/auth/types/state";
 import { UserType } from "@/features/auth/types/enums";
+import { PartnerRequestDto } from "@/features/partners/types/request";
+import { PartnerResponseDto } from "@/features/partners/types/response";
 
 const initialState: AuthState = {
   user: null,

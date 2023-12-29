@@ -7,7 +7,7 @@ import { Spinner } from "@/components/ui/Spinner";
 import { StoreList } from "@/features/stores/components";
 import { FaLocationDot } from "react-icons/fa6";
 import { Col, ListGroup, ListGroupItem, Row } from "react-bootstrap";
-import { useDeliveryLocation } from "@/context/location/useDeliveryLocation";
+import { useDeliveryLocation } from "@/features/delivery/hooks";
 import categoryIcons from "@/features/stores/data/categoryIcons";
 import { UserType } from "@/features/auth/types/enums";
 import { StoreCategory } from "@/features/stores/types/category";
