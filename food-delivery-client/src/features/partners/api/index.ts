@@ -1,22 +1,15 @@
 import axios from "axios";
-import {
-  PartnerResponseDto,
-  VerifyPartnerRequestDto,
-} from "../../interfaces/partner";
-import apiClient from "../../config/apiClient";
+import apiClient from "@/config/apiClient";
+import { PartnerResponseDto } from "@/features/partners/types/response";
+import { VerifyPartnerRequestDto } from "@/features/partners/types/request";
 
-const getPartners = async (
-  token: string | null
-): Promise<PartnerResponseDto[]> => {
+const getPartners = async (token: string | null): Promise<PartnerResponseDto[]> => {
   try {
-    const response = await apiClient.get<PartnerResponseDto[]>(
-      "/api/partners",
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+    const response = await apiClient.get<PartnerResponseDto[]>("/api/partners", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {

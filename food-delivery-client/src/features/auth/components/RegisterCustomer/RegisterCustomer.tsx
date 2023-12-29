@@ -1,40 +1,21 @@
 import { Form, Button, Row, Col } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import * as Yup from "yup";
 import { CustomerRequestDto } from "@/interfaces/customer";
+import { registerCustomerSchema } from "@/features/auth/types/schemas";
 
 interface RegisterCustomerProps {
   onSubmit: (data: CustomerRequestDto) => void;
 }
 
 export function RegisterCustomer({ onSubmit }: RegisterCustomerProps) {
-  const validationSchema = Yup.object().shape({
-    username: Yup.string()
-      .required("Username is required")
-      .min(6, "Username must be at least 6 characters long"),
-    email: Yup.string().required("Email is required").email("Email is not valid"),
-    password: Yup.string()
-      .required("Password is required")
-      .min(8, "Password must be at least 8 characters long"),
-    confirmPassword: Yup.string()
-      .required("Password confirmation is required")
-      .min(8, "Password must be at least 8 characters long")
-      .oneOf([Yup.ref("password")], "Passwords don't match"),
-    firstName: Yup.string().required("First name is required"),
-    lastName: Yup.string().required("Last name is required"),
-    address: Yup.string().required("Address is required").max(100, "Address is too long"),
-    city: Yup.string().required("City is required").max(50, "City name is too long"),
-    postalCode: Yup.string().required("Postal code is required").max(10, "Postal code is too long"),
-  });
-
   const {
     register,
     handleSubmit,
     formState: { errors, touchedFields },
   } = useForm<CustomerRequestDto>({
     mode: "all",
-    resolver: yupResolver(validationSchema),
+    resolver: yupResolver(registerCustomerSchema),
   });
 
   return (

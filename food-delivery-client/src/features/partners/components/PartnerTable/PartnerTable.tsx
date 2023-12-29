@@ -1,8 +1,8 @@
 import { Table } from "react-bootstrap";
-import { PartnerStatus } from "@/interfaces/enums";
 import { LuShieldCheck, LuShieldClose, LuShieldQuestion } from "react-icons/lu";
 import { HiOutlineX, HiOutlineCheck } from "react-icons/hi";
-import { PartnerResponseDto } from "@/interfaces/partner";
+import { PartnerStatus } from "@/features/partners/types/enums";
+import { PartnerResponseDto } from "@/features/partners/types/response";
 
 interface PartnerTableProps {
   partners: PartnerResponseDto[];

@@ -1,11 +1,12 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { PartnerStatus, StateStatus } from "@/interfaces/enums";
+import { StateStatus } from "@/interfaces/enums";
 import { RootState } from "@/app/store";
-import { PartnerResponseDto } from "@/interfaces/partner";
 import { UserType } from "@/features/auth/types/enums";
 import productsService from "@/features/products/api";
 import { ProductsState } from "@/features/products/types/state";
 import { ProductRequestDto } from "@/features/products/types/request";
+import { PartnerStatus } from "@/features/partners/types/enums";
+import { PartnerResponseDto } from "@/features/partners/types/response";
 
 const initialState: ProductsState = {
   products: [],

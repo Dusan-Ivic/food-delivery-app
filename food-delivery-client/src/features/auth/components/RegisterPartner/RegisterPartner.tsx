@@ -1,37 +1,21 @@
 import { Form, Button, Row, Col } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import * as Yup from "yup";
-import { PartnerRequestDto } from "@/interfaces/partner";
+import { PartnerRequestDto } from "@/features/partners/types/request";
+import { registerPartnerSchema } from "@/features/auth/types/schemas";
 
 interface RegisterPartnerProps {
   onSubmit: (data: PartnerRequestDto) => void;
 }
 
 export function RegisterPartner({ onSubmit }: RegisterPartnerProps) {
-  const validationSchema = Yup.object().shape({
-    username: Yup.string()
-      .required("Username is required")
-      .min(6, "Username must be at least 6 characters long"),
-    email: Yup.string().required("Email is required").email("Email is not valid"),
-    password: Yup.string()
-      .required("Password is required")
-      .min(8, "Password must be at least 8 characters long"),
-    confirmPassword: Yup.string()
-      .required("Password confirmation is required")
-      .min(8, "Password must be at least 8 characters long")
-      .oneOf([Yup.ref("password")], "Passwords don't match"),
-    firstName: Yup.string().required("First name is required"),
-    lastName: Yup.string().required("Last name is required"),
-  });
-
   const {
     register,
     handleSubmit,
     formState: { errors, touchedFields },
   } = useForm<PartnerRequestDto>({
     mode: "all",
-    resolver: yupResolver(validationSchema),
+    resolver: yupResolver(registerPartnerSchema),
   });
 
   return (
