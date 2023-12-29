@@ -1,5 +1,5 @@
 import { Table } from "react-bootstrap";
-import { formatCurrency } from "@/utils/currencyFormatter";
+import { formatCurrency } from "@/utils";
 import { useState } from "react";
 import { HiOutlineDotsHorizontal } from "react-icons/hi";
 import { HiOutlineX, HiOutlineCheck } from "react-icons/hi";

@@ -1,5 +1,5 @@
 import { Button, Col, Modal, Row, Stack } from "react-bootstrap";
-import { formatCurrency } from "@/utils/currencyFormatter";
+import { formatCurrency } from "@/utils";
 import { MdOutlineKeyboardDoubleArrowRight } from "react-icons/md";
 import { ImCancelCircle } from "react-icons/im";
 import { useEffect, useMemo, useState } from "react";

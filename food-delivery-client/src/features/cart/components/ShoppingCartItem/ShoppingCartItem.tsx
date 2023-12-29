@@ -1,5 +1,5 @@
 import { Button, Stack } from "react-bootstrap";
-import { formatCurrency } from "@/utils/currencyFormatter";
+import { formatCurrency } from "@/utils";
 import { CartItem } from "@/features/cart/types/request";
 
 interface ShoppingCartItemProps {

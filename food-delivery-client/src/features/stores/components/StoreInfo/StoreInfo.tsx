@@ -2,7 +2,7 @@ import { Card, Form } from "react-bootstrap";
 import { TbTruckDelivery, TbClockHour4 } from "react-icons/tb";
 import { useRef } from "react";
 import { FaLocationDot } from "react-icons/fa6";
-import { formatCurrency } from "@/utils/currencyFormatter";
+import { formatCurrency } from "@/utils";
 import { StoreResponseDto } from "@/features/stores/types/response";
 
 interface StoreInfoProps {

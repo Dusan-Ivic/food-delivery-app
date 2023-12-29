@@ -17,7 +17,7 @@ import {
   DeliveryInfo,
   StoreRequestDto,
 } from "@/features/stores/types/request";
-import { useMultistepForm } from "@/hooks/useMultistepForm";
+import { useMultistepForm } from "@/hooks";
 import {
   basicInfoSchema,
   contactInfoSchema,

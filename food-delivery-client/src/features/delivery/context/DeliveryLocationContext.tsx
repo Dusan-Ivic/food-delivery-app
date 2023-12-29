@@ -1,5 +1,5 @@
 import { createContext, useState } from "react";
-import { useLocalStorage } from "@/hooks/useLocalStorage";
+import { useLocalStorage } from "@/hooks";
 import { FormModal, FormProps } from "@/components";
 import { DeliveryLocation } from "@/features/delivery/types/location";
 import { DeliveryLocationMap } from "@/features/delivery/components";

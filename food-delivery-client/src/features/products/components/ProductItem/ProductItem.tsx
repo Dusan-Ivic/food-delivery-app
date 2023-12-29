@@ -1,5 +1,5 @@
 import { Card, Form } from "react-bootstrap";
-import { formatCurrency } from "@/utils/currencyFormatter";
+import { formatCurrency } from "@/utils";
 import { BiEdit } from "react-icons/bi";
 import { AiFillDelete, AiOutlinePlusSquare } from "react-icons/ai";
 import { useRef } from "react";

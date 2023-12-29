@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { Button, Offcanvas, Stack } from "react-bootstrap";
-import { formatCurrency } from "@/utils/currencyFormatter";
+import { formatCurrency } from "@/utils";
 import { Spinner } from "@/components";
 import { StoreResponseDto } from "@/features/stores/types/response";
 import { CartItem } from "@/features/cart/types/request";
