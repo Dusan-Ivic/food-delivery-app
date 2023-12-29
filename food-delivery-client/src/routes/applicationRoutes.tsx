@@ -1,6 +1,7 @@
 import { RouteObject } from "react-router-dom";
 import App from "@/App";
-import { Home, PaymentStatus } from "@/pages";
+import { Home } from "@/features/home";
+import { PaymentStatus } from "@/pages";
 import { PrivateRoute } from "@/components";
 import { Register, Login, Profile } from "@/features/auth";
 import { Stores, Store } from "@/features/stores";
