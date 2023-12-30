@@ -6,14 +6,13 @@ import {
   UserRequestDto,
   CreateTokenRequestDto,
   DeleteTokenRequestDto,
-  CustomerRequestDto,
+  RegisterRequestDto,
 } from "@/features/auth/types/request";
 import { StateStatus } from "@/types/state";
 import { AuthState } from "@/features/auth/types/state";
 import { UserType } from "@/features/auth/types/enums";
-import { PartnerRequestDto } from "@/features/partners/types/request";
 import { PartnerResponseDto } from "@/features/partners/types/response";
-import { CustomerResponseDto } from "@/features/auth/types/response";
+import { UserResponseDto } from "@/features/auth/types/response";
 
 const initialState: AuthState = {
   user: null,
@@ -69,7 +68,7 @@ export const logoutUser = createAsyncThunk("auth/logout", async (_, thunkAPI) =>
 
 export const registerCustomer = createAsyncThunk(
   "auth/register-customer",
-  async (registerData: CustomerRequestDto, thunkAPI) => {
+  async (registerData: RegisterRequestDto, thunkAPI) => {
     try {
       return await authService.registerCustomer(registerData);
     } catch (error: unknown) {
@@ -84,7 +83,7 @@ export const registerCustomer = createAsyncThunk(
 
 export const registerPartner = createAsyncThunk(
   "auth/register-partner",
-  async (registerData: PartnerRequestDto, thunkAPI) => {
+  async (registerData: RegisterRequestDto, thunkAPI) => {
     try {
       return await authService.registerPartner(registerData);
     } catch (error: unknown) {
@@ -112,17 +111,9 @@ export const updateUser = createAsyncThunk(
 
       switch (userType) {
         case UserType.Customer:
-          return await authService.updateCustomer(
-            userId,
-            userData as CustomerRequestDto,
-            accessToken!.payload
-          );
+          return await authService.updateCustomer(userId, userData, accessToken!.payload);
         case UserType.Partner:
-          return await authService.updatePartner(
-            userId,
-            userData as PartnerRequestDto,
-            accessToken!.payload
-          );
+          return await authService.updatePartner(userId, userData, accessToken!.payload);
       }
     } catch (error: unknown) {
       let message: string = "";
@@ -276,10 +267,10 @@ export const authSlice = createSlice({
         state.status = StateStatus.Success;
         switch (state.user?.userType) {
           case UserType.Customer:
-            state.user = action.payload as CustomerResponseDto;
+            state.user = action.payload as UserResponseDto;
             break;
           case UserType.Partner:
-            state.user = action.payload as PartnerResponseDto; // as unknown
+            state.user = action.payload as PartnerResponseDto;
             break;
         }
       })

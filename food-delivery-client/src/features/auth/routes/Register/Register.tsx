@@ -6,19 +6,13 @@ import { registerCustomer, registerPartner, reset } from "@/features/auth/slices
 import { useAppDispatch, useAppSelector } from "@/app/hooks";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { RegisterCustomer } from "@/features/auth/components";
-import { RegisterPartner } from "@/features/auth/components";
 import { IoArrowBack } from "react-icons/io5";
 import { Spinner } from "@/components";
 import { FaRegHandshake } from "react-icons/fa";
 import { AiOutlineUser } from "react-icons/ai";
 import { AllowedUserType } from "@/features/auth/types/enums";
-import { PartnerRequestDto } from "@/features/partners/types/request";
-import { CustomerRequestDto } from "@/features/auth/types/request";
-
-interface FormComponentProps {
-  onSubmit: (data: CustomerRequestDto | PartnerRequestDto) => void;
-}
+import { RegisterRequestDto } from "@/features/auth/types/request";
+import { RegisterForm } from "@/features/auth/components";
 
 export function Register() {
   const navigate = useNavigate();
@@ -43,23 +37,14 @@ export function Register() {
     };
   }, [dispatch]);
 
-  const onRegister = (data: CustomerRequestDto | PartnerRequestDto) => {
+  const onRegister = (data: RegisterRequestDto) => {
     switch (registerType) {
       case AllowedUserType.Customer:
-        dispatch(registerCustomer(data as CustomerRequestDto));
+        dispatch(registerCustomer(data));
         break;
       case AllowedUserType.Partner:
-        dispatch(registerPartner(data as PartnerRequestDto));
+        dispatch(registerPartner(data));
         break;
-    }
-  };
-
-  const FormComponent = ({ onSubmit }: FormComponentProps) => {
-    switch (registerType) {
-      case AllowedUserType.Customer:
-        return <RegisterCustomer onSubmit={onSubmit} />;
-      case AllowedUserType.Partner:
-        return <RegisterPartner onSubmit={onSubmit} />;
     }
   };
 
@@ -79,7 +64,7 @@ export function Register() {
             <p className="text-center mt-4">
               Fill in your details and register as a {AllowedUserType[registerType]}
             </p>
-            <FormComponent onSubmit={onRegister} />
+            <RegisterForm onSubmit={onRegister} />
           </>
         ) : (
           <>

@@ -1,21 +1,21 @@
 import { Form, Button, Row, Col } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { PartnerRequestDto } from "@/features/partners/types/request";
-import { registerPartnerSchema } from "@/features/auth/types/schemas";
+import { registerSchema } from "@/features/auth/types/schemas";
+import { RegisterRequestDto } from "@/features/auth/types/request";
 
-interface RegisterPartnerProps {
-  onSubmit: (data: PartnerRequestDto) => void;
+interface RegisterFormProps {
+  onSubmit: (data: RegisterRequestDto) => void;
 }
 
-export function RegisterPartner({ onSubmit }: RegisterPartnerProps) {
+export function RegisterForm({ onSubmit }: RegisterFormProps) {
   const {
     register,
     handleSubmit,
     formState: { errors, touchedFields },
-  } = useForm<PartnerRequestDto>({
+  } = useForm<RegisterRequestDto>({
     mode: "all",
-    resolver: yupResolver(registerPartnerSchema),
+    resolver: yupResolver(registerSchema),
   });
 
   return (
