@@ -1,6 +1,7 @@
 ﻿using FluentValidation;
 using FoodDeliveryServer.Common.Dto.Error;
 using FoodDeliveryServer.Common.Dto.Order;
+using FoodDeliveryServer.Common.Dto.Request;
 using FoodDeliveryServer.Common.Enums;
 using FoodDeliveryServer.Common.Exceptions;
 using FoodDeliveryServer.Core.Interfaces;
@@ -39,7 +40,7 @@ namespace FoodDeliveryServer.Api.Controllers
 
         [HttpPost]
         [Authorize(Roles = "Customer")]
-        public async Task<IActionResult> CreateCheckout([FromBody] CreateOrderRequestDto requestDto)
+        public async Task<IActionResult> CreateCheckout([FromBody] OrderRequestDto requestDto)
         {
             Claim? idClaim = User.Claims.FirstOrDefault(x => x.Type == "UserId");
             long userId = long.Parse(idClaim!.Value);

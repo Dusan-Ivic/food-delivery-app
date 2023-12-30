@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using FoodDeliveryServer.Common.Dto.Auth;
 using FoodDeliveryServer.Common.Dto.Geolocation;
+using FoodDeliveryServer.Common.Dto.Request;
 using FoodDeliveryServer.Common.Dto.Store;
 using FoodDeliveryServer.Core.Converters;
 using FoodDeliveryServer.Data.Models;
@@ -16,14 +17,14 @@ namespace FoodDeliveryServer.Core.Mapping
 
             CreateMap<List<Coordinate>, Polygon>().ConvertUsing(new CoordinatesToPolygonConverter());
 
-            CreateMap<CreateStoreRequestDto, Store>();
+            CreateMap<StoreRequestDto, Store>();
             CreateMap<Store, CreateStoreResponseDto>()
                 .ForMember(dest => dest.Coordinates, opt => opt.MapFrom(src => src.DeliveryArea.Coordinates));
 
             CreateMap<Store, GetStoreResponseDto>()
                 .ForMember(dest => dest.Coordinates, opt => opt.MapFrom(src => src.DeliveryArea.Coordinates));
 
-            CreateMap<UpdateStoreRequestDto, Store>();
+            CreateMap<StoreRequestDto, Store>();
             CreateMap<Store, UpdateStoreResponseDto>()
                 .ForMember(dest => dest.Coordinates, opt => opt.MapFrom(src => src.DeliveryArea.Coordinates));
 

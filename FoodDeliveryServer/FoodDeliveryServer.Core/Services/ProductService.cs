@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Http;
 using CloudinaryDotNet;
 using Microsoft.Extensions.Configuration;
 using CloudinaryDotNet.Actions;
+using FoodDeliveryServer.Common.Dto.Request;
 
 namespace FoodDeliveryServer.Core.Services
 {

@@ -12,6 +12,7 @@ using Stripe;
 using Stripe.Checkout;
 using Product = FoodDeliveryServer.Data.Models.Product;
 using Microsoft.Extensions.Configuration;
+using FoodDeliveryServer.Common.Dto.Request;
 
 namespace FoodDeliveryServer.Core.Services
 {
@@ -54,7 +55,7 @@ namespace FoodDeliveryServer.Core.Services
             return _mapper.Map<List<GetOrderResponseDto>>(orders);
         }
 
-        public async Task<CheckoutResponseDto> CreateCheckout(long customerId, CreateOrderRequestDto requestDto)
+        public async Task<CheckoutResponseDto> CreateCheckout(long customerId, OrderRequestDto requestDto)
         {
             Order order = _mapper.Map<Order>(requestDto);
             order.CustomerId = customerId;
@@ -183,7 +184,7 @@ namespace FoodDeliveryServer.Core.Services
             };
         }
 
-        public async Task<CreateOrderResponseDto> CreateOrder(long customerId, CreateOrderRequestDto requestDto)
+        public async Task<CreateOrderResponseDto> CreateOrder(long customerId, OrderRequestDto requestDto)
         {
             Order order = _mapper.Map<Order>(requestDto);
             order.CustomerId = customerId;

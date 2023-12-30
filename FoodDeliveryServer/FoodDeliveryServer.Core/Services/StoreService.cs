@@ -13,6 +13,7 @@ using CloudinaryDotNet;
 using Microsoft.Extensions.Configuration;
 using CloudinaryDotNet.Actions;
 using Point = NetTopologySuite.Geometries.Point;
+using FoodDeliveryServer.Common.Dto.Request;
 
 namespace FoodDeliveryServer.Core.Services
 {
@@ -68,7 +69,7 @@ namespace FoodDeliveryServer.Core.Services
             return _mapper.Map<GetStoreResponseDto>(store);
         }
 
-        public async Task<CreateStoreResponseDto> CreateStore(long partnerId, CreateStoreRequestDto requestDto)
+        public async Task<CreateStoreResponseDto> CreateStore(long partnerId, StoreRequestDto requestDto)
         {
             Store store = _mapper.Map<Store>(requestDto);
             store.PartnerId = partnerId;
@@ -102,7 +103,7 @@ namespace FoodDeliveryServer.Core.Services
             return _mapper.Map<CreateStoreResponseDto>(store);
         }
 
-        public async Task<UpdateStoreResponseDto> UpdateStore(long id, long partnerId, UpdateStoreRequestDto requestDto)
+        public async Task<UpdateStoreResponseDto> UpdateStore(long id, long partnerId, StoreRequestDto requestDto)
         {
             Store? store = await _storeRepository.GetStoreById(id);
 

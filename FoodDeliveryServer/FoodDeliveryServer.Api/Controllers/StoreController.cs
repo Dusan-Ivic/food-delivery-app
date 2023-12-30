@@ -1,6 +1,7 @@
 ﻿using FluentValidation;
 using FoodDeliveryServer.Common.Dto.Auth;
 using FoodDeliveryServer.Common.Dto.Error;
+using FoodDeliveryServer.Common.Dto.Request;
 using FoodDeliveryServer.Common.Dto.Store;
 using FoodDeliveryServer.Common.Enums;
 using FoodDeliveryServer.Common.Exceptions;
@@ -50,7 +51,7 @@ namespace FoodDeliveryServer.Api.Controllers
 
         [HttpPost]
         [Authorize(Roles = "Partner", Policy = "VerifiedPartner")]
-        public async Task<IActionResult> CreateStore([FromBody] CreateStoreRequestDto requestDto)
+        public async Task<IActionResult> CreateStore([FromBody] StoreRequestDto requestDto)
         {
             Claim? idClaim = User.Claims.FirstOrDefault(x => x.Type == "UserId");
             long userId = long.Parse(idClaim!.Value);
@@ -83,7 +84,7 @@ namespace FoodDeliveryServer.Api.Controllers
 
         [HttpPut("{id}")]
         [Authorize(Roles = "Partner", Policy = "VerifiedPartner")]
-        public async Task<IActionResult> UpdateStore(long id, [FromBody] UpdateStoreRequestDto requestDto)
+        public async Task<IActionResult> UpdateStore(long id, [FromBody] StoreRequestDto requestDto)
         {
             Claim? idClaim = User.Claims.FirstOrDefault(x => x.Type == "UserId");
             long userId = long.Parse(idClaim!.Value);

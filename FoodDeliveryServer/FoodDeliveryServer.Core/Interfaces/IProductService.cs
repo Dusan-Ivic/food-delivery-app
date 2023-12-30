@@ -1,5 +1,6 @@
 ﻿using FoodDeliveryServer.Common.Dto.Auth;
 using FoodDeliveryServer.Common.Dto.Product;
+using FoodDeliveryServer.Common.Dto.Request;
 using Microsoft.AspNetCore.Http;
 
 namespace FoodDeliveryServer.Core.Interfaces

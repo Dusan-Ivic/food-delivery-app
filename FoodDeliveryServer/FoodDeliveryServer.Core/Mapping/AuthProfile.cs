@@ -3,6 +3,7 @@ using FoodDeliveryServer.Common.Dto.Admin;
 using FoodDeliveryServer.Common.Dto.Auth;
 using FoodDeliveryServer.Common.Dto.Customer;
 using FoodDeliveryServer.Common.Dto.Partner;
+using FoodDeliveryServer.Common.Dto.Request;
 using FoodDeliveryServer.Common.Dto.User;
 using FoodDeliveryServer.Data.Models;
 
@@ -12,8 +13,6 @@ namespace FoodDeliveryServer.Core.Mapping
     {
         public AuthProfile()
         {
-            CreateMap<LoginUserRequestDto, User>();
-
             CreateMap<User, UserResponseDto>();
 
             CreateMap<User, AdminResponseDto>();

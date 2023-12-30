@@ -8,11 +8,6 @@ namespace FoodDeliveryServer.Common.Dto.Order
         public int Quantity { get; set; }
     }
 
-    public class OrderItemRequestDto : BaseOrderItemDto
-    {
-        
-    }
-
     public class OrderItemResponseDto : BaseOrderItemDto
     {
         public decimal TotalPrice { get; set; }

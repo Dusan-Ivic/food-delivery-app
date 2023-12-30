@@ -1,6 +1,6 @@
 ﻿using FoodDeliveryServer.Common.Enums;
 
-namespace FoodDeliveryServer.Common.Dto.Partner
+namespace FoodDeliveryServer.Common.Dto.Request
 {
     public class VerifyPartnerRequestDto
     {

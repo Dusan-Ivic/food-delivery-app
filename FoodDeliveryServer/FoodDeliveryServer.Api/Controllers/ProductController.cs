@@ -10,6 +10,7 @@ using FoodDeliveryServer.Core.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
+using FoodDeliveryServer.Common.Dto.Request;
 
 namespace FoodDeliveryServer.Api.Controllers
 {

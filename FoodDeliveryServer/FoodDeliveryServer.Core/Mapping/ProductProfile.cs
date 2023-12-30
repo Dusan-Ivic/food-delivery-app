@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using FoodDeliveryServer.Common.Dto.Auth;
 using FoodDeliveryServer.Common.Dto.Product;
+using FoodDeliveryServer.Common.Dto.Request;
 using FoodDeliveryServer.Data.Models;
 
 namespace FoodDeliveryServer.Core.Mapping

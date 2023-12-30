@@ -1,6 +1,6 @@
 ﻿using FoodDeliveryServer.Common.Enums;
 
-namespace FoodDeliveryServer.Common.Dto.Auth
+namespace FoodDeliveryServer.Common.Dto.Request
 {
     public class CreateTokenRequestDto
     {

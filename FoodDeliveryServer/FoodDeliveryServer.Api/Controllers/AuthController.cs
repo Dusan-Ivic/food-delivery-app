@@ -1,6 +1,7 @@
 ﻿using FluentValidation;
 using FoodDeliveryServer.Common.Dto.Auth;
 using FoodDeliveryServer.Common.Dto.Error;
+using FoodDeliveryServer.Common.Dto.Request;
 using FoodDeliveryServer.Common.Dto.User;
 using FoodDeliveryServer.Common.Enums;
 using FoodDeliveryServer.Common.Exceptions;

@@ -1,4 +1,4 @@
-﻿namespace FoodDeliveryServer.Common.Dto.Auth
+﻿namespace FoodDeliveryServer.Common.Dto.Request
 {
     public class ChangePasswordRequestDto
     {
