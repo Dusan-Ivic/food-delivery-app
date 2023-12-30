@@ -99,9 +99,6 @@ namespace FoodDeliveryServer.Core.Services
                 options.IncludeProperties(x => x.Email);
                 options.IncludeProperties(x => x.FirstName);
                 options.IncludeProperties(x => x.LastName);
-                options.IncludeProperties(x => x.Address);
-                options.IncludeProperties(x => x.City);
-                options.IncludeProperties(x => x.PostalCode);
             });
 
             if (!validationResult.IsValid)

@@ -5,14 +5,10 @@ import {
   CreateTokenRequestDto,
   DeleteTokenRequestDto,
   ChangePasswordRequestDto,
-  CustomerRequestDto,
+  RegisterRequestDto,
+  UserRequestDto,
 } from "@/features/auth/types/request";
-import {
-  CustomerResponseDto,
-  TokenResponseDto,
-  UserResponseDto,
-} from "@/features/auth/types/response";
-import { PartnerRequestDto } from "@/features/partners/types/request";
+import { TokenResponseDto, UserResponseDto } from "@/features/auth/types/response";
 import { PartnerResponseDto } from "@/features/partners/types/response";
 
 const generateToken = async (requestDto: CreateTokenRequestDto): Promise<TokenResponseDto> => {
@@ -66,9 +62,9 @@ const deleteRefreshToken = async (
   }
 };
 
-const registerCustomer = async (requestDto: CustomerRequestDto): Promise<CustomerResponseDto> => {
+const registerCustomer = async (requestDto: RegisterRequestDto): Promise<UserResponseDto> => {
   try {
-    const response = await apiClient.post<CustomerResponseDto>("/api/customers", requestDto);
+    const response = await apiClient.post<UserResponseDto>("/api/customers", requestDto);
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
@@ -79,7 +75,7 @@ const registerCustomer = async (requestDto: CustomerRequestDto): Promise<Custome
   }
 };
 
-const registerPartner = async (requestDto: PartnerRequestDto): Promise<PartnerResponseDto> => {
+const registerPartner = async (requestDto: RegisterRequestDto): Promise<PartnerResponseDto> => {
   try {
     const response = await apiClient.post<PartnerResponseDto>("/api/partners", requestDto);
     return response.data;
@@ -94,11 +90,11 @@ const registerPartner = async (requestDto: PartnerRequestDto): Promise<PartnerRe
 
 const updateCustomer = async (
   customerId: number,
-  requestDto: CustomerRequestDto,
+  requestDto: UserRequestDto,
   token: string | null
-): Promise<CustomerResponseDto> => {
+): Promise<UserResponseDto> => {
   try {
-    const response = await apiClient.put<CustomerResponseDto>(
+    const response = await apiClient.put<UserResponseDto>(
       `/api/customers/${customerId}`,
       requestDto,
       {
@@ -119,7 +115,7 @@ const updateCustomer = async (
 
 const updatePartner = async (
   partnerId: number,
-  requestDto: PartnerRequestDto,
+  requestDto: UserRequestDto,
   token: string | null
 ): Promise<PartnerResponseDto> => {
   try {

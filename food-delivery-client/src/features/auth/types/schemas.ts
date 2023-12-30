@@ -43,7 +43,7 @@ export const changePasswordSchema = yup.object().shape({
     .notOneOf([yup.ref("oldPassword")], "New password can't be the same as the current one"),
 });
 
-export const registerCustomerSchema = yup.object().shape({
+export const registerSchema = yup.object().shape({
   username: yup
     .string()
     .required("Username is required")
@@ -60,9 +60,6 @@ export const registerCustomerSchema = yup.object().shape({
     .oneOf([yup.ref("password")], "Passwords don't match"),
   firstName: yup.string().required("First name is required"),
   lastName: yup.string().required("Last name is required"),
-  address: yup.string().required("Address is required").max(100, "Address is too long"),
-  city: yup.string().required("City is required").max(50, "City name is too long"),
-  postalCode: yup.string().required("Postal code is required").max(10, "Postal code is too long"),
 });
 
 export const registerPartnerSchema = yup.object().shape({
@@ -82,10 +79,4 @@ export const registerPartnerSchema = yup.object().shape({
     .oneOf([yup.ref("password")], "Passwords don't match"),
   firstName: yup.string().required("First name is required"),
   lastName: yup.string().required("Last name is required"),
-});
-
-export const addressSchema = yup.object().shape({
-  address: yup.string().required("Address is required").max(100, "Address is too long"),
-  city: yup.string().required("City is required").max(50, "City name is too long"),
-  postalCode: yup.string().required("Postal code is required").max(10, "Postal code is too long"),
 });

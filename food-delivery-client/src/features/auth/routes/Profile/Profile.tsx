@@ -1,6 +1,5 @@
 import { Button, Col, Form, Row } from "react-bootstrap";
 import { useAppSelector, useAppDispatch } from "@/app/hooks";
-import { AddressDetails } from "@/features/auth/components";
 import { UserDetails, UserAvatar, ChangePassword } from "@/features/auth/components";
 import {
   updateUser,
@@ -12,9 +11,7 @@ import {
 import { useEffect, useRef } from "react";
 import { StateStatus } from "@/types/state";
 import { toast } from "react-toastify";
-import { AddressInfo } from "@/features/auth/types/address";
 import { ChangePasswordRequestDto, UserRequestDto } from "@/features/auth/types/request";
-import { UserType } from "@/features/auth/types/enums";
 
 export function Profile() {
   const { user, status, message } = useAppSelector((state) => state.auth);
@@ -36,20 +33,6 @@ export function Profile() {
   }, [status, message, dispatch]);
 
   const handleUpdateDetails = (data: UserRequestDto) => {
-    if (!user) {
-      return;
-    }
-
-    const updatedUser = {
-      userId: user.id,
-      userType: user.userType,
-      userData: { ...user, ...data },
-    };
-
-    dispatch(updateUser(updatedUser));
-  };
-
-  const handleUpdateAddress = (data: AddressInfo) => {
     if (!user) {
       return;
     }
@@ -121,19 +104,6 @@ export function Profile() {
               onSubmit={(data) => handleUpdateDetails(data)}
             />
           </div>
-
-          {user?.userType == UserType.Customer && (
-            <>
-              <hr />
-              <div className="mt-3">
-                <h1 className="text-center mt-3 mb-4">Address Info</h1>
-                <AddressDetails
-                  data={user as AddressInfo}
-                  onSubmit={(data) => handleUpdateAddress(data)}
-                />
-              </div>
-            </>
-          )}
 
           <hr />
 

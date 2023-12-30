@@ -1,8 +1,8 @@
-import { AdminResponseDto, CustomerResponseDto } from "@/features/auth/types/response";
+import { UserResponseDto } from "@/features/auth/types/response";
 import { PartnerResponseDto } from "@/features/partners/types/response";
 import { StateStatus } from "@/types/state";
 
-type UserState = CustomerResponseDto | PartnerResponseDto | AdminResponseDto;
+type UserState = UserResponseDto | PartnerResponseDto;
 
 export type AccessTokenState = {
   payload: string;
