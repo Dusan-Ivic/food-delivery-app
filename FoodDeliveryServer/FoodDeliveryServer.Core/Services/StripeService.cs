@@ -1,4 +1,4 @@
-﻿using FoodDeliveryServer.Common.Dto.Geolocation;
+﻿using FoodDeliveryServer.Common.Dto.Shared;
 using FoodDeliveryServer.Common.Dto.Request;
 using FoodDeliveryServer.Core.Interfaces;
 using Microsoft.Extensions.Configuration;

@@ -1,4 +1,4 @@
-﻿using FoodDeliveryServer.Common.Dto.Geolocation;
+﻿using FoodDeliveryServer.Common.Dto.Shared;
 
 namespace FoodDeliveryServer.Common.Dto.Response
 {

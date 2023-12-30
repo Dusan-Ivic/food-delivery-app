@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
-using FoodDeliveryServer.Common.Dto.Geolocation;
 using FoodDeliveryServer.Common.Dto.Request;
 using FoodDeliveryServer.Common.Dto.Response;
+using FoodDeliveryServer.Common.Dto.Shared;
 using FoodDeliveryServer.Core.Converters;
 using FoodDeliveryServer.Data.Models;
 using NetTopologySuite.Geometries;

@@ -1,4 +1,4 @@
-﻿namespace FoodDeliveryServer.Common.Dto.Geolocation
+﻿namespace FoodDeliveryServer.Common.Dto.Shared
 {
     public class CoordinateDto
     {
