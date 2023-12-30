@@ -1,6 +1,5 @@
-﻿using FoodDeliveryServer.Common.Dto.Auth;
-using FoodDeliveryServer.Common.Dto.Request;
-using FoodDeliveryServer.Common.Dto.User;
+﻿using FoodDeliveryServer.Common.Dto.Request;
+using FoodDeliveryServer.Common.Dto.Response;
 using FoodDeliveryServer.Common.Enums;
 using Microsoft.AspNetCore.Http;
 

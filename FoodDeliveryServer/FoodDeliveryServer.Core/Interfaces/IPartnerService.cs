@@ -1,15 +1,15 @@
-﻿using FoodDeliveryServer.Common.Dto.Partner;
-using FoodDeliveryServer.Common.Dto.Request;
+﻿using FoodDeliveryServer.Common.Dto.Request;
+using FoodDeliveryServer.Common.Dto.Response;
 
 namespace FoodDeliveryServer.Core.Interfaces
 {
     public interface IPartnerService
     {
-        public Task<List<GetPartnerResponseDto>> GetPartners(string status);
-        public Task<GetPartnerResponseDto> GetPartner(long id);
-        public Task<RegisterPartnerResponseDto> RegisterPartner(RegisterUserRequestDto requestDto);
-        public Task<UpdatePartnerResponseDto> UpdatePartner(long id, UpdateUserRequestDto requestDto);
-        public Task<DeletePartnerResponseDto> DeletePartner(long id);
-        public Task<UpdatePartnerResponseDto> VerifyPartner(long id, VerifyPartnerRequestDto requestDto);
+        public Task<List<PartnerResponseDto>> GetPartners(string status);
+        public Task<PartnerResponseDto> GetPartner(long id);
+        public Task<PartnerResponseDto> RegisterPartner(RegisterUserRequestDto requestDto);
+        public Task<PartnerResponseDto> UpdatePartner(long id, UpdateUserRequestDto requestDto);
+        public Task<DeleteEntityResponseDto> DeletePartner(long id);
+        public Task<PartnerResponseDto> VerifyPartner(long id, VerifyPartnerRequestDto requestDto);
     }
 }

@@ -1,10 +1,8 @@
 ﻿using FluentValidation;
-using FoodDeliveryServer.Common.Dto.Customer;
-using FoodDeliveryServer.Common.Dto.Error;
 using FoodDeliveryServer.Common.Dto.Request;
+using FoodDeliveryServer.Common.Dto.Response;
 using FoodDeliveryServer.Common.Exceptions;
 using FoodDeliveryServer.Core.Interfaces;
-using FoodDeliveryServer.Core.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Data;
@@ -27,7 +25,7 @@ namespace FoodDeliveryServer.Api.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetCustomers()
         {
-            List<GetCustomerResponseDto> responseDto = await _customerService.GetCustomers();
+            List<UserResponseDto> responseDto = await _customerService.GetCustomers();
 
             return Ok(responseDto);
         }
@@ -36,7 +34,7 @@ namespace FoodDeliveryServer.Api.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetCustomer(long id)
         {
-            GetCustomerResponseDto responseDto;
+            UserResponseDto responseDto;
 
             try
             {
@@ -53,7 +51,7 @@ namespace FoodDeliveryServer.Api.Controllers
         [HttpPost]
         public async Task<IActionResult> RegisterCustomer([FromBody] RegisterUserRequestDto requestDto)
         {
-            RegisterCustomerResponseDto responseDto;
+            UserResponseDto responseDto;
 
             try
             {
@@ -86,7 +84,7 @@ namespace FoodDeliveryServer.Api.Controllers
                 });
             }
 
-            UpdateCustomerResponseDto responseDto;
+            UserResponseDto responseDto;
 
             try
             {
@@ -116,7 +114,7 @@ namespace FoodDeliveryServer.Api.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteCustomer(long id)
         {
-            DeleteCustomerResponseDto responseDto;
+            DeleteEntityResponseDto responseDto;
 
             try
             {

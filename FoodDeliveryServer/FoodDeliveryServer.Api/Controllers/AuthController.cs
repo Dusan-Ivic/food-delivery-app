@@ -1,15 +1,11 @@
 ﻿using FluentValidation;
-using FoodDeliveryServer.Common.Dto.Auth;
-using FoodDeliveryServer.Common.Dto.Error;
 using FoodDeliveryServer.Common.Dto.Request;
-using FoodDeliveryServer.Common.Dto.User;
+using FoodDeliveryServer.Common.Dto.Response;
 using FoodDeliveryServer.Common.Enums;
 using FoodDeliveryServer.Common.Exceptions;
 using FoodDeliveryServer.Core.Interfaces;
-using FoodDeliveryServer.Core.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Linq;
 using System.Security.Claims;
 
 namespace FoodDeliveryServer.Api.Controllers

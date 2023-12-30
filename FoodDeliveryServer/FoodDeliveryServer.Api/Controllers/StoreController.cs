@@ -1,12 +1,9 @@
 ﻿using FluentValidation;
-using FoodDeliveryServer.Common.Dto.Auth;
-using FoodDeliveryServer.Common.Dto.Error;
 using FoodDeliveryServer.Common.Dto.Request;
-using FoodDeliveryServer.Common.Dto.Store;
+using FoodDeliveryServer.Common.Dto.Response;
 using FoodDeliveryServer.Common.Enums;
 using FoodDeliveryServer.Common.Exceptions;
 using FoodDeliveryServer.Core.Interfaces;
-using FoodDeliveryServer.Core.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
@@ -27,7 +24,7 @@ namespace FoodDeliveryServer.Api.Controllers
         [HttpGet]
         public async Task<IActionResult> GetStores([FromQuery] long? partnerId = null, double? latitude = null, double? longitude = null)
         {
-            List<GetStoreResponseDto> responseDto = await _storeService.GetStores(partnerId ?? null, latitude ?? null, longitude ?? null);
+            List<StoreResponseDto> responseDto = await _storeService.GetStores(partnerId ?? null, latitude ?? null, longitude ?? null);
 
             return Ok(responseDto);
         }
@@ -35,7 +32,7 @@ namespace FoodDeliveryServer.Api.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetStore(long id)
         {
-            GetStoreResponseDto responseDto;
+            StoreResponseDto responseDto;
 
             try
             {
@@ -56,7 +53,7 @@ namespace FoodDeliveryServer.Api.Controllers
             Claim? idClaim = User.Claims.FirstOrDefault(x => x.Type == "UserId");
             long userId = long.Parse(idClaim!.Value);
 
-            CreateStoreResponseDto responseDto;
+            StoreResponseDto responseDto;
 
             try
             {
@@ -89,7 +86,7 @@ namespace FoodDeliveryServer.Api.Controllers
             Claim? idClaim = User.Claims.FirstOrDefault(x => x.Type == "UserId");
             long userId = long.Parse(idClaim!.Value);
 
-            UpdateStoreResponseDto responseDto;
+            StoreResponseDto responseDto;
 
             try
             {
@@ -126,7 +123,7 @@ namespace FoodDeliveryServer.Api.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteStore(long id)
         {
-            DeleteStoreResponseDto responseDto;
+            DeleteEntityResponseDto responseDto;
 
             try
             {

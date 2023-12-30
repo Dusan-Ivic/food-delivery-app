@@ -1,9 +1,10 @@
 ﻿using FoodDeliveryServer.Common.Dto.Geolocation;
 
-namespace FoodDeliveryServer.Common.Dto.Store
+namespace FoodDeliveryServer.Common.Dto.Response
 {
-    public class BaseStoreDto
+    public class StoreResponseDto
     {
+        public long Id { get; set; }
         public string Name { get; set; } = string.Empty;
         public string? Description { get; set; } = string.Empty;
         public string Address { get; set; } = string.Empty;
@@ -14,5 +15,7 @@ namespace FoodDeliveryServer.Common.Dto.Store
         public decimal DeliveryFee { get; set; } = decimal.Zero;
         public string Category { get; set; } = string.Empty;
         public List<CoordinateDto> Coordinates { get; set; } = default!;
+        public long PartnerId { get; set; }
+        public string? Image { get; set; }
     }
 }

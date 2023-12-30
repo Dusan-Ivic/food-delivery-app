@@ -1,7 +1,6 @@
 ﻿using FluentValidation;
-using FoodDeliveryServer.Common.Dto.Admin;
-using FoodDeliveryServer.Common.Dto.Error;
 using FoodDeliveryServer.Common.Dto.Request;
+using FoodDeliveryServer.Common.Dto.Response;
 using FoodDeliveryServer.Common.Exceptions;
 using FoodDeliveryServer.Core.Interfaces;
 using Microsoft.AspNetCore.Authorization;
@@ -24,7 +23,7 @@ namespace FoodDeliveryServer.Api.Controllers
         [HttpPost]
         public async Task<IActionResult> RegisterAdmin([FromBody] RegisterUserRequestDto requestDto)
         {
-            RegisterAdminResponseDto responseDto;
+            UserResponseDto responseDto;
 
             try
             {
@@ -62,7 +61,7 @@ namespace FoodDeliveryServer.Api.Controllers
                 });
             }
 
-            UpdateAdminResponseDto responseDto;
+            UserResponseDto responseDto;
 
             try
             {

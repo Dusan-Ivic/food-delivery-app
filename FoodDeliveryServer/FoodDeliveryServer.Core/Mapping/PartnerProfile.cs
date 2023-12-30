@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using FoodDeliveryServer.Common.Dto.Partner;
 using FoodDeliveryServer.Common.Dto.Request;
+using FoodDeliveryServer.Common.Dto.Response;
 using FoodDeliveryServer.Data.Models;
 
 namespace FoodDeliveryServer.Core.Mapping
@@ -10,14 +10,11 @@ namespace FoodDeliveryServer.Core.Mapping
         public PartnerProfile()
         {
             CreateMap<RegisterUserRequestDto, Partner>();
-            CreateMap<Partner, RegisterPartnerResponseDto>();
-
-            CreateMap<Partner, GetPartnerResponseDto>();
+            CreateMap<Partner, PartnerResponseDto>();
 
             CreateMap<UpdateUserRequestDto, Partner>();
-            CreateMap<Partner, UpdatePartnerResponseDto>();
 
-            CreateMap<Partner, DeletePartnerResponseDto>();
+            CreateMap<Partner, DeleteEntityResponseDto>();
 
             CreateMap<VerifyPartnerRequestDto, Partner>();
         }

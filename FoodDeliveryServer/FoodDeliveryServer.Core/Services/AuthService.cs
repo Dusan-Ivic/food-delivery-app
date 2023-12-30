@@ -1,11 +1,6 @@
 ﻿using AutoMapper;
 using FluentValidation;
 using FluentValidation.Results;
-using FoodDeliveryServer.Common.Dto.Admin;
-using FoodDeliveryServer.Common.Dto.Auth;
-using FoodDeliveryServer.Common.Dto.Customer;
-using FoodDeliveryServer.Common.Dto.Partner;
-using FoodDeliveryServer.Common.Dto.User;
 using FoodDeliveryServer.Common.Enums;
 using FoodDeliveryServer.Common.Exceptions;
 using FoodDeliveryServer.Data.Interfaces;
@@ -14,10 +9,10 @@ using FoodDeliveryServer.Data.Models;
 using System.Security.Claims;
 using Microsoft.Extensions.Configuration;
 using FoodDeliveryServer.Core.Helpers;
-using Microsoft.AspNetCore.Http;
 using CloudinaryDotNet;
 using CloudinaryDotNet.Actions;
 using FoodDeliveryServer.Common.Dto.Request;
+using FoodDeliveryServer.Common.Dto.Response;
 
 namespace FoodDeliveryServer.Core.Services
 {
@@ -50,25 +45,19 @@ namespace FoodDeliveryServer.Core.Services
                 throw new ResourceNotFoundException("User with this id doesn't exist");
             }
 
-            UserResponseDto responseDto = new UserResponseDto();
-
-            switch (userType)
+            UserResponseDto responseDto = new UserResponseDto()
             {
-                case UserType.Customer:
-                    responseDto = _mapper.Map<CustomerResponseDto>(existingUser);
-                    break;
-                case UserType.Partner:
-                    responseDto = _mapper.Map<PartnerResponseDto>(existingUser);
-                    break;
-                case UserType.Admin:
-                    responseDto = _mapper.Map<AdminResponseDto>(existingUser);
-                    break;
-                default:
-                    responseDto = _mapper.Map<UserResponseDto>(existingUser);
-                    break;
-            }
+                UserType = userType
+            };
 
-            responseDto.UserType = userType;
+            if (responseDto.UserType == UserType.Partner)
+            {
+                responseDto = _mapper.Map<PartnerResponseDto>(existingUser);
+            }
+            else
+            {
+                responseDto = _mapper.Map<UserResponseDto>(existingUser);
+            }
 
             return responseDto;
         }

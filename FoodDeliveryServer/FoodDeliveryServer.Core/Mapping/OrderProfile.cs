@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using FoodDeliveryServer.Common.Dto.Geolocation;
-using FoodDeliveryServer.Common.Dto.Order;
 using FoodDeliveryServer.Common.Dto.Request;
+using FoodDeliveryServer.Common.Dto.Response;
 using FoodDeliveryServer.Core.Converters;
 using FoodDeliveryServer.Data.Models;
 using NetTopologySuite.Geometries;
@@ -18,19 +18,13 @@ namespace FoodDeliveryServer.Core.Mapping
             CreateMap<OrderItemRequestDto, OrderItem>();
             CreateMap<OrderItem, OrderItemResponseDto>();
 
-            CreateMap<OrderItemRequestDto, OrderItem>();
-            CreateMap<Order, OrderItemResponseDto>();
-
             CreateMap<OrderRequestDto, Order>();
-            CreateMap<Order, CreateOrderResponseDto>()
+            CreateMap<Order, OrderResponseDto>()
                 .ForMember(dest => dest.Coordinate, opt => opt.MapFrom(src => src.DeliveryLocation.Coordinate));
 
-            CreateMap<Order, GetOrderResponseDto>()
-                .ForMember(dest => dest.Coordinate, opt => opt.MapFrom(src => src.DeliveryLocation.Coordinate));
+            CreateMap<OrderItem, OrderResponseDto>();
 
-            CreateMap<OrderItem, GetOrderItemResponseDto>();
-
-            CreateMap<Order, DeleteOrderResponseDto>();
+            CreateMap<Order, DeleteEntityResponseDto>();
         }
     }
 }

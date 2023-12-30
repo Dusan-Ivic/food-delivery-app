@@ -2,7 +2,7 @@
 using FoodDeliveryServer.Common.Enums;
 using System.Text.Json.Serialization;
 
-namespace FoodDeliveryServer.Common.Dto.User
+namespace FoodDeliveryServer.Common.Dto.Response
 {
     [JsonConverter(typeof(UserResponseDtoConverter))]
     public class UserResponseDto

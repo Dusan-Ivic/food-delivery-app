@@ -1,4 +1,4 @@
-﻿namespace FoodDeliveryServer.Common.Dto.Error
+﻿namespace FoodDeliveryServer.Common.Dto.Response
 {
     public class ErrorResponseDto
     {

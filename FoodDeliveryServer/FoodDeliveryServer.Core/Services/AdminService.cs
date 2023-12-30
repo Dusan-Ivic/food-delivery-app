@@ -1,13 +1,13 @@
 ﻿using AutoMapper;
 using FluentValidation;
 using FluentValidation.Results;
-using FoodDeliveryServer.Common.Dto.Admin;
 using FoodDeliveryServer.Common.Enums;
 using FoodDeliveryServer.Common.Exceptions;
 using FoodDeliveryServer.Data.Interfaces;
 using FoodDeliveryServer.Core.Interfaces;
 using FoodDeliveryServer.Data.Models;
 using FoodDeliveryServer.Common.Dto.Request;
+using FoodDeliveryServer.Common.Dto.Response;
 
 namespace FoodDeliveryServer.Core.Services
 {
@@ -24,7 +24,7 @@ namespace FoodDeliveryServer.Core.Services
             _mapper = mapper;
         }
 
-        public async Task<RegisterAdminResponseDto> RegisterAdmin(RegisterUserRequestDto requestDto)
+        public async Task<UserResponseDto> RegisterAdmin(RegisterUserRequestDto requestDto)
         {
             Admin admin = _mapper.Map<Admin>(requestDto);
 
@@ -58,13 +58,13 @@ namespace FoodDeliveryServer.Core.Services
                 throw;
             }
 
-            RegisterAdminResponseDto responseDto = _mapper.Map<RegisterAdminResponseDto>(admin);
+            UserResponseDto responseDto = _mapper.Map<UserResponseDto>(admin);
             responseDto.UserType = UserType.Admin;
 
             return responseDto;
         }
 
-        public async Task<UpdateAdminResponseDto> UpdateAdmin(long id, UpdateUserRequestDto requestDto)
+        public async Task<UserResponseDto> UpdateAdmin(long id, UpdateUserRequestDto requestDto)
         {
             Admin? admin = await _adminRepository.GetAdminById(id);
 
@@ -108,7 +108,7 @@ namespace FoodDeliveryServer.Core.Services
                 throw;
             }
 
-            UpdateAdminResponseDto responseDto = _mapper.Map<UpdateAdminResponseDto>(admin);
+            UserResponseDto responseDto = _mapper.Map<UserResponseDto>(admin);
             responseDto.UserType = UserType.Admin;
 
             return responseDto;

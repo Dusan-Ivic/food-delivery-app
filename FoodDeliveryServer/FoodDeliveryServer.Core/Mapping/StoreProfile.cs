@@ -1,8 +1,7 @@
 ﻿using AutoMapper;
-using FoodDeliveryServer.Common.Dto.Auth;
 using FoodDeliveryServer.Common.Dto.Geolocation;
 using FoodDeliveryServer.Common.Dto.Request;
-using FoodDeliveryServer.Common.Dto.Store;
+using FoodDeliveryServer.Common.Dto.Response;
 using FoodDeliveryServer.Core.Converters;
 using FoodDeliveryServer.Data.Models;
 using NetTopologySuite.Geometries;
@@ -18,17 +17,11 @@ namespace FoodDeliveryServer.Core.Mapping
             CreateMap<List<Coordinate>, Polygon>().ConvertUsing(new CoordinatesToPolygonConverter());
 
             CreateMap<StoreRequestDto, Store>();
-            CreateMap<Store, CreateStoreResponseDto>()
+
+            CreateMap<Store, StoreResponseDto>()
                 .ForMember(dest => dest.Coordinates, opt => opt.MapFrom(src => src.DeliveryArea.Coordinates));
 
-            CreateMap<Store, GetStoreResponseDto>()
-                .ForMember(dest => dest.Coordinates, opt => opt.MapFrom(src => src.DeliveryArea.Coordinates));
-
-            CreateMap<StoreRequestDto, Store>();
-            CreateMap<Store, UpdateStoreResponseDto>()
-                .ForMember(dest => dest.Coordinates, opt => opt.MapFrom(src => src.DeliveryArea.Coordinates));
-
-            CreateMap<Store, DeleteStoreResponseDto>();
+            CreateMap<Store, DeleteEntityResponseDto>();
 
             CreateMap<Store, ImageResponseDto>();
         }
