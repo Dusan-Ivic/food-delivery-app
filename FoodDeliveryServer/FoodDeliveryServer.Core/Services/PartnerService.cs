@@ -7,6 +7,7 @@ using FoodDeliveryServer.Common.Exceptions;
 using FoodDeliveryServer.Data.Interfaces;
 using FoodDeliveryServer.Core.Interfaces;
 using FoodDeliveryServer.Data.Models;
+using FoodDeliveryServer.Common.Dto.Request;
 
 namespace FoodDeliveryServer.Core.Services
 {
@@ -58,7 +59,7 @@ namespace FoodDeliveryServer.Core.Services
             return _mapper.Map<List<GetPartnerResponseDto>>(partners);
         }
 
-        public async Task<RegisterPartnerResponseDto> RegisterPartner(RegisterPartnerRequestDto requestDto)
+        public async Task<RegisterPartnerResponseDto> RegisterPartner(RegisterUserRequestDto requestDto)
         {
             Partner partner = _mapper.Map<Partner>(requestDto);
             partner.Status = PartnerStatus.Pending;
@@ -99,7 +100,7 @@ namespace FoodDeliveryServer.Core.Services
             return responseDto;
         }
 
-        public async Task<UpdatePartnerResponseDto> UpdatePartner(long id, UpdatePartnerRequestDto requestDto)
+        public async Task<UpdatePartnerResponseDto> UpdatePartner(long id, UpdateUserRequestDto requestDto)
         {
             Partner? partner = await _partnerRepository.GetPartnerById(id);
 

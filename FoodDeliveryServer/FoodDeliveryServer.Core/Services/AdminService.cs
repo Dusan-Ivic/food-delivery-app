@@ -7,6 +7,7 @@ using FoodDeliveryServer.Common.Exceptions;
 using FoodDeliveryServer.Data.Interfaces;
 using FoodDeliveryServer.Core.Interfaces;
 using FoodDeliveryServer.Data.Models;
+using FoodDeliveryServer.Common.Dto.Request;
 
 namespace FoodDeliveryServer.Core.Services
 {
@@ -23,7 +24,7 @@ namespace FoodDeliveryServer.Core.Services
             _mapper = mapper;
         }
 
-        public async Task<RegisterAdminResponseDto> RegisterAdmin(RegisterAdminRequestDto requestDto)
+        public async Task<RegisterAdminResponseDto> RegisterAdmin(RegisterUserRequestDto requestDto)
         {
             Admin admin = _mapper.Map<Admin>(requestDto);
 
@@ -63,7 +64,7 @@ namespace FoodDeliveryServer.Core.Services
             return responseDto;
         }
 
-        public async Task<UpdateAdminResponseDto> UpdateAdmin(long id, UpdateAdminRequestDto requestDto)
+        public async Task<UpdateAdminResponseDto> UpdateAdmin(long id, UpdateUserRequestDto requestDto)
         {
             Admin? admin = await _adminRepository.GetAdminById(id);
 

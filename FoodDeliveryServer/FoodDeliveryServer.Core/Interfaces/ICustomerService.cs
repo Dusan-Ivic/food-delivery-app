@@ -1,4 +1,5 @@
 ﻿using FoodDeliveryServer.Common.Dto.Customer;
+using FoodDeliveryServer.Common.Dto.Request;
 
 namespace FoodDeliveryServer.Core.Interfaces
 {
@@ -6,8 +7,8 @@ namespace FoodDeliveryServer.Core.Interfaces
     {
         public Task<List<GetCustomerResponseDto>> GetCustomers();
         public Task<GetCustomerResponseDto> GetCustomer(long id);
-        public Task<RegisterCustomerResponseDto> RegisterCustomer(RegisterCustomerRequestDto requestDto);
-        public Task<UpdateCustomerResponseDto> UpdateCustomer(long id, UpdateCustomerRequestDto requestDto);
+        public Task<RegisterCustomerResponseDto> RegisterCustomer(RegisterUserRequestDto requestDto);
+        public Task<UpdateCustomerResponseDto> UpdateCustomer(long id, UpdateUserRequestDto requestDto);
         public Task<DeleteCustomerResponseDto> DeleteCustomer(long id);
     }
 }

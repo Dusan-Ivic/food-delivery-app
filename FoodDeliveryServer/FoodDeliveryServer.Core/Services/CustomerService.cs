@@ -7,6 +7,7 @@ using FoodDeliveryServer.Common.Exceptions;
 using FoodDeliveryServer.Data.Interfaces;
 using FoodDeliveryServer.Core.Interfaces;
 using FoodDeliveryServer.Data.Models;
+using FoodDeliveryServer.Common.Dto.Request;
 
 namespace FoodDeliveryServer.Core.Services
 {
@@ -42,7 +43,7 @@ namespace FoodDeliveryServer.Core.Services
             return _mapper.Map<List<GetCustomerResponseDto>>(customers);
         }
 
-        public async Task<RegisterCustomerResponseDto> RegisterCustomer(RegisterCustomerRequestDto requestDto)
+        public async Task<RegisterCustomerResponseDto> RegisterCustomer(RegisterUserRequestDto requestDto)
         {
             Customer customer = _mapper.Map<Customer>(requestDto);
 
@@ -82,7 +83,7 @@ namespace FoodDeliveryServer.Core.Services
             return responseDto;
         }
 
-        public async Task<UpdateCustomerResponseDto> UpdateCustomer(long id, UpdateCustomerRequestDto requestDto)
+        public async Task<UpdateCustomerResponseDto> UpdateCustomer(long id, UpdateUserRequestDto requestDto)
         {
             Customer? customer = await _customerRepository.GetCustomerById(id);
 

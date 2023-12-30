@@ -1,6 +1,7 @@
 ﻿using FluentValidation;
 using FoodDeliveryServer.Common.Dto.Error;
 using FoodDeliveryServer.Common.Dto.Partner;
+using FoodDeliveryServer.Common.Dto.Request;
 using FoodDeliveryServer.Common.Enums;
 using FoodDeliveryServer.Common.Exceptions;
 using FoodDeliveryServer.Core.Interfaces;
@@ -59,7 +60,7 @@ namespace FoodDeliveryServer.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> RegisterPartner([FromBody] RegisterPartnerRequestDto requestDto)
+        public async Task<IActionResult> RegisterPartner([FromBody] RegisterUserRequestDto requestDto)
         {
             RegisterPartnerResponseDto responseDto;
 
@@ -85,7 +86,7 @@ namespace FoodDeliveryServer.Api.Controllers
 
         [HttpPut("{id}")]
         [Authorize(Roles = "Partner")]
-        public async Task<IActionResult> UpdatePartner(long id, [FromBody] UpdatePartnerRequestDto requestDto)
+        public async Task<IActionResult> UpdatePartner(long id, [FromBody] UpdateUserRequestDto requestDto)
         {
             Claim? idClaim = User.Claims.FirstOrDefault(x => x.Type == "UserId");
             long userId = long.Parse(idClaim!.Value);

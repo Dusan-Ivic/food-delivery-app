@@ -1,6 +1,6 @@
-﻿namespace FoodDeliveryServer.Common.Dto.User
+﻿namespace FoodDeliveryServer.Common.Dto.Request
 {
-    public class UserRequestDto
+    public class UpdateUserRequestDto
     {
         public string Username { get; set; } = string.Empty;
         public string Email { get; set; } = string.Empty;

@@ -1,6 +1,7 @@
 ﻿using FluentValidation;
 using FoodDeliveryServer.Common.Dto.Customer;
 using FoodDeliveryServer.Common.Dto.Error;
+using FoodDeliveryServer.Common.Dto.Request;
 using FoodDeliveryServer.Common.Exceptions;
 using FoodDeliveryServer.Core.Interfaces;
 using FoodDeliveryServer.Core.Services;
@@ -50,7 +51,7 @@ namespace FoodDeliveryServer.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> RegisterCustomer([FromBody] RegisterCustomerRequestDto requestDto)
+        public async Task<IActionResult> RegisterCustomer([FromBody] RegisterUserRequestDto requestDto)
         {
             RegisterCustomerResponseDto responseDto;
 
@@ -72,7 +73,7 @@ namespace FoodDeliveryServer.Api.Controllers
 
         [HttpPut("{id}")]
         [Authorize(Roles = "Customer")]
-        public async Task<IActionResult> UpdateCustomer(long id, [FromBody] UpdateCustomerRequestDto requestDto)
+        public async Task<IActionResult> UpdateCustomer(long id, [FromBody] UpdateUserRequestDto requestDto)
         {
             Claim? idClaim = User.Claims.FirstOrDefault(x => x.Type == "UserId");
             long userId = long.Parse(idClaim!.Value);
