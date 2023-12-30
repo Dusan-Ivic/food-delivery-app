@@ -21,10 +21,7 @@ namespace FoodDeliveryServer.Core.Mapping
             CreateMap<User, PartnerResponseDto>()
                 .ForMember(dest => dest.Status, opt => opt.MapFrom(src => ((Partner)src).Status));
 
-            CreateMap<User, CustomerResponseDto>()
-                .ForMember(dest => dest.Address, opt => opt.MapFrom(src => ((Customer)src).Address))
-                .ForMember(dest => dest.City, opt => opt.MapFrom(src => ((Customer)src).City))
-                .ForMember(dest => dest.PostalCode, opt => opt.MapFrom(src => ((Customer)src).PostalCode));
+            CreateMap<User, CustomerResponseDto>();
 
             CreateMap<ChangePasswordRequestDto, User>().ForMember(dest => dest.Password, opt => opt.MapFrom(src => src.OldPassword));
 
