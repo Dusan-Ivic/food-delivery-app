@@ -8,5 +8,6 @@
         public long OrderId { get; set; }
         public string ProductName { get; set; } = string.Empty;
         public decimal ProductPrice { get; set; }
+        public string? ProductImage { get; set; }
     }
 }
