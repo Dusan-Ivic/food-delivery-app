@@ -45,19 +45,25 @@ namespace FoodDeliveryServer.Core.Services
                 throw new ResourceNotFoundException("User with this id doesn't exist");
             }
 
-            UserResponseDto responseDto = new UserResponseDto()
-            {
-                UserType = userType
-            };
+            UserResponseDto responseDto = new UserResponseDto();
 
-            if (responseDto.UserType == UserType.Partner)
+            switch (userType)
             {
-                responseDto = _mapper.Map<PartnerResponseDto>(existingUser);
+                case UserType.Customer:
+                    responseDto = _mapper.Map<CustomerResponseDto>(existingUser);
+                    break;
+                case UserType.Partner:
+                    responseDto = _mapper.Map<PartnerResponseDto>(existingUser);
+                    break;
+                case UserType.Admin:
+                    responseDto = _mapper.Map<AdminResponseDto>(existingUser);
+                    break;
+                default:
+                    responseDto = _mapper.Map<UserResponseDto>(existingUser);
+                    break;
             }
-            else
-            {
-                responseDto = _mapper.Map<UserResponseDto>(existingUser);
-            }
+
+            responseDto.UserType = userType;
 
             return responseDto;
         }

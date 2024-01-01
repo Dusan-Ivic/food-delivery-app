@@ -11,7 +11,7 @@ namespace FoodDeliveryServer.Core.Mapping
         {
             CreateMap<RegisterUserRequestDto, Admin>();
 
-            CreateMap<Admin, UserResponseDto>();
+            CreateMap<Admin, AdminResponseDto>();
 
             CreateMap<UpdateUserRequestDto, Admin>();
         }

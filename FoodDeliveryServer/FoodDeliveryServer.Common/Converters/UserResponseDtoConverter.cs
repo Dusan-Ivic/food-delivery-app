@@ -13,13 +13,17 @@ namespace FoodDeliveryServer.Api.Converters
 
         public override void Write(Utf8JsonWriter writer, UserResponseDto value, JsonSerializerOptions options)
         {
-            if (value is PartnerResponseDto partnerDto)
+            if (value is CustomerResponseDto customerDto)
+            {
+                JsonSerializer.Serialize(writer, customerDto, options);
+            }
+            else if (value is PartnerResponseDto partnerDto)
             {
                 JsonSerializer.Serialize(writer, partnerDto, options);
             }
-            else if (value is UserResponseDto userDto)
+            else if (value is AdminResponseDto adminDto)
             {
-                JsonSerializer.Serialize(writer, userDto, options);
+                JsonSerializer.Serialize(writer, adminDto, options);
             }
             else
             {

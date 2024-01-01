@@ -25,7 +25,7 @@ namespace FoodDeliveryServer.Api.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetCustomers()
         {
-            List<UserResponseDto> responseDto = await _customerService.GetCustomers();
+            List<CustomerResponseDto> responseDto = await _customerService.GetCustomers();
 
             return Ok(responseDto);
         }
@@ -34,7 +34,7 @@ namespace FoodDeliveryServer.Api.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetCustomer(long id)
         {
-            UserResponseDto responseDto;
+            CustomerResponseDto responseDto;
 
             try
             {
@@ -51,7 +51,7 @@ namespace FoodDeliveryServer.Api.Controllers
         [HttpPost]
         public async Task<IActionResult> RegisterCustomer([FromBody] RegisterUserRequestDto requestDto)
         {
-            UserResponseDto responseDto;
+            CustomerResponseDto responseDto;
 
             try
             {
@@ -84,7 +84,7 @@ namespace FoodDeliveryServer.Api.Controllers
                 });
             }
 
-            UserResponseDto responseDto;
+            CustomerResponseDto responseDto;
 
             try
             {

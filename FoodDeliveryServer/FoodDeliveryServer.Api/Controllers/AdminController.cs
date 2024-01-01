@@ -23,7 +23,7 @@ namespace FoodDeliveryServer.Api.Controllers
         [HttpPost]
         public async Task<IActionResult> RegisterAdmin([FromBody] RegisterUserRequestDto requestDto)
         {
-            UserResponseDto responseDto;
+            AdminResponseDto responseDto;
 
             try
             {
@@ -61,7 +61,7 @@ namespace FoodDeliveryServer.Api.Controllers
                 });
             }
 
-            UserResponseDto responseDto;
+            AdminResponseDto responseDto;
 
             try
             {

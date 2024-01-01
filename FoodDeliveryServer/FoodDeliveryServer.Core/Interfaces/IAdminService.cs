@@ -5,7 +5,7 @@ namespace FoodDeliveryServer.Core.Interfaces
 {
     public interface IAdminService
     {
-        public Task<UserResponseDto> RegisterAdmin(RegisterUserRequestDto requestDto);
-        public Task<UserResponseDto> UpdateAdmin(long id, UpdateUserRequestDto requestDto);
+        public Task<AdminResponseDto> RegisterAdmin(RegisterUserRequestDto requestDto);
+        public Task<AdminResponseDto> UpdateAdmin(long id, UpdateUserRequestDto requestDto);
     }
 }

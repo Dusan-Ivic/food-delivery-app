@@ -24,7 +24,7 @@ namespace FoodDeliveryServer.Core.Services
             _mapper = mapper;
         }
 
-        public async Task<UserResponseDto> GetCustomer(long id)
+        public async Task<CustomerResponseDto> GetCustomer(long id)
         {
             Customer? customer = await _customerRepository.GetCustomerById(id);
 
@@ -33,17 +33,17 @@ namespace FoodDeliveryServer.Core.Services
                 throw new ResourceNotFoundException("Customer with this id doesn't exist");
             }
 
-            return _mapper.Map<UserResponseDto>(customer);
+            return _mapper.Map<CustomerResponseDto>(customer);
         }
 
-        public async Task<List<UserResponseDto>> GetCustomers()
+        public async Task<List<CustomerResponseDto>> GetCustomers()
         {
             List<Customer> customers = await _customerRepository.GetAllCustomers();
 
-            return _mapper.Map<List<UserResponseDto>>(customers);
+            return _mapper.Map<List<CustomerResponseDto>>(customers);
         }
 
-        public async Task<UserResponseDto> RegisterCustomer(RegisterUserRequestDto requestDto)
+        public async Task<CustomerResponseDto> RegisterCustomer(RegisterUserRequestDto requestDto)
         {
             Customer customer = _mapper.Map<Customer>(requestDto);
 
@@ -77,13 +77,13 @@ namespace FoodDeliveryServer.Core.Services
                 throw;
             }
 
-            UserResponseDto responseDto = _mapper.Map<UserResponseDto>(customer);
+            CustomerResponseDto responseDto = _mapper.Map<CustomerResponseDto>(customer);
             responseDto.UserType = UserType.Customer;
 
             return responseDto;
         }
 
-        public async Task<UserResponseDto> UpdateCustomer(long id, UpdateUserRequestDto requestDto)
+        public async Task<CustomerResponseDto> UpdateCustomer(long id, UpdateUserRequestDto requestDto)
         {
             Customer? customer = await _customerRepository.GetCustomerById(id);
 
@@ -127,7 +127,7 @@ namespace FoodDeliveryServer.Core.Services
                 throw;
             }
 
-            UserResponseDto responseDto = _mapper.Map<UserResponseDto>(customer);
+            CustomerResponseDto responseDto = _mapper.Map<CustomerResponseDto>(customer);
             responseDto.UserType = UserType.Customer;
 
             return responseDto;

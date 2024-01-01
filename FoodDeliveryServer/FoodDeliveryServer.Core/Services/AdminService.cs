@@ -24,7 +24,7 @@ namespace FoodDeliveryServer.Core.Services
             _mapper = mapper;
         }
 
-        public async Task<UserResponseDto> RegisterAdmin(RegisterUserRequestDto requestDto)
+        public async Task<AdminResponseDto> RegisterAdmin(RegisterUserRequestDto requestDto)
         {
             Admin admin = _mapper.Map<Admin>(requestDto);
 
@@ -58,13 +58,13 @@ namespace FoodDeliveryServer.Core.Services
                 throw;
             }
 
-            UserResponseDto responseDto = _mapper.Map<UserResponseDto>(admin);
+            AdminResponseDto responseDto = _mapper.Map<AdminResponseDto>(admin);
             responseDto.UserType = UserType.Admin;
 
             return responseDto;
         }
 
-        public async Task<UserResponseDto> UpdateAdmin(long id, UpdateUserRequestDto requestDto)
+        public async Task<AdminResponseDto> UpdateAdmin(long id, UpdateUserRequestDto requestDto)
         {
             Admin? admin = await _adminRepository.GetAdminById(id);
 
@@ -108,7 +108,7 @@ namespace FoodDeliveryServer.Core.Services
                 throw;
             }
 
-            UserResponseDto responseDto = _mapper.Map<UserResponseDto>(admin);
+            AdminResponseDto responseDto = _mapper.Map<AdminResponseDto>(admin);
             responseDto.UserType = UserType.Admin;
 
             return responseDto;
