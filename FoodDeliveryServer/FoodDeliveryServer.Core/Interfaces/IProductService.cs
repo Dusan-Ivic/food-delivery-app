@@ -1,16 +1,15 @@
-﻿using FoodDeliveryServer.Common.Dto.Auth;
-using FoodDeliveryServer.Common.Dto.Product;
-using Microsoft.AspNetCore.Http;
+﻿using FoodDeliveryServer.Common.Dto.Request;
+using FoodDeliveryServer.Common.Dto.Response;
 
 namespace FoodDeliveryServer.Core.Interfaces
 {
     public interface IProductService
     {
-        public Task<List<GetProductResponseDto>> GetProducts(long? storeId);
-        public Task<GetProductResponseDto> GetProduct(long id);
-        public Task<CreateProductResponseDto> CreateProduct(long partnerId, CreateProductRequestDto requestDto);
-        public Task<UpdateProductResponseDto> UpdateProduct(long id, long partnerId, UpdateProductRequestDto requestDto);
-        public Task<DeleteProductResponseDto> DeleteProduct(long id, long partnerId);
+        public Task<List<ProductResponseDto>> GetProducts(long? storeId);
+        public Task<ProductResponseDto> GetProduct(long id);
+        public Task<ProductResponseDto> CreateProduct(long partnerId, CreateProductRequestDto requestDto);
+        public Task<ProductResponseDto> UpdateProduct(long id, long partnerId, UpdateProductRequestDto requestDto);
+        public Task<DeleteEntityResponseDto> DeleteProduct(long id, long partnerId);
         public Task<ImageResponseDto> UploadImage(long productId, long partnerId, Stream imageStream, string imageName);
     }
 }

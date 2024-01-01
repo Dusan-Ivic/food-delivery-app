@@ -1,10 +1,11 @@
-﻿using FoodDeliveryServer.Common.Dto.Admin;
+﻿using FoodDeliveryServer.Common.Dto.Request;
+using FoodDeliveryServer.Common.Dto.Response;
 
 namespace FoodDeliveryServer.Core.Interfaces
 {
     public interface IAdminService
     {
-        public Task<RegisterAdminResponseDto> RegisterAdmin(RegisterAdminRequestDto requestDto);
-        public Task<UpdateAdminResponseDto> UpdateAdmin(long id, UpdateAdminRequestDto requestDto);
+        public Task<AdminResponseDto> RegisterAdmin(RegisterUserRequestDto requestDto);
+        public Task<AdminResponseDto> UpdateAdmin(long id, UpdateUserRequestDto requestDto);
     }
 }

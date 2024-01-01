@@ -1,10 +1,8 @@
 ﻿using FluentValidation;
-using FoodDeliveryServer.Common.Dto.Error;
-using FoodDeliveryServer.Common.Dto.Partner;
-using FoodDeliveryServer.Common.Enums;
+using FoodDeliveryServer.Common.Dto.Request;
+using FoodDeliveryServer.Common.Dto.Response;
 using FoodDeliveryServer.Common.Exceptions;
 using FoodDeliveryServer.Core.Interfaces;
-using FoodDeliveryServer.Core.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
@@ -26,7 +24,7 @@ namespace FoodDeliveryServer.Api.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetPartners([FromQuery] string? status = null)
         {
-            List<GetPartnerResponseDto> responseDto;
+            List<PartnerResponseDto> responseDto;
 
             try
             {
@@ -44,7 +42,7 @@ namespace FoodDeliveryServer.Api.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetPartner(long id)
         {
-            GetPartnerResponseDto responseDto;
+            PartnerResponseDto responseDto;
 
             try
             {
@@ -59,9 +57,9 @@ namespace FoodDeliveryServer.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> RegisterPartner([FromBody] RegisterPartnerRequestDto requestDto)
+        public async Task<IActionResult> RegisterPartner([FromBody] RegisterUserRequestDto requestDto)
         {
-            RegisterPartnerResponseDto responseDto;
+            PartnerResponseDto responseDto;
 
             try
             {
@@ -85,7 +83,7 @@ namespace FoodDeliveryServer.Api.Controllers
 
         [HttpPut("{id}")]
         [Authorize(Roles = "Partner")]
-        public async Task<IActionResult> UpdatePartner(long id, [FromBody] UpdatePartnerRequestDto requestDto)
+        public async Task<IActionResult> UpdatePartner(long id, [FromBody] UpdateUserRequestDto requestDto)
         {
             Claim? idClaim = User.Claims.FirstOrDefault(x => x.Type == "UserId");
             long userId = long.Parse(idClaim!.Value);
@@ -98,7 +96,7 @@ namespace FoodDeliveryServer.Api.Controllers
                 });
             }
 
-            UpdatePartnerResponseDto responseDto;
+            PartnerResponseDto responseDto;
 
             try
             {
@@ -128,7 +126,7 @@ namespace FoodDeliveryServer.Api.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeletePartner(long id)
         {
-            DeletePartnerResponseDto responseDto;
+            DeleteEntityResponseDto responseDto;
 
             try
             {
@@ -146,7 +144,7 @@ namespace FoodDeliveryServer.Api.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> VerifyPartner(long id, [FromBody] VerifyPartnerRequestDto requestDto)
         {
-            UpdatePartnerResponseDto responseDto;
+            PartnerResponseDto responseDto;
 
             try
             {

@@ -1,5 +1,5 @@
-﻿using FoodDeliveryServer.Common.Dto.Geolocation;
-using FoodDeliveryServer.Common.Dto.Order;
+﻿using FoodDeliveryServer.Common.Dto.Shared;
+using FoodDeliveryServer.Common.Dto.Request;
 using FoodDeliveryServer.Core.Interfaces;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Primitives;
@@ -40,7 +40,7 @@ namespace FoodDeliveryServer.Core.Services
 
                     string[] coordinates = extendedSession.Metadata["Coordinate"].Split(";");
 
-                    CreateOrderRequestDto requestDto = new CreateOrderRequestDto()
+                    OrderRequestDto requestDto = new OrderRequestDto()
                     {
                         StoreId = long.Parse(extendedSession.Metadata["StoreId"]),
                         Address = extendedSession.Metadata["Address"],
