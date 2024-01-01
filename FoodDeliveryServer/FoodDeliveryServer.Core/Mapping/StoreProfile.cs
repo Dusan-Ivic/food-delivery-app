@@ -1,10 +1,7 @@
 ﻿using AutoMapper;
 using FoodDeliveryServer.Common.Dto.Request;
 using FoodDeliveryServer.Common.Dto.Response;
-using FoodDeliveryServer.Common.Dto.Shared;
-using FoodDeliveryServer.Core.Converters;
 using FoodDeliveryServer.Data.Models;
-using NetTopologySuite.Geometries;
 
 namespace FoodDeliveryServer.Core.Mapping
 {
@@ -12,10 +9,6 @@ namespace FoodDeliveryServer.Core.Mapping
     {
         public StoreProfile()
         {
-            CreateMap<CoordinateDto, Coordinate>().ReverseMap();
-
-            CreateMap<List<Coordinate>, Polygon>().ConvertUsing(new CoordinatesToPolygonConverter());
-
             CreateMap<StoreRequestDto, Store>();
 
             CreateMap<Store, StoreResponseDto>()

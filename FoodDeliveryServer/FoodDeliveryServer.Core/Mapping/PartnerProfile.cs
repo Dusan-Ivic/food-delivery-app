@@ -10,6 +10,7 @@ namespace FoodDeliveryServer.Core.Mapping
         public PartnerProfile()
         {
             CreateMap<RegisterUserRequestDto, Partner>();
+
             CreateMap<Partner, PartnerResponseDto>();
 
             CreateMap<UpdateUserRequestDto, Partner>();
