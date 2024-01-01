@@ -134,6 +134,7 @@ MapperConfiguration mapperConfig = new MapperConfiguration(config =>
     config.AddProfile(new StoreProfile());
     config.AddProfile(new ProductProfile());
     config.AddProfile(new OrderProfile());
+    config.AddProfile(new CoordinateProfile());
 });
 
 builder.Services.AddSingleton(mapperConfig.CreateMapper());

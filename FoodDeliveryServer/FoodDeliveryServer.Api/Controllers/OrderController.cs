@@ -1,10 +1,9 @@
 ﻿using FluentValidation;
-using FoodDeliveryServer.Common.Dto.Error;
-using FoodDeliveryServer.Common.Dto.Order;
+using FoodDeliveryServer.Common.Dto.Request;
+using FoodDeliveryServer.Common.Dto.Response;
 using FoodDeliveryServer.Common.Enums;
 using FoodDeliveryServer.Common.Exceptions;
 using FoodDeliveryServer.Core.Interfaces;
-using FoodDeliveryServer.Core.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
@@ -32,14 +31,14 @@ namespace FoodDeliveryServer.Api.Controllers
             Claim? roleClaim = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Role);
             UserType userType = (UserType)Enum.Parse(typeof(UserType), roleClaim!.Value);
 
-            List<GetOrderResponseDto> responseDto = await _orderService.GetOrders(userId, userType);
+            List<OrderResponseDto> responseDto = await _orderService.GetOrders(userId, userType);
 
             return Ok(responseDto);
         }
 
         [HttpPost]
         [Authorize(Roles = "Customer")]
-        public async Task<IActionResult> CreateCheckout([FromBody] CreateOrderRequestDto requestDto)
+        public async Task<IActionResult> CreateCheckout([FromBody] OrderRequestDto requestDto)
         {
             Claim? idClaim = User.Claims.FirstOrDefault(x => x.Type == "UserId");
             long userId = long.Parse(idClaim!.Value);
@@ -89,7 +88,7 @@ namespace FoodDeliveryServer.Api.Controllers
             Claim? idClaim = User.Claims.FirstOrDefault(x => x.Type == "UserId");
             long userId = long.Parse(idClaim!.Value);
 
-            DeleteOrderResponseDto responseDto;
+            DeleteEntityResponseDto responseDto;
 
             try
             {

@@ -1,10 +1,7 @@
 ﻿using AutoMapper;
-using FoodDeliveryServer.Common.Dto.Auth;
-using FoodDeliveryServer.Common.Dto.Geolocation;
-using FoodDeliveryServer.Common.Dto.Store;
-using FoodDeliveryServer.Core.Converters;
+using FoodDeliveryServer.Common.Dto.Request;
+using FoodDeliveryServer.Common.Dto.Response;
 using FoodDeliveryServer.Data.Models;
-using NetTopologySuite.Geometries;
 
 namespace FoodDeliveryServer.Core.Mapping
 {
@@ -12,22 +9,12 @@ namespace FoodDeliveryServer.Core.Mapping
     {
         public StoreProfile()
         {
-            CreateMap<CoordinateDto, Coordinate>().ReverseMap();
+            CreateMap<StoreRequestDto, Store>();
 
-            CreateMap<List<Coordinate>, Polygon>().ConvertUsing(new CoordinatesToPolygonConverter());
-
-            CreateMap<CreateStoreRequestDto, Store>();
-            CreateMap<Store, CreateStoreResponseDto>()
+            CreateMap<Store, StoreResponseDto>()
                 .ForMember(dest => dest.Coordinates, opt => opt.MapFrom(src => src.DeliveryArea.Coordinates));
 
-            CreateMap<Store, GetStoreResponseDto>()
-                .ForMember(dest => dest.Coordinates, opt => opt.MapFrom(src => src.DeliveryArea.Coordinates));
-
-            CreateMap<UpdateStoreRequestDto, Store>();
-            CreateMap<Store, UpdateStoreResponseDto>()
-                .ForMember(dest => dest.Coordinates, opt => opt.MapFrom(src => src.DeliveryArea.Coordinates));
-
-            CreateMap<Store, DeleteStoreResponseDto>();
+            CreateMap<Store, DeleteEntityResponseDto>();
 
             CreateMap<Store, ImageResponseDto>();
         }
