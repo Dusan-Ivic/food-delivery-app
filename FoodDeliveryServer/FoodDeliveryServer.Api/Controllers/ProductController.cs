@@ -1,11 +1,15 @@
 ﻿using FluentValidation;
+using FoodDeliveryServer.Common.Dto.Auth;
+using FoodDeliveryServer.Common.Dto.Error;
+using FoodDeliveryServer.Common.Dto.Product;
+using FoodDeliveryServer.Common.Enums;
 using FoodDeliveryServer.Common.Exceptions;
 using FoodDeliveryServer.Core.Interfaces;
+using FoodDeliveryServer.Data.Models;
+using FoodDeliveryServer.Core.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
-using FoodDeliveryServer.Common.Dto.Request;
-using FoodDeliveryServer.Common.Dto.Response;
 
 namespace FoodDeliveryServer.Api.Controllers
 {
@@ -23,7 +27,7 @@ namespace FoodDeliveryServer.Api.Controllers
         [HttpGet]
         public async Task<IActionResult> GetProducts([FromQuery] long? storeId)
         {
-            List<ProductResponseDto> responseDto = await _productService.GetProducts(storeId ?? null);
+            List<GetProductResponseDto> responseDto = await _productService.GetProducts(storeId ?? null);
 
             return Ok(responseDto);
         }
@@ -31,7 +35,7 @@ namespace FoodDeliveryServer.Api.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetProduct(long id)
         {
-            ProductResponseDto responseDto;
+            GetProductResponseDto responseDto;
 
             try
             {
@@ -52,7 +56,7 @@ namespace FoodDeliveryServer.Api.Controllers
             Claim? idClaim = User.Claims.FirstOrDefault(x => x.Type == "UserId");
             long userId = long.Parse(idClaim!.Value);
 
-            ProductResponseDto responseDto;
+            CreateProductResponseDto responseDto;
 
             try
             {
@@ -88,7 +92,7 @@ namespace FoodDeliveryServer.Api.Controllers
             Claim? idClaim = User.Claims.FirstOrDefault(x => x.Type == "UserId");
             long userId = long.Parse(idClaim!.Value);
 
-            ProductResponseDto responseDto;
+            UpdateProductResponseDto responseDto;
 
             try
             {
@@ -124,7 +128,7 @@ namespace FoodDeliveryServer.Api.Controllers
             Claim? idClaim = User.Claims.FirstOrDefault(x => x.Type == "UserId");
             long userId = long.Parse(idClaim!.Value);
 
-            DeleteEntityResponseDto responseDto;
+            DeleteProductResponseDto responseDto;
 
             try
             {

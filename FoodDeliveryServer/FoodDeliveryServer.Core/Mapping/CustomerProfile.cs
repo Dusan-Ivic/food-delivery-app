@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
-using FoodDeliveryServer.Common.Dto.Request;
-using FoodDeliveryServer.Common.Dto.Response;
+using FoodDeliveryServer.Common.Dto.Customer;
 using FoodDeliveryServer.Data.Models;
 
 namespace FoodDeliveryServer.Core.Mapping
@@ -9,13 +8,15 @@ namespace FoodDeliveryServer.Core.Mapping
     {
         public CustomerProfile()
         {
-            CreateMap<RegisterUserRequestDto, Customer>();
+            CreateMap<RegisterCustomerRequestDto, Customer>();
+            CreateMap<Customer, RegisterCustomerResponseDto>();
 
-            CreateMap<Customer, CustomerResponseDto>();
+            CreateMap<Customer, GetCustomerResponseDto>();
 
-            CreateMap<UpdateUserRequestDto, Customer>();
+            CreateMap<UpdateCustomerRequestDto, Customer>();
+            CreateMap<Customer, UpdateCustomerResponseDto>();
 
-            CreateMap<Customer, DeleteEntityResponseDto>();
+            CreateMap<Customer, DeleteCustomerResponseDto>();
         }
     }
 }

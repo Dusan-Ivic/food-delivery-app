@@ -1,17 +1,18 @@
 ﻿using AutoMapper;
 using FluentValidation;
 using FluentValidation.Results;
+using FoodDeliveryServer.Common.Dto.Auth;
+using FoodDeliveryServer.Common.Dto.Store;
 using FoodDeliveryServer.Common.Exceptions;
 using FoodDeliveryServer.Data.Interfaces;
 using FoodDeliveryServer.Core.Interfaces;
 using FoodDeliveryServer.Data.Models;
 using NetTopologySuite.Geometries;
+using Microsoft.AspNetCore.Http;
 using CloudinaryDotNet;
 using Microsoft.Extensions.Configuration;
 using CloudinaryDotNet.Actions;
 using Point = NetTopologySuite.Geometries.Point;
-using FoodDeliveryServer.Common.Dto.Request;
-using FoodDeliveryServer.Common.Dto.Response;
 
 namespace FoodDeliveryServer.Core.Services
 {
@@ -33,7 +34,7 @@ namespace FoodDeliveryServer.Core.Services
             _cloudinary = new Cloudinary(cloudinaryUrl);
         }
 
-        public async Task<List<StoreResponseDto>> GetStores(long? partnerId, double? latitude, double? longitude)
+        public async Task<List<GetStoreResponseDto>> GetStores(long? partnerId, double? latitude, double? longitude)
         {
             List<Store> allStores = await _storeRepository.GetAllStores();
             List<Store> stores = new List<Store>();
@@ -52,10 +53,10 @@ namespace FoodDeliveryServer.Core.Services
                 stores = await _storeRepository.GetAllStores();
             }
 
-            return _mapper.Map<List<StoreResponseDto>>(stores);
+            return _mapper.Map<List<GetStoreResponseDto>>(stores);
         }
 
-        public async Task<StoreResponseDto> GetStore(long id)
+        public async Task<GetStoreResponseDto> GetStore(long id)
         {
             Store? store = await _storeRepository.GetStoreById(id);
 
@@ -64,10 +65,10 @@ namespace FoodDeliveryServer.Core.Services
                 throw new ResourceNotFoundException("Store with this id doesn't exist");
             }
 
-            return _mapper.Map<StoreResponseDto>(store);
+            return _mapper.Map<GetStoreResponseDto>(store);
         }
 
-        public async Task<StoreResponseDto> CreateStore(long partnerId, StoreRequestDto requestDto)
+        public async Task<CreateStoreResponseDto> CreateStore(long partnerId, CreateStoreRequestDto requestDto)
         {
             Store store = _mapper.Map<Store>(requestDto);
             store.PartnerId = partnerId;
@@ -98,10 +99,10 @@ namespace FoodDeliveryServer.Core.Services
                 throw;
             }
 
-            return _mapper.Map<StoreResponseDto>(store);
+            return _mapper.Map<CreateStoreResponseDto>(store);
         }
 
-        public async Task<StoreResponseDto> UpdateStore(long id, long partnerId, StoreRequestDto requestDto)
+        public async Task<UpdateStoreResponseDto> UpdateStore(long id, long partnerId, UpdateStoreRequestDto requestDto)
         {
             Store? store = await _storeRepository.GetStoreById(id);
 
@@ -153,10 +154,10 @@ namespace FoodDeliveryServer.Core.Services
                 throw;
             }
 
-            return _mapper.Map<StoreResponseDto>(store);
+            return _mapper.Map<UpdateStoreResponseDto>(store);
         }
 
-        public async Task<DeleteEntityResponseDto> DeleteStore(long id)
+        public async Task<DeleteStoreResponseDto> DeleteStore(long id)
         {
             Store? store = await _storeRepository.GetStoreById(id);
 
@@ -174,7 +175,7 @@ namespace FoodDeliveryServer.Core.Services
                 throw;
             }
 
-            return _mapper.Map<DeleteEntityResponseDto>(store);
+            return _mapper.Map<DeleteStoreResponseDto>(store);
         }
 
         public async Task<ImageResponseDto> UploadImage(long storeId, long partnerId, Stream imageStream, string imageName)

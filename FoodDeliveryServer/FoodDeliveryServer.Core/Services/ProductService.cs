@@ -1,15 +1,16 @@
 ﻿using AutoMapper;
 using FluentValidation;
 using FluentValidation.Results;
+using FoodDeliveryServer.Common.Dto.Auth;
+using FoodDeliveryServer.Common.Dto.Product;
 using FoodDeliveryServer.Common.Exceptions;
 using FoodDeliveryServer.Data.Interfaces;
 using FoodDeliveryServer.Core.Interfaces;
 using FoodDeliveryServer.Data.Models;
+using Microsoft.AspNetCore.Http;
 using CloudinaryDotNet;
 using Microsoft.Extensions.Configuration;
 using CloudinaryDotNet.Actions;
-using FoodDeliveryServer.Common.Dto.Request;
-using FoodDeliveryServer.Common.Dto.Response;
 
 namespace FoodDeliveryServer.Core.Services
 {
@@ -33,7 +34,7 @@ namespace FoodDeliveryServer.Core.Services
             _cloudinary = new Cloudinary(cloudinaryUrl);
         }
 
-        public async Task<List<ProductResponseDto>> GetProducts(long? storeId)
+        public async Task<List<GetProductResponseDto>> GetProducts(long? storeId)
         {
             List<Product> products;
 
@@ -46,10 +47,10 @@ namespace FoodDeliveryServer.Core.Services
                 products = await _productRepository.GetProductsByStore(storeId.Value);
             }
 
-            return _mapper.Map<List<ProductResponseDto>>(products);
+            return _mapper.Map<List<GetProductResponseDto>>(products);
         }
 
-        public async Task<ProductResponseDto> GetProduct(long id)
+        public async Task<GetProductResponseDto> GetProduct(long id)
         {
             Product? product = await _productRepository.GetProductById(id);
 
@@ -58,10 +59,10 @@ namespace FoodDeliveryServer.Core.Services
                 throw new ResourceNotFoundException("Product with this id doesn't exist");
             }
 
-            return _mapper.Map<ProductResponseDto>(product);
+            return _mapper.Map<GetProductResponseDto>(product);
         }
 
-        public async Task<ProductResponseDto> CreateProduct(long partnerId, CreateProductRequestDto requestDto)
+        public async Task<CreateProductResponseDto> CreateProduct(long partnerId, CreateProductRequestDto requestDto)
         {
             Product product = _mapper.Map<Product>(requestDto);
 
@@ -93,10 +94,10 @@ namespace FoodDeliveryServer.Core.Services
                 throw;
             }
 
-            return _mapper.Map<ProductResponseDto>(product);
+            return _mapper.Map<CreateProductResponseDto>(product);
         }
 
-        public async Task<ProductResponseDto> UpdateProduct(long id, long partnerId, UpdateProductRequestDto requestDto)
+        public async Task<UpdateProductResponseDto> UpdateProduct(long id, long partnerId, UpdateProductRequestDto requestDto)
         {
             Product? product = await _productRepository.GetProductById(id);
 
@@ -135,10 +136,10 @@ namespace FoodDeliveryServer.Core.Services
                 throw;
             }
 
-            return _mapper.Map<ProductResponseDto>(product);
+            return _mapper.Map<UpdateProductResponseDto>(product);
         }
 
-        public async Task<DeleteEntityResponseDto> DeleteProduct(long id, long partnerId)
+        public async Task<DeleteProductResponseDto> DeleteProduct(long id, long partnerId)
         {
             Product? product = await _productRepository.GetProductById(id);
 
@@ -163,7 +164,7 @@ namespace FoodDeliveryServer.Core.Services
                 throw;
             }
 
-            return _mapper.Map<DeleteEntityResponseDto>(product);
+            return _mapper.Map<DeleteProductResponseDto>(product);
         }
 
         public async Task<ImageResponseDto> UploadImage(long productId, long partnerId, Stream imageStream, string imageName)

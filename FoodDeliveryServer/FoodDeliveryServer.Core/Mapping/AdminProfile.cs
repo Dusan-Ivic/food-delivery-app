@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
-using FoodDeliveryServer.Common.Dto.Request;
-using FoodDeliveryServer.Common.Dto.Response;
+using FoodDeliveryServer.Common.Dto.Admin;
 using FoodDeliveryServer.Data.Models;
 
 namespace FoodDeliveryServer.Core.Mapping
@@ -9,11 +8,11 @@ namespace FoodDeliveryServer.Core.Mapping
     {
         public AdminProfile()
         {
-            CreateMap<RegisterUserRequestDto, Admin>();
+            CreateMap<RegisterAdminRequestDto, Admin>();
+            CreateMap<Admin, RegisterAdminResponseDto>();
 
-            CreateMap<Admin, AdminResponseDto>();
-
-            CreateMap<UpdateUserRequestDto, Admin>();
+            CreateMap<UpdateAdminRequestDto, Admin>();
+            CreateMap<Admin, UpdateAdminResponseDto>();
         }
     }
 }
