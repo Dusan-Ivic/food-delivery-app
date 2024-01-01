@@ -1,4 +1,7 @@
-﻿using FoodDeliveryServer.Common.Dto.Response;
+﻿using FoodDeliveryServer.Common.Dto.Admin;
+using FoodDeliveryServer.Common.Dto.Customer;
+using FoodDeliveryServer.Common.Dto.Partner;
+using FoodDeliveryServer.Common.Dto.User;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 

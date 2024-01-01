@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using FluentValidation;
 using FluentValidation.Results;
+using FoodDeliveryServer.Common.Dto.Order;
 using FoodDeliveryServer.Common.Enums;
 using FoodDeliveryServer.Common.Exceptions;
 using FoodDeliveryServer.Data.Interfaces;
@@ -11,8 +12,6 @@ using Stripe;
 using Stripe.Checkout;
 using Product = FoodDeliveryServer.Data.Models.Product;
 using Microsoft.Extensions.Configuration;
-using FoodDeliveryServer.Common.Dto.Request;
-using FoodDeliveryServer.Common.Dto.Response;
 
 namespace FoodDeliveryServer.Core.Services
 {
@@ -35,7 +34,7 @@ namespace FoodDeliveryServer.Core.Services
             _clientSettings = config.GetSection("ClientSettings");
         }
 
-        public async Task<List<OrderResponseDto>> GetOrders(long userId, UserType userType)
+        public async Task<List<GetOrderResponseDto>> GetOrders(long userId, UserType userType)
         {
             List<Order> orders = new List<Order>();
 
@@ -52,10 +51,10 @@ namespace FoodDeliveryServer.Core.Services
                     break;
             }
 
-            return _mapper.Map<List<OrderResponseDto>>(orders);
+            return _mapper.Map<List<GetOrderResponseDto>>(orders);
         }
 
-        public async Task<CheckoutResponseDto> CreateCheckout(long customerId, OrderRequestDto requestDto)
+        public async Task<CheckoutResponseDto> CreateCheckout(long customerId, CreateOrderRequestDto requestDto)
         {
             Order order = _mapper.Map<Order>(requestDto);
             order.CustomerId = customerId;
@@ -179,12 +178,12 @@ namespace FoodDeliveryServer.Core.Services
 
             return new CheckoutResponseDto()
             {
-                Order = _mapper.Map<OrderResponseDto>(order),
+                Order = _mapper.Map<CreateOrderResponseDto>(order),
                 SessionUrl = session.Url
             };
         }
 
-        public async Task<OrderResponseDto> CreateOrder(long customerId, OrderRequestDto requestDto)
+        public async Task<CreateOrderResponseDto> CreateOrder(long customerId, CreateOrderRequestDto requestDto)
         {
             Order order = _mapper.Map<Order>(requestDto);
             order.CustomerId = customerId;
@@ -261,10 +260,10 @@ namespace FoodDeliveryServer.Core.Services
                 throw;
             }
 
-            return _mapper.Map<OrderResponseDto>(order);
+            return _mapper.Map<CreateOrderResponseDto>(order);
         }
 
-        public async Task<DeleteEntityResponseDto> RefundOrder(long orderId, long customerId)
+        public async Task<DeleteOrderResponseDto> RefundOrder(long orderId, long customerId)
         {
             Order? order = await _orderRepository.GetOrderById(orderId);
 
@@ -299,10 +298,10 @@ namespace FoodDeliveryServer.Core.Services
 
             service.Create(options);
 
-            return _mapper.Map<DeleteEntityResponseDto>(order);
+            return _mapper.Map<DeleteOrderResponseDto>(order);
         }
 
-        public async Task<DeleteEntityResponseDto> CancelOrder(long orderId, long customerId)
+        public async Task<DeleteOrderResponseDto> CancelOrder(long orderId, long customerId)
         {
             Order? order = await _orderRepository.GetOrderById(orderId);
 
@@ -338,7 +337,7 @@ namespace FoodDeliveryServer.Core.Services
                 throw;
             }
 
-            return _mapper.Map<DeleteEntityResponseDto>(order);
+            return _mapper.Map<DeleteOrderResponseDto>(order);
         }
     }
 }

@@ -1,9 +1,11 @@
 ﻿using FluentValidation;
-using FoodDeliveryServer.Common.Dto.Request;
-using FoodDeliveryServer.Common.Dto.Response;
+using FoodDeliveryServer.Common.Dto.Auth;
+using FoodDeliveryServer.Common.Dto.Error;
+using FoodDeliveryServer.Common.Dto.Store;
 using FoodDeliveryServer.Common.Enums;
 using FoodDeliveryServer.Common.Exceptions;
 using FoodDeliveryServer.Core.Interfaces;
+using FoodDeliveryServer.Core.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
@@ -24,7 +26,7 @@ namespace FoodDeliveryServer.Api.Controllers
         [HttpGet]
         public async Task<IActionResult> GetStores([FromQuery] long? partnerId = null, double? latitude = null, double? longitude = null)
         {
-            List<StoreResponseDto> responseDto = await _storeService.GetStores(partnerId ?? null, latitude ?? null, longitude ?? null);
+            List<GetStoreResponseDto> responseDto = await _storeService.GetStores(partnerId ?? null, latitude ?? null, longitude ?? null);
 
             return Ok(responseDto);
         }
@@ -32,7 +34,7 @@ namespace FoodDeliveryServer.Api.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetStore(long id)
         {
-            StoreResponseDto responseDto;
+            GetStoreResponseDto responseDto;
 
             try
             {
@@ -48,12 +50,12 @@ namespace FoodDeliveryServer.Api.Controllers
 
         [HttpPost]
         [Authorize(Roles = "Partner", Policy = "VerifiedPartner")]
-        public async Task<IActionResult> CreateStore([FromBody] StoreRequestDto requestDto)
+        public async Task<IActionResult> CreateStore([FromBody] CreateStoreRequestDto requestDto)
         {
             Claim? idClaim = User.Claims.FirstOrDefault(x => x.Type == "UserId");
             long userId = long.Parse(idClaim!.Value);
 
-            StoreResponseDto responseDto;
+            CreateStoreResponseDto responseDto;
 
             try
             {
@@ -81,12 +83,12 @@ namespace FoodDeliveryServer.Api.Controllers
 
         [HttpPut("{id}")]
         [Authorize(Roles = "Partner", Policy = "VerifiedPartner")]
-        public async Task<IActionResult> UpdateStore(long id, [FromBody] StoreRequestDto requestDto)
+        public async Task<IActionResult> UpdateStore(long id, [FromBody] UpdateStoreRequestDto requestDto)
         {
             Claim? idClaim = User.Claims.FirstOrDefault(x => x.Type == "UserId");
             long userId = long.Parse(idClaim!.Value);
 
-            StoreResponseDto responseDto;
+            UpdateStoreResponseDto responseDto;
 
             try
             {
@@ -123,7 +125,7 @@ namespace FoodDeliveryServer.Api.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteStore(long id)
         {
-            DeleteEntityResponseDto responseDto;
+            DeleteStoreResponseDto responseDto;
 
             try
             {

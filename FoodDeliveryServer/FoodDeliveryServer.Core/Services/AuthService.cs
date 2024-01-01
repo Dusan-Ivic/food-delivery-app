@@ -1,6 +1,11 @@
 ﻿using AutoMapper;
 using FluentValidation;
 using FluentValidation.Results;
+using FoodDeliveryServer.Common.Dto.Admin;
+using FoodDeliveryServer.Common.Dto.Auth;
+using FoodDeliveryServer.Common.Dto.Customer;
+using FoodDeliveryServer.Common.Dto.Partner;
+using FoodDeliveryServer.Common.Dto.User;
 using FoodDeliveryServer.Common.Enums;
 using FoodDeliveryServer.Common.Exceptions;
 using FoodDeliveryServer.Data.Interfaces;
@@ -9,10 +14,9 @@ using FoodDeliveryServer.Data.Models;
 using System.Security.Claims;
 using Microsoft.Extensions.Configuration;
 using FoodDeliveryServer.Core.Helpers;
+using Microsoft.AspNetCore.Http;
 using CloudinaryDotNet;
 using CloudinaryDotNet.Actions;
-using FoodDeliveryServer.Common.Dto.Request;
-using FoodDeliveryServer.Common.Dto.Response;
 
 namespace FoodDeliveryServer.Core.Services
 {

@@ -1,13 +1,12 @@
 ﻿using AutoMapper;
 using FluentValidation;
 using FluentValidation.Results;
+using FoodDeliveryServer.Common.Dto.Partner;
 using FoodDeliveryServer.Common.Enums;
 using FoodDeliveryServer.Common.Exceptions;
 using FoodDeliveryServer.Data.Interfaces;
 using FoodDeliveryServer.Core.Interfaces;
 using FoodDeliveryServer.Data.Models;
-using FoodDeliveryServer.Common.Dto.Request;
-using FoodDeliveryServer.Common.Dto.Response;
 
 namespace FoodDeliveryServer.Core.Services
 {
@@ -24,7 +23,7 @@ namespace FoodDeliveryServer.Core.Services
             _mapper = mapper;
         }
 
-        public async Task<PartnerResponseDto> GetPartner(long id)
+        public async Task<GetPartnerResponseDto> GetPartner(long id)
         {
             Partner? partner = await _partnerRepository.GetPartnerById(id);
 
@@ -33,10 +32,10 @@ namespace FoodDeliveryServer.Core.Services
                 throw new ResourceNotFoundException("Partner with this id doesn't exist");
             }
 
-            return _mapper.Map<PartnerResponseDto>(partner);
+            return _mapper.Map<GetPartnerResponseDto>(partner);
         }
 
-        public async Task<List<PartnerResponseDto>> GetPartners(string status)
+        public async Task<List<GetPartnerResponseDto>> GetPartners(string status)
         {
             List<Partner> partners = new List<Partner>();
 
@@ -56,10 +55,10 @@ namespace FoodDeliveryServer.Core.Services
                 partners = await _partnerRepository.GetPartnersByStatus(partnerStatus);
             }
 
-            return _mapper.Map<List<PartnerResponseDto>>(partners);
+            return _mapper.Map<List<GetPartnerResponseDto>>(partners);
         }
 
-        public async Task<PartnerResponseDto> RegisterPartner(RegisterUserRequestDto requestDto)
+        public async Task<RegisterPartnerResponseDto> RegisterPartner(RegisterPartnerRequestDto requestDto)
         {
             Partner partner = _mapper.Map<Partner>(requestDto);
             partner.Status = PartnerStatus.Pending;
@@ -94,13 +93,13 @@ namespace FoodDeliveryServer.Core.Services
                 throw;
             }
 
-            PartnerResponseDto responseDto = _mapper.Map<PartnerResponseDto>(partner);
+            RegisterPartnerResponseDto responseDto = _mapper.Map<RegisterPartnerResponseDto>(partner);
             responseDto.UserType = UserType.Partner;
 
             return responseDto;
         }
 
-        public async Task<PartnerResponseDto> UpdatePartner(long id, UpdateUserRequestDto requestDto)
+        public async Task<UpdatePartnerResponseDto> UpdatePartner(long id, UpdatePartnerRequestDto requestDto)
         {
             Partner? partner = await _partnerRepository.GetPartnerById(id);
 
@@ -144,13 +143,13 @@ namespace FoodDeliveryServer.Core.Services
                 throw;
             }
 
-            PartnerResponseDto responseDto = _mapper.Map<PartnerResponseDto>(partner);
+            UpdatePartnerResponseDto responseDto = _mapper.Map<UpdatePartnerResponseDto>(partner);
             responseDto.UserType = UserType.Partner;
 
             return responseDto;
         }
 
-        public async Task<DeleteEntityResponseDto> DeletePartner(long id)
+        public async Task<DeletePartnerResponseDto> DeletePartner(long id)
         {
             Partner? partner = await _partnerRepository.GetPartnerById(id);
 
@@ -168,10 +167,10 @@ namespace FoodDeliveryServer.Core.Services
                 throw;
             }
 
-            return _mapper.Map<DeleteEntityResponseDto>(partner);
+            return _mapper.Map<DeletePartnerResponseDto>(partner);
         }
 
-        public async Task<PartnerResponseDto> VerifyPartner(long id, VerifyPartnerRequestDto requestDto)
+        public async Task<UpdatePartnerResponseDto> VerifyPartner(long id, VerifyPartnerRequestDto requestDto)
         {
             Partner? partner = await _partnerRepository.GetPartnerById(id);
 
@@ -198,7 +197,7 @@ namespace FoodDeliveryServer.Core.Services
                 throw;
             }
 
-            return _mapper.Map<PartnerResponseDto>(partner);
+            return _mapper.Map<UpdatePartnerResponseDto>(partner);
         }
     }
 }

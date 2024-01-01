@@ -1,13 +1,12 @@
 ﻿using AutoMapper;
 using FluentValidation;
 using FluentValidation.Results;
+using FoodDeliveryServer.Common.Dto.Customer;
 using FoodDeliveryServer.Common.Enums;
 using FoodDeliveryServer.Common.Exceptions;
 using FoodDeliveryServer.Data.Interfaces;
 using FoodDeliveryServer.Core.Interfaces;
 using FoodDeliveryServer.Data.Models;
-using FoodDeliveryServer.Common.Dto.Request;
-using FoodDeliveryServer.Common.Dto.Response;
 
 namespace FoodDeliveryServer.Core.Services
 {
@@ -24,7 +23,7 @@ namespace FoodDeliveryServer.Core.Services
             _mapper = mapper;
         }
 
-        public async Task<CustomerResponseDto> GetCustomer(long id)
+        public async Task<GetCustomerResponseDto> GetCustomer(long id)
         {
             Customer? customer = await _customerRepository.GetCustomerById(id);
 
@@ -33,17 +32,17 @@ namespace FoodDeliveryServer.Core.Services
                 throw new ResourceNotFoundException("Customer with this id doesn't exist");
             }
 
-            return _mapper.Map<CustomerResponseDto>(customer);
+            return _mapper.Map<GetCustomerResponseDto>(customer);
         }
 
-        public async Task<List<CustomerResponseDto>> GetCustomers()
+        public async Task<List<GetCustomerResponseDto>> GetCustomers()
         {
             List<Customer> customers = await _customerRepository.GetAllCustomers();
 
-            return _mapper.Map<List<CustomerResponseDto>>(customers);
+            return _mapper.Map<List<GetCustomerResponseDto>>(customers);
         }
 
-        public async Task<CustomerResponseDto> RegisterCustomer(RegisterUserRequestDto requestDto)
+        public async Task<RegisterCustomerResponseDto> RegisterCustomer(RegisterCustomerRequestDto requestDto)
         {
             Customer customer = _mapper.Map<Customer>(requestDto);
 
@@ -77,13 +76,13 @@ namespace FoodDeliveryServer.Core.Services
                 throw;
             }
 
-            CustomerResponseDto responseDto = _mapper.Map<CustomerResponseDto>(customer);
+            RegisterCustomerResponseDto responseDto = _mapper.Map<RegisterCustomerResponseDto>(customer);
             responseDto.UserType = UserType.Customer;
 
             return responseDto;
         }
 
-        public async Task<CustomerResponseDto> UpdateCustomer(long id, UpdateUserRequestDto requestDto)
+        public async Task<UpdateCustomerResponseDto> UpdateCustomer(long id, UpdateCustomerRequestDto requestDto)
         {
             Customer? customer = await _customerRepository.GetCustomerById(id);
 
@@ -127,13 +126,13 @@ namespace FoodDeliveryServer.Core.Services
                 throw;
             }
 
-            CustomerResponseDto responseDto = _mapper.Map<CustomerResponseDto>(customer);
+            UpdateCustomerResponseDto responseDto = _mapper.Map<UpdateCustomerResponseDto>(customer);
             responseDto.UserType = UserType.Customer;
 
             return responseDto;
         }
 
-        public async Task<DeleteEntityResponseDto> DeleteCustomer(long id)
+        public async Task<DeleteCustomerResponseDto> DeleteCustomer(long id)
         {
             Customer? customer = await _customerRepository.GetCustomerById(id);
 
@@ -151,7 +150,7 @@ namespace FoodDeliveryServer.Core.Services
                 throw;
             }
 
-            return _mapper.Map<DeleteEntityResponseDto>(customer);
+            return _mapper.Map<DeleteCustomerResponseDto>(customer);
         }
     }
 }
