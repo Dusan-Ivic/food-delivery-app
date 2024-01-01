@@ -1,9 +1,8 @@
 ﻿using FluentValidation;
-using FoodDeliveryServer.Common.Dto.Customer;
-using FoodDeliveryServer.Common.Dto.Error;
+using FoodDeliveryServer.Common.Dto.Request;
+using FoodDeliveryServer.Common.Dto.Response;
 using FoodDeliveryServer.Common.Exceptions;
 using FoodDeliveryServer.Core.Interfaces;
-using FoodDeliveryServer.Core.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Data;
@@ -26,7 +25,7 @@ namespace FoodDeliveryServer.Api.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetCustomers()
         {
-            List<GetCustomerResponseDto> responseDto = await _customerService.GetCustomers();
+            List<CustomerResponseDto> responseDto = await _customerService.GetCustomers();
 
             return Ok(responseDto);
         }
@@ -35,7 +34,7 @@ namespace FoodDeliveryServer.Api.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetCustomer(long id)
         {
-            GetCustomerResponseDto responseDto;
+            CustomerResponseDto responseDto;
 
             try
             {
@@ -50,9 +49,9 @@ namespace FoodDeliveryServer.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> RegisterCustomer([FromBody] RegisterCustomerRequestDto requestDto)
+        public async Task<IActionResult> RegisterCustomer([FromBody] RegisterUserRequestDto requestDto)
         {
-            RegisterCustomerResponseDto responseDto;
+            CustomerResponseDto responseDto;
 
             try
             {
@@ -72,7 +71,7 @@ namespace FoodDeliveryServer.Api.Controllers
 
         [HttpPut("{id}")]
         [Authorize(Roles = "Customer")]
-        public async Task<IActionResult> UpdateCustomer(long id, [FromBody] UpdateCustomerRequestDto requestDto)
+        public async Task<IActionResult> UpdateCustomer(long id, [FromBody] UpdateUserRequestDto requestDto)
         {
             Claim? idClaim = User.Claims.FirstOrDefault(x => x.Type == "UserId");
             long userId = long.Parse(idClaim!.Value);
@@ -85,7 +84,7 @@ namespace FoodDeliveryServer.Api.Controllers
                 });
             }
 
-            UpdateCustomerResponseDto responseDto;
+            CustomerResponseDto responseDto;
 
             try
             {
@@ -115,7 +114,7 @@ namespace FoodDeliveryServer.Api.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteCustomer(long id)
         {
-            DeleteCustomerResponseDto responseDto;
+            DeleteEntityResponseDto responseDto;
 
             try
             {

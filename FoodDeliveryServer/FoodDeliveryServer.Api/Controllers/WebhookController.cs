@@ -1,8 +1,4 @@
-﻿using FoodDeliveryServer.Common.Dto.Order;
-using FoodDeliveryServer.Common.Dto.Geolocation;
-using Microsoft.AspNetCore.Mvc;
-using Stripe;
-using Stripe.Checkout;
+﻿using Microsoft.AspNetCore.Mvc;
 using FoodDeliveryServer.Core.Interfaces;
 
 namespace FoodDeliveryServer.Api.Controllers
