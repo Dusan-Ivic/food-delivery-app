@@ -26,68 +26,33 @@ namespace FoodDeliveryServer.Data.Repositories
 
         public async Task<bool> IsEmailTaken(string email)
         {
-            try
-            {
-                return await _dbContext.Customers.AnyAsync(x => x.Email == email);
-            }
-            catch (Exception)
-            {
-                throw;
-            }
+            return await _dbContext.Customers.AnyAsync(x => x.Email == email);
         }
 
         public async Task<bool> IsUsernameTaken(string username)
         {
-            try
-            {
-                return await _dbContext.Customers.AnyAsync(x => x.Username == username);
-            }
-            catch (Exception)
-            {
-                throw;
-            }
+            return await _dbContext.Customers.AnyAsync(x => x.Username == username);
         }
 
         public async Task<Customer> RegisterCustomer(Customer customer)
         {
-            try
-            {
-                await _dbContext.Customers.AddAsync(customer);
-                await _dbContext.SaveChangesAsync();
-                return customer;
-            }
-            catch (Exception)
-            {
-                throw;
-            }
+            await _dbContext.Customers.AddAsync(customer);
+            await _dbContext.SaveChangesAsync();
+            return customer;
         }
 
         public async Task<Customer> UpdateCustomer(Customer customer)
         {
-            try
-            {
-                _dbContext.Entry(customer).State = EntityState.Modified;
-                await _dbContext.SaveChangesAsync();
-                return customer;
-            }
-            catch (Exception)
-            {
-                throw;
-            }
+            _dbContext.Entry(customer).State = EntityState.Modified;
+            await _dbContext.SaveChangesAsync();
+            return customer;
         }
 
         public async Task DeleteCustomer(Customer customer)
         {
-            try
-            {
-                _dbContext.Customers.Remove(customer);
-                await _dbContext.SaveChangesAsync();
-                return;
-            }
-            catch (Exception)
-            {
-                throw;
-            }
+            _dbContext.Customers.Remove(customer);
+            await _dbContext.SaveChangesAsync();
+            return;
         }
     }
 }

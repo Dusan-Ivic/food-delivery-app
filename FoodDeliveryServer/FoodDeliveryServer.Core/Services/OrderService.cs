@@ -252,14 +252,7 @@ namespace FoodDeliveryServer.Core.Services
             order.TotalPrice = order.ItemsPrice + order.DeliveryFee;
             order.CreatedAt = DateTime.UtcNow;
 
-            try
-            {
-                order = await _orderRepository.CreateOrder(order);
-            }
-            catch (Exception)
-            {
-                throw;
-            }
+            order = await _orderRepository.CreateOrder(order);
 
             return _mapper.Map<OrderResponseDto>(order);
         }
@@ -329,14 +322,7 @@ namespace FoodDeliveryServer.Core.Services
                 item.Product.Quantity += item.Quantity;
             });
 
-            try
-            {
-                await _orderRepository.UpdateOrder(order);
-            }
-            catch (Exception)
-            {
-                throw;
-            }
+            await _orderRepository.UpdateOrder(order);
 
             return _mapper.Map<DeleteEntityResponseDto>(order);
         }

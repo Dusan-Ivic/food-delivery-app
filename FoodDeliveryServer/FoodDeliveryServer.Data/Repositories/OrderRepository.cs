@@ -36,30 +36,16 @@ namespace FoodDeliveryServer.Data.Repositories
 
         public async Task<Order> CreateOrder(Order order)
         {
-            try
-            {
-                await _dbContext.Orders.AddAsync(order);
-                await _dbContext.SaveChangesAsync();
-                return order;
-            }
-            catch (Exception)
-            {
-                throw;
-            }
+            await _dbContext.Orders.AddAsync(order);
+            await _dbContext.SaveChangesAsync();
+            return order;
         }
 
         public async Task<Order> UpdateOrder(Order order)
         {
-            try
-            {
-                _dbContext.Entry(order).State = EntityState.Modified;
-                await _dbContext.SaveChangesAsync();
-                return order;
-            }
-            catch (Exception)
-            {
-                throw;
-            }
+            _dbContext.Entry(order).State = EntityState.Modified;
+            await _dbContext.SaveChangesAsync();
+            return order;
         }
     }
 }

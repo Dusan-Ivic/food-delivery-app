@@ -68,14 +68,7 @@ namespace FoodDeliveryServer.Core.Services
             string salt = BCrypt.Net.BCrypt.GenerateSalt();
             customer.Password = BCrypt.Net.BCrypt.HashPassword(customer.Password, salt);
 
-            try
-            {
-                customer = await _customerRepository.RegisterCustomer(customer);
-            }
-            catch (Exception)
-            {
-                throw;
-            }
+            customer = await _customerRepository.RegisterCustomer(customer);
 
             CustomerResponseDto responseDto = _mapper.Map<CustomerResponseDto>(customer);
             responseDto.UserType = UserType.Customer;
@@ -117,15 +110,9 @@ namespace FoodDeliveryServer.Core.Services
                 throw new UserAlreadyExistsException("Customer with this username already exists");
             }
 
-            try
-            {
-                _mapper.Map(requestDto, customer);
-                customer = await _customerRepository.UpdateCustomer(customer);
-            }
-            catch (Exception)
-            {
-                throw;
-            }
+            _mapper.Map(requestDto, customer);
+
+            customer = await _customerRepository.UpdateCustomer(customer);
 
             CustomerResponseDto responseDto = _mapper.Map<CustomerResponseDto>(customer);
             responseDto.UserType = UserType.Customer;
@@ -142,14 +129,7 @@ namespace FoodDeliveryServer.Core.Services
                 throw new ResourceNotFoundException("Customer with this id doesn't exist");
             }
 
-            try
-            {
-                await _customerRepository.DeleteCustomer(customer);
-            }
-            catch (Exception)
-            {
-                throw;
-            }
+            await _customerRepository.DeleteCustomer(customer);
 
             return _mapper.Map<DeleteEntityResponseDto>(customer);
         }

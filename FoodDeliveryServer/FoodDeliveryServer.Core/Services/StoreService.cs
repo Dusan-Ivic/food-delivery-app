@@ -89,14 +89,7 @@ namespace FoodDeliveryServer.Core.Services
             deliveryAreaPolygon.SRID = 4326;
             store.DeliveryArea = deliveryAreaPolygon;
 
-            try
-            {
-                store = await _storeRepository.CreateStore(store);
-            }
-            catch (Exception)
-            {
-                throw;
-            }
+            store = await _storeRepository.CreateStore(store);
 
             return _mapper.Map<StoreResponseDto>(store);
         }
@@ -142,16 +135,11 @@ namespace FoodDeliveryServer.Core.Services
 
             deliveryAreaPolygon.SRID = 4326;
 
-            try
-            {
-                _mapper.Map(requestDto, store);
-                store.DeliveryArea = deliveryAreaPolygon;
-                store = await _storeRepository.UpdateStore(store);
-            }
-            catch (Exception)
-            {
-                throw;
-            }
+            _mapper.Map(requestDto, store);
+
+            store.DeliveryArea = deliveryAreaPolygon;
+
+            store = await _storeRepository.UpdateStore(store);
 
             return _mapper.Map<StoreResponseDto>(store);
         }
@@ -165,14 +153,7 @@ namespace FoodDeliveryServer.Core.Services
                 throw new ResourceNotFoundException("Store with this id doesn't exist");
             }
 
-            try
-            {
-                await _storeRepository.DeleteStore(store);
-            }
-            catch (Exception)
-            {
-                throw;
-            }
+            await _storeRepository.DeleteStore(store);
 
             return _mapper.Map<DeleteEntityResponseDto>(store);
         }
@@ -217,14 +198,7 @@ namespace FoodDeliveryServer.Core.Services
             existingStore.ImagePublicId = uploadResult.PublicId;
             existingStore.Image = uploadResult.Url.ToString();
 
-            try
-            {
-                existingStore = await _storeRepository.UpdateStore(existingStore);
-            }
-            catch (Exception)
-            {
-                throw;
-            }
+            existingStore = await _storeRepository.UpdateStore(existingStore);
 
             return _mapper.Map<ImageResponseDto>(existingStore);
         }

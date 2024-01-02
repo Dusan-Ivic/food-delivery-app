@@ -84,14 +84,7 @@ namespace FoodDeliveryServer.Core.Services
                 throw new ActionNotAllowedException("Unauthorized to add products to this store. Only the creator can perform this action.");
             }
 
-            try
-            {
-                product = await _productRepository.CreateProduct(product);
-            }
-            catch (Exception)
-            {
-                throw;
-            }
+            product = await _productRepository.CreateProduct(product);
 
             return _mapper.Map<ProductResponseDto>(product);
         }
@@ -125,15 +118,9 @@ namespace FoodDeliveryServer.Core.Services
                 throw new ValidationException(validationResult.Errors);
             }
 
-            try
-            {
-                _mapper.Map(requestDto, product);
-                product = await _productRepository.UpdateProduct(product);
-            }
-            catch (Exception)
-            {
-                throw;
-            }
+            _mapper.Map(requestDto, product);
+
+            product = await _productRepository.UpdateProduct(product);
 
             return _mapper.Map<ProductResponseDto>(product);
         }
@@ -154,14 +141,7 @@ namespace FoodDeliveryServer.Core.Services
 
             product.IsDeleted = true;
 
-            try
-            {
-                await _productRepository.UpdateProduct(product);
-            }
-            catch (Exception)
-            {
-                throw;
-            }
+            await _productRepository.UpdateProduct(product);
 
             return _mapper.Map<DeleteEntityResponseDto>(product);
         }
@@ -206,14 +186,7 @@ namespace FoodDeliveryServer.Core.Services
             existingProduct.ImagePublicId = uploadResult.PublicId;
             existingProduct.Image = uploadResult.Url.ToString();
 
-            try
-            {
-                existingProduct = await _productRepository.UpdateProduct(existingProduct);
-            }
-            catch (Exception)
-            {
-                throw;
-            }
+            existingProduct = await _productRepository.UpdateProduct(existingProduct);
 
             return _mapper.Map<ImageResponseDto>(existingProduct);
         }

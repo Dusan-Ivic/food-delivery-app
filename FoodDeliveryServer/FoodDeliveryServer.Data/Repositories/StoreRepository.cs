@@ -38,44 +38,23 @@ namespace FoodDeliveryServer.Data.Repositories
 
         public async Task<Store> CreateStore(Store store)
         {
-            try
-            {
-                await _dbContext.Stores.AddAsync(store);
-                await _dbContext.SaveChangesAsync();
-                return store;
-            }
-            catch (Exception)
-            {
-                throw;
-            }
+            await _dbContext.Stores.AddAsync(store);
+            await _dbContext.SaveChangesAsync();
+            return store;
         }
 
         public async Task<Store> UpdateStore(Store store)
         {
-            try
-            {
-                _dbContext.Entry(store).State = EntityState.Modified;
-                await _dbContext.SaveChangesAsync();
-                return store;
-            }
-            catch (Exception)
-            {
-                throw;
-            }
+            _dbContext.Entry(store).State = EntityState.Modified;
+            await _dbContext.SaveChangesAsync();
+            return store;
         }
 
         public async Task DeleteStore(Store store)
         {
-            try
-            {
-                _dbContext.Stores.Remove(store);
-                await _dbContext.SaveChangesAsync();
-                return;
-            }
-            catch (Exception)
-            {
-                throw;
-            }
+            _dbContext.Stores.Remove(store);
+            await _dbContext.SaveChangesAsync();
+            return;
         }
     }
 }
