@@ -19,6 +19,7 @@ using Product = FoodDeliveryServer.Data.Models.Product;
 using ProductService = FoodDeliveryServer.Core.Services.ProductService;
 using FoodDeliveryServer.Core.Interfaces;
 using FoodDeliveryServer.Core.Services;
+using FoodDeliveryServer.Api.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -93,6 +94,8 @@ builder.Services.AddAuthorization(options =>
     options.AddPolicy("VerifiedPartner", policy => policy.RequireClaim("Status", "Accepted"));
 });
 
+builder.Services.AddTransient<ExceptionMiddleware>();
+
 builder.Services.AddScoped<IAdminService, AdminService>();
 builder.Services.AddScoped<IAdminRepository, AdminRepository>();
 builder.Services.AddScoped<IValidator<Admin>, AdminValidator>();
@@ -155,6 +158,8 @@ if (app.Environment.IsDevelopment())
 }
 
 StripeConfiguration.ApiKey = builder.Configuration["StripeSettings:SecretKey"];
+
+app.UseMiddleware<ExceptionMiddleware>();
 
 app.UseHttpsRedirection();
 app.UseCors("AllowClientApplication");
