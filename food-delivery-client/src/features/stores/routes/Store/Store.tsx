@@ -57,16 +57,8 @@ export function StorePage() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { user } = useAppSelector((state) => state.auth);
-  const {
-    stores,
-    status: storesStatus,
-    message: storesMessage,
-  } = useAppSelector((state) => state.stores);
-  const {
-    products,
-    status: productsStatus,
-    message: productsMessage,
-  } = useAppSelector((state) => state.products);
+  const { stores } = useAppSelector((state) => state.stores);
+  const { products, status: productsStatus } = useAppSelector((state) => state.products);
   const { status: ordersStatus, message: ordersMessage } = useAppSelector((state) => state.orders);
   const { items } = useAppSelector((state) => state.cart);
   const [isCartVisible, setCartVisible] = useState<boolean>(false);
@@ -112,27 +104,11 @@ export function StorePage() {
   }, [store, dispatch, navigate]);
 
   useEffect(() => {
-    if (ordersStatus == StateStatus.Error && ordersMessage) {
-      toast.error(ordersMessage);
-    }
-
     if (ordersStatus == StateStatus.Success) {
       dispatch(clearCartItems());
       setCartVisible(false);
     }
   }, [ordersStatus, ordersMessage, dispatch]);
-
-  useEffect(() => {
-    if (productsStatus == StateStatus.Error && productsMessage) {
-      toast.error(productsMessage);
-    }
-  }, [productsStatus, productsMessage]);
-
-  useEffect(() => {
-    if (storesStatus == StateStatus.Error && storesMessage) {
-      toast.error(storesMessage);
-    }
-  }, [storesStatus, storesMessage]);
 
   useEffect(() => {
     return () => {

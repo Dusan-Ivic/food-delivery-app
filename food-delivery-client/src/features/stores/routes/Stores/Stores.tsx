@@ -2,7 +2,6 @@ import { useEffect, useMemo, useState } from "react";
 import { useAppDispatch, useAppSelector } from "@/app/hooks";
 import { getStores, reset } from "@/features/stores/slices";
 import { StateStatus } from "@/types/state";
-import { toast } from "react-toastify";
 import { Spinner } from "@/components";
 import { StoreList } from "@/features/stores/components";
 import { FaLocationDot } from "react-icons/fa6";
@@ -15,7 +14,7 @@ import { StoreCategory } from "@/features/stores/types/category";
 export function Stores() {
   const dispatch = useAppDispatch();
   const { user } = useAppSelector((state) => state.auth);
-  const { stores, status, message } = useAppSelector((state) => state.stores);
+  const { stores, status } = useAppSelector((state) => state.stores);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const { deliveryLocation, openLocationModal } = useDeliveryLocation();
 
@@ -34,12 +33,6 @@ export function Stores() {
       dispatch(getStores());
     }
   }, [deliveryLocation, dispatch, user]);
-
-  useEffect(() => {
-    if (status == StateStatus.Error && message) {
-      toast.error(message);
-    }
-  }, [status, message]);
 
   const filteredStores = useMemo(() => {
     if (selectedCategory) {

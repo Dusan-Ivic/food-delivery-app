@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { BsHouseAddFill } from "react-icons/bs";
 import { Alert, Button, Col, Row } from "react-bootstrap";
 import { StateStatus } from "@/types/state";
-import { toast } from "react-toastify";
 import { getOrders, clearOrders, reset as resetOrdersState } from "@/features/orders/slices";
 import { OrderHistory } from "@/features/orders/components";
 import { StoreTable, StoreModal } from "@/features/stores/components";
@@ -40,20 +39,12 @@ export function PartnerDashboard() {
   }, [dispatch, user]);
 
   useEffect(() => {
-    if (storesStatus == StateStatus.Error && storesMessage) {
-      toast.error(storesMessage);
-    }
-
     return () => {
       dispatch(resetStoresState());
     };
   }, [storesStatus, storesMessage, dispatch]);
 
   useEffect(() => {
-    if (ordersStatus == StateStatus.Error && ordersMessage) {
-      toast.error(ordersMessage);
-    }
-
     return () => {
       dispatch(resetOrdersState());
     };

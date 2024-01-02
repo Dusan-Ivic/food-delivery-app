@@ -19,10 +19,6 @@ export function Profile() {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    if (status === StateStatus.Error && message) {
-      toast.error(message);
-    }
-
     if (status === StateStatus.Success && message) {
       toast.success(message);
     }
