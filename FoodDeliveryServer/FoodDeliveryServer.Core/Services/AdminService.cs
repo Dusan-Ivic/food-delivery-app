@@ -49,14 +49,7 @@ namespace FoodDeliveryServer.Core.Services
             string salt = BCrypt.Net.BCrypt.GenerateSalt();
             admin.Password = BCrypt.Net.BCrypt.HashPassword(admin.Password, salt);
 
-            try
-            {
-                admin = await _adminRepository.RegisterAdmin(admin);
-            }
-            catch (Exception)
-            {
-                throw;
-            }
+            admin = await _adminRepository.RegisterAdmin(admin);
 
             AdminResponseDto responseDto = _mapper.Map<AdminResponseDto>(admin);
             responseDto.UserType = UserType.Admin;
@@ -98,15 +91,9 @@ namespace FoodDeliveryServer.Core.Services
                 throw new UserAlreadyExistsException("Admin with this username already exists");
             }
 
-            try
-            {
-                _mapper.Map(requestDto, admin);
-                admin = await _adminRepository.UpdateAdmin(admin);
-            }
-            catch (Exception)
-            {
-                throw;
-            }
+            _mapper.Map(requestDto, admin);
+
+            admin = await _adminRepository.UpdateAdmin(admin);
 
             AdminResponseDto responseDto = _mapper.Map<AdminResponseDto>(admin);
             responseDto.UserType = UserType.Admin;

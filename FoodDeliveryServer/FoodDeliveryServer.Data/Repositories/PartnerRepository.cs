@@ -32,68 +32,33 @@ namespace FoodDeliveryServer.Data.Repositories
 
         public async Task<bool> IsEmailTaken(string email)
         {
-            try
-            {
-                return await _dbContext.Partners.AnyAsync(x => x.Email == email);
-            }
-            catch (Exception)
-            {
-                throw;
-            }
+            return await _dbContext.Partners.AnyAsync(x => x.Email == email);
         }
 
         public async Task<bool> IsUsernameTaken(string username)
         {
-            try
-            {
-                return await _dbContext.Partners.AnyAsync(x => x.Username == username);
-            }
-            catch (Exception)
-            {
-                throw;
-            }
+            return await _dbContext.Partners.AnyAsync(x => x.Username == username);
         }
 
         public async Task<Partner> RegisterPartner(Partner partner)
         {
-            try
-            {
-                await _dbContext.Partners.AddAsync(partner);
-                await _dbContext.SaveChangesAsync();
-                return partner;
-            }
-            catch (Exception)
-            {
-                throw;
-            }
+            await _dbContext.Partners.AddAsync(partner);
+            await _dbContext.SaveChangesAsync();
+            return partner;
         }
 
         public async Task<Partner> UpdatePartner(Partner partner)
         {
-            try
-            {
-                _dbContext.Entry(partner).State = EntityState.Modified;
-                await _dbContext.SaveChangesAsync();
-                return partner;
-            }
-            catch (Exception)
-            {
-                throw;
-            }
+            _dbContext.Entry(partner).State = EntityState.Modified;
+            await _dbContext.SaveChangesAsync();
+            return partner;
         }
 
         public async Task DeletePartner(Partner partner)
         {
-            try
-            {
-                _dbContext.Partners.Remove(partner);
-                await _dbContext.SaveChangesAsync();
-                return;
-            }
-            catch (Exception)
-            {
-                throw;
-            }
+            _dbContext.Partners.Remove(partner);
+            await _dbContext.SaveChangesAsync();
+            return;
         }
     }
 }

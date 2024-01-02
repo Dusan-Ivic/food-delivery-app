@@ -17,30 +17,16 @@ namespace FoodDeliveryServer.Data.Repositories
 
         public async Task<RefreshToken> CreateRefreshToken(RefreshToken refreshToken)
         {
-            try
-            {
-                await _dbContext.RefreshTokens.AddAsync(refreshToken);
-                await _dbContext.SaveChangesAsync();
-                return refreshToken;
-            }
-            catch (Exception)
-            {
-                throw;
-            }
+            await _dbContext.RefreshTokens.AddAsync(refreshToken);
+            await _dbContext.SaveChangesAsync();
+            return refreshToken;
         }
 
         public async Task DeleteRefreshToken(RefreshToken refreshToken)
         {
-            try
-            {
-                _dbContext.RefreshTokens.Remove(refreshToken);
-                await _dbContext.SaveChangesAsync();
-                return;
-            }
-            catch (Exception)
-            {
-                throw;
-            }
+            _dbContext.RefreshTokens.Remove(refreshToken);
+            await _dbContext.SaveChangesAsync();
+            return;
         }
 
         public async Task<RefreshToken?> GetRefreshToken(string token)
@@ -85,30 +71,16 @@ namespace FoodDeliveryServer.Data.Repositories
 
         public async Task<RefreshToken> UpdateRefreshToken(RefreshToken refreshToken)
         {
-            try
-            {
-                _dbContext.Entry(refreshToken).State = EntityState.Modified;
-                await _dbContext.SaveChangesAsync();
-                return refreshToken;
-            }
-            catch (Exception)
-            {
-                throw;
-            }
+            _dbContext.Entry(refreshToken).State = EntityState.Modified;
+            await _dbContext.SaveChangesAsync();
+            return refreshToken;
         }
 
         public async Task<User> UpdateUser(User user)
         {
-            try
-            {
-                _dbContext.Entry(user).State = EntityState.Modified;
-                await _dbContext.SaveChangesAsync();
-                return user;
-            }
-            catch (Exception)
-            {
-                throw;
-            }
+            _dbContext.Entry(user).State = EntityState.Modified;
+            await _dbContext.SaveChangesAsync();
+            return user;
         }
     }
 }

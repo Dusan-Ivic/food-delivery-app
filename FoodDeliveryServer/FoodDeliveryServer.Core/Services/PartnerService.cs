@@ -85,14 +85,7 @@ namespace FoodDeliveryServer.Core.Services
             string salt = BCrypt.Net.BCrypt.GenerateSalt();
             partner.Password = BCrypt.Net.BCrypt.HashPassword(partner.Password, salt);
 
-            try
-            {
-                partner = await _partnerRepository.RegisterPartner(partner);
-            }
-            catch (Exception)
-            {
-                throw;
-            }
+            partner = await _partnerRepository.RegisterPartner(partner);
 
             PartnerResponseDto responseDto = _mapper.Map<PartnerResponseDto>(partner);
             responseDto.UserType = UserType.Partner;
@@ -134,15 +127,9 @@ namespace FoodDeliveryServer.Core.Services
                 throw new UserAlreadyExistsException("Partner with this username already exists");
             }
 
-            try
-            {
-                _mapper.Map(requestDto, partner);
-                partner = await _partnerRepository.UpdatePartner(partner);
-            }
-            catch (Exception)
-            {
-                throw;
-            }
+            _mapper.Map(requestDto, partner);
+
+            partner = await _partnerRepository.UpdatePartner(partner);
 
             PartnerResponseDto responseDto = _mapper.Map<PartnerResponseDto>(partner);
             responseDto.UserType = UserType.Partner;
@@ -159,14 +146,7 @@ namespace FoodDeliveryServer.Core.Services
                 throw new ResourceNotFoundException("Partner with this id doesn't exist");
             }
 
-            try
-            {
-                await _partnerRepository.DeletePartner(partner);
-            }
-            catch (Exception)
-            {
-                throw;
-            }
+            await _partnerRepository.DeletePartner(partner);
 
             return _mapper.Map<DeleteEntityResponseDto>(partner);
         }
@@ -189,14 +169,7 @@ namespace FoodDeliveryServer.Core.Services
                 throw new ValidationException(validationResult.Errors);
             }
 
-            try
-            {
-                partner = await _partnerRepository.UpdatePartner(partner);
-            }
-            catch (Exception)
-            {
-                throw;
-            }
+            partner = await _partnerRepository.UpdatePartner(partner);
 
             return _mapper.Map<PartnerResponseDto>(partner);
         }

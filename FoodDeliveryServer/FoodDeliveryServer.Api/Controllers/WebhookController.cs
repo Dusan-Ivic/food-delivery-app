@@ -20,15 +20,9 @@ namespace FoodDeliveryServer.Api.Controllers
             var json = await new StreamReader(HttpContext.Request.Body).ReadToEndAsync();
             var signature = Request.Headers["Stripe-Signature"];
 
-            try
-            {
-                await _stripeService.HandleStripeWebhook(json, signature);
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            await _stripeService.HandleStripeWebhook(json, signature);
+
+            return Ok();
         }
     }
 }

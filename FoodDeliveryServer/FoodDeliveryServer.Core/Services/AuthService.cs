@@ -134,14 +134,7 @@ namespace FoodDeliveryServer.Core.Services
                     existingRefreshToken.Token = refreshTokenPayload;
                     existingRefreshToken.CreatedAt = DateTime.UtcNow;
 
-                    try
-                    {
-                        existingRefreshToken = await _authRepository.UpdateRefreshToken(existingRefreshToken);
-                    }
-                    catch (Exception)
-                    {
-                        throw;
-                    }
+                    existingRefreshToken = await _authRepository.UpdateRefreshToken(existingRefreshToken);
 
                     responseDto.RefreshToken = existingRefreshToken.Token;
 
@@ -157,14 +150,7 @@ namespace FoodDeliveryServer.Core.Services
                     UserType = userType.Value
                 };
 
-                try
-                {
-                    refreshToken = await _authRepository.CreateRefreshToken(refreshToken);
-                }
-                catch (Exception)
-                {
-                    throw;
-                }
+                refreshToken = await _authRepository.CreateRefreshToken(refreshToken);
 
                 responseDto.RefreshToken = refreshToken.Token;
 
@@ -245,14 +231,7 @@ namespace FoodDeliveryServer.Core.Services
                 throw new IncorrectLoginCredentialsException("Provided refresh token is not valid");
             }
 
-            try
-            {
-                await _authRepository.DeleteRefreshToken(existingRefreshToken);
-            }
-            catch (Exception)
-            {
-                throw;
-            }
+            await _authRepository.DeleteRefreshToken(existingRefreshToken);
 
             return;
         }
@@ -286,14 +265,7 @@ namespace FoodDeliveryServer.Core.Services
             string salt = BCrypt.Net.BCrypt.GenerateSalt();
             existingUser.Password = BCrypt.Net.BCrypt.HashPassword(requestDto.NewPassword, salt);
 
-            try
-            {
-                existingUser = await _authRepository.UpdateUser(existingUser);
-            }
-            catch (Exception)
-            {
-                throw;
-            }
+            existingUser = await _authRepository.UpdateUser(existingUser);
 
             return;
         }
@@ -333,14 +305,7 @@ namespace FoodDeliveryServer.Core.Services
             existingUser.ImagePublicId = uploadResult.PublicId;
             existingUser.Image = uploadResult.Url.ToString();
 
-            try
-            {
-                existingUser = await _authRepository.UpdateUser(existingUser);
-            }
-            catch (Exception)
-            {
-                throw;
-            }
+            existingUser = await _authRepository.UpdateUser(existingUser);
 
             return _mapper.Map<ImageResponseDto>(existingUser);
         }
@@ -367,14 +332,7 @@ namespace FoodDeliveryServer.Core.Services
             existingUser.ImagePublicId = null;
             existingUser.Image = null;
 
-            try
-            {
-                existingUser = await _authRepository.UpdateUser(existingUser);
-            }
-            catch (Exception)
-            {
-                throw;
-            }
+            await _authRepository.UpdateUser(existingUser);
 
             return;
         }

@@ -16,26 +16,12 @@ namespace FoodDeliveryServer.Data.Repositories
 
         public async Task<bool> IsEmailTaken(string email)
         {
-            try
-            {
-                return await _dbContext.Admins.AnyAsync(x => x.Email == email);
-            }
-            catch (Exception)
-            {
-                throw;
-            }
+            return await _dbContext.Admins.AnyAsync(x => x.Email == email);
         }
 
         public async Task<bool> IsUsernameTaken(string username)
         {
-            try
-            {
-                return await _dbContext.Admins.AnyAsync(x => x.Username == username);
-            }
-            catch (Exception)
-            {
-                throw;
-            }
+            return await _dbContext.Admins.AnyAsync(x => x.Username == username);
         }
 
         public async Task<Admin?> GetAdminById(long id)
@@ -45,30 +31,16 @@ namespace FoodDeliveryServer.Data.Repositories
 
         public async Task<Admin> RegisterAdmin(Admin admin)
         {
-            try
-            {
-                await _dbContext.Admins.AddAsync(admin);
-                await _dbContext.SaveChangesAsync();
-                return admin;
-            }
-            catch (Exception)
-            {
-                throw;
-            }
+            await _dbContext.Admins.AddAsync(admin);
+            await _dbContext.SaveChangesAsync();
+            return admin;
         }
 
         public async Task<Admin> UpdateAdmin(Admin admin)
         {
-            try
-            {
-                _dbContext.Entry(admin).State = EntityState.Modified;
-                await _dbContext.SaveChangesAsync();
-                return admin;
-            }
-            catch (Exception)
-            {
-                throw;
-            }
+            _dbContext.Entry(admin).State = EntityState.Modified;
+            await _dbContext.SaveChangesAsync();
+            return admin;
         }
     }
 }
