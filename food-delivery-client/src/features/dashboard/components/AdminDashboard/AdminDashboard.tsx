@@ -52,30 +52,18 @@ export function AdminDashboard() {
   }, [user, dispatch]);
 
   useEffect(() => {
-    if (storesStatus == StateStatus.Error && storesMessage) {
-      toast.error(storesMessage);
-    }
-
     return () => {
       dispatch(resetStores());
     };
   }, [storesStatus, storesMessage, dispatch]);
 
   useEffect(() => {
-    if (partnersStatus == StateStatus.Error && partnersMessage) {
-      toast.error(partnersMessage);
-    }
-
     return () => {
       dispatch(resetPartners());
     };
   }, [partnersStatus, partnersMessage, dispatch]);
 
   useEffect(() => {
-    if (ordersStatus == StateStatus.Error && ordersMessage) {
-      toast.error(ordersMessage);
-    }
-
     return () => {
       dispatch(resetOrders());
     };

@@ -21,10 +21,6 @@ export function Register() {
   const [registerType, setRegisterType] = useState<AllowedUserType | null>(null);
 
   useEffect(() => {
-    if (status == StateStatus.Error) {
-      toast.error(message);
-    }
-
     if (status == StateStatus.Success) {
       toast.success(message);
       navigate("/login");

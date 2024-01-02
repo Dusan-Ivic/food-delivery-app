@@ -6,7 +6,6 @@ import { useAppDispatch, useAppSelector } from "@/app/hooks";
 import { useNavigate } from "react-router-dom";
 import { StateStatus } from "@/types/state";
 import { Link } from "react-router-dom";
-import { toast } from "react-toastify";
 import { Spinner } from "@/components";
 import { CreateTokenRequestDto, LoginRequestDto } from "@/features/auth/types/request";
 import { GrantType, UserType } from "@/features/auth/types/enums";
@@ -27,10 +26,6 @@ export function Login() {
   };
 
   useEffect(() => {
-    if (status == StateStatus.Error && message) {
-      toast.error(message);
-    }
-
     if (user) {
       if (user.userType == UserType.Customer) {
         navigate("/stores");
