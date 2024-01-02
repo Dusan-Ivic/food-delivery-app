@@ -78,7 +78,12 @@ namespace FoodDeliveryServer.Api.Middleware
             context.Response.StatusCode = statusCode;
             context.Response.ContentType = "application/json";
 
-			return context.Response.WriteAsync(JsonSerializer.Serialize(errorDto));
+			JsonSerializerOptions options = new JsonSerializerOptions()
+			{
+				PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+			};
+
+			return context.Response.WriteAsync(JsonSerializer.Serialize(errorDto, options));
 		}
     }
 }
