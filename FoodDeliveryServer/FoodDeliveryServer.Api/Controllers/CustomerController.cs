@@ -1,11 +1,8 @@
-﻿using FluentValidation;
-using FoodDeliveryServer.Common.Dto.Request;
+﻿using FoodDeliveryServer.Common.Dto.Request;
 using FoodDeliveryServer.Common.Dto.Response;
-using FoodDeliveryServer.Common.Exceptions;
 using FoodDeliveryServer.Core.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Data;
 using System.Security.Claims;
 
 namespace FoodDeliveryServer.Api.Controllers
@@ -34,16 +31,7 @@ namespace FoodDeliveryServer.Api.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetCustomer(long id)
         {
-            CustomerResponseDto responseDto;
-
-            try
-            {
-                responseDto = await _customerService.GetCustomer(id);
-            }
-            catch (ResourceNotFoundException ex)
-            {
-                return NotFound(new ErrorResponseDto() { Message = ex.Message });
-            }
+            CustomerResponseDto responseDto = await _customerService.GetCustomer(id);
 
             return Ok(responseDto);
         }
@@ -51,20 +39,7 @@ namespace FoodDeliveryServer.Api.Controllers
         [HttpPost]
         public async Task<IActionResult> RegisterCustomer([FromBody] RegisterUserRequestDto requestDto)
         {
-            CustomerResponseDto responseDto;
-
-            try
-            {
-                responseDto = await _customerService.RegisterCustomer(requestDto);
-            }
-            catch (ValidationException ex)
-            {
-                return BadRequest(ex.Errors.Select(err => err.ErrorMessage));
-            }
-            catch (UserAlreadyExistsException ex)
-            {
-                return Conflict(new ErrorResponseDto() { Message = ex.Message });
-            }
+            CustomerResponseDto responseDto = await _customerService.RegisterCustomer(requestDto);
 
             return Ok(responseDto);
         }
@@ -84,28 +59,7 @@ namespace FoodDeliveryServer.Api.Controllers
                 });
             }
 
-            CustomerResponseDto responseDto;
-
-            try
-            {
-                responseDto = await _customerService.UpdateCustomer(id, requestDto);
-            }
-            catch (ResourceNotFoundException ex)
-            {
-                return NotFound(new ErrorResponseDto() { Message = ex.Message });
-            }
-            catch (ValidationException ex)
-            {
-                return BadRequest(new ErrorResponseDto()
-                {
-                    Message = "One or more validation errors occurred. See the 'Errors' for details.",
-                    Errors = ex.Errors.Select(err => err.ErrorMessage).ToList()
-                });
-            }
-            catch (UserAlreadyExistsException ex)
-            {
-                return Conflict(new ErrorResponseDto() { Message = ex.Message });
-            }
+            CustomerResponseDto responseDto = await _customerService.UpdateCustomer(id, requestDto);
 
             return Ok(responseDto);
         }
@@ -114,16 +68,7 @@ namespace FoodDeliveryServer.Api.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteCustomer(long id)
         {
-            DeleteEntityResponseDto responseDto;
-
-            try
-            {
-                responseDto = await _customerService.DeleteCustomer(id);
-            }
-            catch (ResourceNotFoundException ex)
-            {
-                return NotFound(new ErrorResponseDto() { Message = ex.Message });
-            }
+            DeleteEntityResponseDto responseDto = await _customerService.DeleteCustomer(id);
 
             return Ok(responseDto);
         }

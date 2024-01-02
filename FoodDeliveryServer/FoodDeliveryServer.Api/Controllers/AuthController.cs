@@ -1,8 +1,6 @@
-﻿using FluentValidation;
-using FoodDeliveryServer.Common.Dto.Request;
+﻿using FoodDeliveryServer.Common.Dto.Request;
 using FoodDeliveryServer.Common.Dto.Response;
 using FoodDeliveryServer.Common.Enums;
-using FoodDeliveryServer.Common.Exceptions;
 using FoodDeliveryServer.Core.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -31,16 +29,7 @@ namespace FoodDeliveryServer.Api.Controllers
             Claim? roleClaim = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Role);
             UserType userType = (UserType)Enum.Parse(typeof(UserType), roleClaim!.Value);
 
-            UserResponseDto responseDto;
-
-            try
-            {
-                responseDto =  await _authService.GetProfile(userId, userType);
-            }
-            catch (ResourceNotFoundException ex)
-            {
-                return Unauthorized(new ErrorResponseDto() { Message = ex.Message });
-            }
+            UserResponseDto responseDto = await _authService.GetProfile(userId, userType);
 
             return Ok(responseDto);
         }
@@ -48,20 +37,7 @@ namespace FoodDeliveryServer.Api.Controllers
         [HttpPost("token")]
         public async Task<IActionResult> GenerateToken([FromBody] CreateTokenRequestDto requestDto)
         {
-            TokenResponseDto responseDto;
-
-            try
-            {
-                responseDto = await _authService.GenerateToken(requestDto);
-            }
-            catch (IncorrectLoginCredentialsException ex)
-            {
-                return Unauthorized(new ErrorResponseDto() { Message = ex.Message });
-            }
-            catch (ResourceNotFoundException ex)
-            {
-                return NotFound(new ErrorResponseDto() { Message = ex.Message });
-            }
+            TokenResponseDto responseDto = await _authService.GenerateToken(requestDto);
 
             return Ok(responseDto);
         }
@@ -76,18 +52,7 @@ namespace FoodDeliveryServer.Api.Controllers
             Claim? roleClaim = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Role);
             UserType userType = (UserType)Enum.Parse(typeof(UserType), roleClaim!.Value);
 
-            try
-            {
-                await _authService.DeleteToken(userId, userType, requestDto);
-            }
-            catch (IncorrectLoginCredentialsException ex)
-            {
-                return Unauthorized(new ErrorResponseDto() { Message = ex.Message });
-            }
-            catch (ResourceNotFoundException ex)
-            {
-                return NotFound(new ErrorResponseDto() { Message = ex.Message });
-            }
+            await _authService.DeleteToken(userId, userType, requestDto);
 
             return NoContent();
         }
@@ -102,22 +67,7 @@ namespace FoodDeliveryServer.Api.Controllers
             Claim? roleClaim = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Role);
             UserType userType = (UserType)Enum.Parse(typeof(UserType), roleClaim!.Value);
 
-            try
-            {
-                await _authService.ChangePassword(userId, userType, requestDto);
-            }
-            catch (IncorrectLoginCredentialsException ex)
-            {
-                return Unauthorized(new ErrorResponseDto() { Message = ex.Message });
-            }
-            catch (ValidationException ex)
-            {
-                return BadRequest(new ErrorResponseDto()
-                {
-                    Message = "One or more validation errors occurred. See the 'Errors' for details.",
-                    Errors = ex.Errors.Select(err => err.ErrorMessage).ToList()
-                });
-            }
+            await _authService.ChangePassword(userId, userType, requestDto);
 
             return Ok("Password successfully changed");
         }
@@ -132,24 +82,9 @@ namespace FoodDeliveryServer.Api.Controllers
             Claim? roleClaim = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Role);
             UserType userType = (UserType)Enum.Parse(typeof(UserType), roleClaim!.Value);
 
-            ImageResponseDto responseDto;
+            using Stream imageStream = image.OpenReadStream();
 
-            try
-            {
-                string imageName = image.FileName;
-
-                using Stream imageStream = image.OpenReadStream();
-
-                responseDto = await _authService.UploadImage(userId, userType, imageStream, imageName);
-            }
-            catch (InvalidImageException ex)
-            {
-                return BadRequest(new ErrorResponseDto() { Message = ex.Message });
-            }
-            catch (ResourceNotFoundException ex)
-            {
-                return NotFound(new ErrorResponseDto() { Message = ex.Message });
-            }
+            ImageResponseDto responseDto = await _authService.UploadImage(userId, userType, imageStream, image.FileName);
 
             return Ok(responseDto);
         }
@@ -164,14 +99,7 @@ namespace FoodDeliveryServer.Api.Controllers
             Claim? roleClaim = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Role);
             UserType userType = (UserType)Enum.Parse(typeof(UserType), roleClaim!.Value);
 
-            try
-            {
-                await _authService.RemoveImage(userId, userType);
-            }
-            catch (ResourceNotFoundException ex)
-            {
-                return NotFound(new ErrorResponseDto() { Message = ex.Message });
-            }
+            await _authService.RemoveImage(userId, userType);
 
             return NoContent();
         }

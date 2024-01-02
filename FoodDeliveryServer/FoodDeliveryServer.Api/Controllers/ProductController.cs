@@ -1,6 +1,4 @@
-﻿using FluentValidation;
-using FoodDeliveryServer.Common.Exceptions;
-using FoodDeliveryServer.Core.Interfaces;
+﻿using FoodDeliveryServer.Core.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
@@ -31,16 +29,7 @@ namespace FoodDeliveryServer.Api.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetProduct(long id)
         {
-            ProductResponseDto responseDto;
-
-            try
-            {
-                responseDto = await _productService.GetProduct(id);
-            }
-            catch (ResourceNotFoundException ex)
-            {
-                return NotFound(new ErrorResponseDto() { Message = ex.Message });
-            }
+            ProductResponseDto responseDto = await _productService.GetProduct(id);
 
             return Ok(responseDto);
         }
@@ -52,31 +41,7 @@ namespace FoodDeliveryServer.Api.Controllers
             Claim? idClaim = User.Claims.FirstOrDefault(x => x.Type == "UserId");
             long userId = long.Parse(idClaim!.Value);
 
-            ProductResponseDto responseDto;
-
-            try
-            {
-                responseDto = await _productService.CreateProduct(userId, requestDto);
-            }
-            catch (ValidationException ex)
-            {
-                return BadRequest(new ErrorResponseDto()
-                {
-                    Message = "One or more validation errors occurred. See the 'Errors' for details.",
-                    Errors = ex.Errors.Select(err => err.ErrorMessage).ToList()
-                });
-            }
-            catch (ResourceNotFoundException ex)
-            {
-                return NotFound(new ErrorResponseDto() { Message = ex.Message });
-            }
-            catch (ActionNotAllowedException ex)
-            {
-                return StatusCode(StatusCodes.Status403Forbidden, new ErrorResponseDto()
-                {
-                    Message = ex.Message
-                });
-            }
+            ProductResponseDto responseDto = await _productService.CreateProduct(userId, requestDto);
 
             return Ok(responseDto);
         }
@@ -88,31 +53,7 @@ namespace FoodDeliveryServer.Api.Controllers
             Claim? idClaim = User.Claims.FirstOrDefault(x => x.Type == "UserId");
             long userId = long.Parse(idClaim!.Value);
 
-            ProductResponseDto responseDto;
-
-            try
-            {
-                responseDto = await _productService.UpdateProduct(id, userId, requestDto);
-            }
-            catch (ResourceNotFoundException ex)
-            {
-                return NotFound(new ErrorResponseDto() { Message = ex.Message });
-            }
-            catch (ValidationException ex)
-            {
-                return BadRequest(new ErrorResponseDto()
-                {
-                    Message = "One or more validation errors occurred. See the 'Errors' for details.",
-                    Errors = ex.Errors.Select(err => err.ErrorMessage).ToList()
-                });
-            }
-            catch (ActionNotAllowedException ex)
-            {
-                return StatusCode(StatusCodes.Status403Forbidden, new ErrorResponseDto()
-                {
-                    Message = ex.Message
-                });
-            }
+            ProductResponseDto responseDto = await _productService.UpdateProduct(id, userId, requestDto);
 
             return Ok(responseDto);
         }
@@ -124,23 +65,7 @@ namespace FoodDeliveryServer.Api.Controllers
             Claim? idClaim = User.Claims.FirstOrDefault(x => x.Type == "UserId");
             long userId = long.Parse(idClaim!.Value);
 
-            DeleteEntityResponseDto responseDto;
-
-            try
-            {
-                responseDto = await _productService.DeleteProduct(id, userId);
-            }
-            catch (ResourceNotFoundException ex)
-            {
-                return NotFound(new ErrorResponseDto() { Message = ex.Message });
-            }
-            catch (ActionNotAllowedException ex)
-            {
-                return StatusCode(StatusCodes.Status403Forbidden, new ErrorResponseDto()
-                {
-                    Message = ex.Message
-                });
-            }
+            DeleteEntityResponseDto responseDto = await _productService.DeleteProduct(id, userId);
 
             return Ok(responseDto);
         }
@@ -152,31 +77,9 @@ namespace FoodDeliveryServer.Api.Controllers
             Claim? idClaim = User.Claims.FirstOrDefault(x => x.Type == "UserId");
             long userId = long.Parse(idClaim!.Value);
 
-            ImageResponseDto responseDto;
+            using Stream imageStream = image.OpenReadStream();
 
-            try
-            {
-                string imageName = image.FileName;
-
-                using Stream imageStream = image.OpenReadStream();
-
-                responseDto = await _productService.UploadImage(id, userId, imageStream, imageName);
-            }
-            catch (InvalidImageException ex)
-            {
-                return BadRequest(new ErrorResponseDto() { Message = ex.Message });
-            }
-            catch (ResourceNotFoundException ex)
-            {
-                return NotFound(new ErrorResponseDto() { Message = ex.Message });
-            }
-            catch (ActionNotAllowedException ex)
-            {
-                return StatusCode(StatusCodes.Status403Forbidden, new ErrorResponseDto()
-                {
-                    Message = ex.Message
-                });
-            }
+            ImageResponseDto responseDto = await _productService.UploadImage(id, userId, imageStream, image.FileName);
 
             return Ok(responseDto);
         }
