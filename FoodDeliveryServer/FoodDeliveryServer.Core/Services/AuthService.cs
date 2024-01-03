@@ -236,6 +236,57 @@ namespace FoodDeliveryServer.Core.Services
             return;
         }
 
+        public async Task<UserResponseDto> UpdateProfile(long userId, UserType userType, UpdateUserRequestDto requestDto)
+        {
+            User user = _mapper.Map<User>(requestDto);
+
+            ValidationResult validationResult = _validator.Validate(user, options =>
+            {
+                options.IncludeProperties(x => x.Username);
+                options.IncludeProperties(x => x.Email);
+                options.IncludeProperties(x => x.FirstName);
+                options.IncludeProperties(x => x.LastName);
+            });
+
+            if (!validationResult.IsValid)
+            {
+                throw new ValidationException(validationResult.Errors);
+            }
+
+            User? existingUser = await _authRepository.GetUserById(userId, userType);
+
+            if (existingUser == null)
+            {
+                throw new ResourceNotFoundException("User with this id doesn't exist");
+            }
+
+            _mapper.Map(requestDto, existingUser);
+
+            existingUser = await _authRepository.UpdateUser(existingUser);
+
+            UserResponseDto responseDto = new UserResponseDto();
+
+            switch (userType)
+            {
+                case UserType.Customer:
+                    responseDto = _mapper.Map<CustomerResponseDto>(existingUser);
+                    break;
+                case UserType.Partner:
+                    responseDto = _mapper.Map<PartnerResponseDto>(existingUser);
+                    break;
+                case UserType.Admin:
+                    responseDto = _mapper.Map<AdminResponseDto>(existingUser);
+                    break;
+                default:
+                    responseDto = _mapper.Map<UserResponseDto>(existingUser);
+                    break;
+            }
+
+            responseDto.UserType = userType;
+
+            return responseDto;
+        }
+
         public async Task ChangePassword(long id, UserType userType, ChangePasswordRequestDto requestDto)
         {
             User user = _mapper.Map<User>(requestDto);

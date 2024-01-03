@@ -16,6 +16,8 @@ namespace FoodDeliveryServer.Core.Mapping
 
             CreateMap<ChangePasswordRequestDto, User>().ForMember(dest => dest.Password, opt => opt.MapFrom(src => src.OldPassword));
 
+            CreateMap<UpdateUserRequestDto, User>();
+
             CreateMap<User, ImageResponseDto>();
         }
     }
