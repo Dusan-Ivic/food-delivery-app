@@ -52,6 +52,40 @@ export function AuthUserProvider({ children }: AuthUserProviderProps) {
     }
   }, [refreshToken]);
 
+  useEffect(() => {
+    const getAccessToken = async (refreshToken: string) => {
+      const response = await authService.generateToken({
+        refreshToken: refreshToken,
+        grantType: GrantType.RefreshToken,
+      });
+
+      setAccessToken({
+        payload: response.accessToken,
+        issuedAt: response.issuedAt,
+        expiresIn: response.expiresIn,
+      });
+    };
+
+    let expirationTimer: number | undefined;
+
+    if (refreshToken && accessToken) {
+      const expirationTimestamp = accessToken.issuedAt + accessToken.expiresIn;
+      const currentTimestamp = Math.floor(Date.now() / 1000);
+      const remainingTime = expirationTimestamp - currentTimestamp;
+
+      const refreshThreshold = import.meta.env.VITE_TOKEN_REFRESH_THRESHOLD;
+      const setThreshold = remainingTime < refreshThreshold ? 0 : refreshThreshold;
+
+      expirationTimer = setTimeout(() => {
+        getAccessToken(refreshToken);
+      }, (expirationTimestamp - currentTimestamp - setThreshold) * 1000);
+    }
+
+    return () => {
+      clearTimeout(expirationTimer);
+    };
+  }, [accessToken, refreshToken]);
+
   const login = async (data: LoginRequestDto) => {
     const response = await authService.generateToken({
       ...data,

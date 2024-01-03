@@ -4,7 +4,6 @@ import authService from "@/features/auth/api";
 import {
   ChangePasswordRequestDto,
   UserRequestDto,
-  CreateTokenRequestDto,
   RegisterRequestDto,
 } from "@/features/auth/types/request";
 import { StateStatus } from "@/types/state";
@@ -20,21 +19,6 @@ const initialState: AuthState = {
   status: StateStatus.None,
   message: "",
 };
-
-export const generateToken = createAsyncThunk(
-  "auth/login",
-  async (requestDto: CreateTokenRequestDto, thunkAPI) => {
-    try {
-      return await authService.generateToken(requestDto);
-    } catch (error: unknown) {
-      let message: string = "";
-      if (error instanceof Error) {
-        message = error.message;
-      }
-      return thunkAPI.rejectWithValue(message);
-    }
-  }
-);
 
 export const registerCustomer = createAsyncThunk(
   "auth/register-customer",
@@ -151,27 +135,6 @@ export const authSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(generateToken.pending, (state) => {
-        state.status = StateStatus.Loading;
-      })
-      .addCase(generateToken.rejected, (state, action) => {
-        state.status = StateStatus.Error;
-        state.user = null;
-        state.accessToken = null;
-        state.refreshToken = null;
-        state.message = action.payload as string;
-        localStorage.removeItem("refreshToken");
-      })
-      .addCase(generateToken.fulfilled, (state, action) => {
-        state.status = StateStatus.Success;
-        state.accessToken = {
-          payload: action.payload.accessToken,
-          issuedAt: action.payload.issuedAt,
-          expiresIn: action.payload.expiresIn,
-        };
-        state.refreshToken = action.payload.refreshToken;
-        localStorage.setItem("refreshToken", action.payload.refreshToken);
-      })
       .addCase(registerCustomer.pending, (state) => {
         state.status = StateStatus.Loading;
       })
