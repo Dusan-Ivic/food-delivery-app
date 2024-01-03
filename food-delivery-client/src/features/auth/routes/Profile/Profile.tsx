@@ -1,21 +1,15 @@
 import { Button, Col, Form, Row } from "react-bootstrap";
 import { useAppSelector, useAppDispatch } from "@/app/hooks";
 import { UserDetails, UserAvatar, ChangePassword } from "@/features/auth/components";
-import {
-  updateUser,
-  reset,
-  uploadImage,
-  removeImage,
-  changePassword,
-} from "@/features/auth/slices";
+import { updateUser, reset } from "@/features/auth/slices";
 import { useEffect, useRef } from "react";
 import { StateStatus } from "@/types/state";
 import { toast } from "react-toastify";
-import { ChangePasswordRequestDto, UserRequestDto } from "@/features/auth/types/request";
+import { UserRequestDto } from "@/features/auth/types/request";
 import { useAuthUser } from "@/features/auth/hooks";
 
 export function Profile() {
-  const { user } = useAuthUser();
+  const { user, changePassword, uploadImage, deleteImage } = useAuthUser();
   const { status, message } = useAppSelector((state) => state.auth);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const dispatch = useAppDispatch();
@@ -55,18 +49,8 @@ export function Profile() {
     if (imageFile) {
       const formData = new FormData();
       formData.append("image", imageFile);
-      dispatch(uploadImage(formData));
+      uploadImage(formData);
     }
-  };
-
-  const handleImageRemove = () => {
-    if (user && user.image) {
-      dispatch(removeImage());
-    }
-  };
-
-  const handlePasswordChange = (data: ChangePasswordRequestDto) => {
-    dispatch(changePassword(data));
   };
 
   return (
@@ -87,7 +71,7 @@ export function Profile() {
                 />
                 Upload
               </Button>
-              <Button variant="secondary" className="w-50" onClick={handleImageRemove}>
+              <Button variant="secondary" className="w-50" onClick={deleteImage}>
                 Remove
               </Button>
             </div>
@@ -107,7 +91,7 @@ export function Profile() {
 
           <div className="mt-3">
             <h1 className="text-center mt-3 mb-4">Change Password</h1>
-            <ChangePassword onSubmit={(data) => handlePasswordChange(data)} />
+            <ChangePassword onSubmit={changePassword} />
           </div>
         </Col>
       </Row>

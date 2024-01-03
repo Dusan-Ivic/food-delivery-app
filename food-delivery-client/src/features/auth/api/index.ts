@@ -156,7 +156,7 @@ const uploadImage = async (formData: FormData, token: string | null): Promise<Im
   }
 };
 
-const removeImage = async (token: string | null): Promise<void> => {
+const deleteImage = async (token: string | null): Promise<void> => {
   try {
     const response = await apiClient.delete("/api/auth/image", {
       headers: {
@@ -202,7 +202,7 @@ const authService = {
   updateCustomer,
   updatePartner,
   uploadImage,
-  removeImage,
+  deleteImage,
   changePassword,
 };
 

@@ -1,11 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { RootState } from "@/app/store";
 import authService from "@/features/auth/api";
-import {
-  ChangePasswordRequestDto,
-  UserRequestDto,
-  RegisterRequestDto,
-} from "@/features/auth/types/request";
+import { UserRequestDto, RegisterRequestDto } from "@/features/auth/types/request";
 import { StateStatus } from "@/types/state";
 import { AuthState } from "@/features/auth/types/state";
 import { UserType } from "@/features/auth/types/enums";
@@ -79,51 +75,6 @@ export const updateUser = createAsyncThunk(
   }
 );
 
-export const uploadImage = createAsyncThunk(
-  "auth/upload-image",
-  async (formData: FormData, thunkAPI) => {
-    try {
-      const { accessToken } = (thunkAPI.getState() as RootState).auth;
-      return await authService.uploadImage(formData, accessToken!.payload);
-    } catch (error: unknown) {
-      let message: string = "";
-      if (error instanceof Error) {
-        message = error.message;
-      }
-      return thunkAPI.rejectWithValue(message);
-    }
-  }
-);
-
-export const removeImage = createAsyncThunk("auth/remove-image", async (_, thunkAPI) => {
-  try {
-    const { accessToken } = (thunkAPI.getState() as RootState).auth;
-    return await authService.removeImage(accessToken!.payload);
-  } catch (error: unknown) {
-    let message: string = "";
-    if (error instanceof Error) {
-      message = error.message;
-    }
-    return thunkAPI.rejectWithValue(message);
-  }
-});
-
-export const changePassword = createAsyncThunk(
-  "auth/change-password",
-  async (passwordData: ChangePasswordRequestDto, thunkAPI) => {
-    try {
-      const { accessToken } = (thunkAPI.getState() as RootState).auth;
-      return await authService.changePassword(passwordData, accessToken!.payload);
-    } catch (error: unknown) {
-      let message: string = "";
-      if (error instanceof Error) {
-        message = error.message;
-      }
-      return thunkAPI.rejectWithValue(message);
-    }
-  }
-);
-
 export const authSlice = createSlice({
   name: "auth",
   initialState,
@@ -174,43 +125,6 @@ export const authSlice = createSlice({
             state.user = action.payload as PartnerResponseDto;
             break;
         }
-      })
-      .addCase(uploadImage.pending, (state) => {
-        state.status = StateStatus.Loading;
-      })
-      .addCase(uploadImage.rejected, (state, action) => {
-        state.status = StateStatus.Error;
-        state.message = action.payload as string;
-      })
-      .addCase(uploadImage.fulfilled, (state, action) => {
-        state.status = StateStatus.Success;
-        if (state.user) {
-          state.user.image = action.payload.image;
-        }
-      })
-      .addCase(removeImage.pending, (state) => {
-        state.status = StateStatus.Loading;
-      })
-      .addCase(removeImage.rejected, (state, action) => {
-        state.status = StateStatus.Error;
-        state.message = action.payload as string;
-      })
-      .addCase(removeImage.fulfilled, (state) => {
-        state.status = StateStatus.Success;
-        if (state.user) {
-          state.user.image = null;
-        }
-      })
-      .addCase(changePassword.pending, (state) => {
-        state.status = StateStatus.Loading;
-      })
-      .addCase(changePassword.rejected, (state, action) => {
-        state.status = StateStatus.Error;
-        state.message = action.payload as string;
-      })
-      .addCase(changePassword.fulfilled, (state, action) => {
-        state.status = StateStatus.Success;
-        state.message = action.payload as string;
       });
   },
 });

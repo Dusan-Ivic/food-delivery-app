@@ -1,14 +1,18 @@
 import { AccessTokenState, UserState } from "@/features/auth/types/state";
 import { createContext, useEffect, useState } from "react";
-import { LoginRequestDto } from "../types/request";
+import { ChangePasswordRequestDto, LoginRequestDto } from "@/features/auth/types/request";
 import authService from "@/features/auth/api";
 import { GrantType } from "@/features/auth/types/enums";
 import { useLocalStorage } from "@/hooks";
+import { toast } from "react-toastify";
 
 type AuthUserContextType = {
   user: UserState | null;
   login: (data: LoginRequestDto) => void;
   logout: () => void;
+  changePassword: (data: ChangePasswordRequestDto) => void;
+  uploadImage: (data: FormData) => void;
+  deleteImage: () => void;
 };
 
 export const AuthUserContext = createContext<AuthUserContextType>({} as AuthUserContextType);
@@ -110,7 +114,38 @@ export function AuthUserProvider({ children }: AuthUserProviderProps) {
     setRefreshToken(null);
   };
 
+  const changePassword = async (data: ChangePasswordRequestDto) => {
+    if (accessToken) {
+      await authService.changePassword(data, accessToken.payload);
+      toast.success("Your password has been changed.");
+    }
+  };
+
+  const uploadImage = async (formData: FormData) => {
+    if (accessToken) {
+      const response = await authService.uploadImage(formData, accessToken.payload);
+      setUser((prevUser) => ({
+        ...prevUser!,
+        image: response.image,
+      }));
+    }
+  };
+
+  const deleteImage = async () => {
+    if (accessToken) {
+      await authService.deleteImage(accessToken.payload);
+      setUser((prevUser) => ({
+        ...prevUser!,
+        image: null,
+      }));
+    }
+  };
+
   return (
-    <AuthUserContext.Provider value={{ user, login, logout }}>{children}</AuthUserContext.Provider>
+    <AuthUserContext.Provider
+      value={{ user, login, logout, changePassword, uploadImage, deleteImage }}
+    >
+      {children}
+    </AuthUserContext.Provider>
   );
 }
