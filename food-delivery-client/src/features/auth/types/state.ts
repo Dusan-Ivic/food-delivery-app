@@ -2,7 +2,7 @@ import { UserResponseDto } from "@/features/auth/types/response";
 import { PartnerResponseDto } from "@/features/partners/types/response";
 import { StateStatus } from "@/types/state";
 
-type UserState = UserResponseDto | PartnerResponseDto;
+export type UserState = UserResponseDto | PartnerResponseDto;
 
 export type AccessTokenState = {
   payload: string;

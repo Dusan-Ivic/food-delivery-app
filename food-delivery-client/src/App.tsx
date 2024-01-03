@@ -8,6 +8,7 @@ import { useEffect } from "react";
 import { CreateTokenRequestDto } from "@/features/auth/types/request";
 import { GrantType } from "@/features/auth/types/enums";
 import { DeliveryLocationProvider } from "@/features/delivery/context";
+import { AuthUserProvider } from "@/features/auth/context";
 
 function App() {
   const dispatch = useAppDispatch();
@@ -58,15 +59,17 @@ function App() {
   }, [accessToken, refreshToken, user, dispatch]);
 
   return (
-    <DeliveryLocationProvider>
-      <div className="bg-light pb-5" style={{ minHeight: "100vh" }}>
-        <Header />
-        <ToastContainer style={{ width: "40%" }} position="top-left" />
-        <Container>
-          <Outlet />
-        </Container>
-      </div>
-    </DeliveryLocationProvider>
+    <AuthUserProvider>
+      <DeliveryLocationProvider>
+        <div className="bg-light pb-5" style={{ minHeight: "100vh" }}>
+          <Header />
+          <ToastContainer style={{ width: "40%" }} position="top-left" />
+          <Container>
+            <Outlet />
+          </Container>
+        </div>
+      </DeliveryLocationProvider>
+    </AuthUserProvider>
   );
 }
 
