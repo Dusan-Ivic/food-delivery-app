@@ -88,39 +88,13 @@ const registerPartner = async (requestDto: RegisterRequestDto): Promise<PartnerR
   }
 };
 
-const updateCustomer = async (
-  customerId: number,
+const updateProfile = async (
   requestDto: UserRequestDto,
   token: string | null
-): Promise<UserResponseDto> => {
+): Promise<UserResponseDto | PartnerResponseDto> => {
   try {
-    const response = await apiClient.put<UserResponseDto>(
-      `/api/customers/${customerId}`,
-      requestDto,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
-    return response.data;
-  } catch (error) {
-    if (axios.isAxiosError(error)) {
-      throw new Error(error.response?.data.message);
-    } else {
-      throw new Error("Unknown error occurred.");
-    }
-  }
-};
-
-const updatePartner = async (
-  partnerId: number,
-  requestDto: UserRequestDto,
-  token: string | null
-): Promise<PartnerResponseDto> => {
-  try {
-    const response = await apiClient.put<PartnerResponseDto>(
-      `/api/partners/${partnerId}`,
+    const response = await apiClient.put<UserResponseDto | PartnerResponseDto>(
+      "/api/auth/profile",
       requestDto,
       {
         headers: {
@@ -199,8 +173,7 @@ const authService = {
   deleteRefreshToken,
   registerCustomer,
   registerPartner,
-  updateCustomer,
-  updatePartner,
+  updateProfile,
   uploadImage,
   deleteImage,
   changePassword,

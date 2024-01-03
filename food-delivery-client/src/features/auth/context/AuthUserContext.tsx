@@ -1,6 +1,10 @@
 import { AccessTokenState, UserState } from "@/features/auth/types/state";
 import { createContext, useEffect, useState } from "react";
-import { ChangePasswordRequestDto, LoginRequestDto } from "@/features/auth/types/request";
+import {
+  ChangePasswordRequestDto,
+  LoginRequestDto,
+  UserRequestDto,
+} from "@/features/auth/types/request";
 import authService from "@/features/auth/api";
 import { GrantType } from "@/features/auth/types/enums";
 import { useLocalStorage } from "@/hooks";
@@ -10,6 +14,7 @@ type AuthUserContextType = {
   user: UserState | null;
   login: (data: LoginRequestDto) => void;
   logout: () => void;
+  updateProfile: (data: UserRequestDto) => void;
   changePassword: (data: ChangePasswordRequestDto) => void;
   uploadImage: (data: FormData) => void;
   deleteImage: () => void;
@@ -114,6 +119,14 @@ export function AuthUserProvider({ children }: AuthUserProviderProps) {
     setRefreshToken(null);
   };
 
+  const updateProfile = async (data: UserRequestDto) => {
+    if (accessToken) {
+      const response = await authService.updateProfile(data, accessToken.payload);
+      setUser(response);
+      toast.success("Your profile has been updated.");
+    }
+  };
+
   const changePassword = async (data: ChangePasswordRequestDto) => {
     if (accessToken) {
       await authService.changePassword(data, accessToken.payload);
@@ -122,28 +135,22 @@ export function AuthUserProvider({ children }: AuthUserProviderProps) {
   };
 
   const uploadImage = async (formData: FormData) => {
-    if (accessToken) {
+    if (accessToken && user) {
       const response = await authService.uploadImage(formData, accessToken.payload);
-      setUser((prevUser) => ({
-        ...prevUser!,
-        image: response.image,
-      }));
+      setUser({ ...user, image: response.image });
     }
   };
 
   const deleteImage = async () => {
-    if (accessToken) {
+    if (accessToken && user) {
       await authService.deleteImage(accessToken.payload);
-      setUser((prevUser) => ({
-        ...prevUser!,
-        image: null,
-      }));
+      setUser({ ...user, image: null });
     }
   };
 
   return (
     <AuthUserContext.Provider
-      value={{ user, login, logout, changePassword, uploadImage, deleteImage }}
+      value={{ user, login, logout, updateProfile, changePassword, uploadImage, deleteImage }}
     >
       {children}
     </AuthUserContext.Provider>

@@ -1,42 +1,12 @@
 import { Button, Col, Form, Row } from "react-bootstrap";
-import { useAppSelector, useAppDispatch } from "@/app/hooks";
 import { UserDetails, UserAvatar, ChangePassword } from "@/features/auth/components";
-import { updateUser, reset } from "@/features/auth/slices";
-import { useEffect, useRef } from "react";
-import { StateStatus } from "@/types/state";
-import { toast } from "react-toastify";
+import { useRef } from "react";
 import { UserRequestDto } from "@/features/auth/types/request";
 import { useAuthUser } from "@/features/auth/hooks";
 
 export function Profile() {
-  const { user, changePassword, uploadImage, deleteImage } = useAuthUser();
-  const { status, message } = useAppSelector((state) => state.auth);
+  const { user, updateProfile, changePassword, uploadImage, deleteImage } = useAuthUser();
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const dispatch = useAppDispatch();
-
-  useEffect(() => {
-    if (status === StateStatus.Success && message) {
-      toast.success(message);
-    }
-
-    return () => {
-      dispatch(reset());
-    };
-  }, [status, message, dispatch]);
-
-  const handleUpdateDetails = (data: UserRequestDto) => {
-    if (!user) {
-      return;
-    }
-
-    const updatedUser = {
-      userId: user.id,
-      userType: user.userType,
-      userData: { ...user, ...data },
-    };
-
-    dispatch(updateUser(updatedUser));
-  };
 
   const handleImageClick = () => {
     if (fileInputRef.current) {
@@ -81,10 +51,7 @@ export function Profile() {
 
           <div className="mt-3">
             <h1 className="text-center mt-3 mb-4">User Details</h1>
-            <UserDetails
-              data={user as UserRequestDto}
-              onSubmit={(data) => handleUpdateDetails(data)}
-            />
+            <UserDetails data={user as UserRequestDto} onSubmit={updateProfile} />
           </div>
 
           <hr />

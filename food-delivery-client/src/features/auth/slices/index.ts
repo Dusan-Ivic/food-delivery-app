@@ -1,12 +1,9 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { RootState } from "@/app/store";
 import authService from "@/features/auth/api";
-import { UserRequestDto, RegisterRequestDto } from "@/features/auth/types/request";
+import { RegisterRequestDto } from "@/features/auth/types/request";
 import { StateStatus } from "@/types/state";
 import { AuthState } from "@/features/auth/types/state";
-import { UserType } from "@/features/auth/types/enums";
-import { PartnerResponseDto } from "@/features/partners/types/response";
-import { UserResponseDto } from "@/features/auth/types/response";
 
 const initialState: AuthState = {
   user: null,
@@ -36,35 +33,6 @@ export const registerPartner = createAsyncThunk(
   async (registerData: RegisterRequestDto, thunkAPI) => {
     try {
       return await authService.registerPartner(registerData);
-    } catch (error: unknown) {
-      let message: string = "";
-      if (error instanceof Error) {
-        message = error.message;
-      }
-      return thunkAPI.rejectWithValue(message);
-    }
-  }
-);
-
-export const updateUser = createAsyncThunk(
-  "auth/update-user",
-  async (
-    {
-      userId,
-      userType,
-      userData,
-    }: { userId: number; userType: UserType; userData: UserRequestDto },
-    thunkAPI
-  ) => {
-    try {
-      const { accessToken } = (thunkAPI.getState() as RootState).auth;
-
-      switch (userType) {
-        case UserType.Customer:
-          return await authService.updateCustomer(userId, userData, accessToken!.payload);
-        case UserType.Partner:
-          return await authService.updatePartner(userId, userData, accessToken!.payload);
-      }
     } catch (error: unknown) {
       let message: string = "";
       if (error instanceof Error) {
@@ -107,24 +75,6 @@ export const authSlice = createSlice({
       .addCase(registerPartner.fulfilled, (state, action) => {
         state.status = StateStatus.Success;
         state.message = `Partner ${action.payload.username} successfully registered`;
-      })
-      .addCase(updateUser.pending, (state) => {
-        state.status = StateStatus.Loading;
-      })
-      .addCase(updateUser.rejected, (state, action) => {
-        state.status = StateStatus.Error;
-        state.message = action.payload as string;
-      })
-      .addCase(updateUser.fulfilled, (state, action) => {
-        state.status = StateStatus.Success;
-        switch (state.user?.userType) {
-          case UserType.Customer:
-            state.user = action.payload as UserResponseDto;
-            break;
-          case UserType.Partner:
-            state.user = action.payload as PartnerResponseDto;
-            break;
-        }
       });
   },
 });
