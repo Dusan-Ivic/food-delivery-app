@@ -12,9 +12,11 @@ import { useEffect, useRef } from "react";
 import { StateStatus } from "@/types/state";
 import { toast } from "react-toastify";
 import { ChangePasswordRequestDto, UserRequestDto } from "@/features/auth/types/request";
+import { useAuthUser } from "@/features/auth/hooks";
 
 export function Profile() {
-  const { user, status, message } = useAppSelector((state) => state.auth);
+  const { user } = useAuthUser();
+  const { status, message } = useAppSelector((state) => state.auth);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const dispatch = useAppDispatch();
 

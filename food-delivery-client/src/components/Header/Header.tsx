@@ -1,32 +1,10 @@
 import { Navbar, Nav, Container } from "react-bootstrap";
 import { NavLink } from "react-router-dom";
-import { logoutUser } from "@/features/auth/slices";
-import { useAppDispatch, useAppSelector } from "@/app/hooks";
-import { useNavigate } from "react-router-dom";
-import { useMemo } from "react";
 import { UserType } from "@/features/auth/types/enums";
+import { useAuthUser } from "@/features/auth/hooks";
 
 export function Header() {
-  const navigate = useNavigate();
-  const dispatch = useAppDispatch();
-  const { user } = useAppSelector((state) => state.auth);
-  const canAccessDashboard: boolean = useMemo(() => {
-    if (!user) {
-      return false;
-    }
-    return [UserType.Partner, UserType.Admin].includes(user.userType);
-  }, [user]);
-
-  const canAccessOrders: boolean = useMemo(() => {
-    if (!user) {
-      return false;
-    }
-    return [UserType.Customer].includes(user.userType);
-  }, [user]);
-
-  const handleLogout = () => {
-    dispatch(logoutUser()).then(() => navigate("/login"));
-  };
+  const { user, logout } = useAuthUser();
 
   return (
     <Navbar sticky="top" className="bg-white shadow-sm mb-3">
@@ -42,13 +20,13 @@ export function Header() {
         <Nav>
           {user ? (
             <>
-              {canAccessDashboard && (
+              {[UserType.Partner, UserType.Admin].includes(user?.userType) && (
                 <Nav.Link to="/dashboard" as={NavLink}>
                   Dashboard
                 </Nav.Link>
               )}
 
-              {canAccessOrders && (
+              {user?.userType === UserType.Customer && (
                 <Nav.Link to="/orders" as={NavLink}>
                   Your Orders
                 </Nav.Link>
@@ -57,7 +35,7 @@ export function Header() {
               <Nav.Link to="/profile" as={NavLink}>
                 Profile
               </Nav.Link>
-              <Nav.Link onClick={handleLogout}>Logout</Nav.Link>
+              <Nav.Link onClick={logout}>Logout</Nav.Link>
             </>
           ) : (
             <>

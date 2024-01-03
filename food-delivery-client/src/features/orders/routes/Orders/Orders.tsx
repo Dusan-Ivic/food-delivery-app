@@ -6,11 +6,12 @@ import { getOrders, clearOrders, cancelOrder } from "@/features/orders/slices";
 import { StateStatus } from "@/types/state";
 import { Spinner } from "@/components";
 import { UserType } from "@/features/auth/types/enums";
+import { useAuthUser } from "@/features/auth/hooks";
 
 export function Orders() {
   const dispatch = useAppDispatch();
   const { orders, status } = useAppSelector((state) => state.orders);
-  const { user } = useAppSelector((state) => state.auth);
+  const { user } = useAuthUser();
 
   useEffect(() => {
     dispatch(getOrders());

@@ -5,7 +5,6 @@ import {
   ChangePasswordRequestDto,
   UserRequestDto,
   CreateTokenRequestDto,
-  DeleteTokenRequestDto,
   RegisterRequestDto,
 } from "@/features/auth/types/request";
 import { StateStatus } from "@/types/state";
@@ -36,35 +35,6 @@ export const generateToken = createAsyncThunk(
     }
   }
 );
-
-export const getProfile = createAsyncThunk("auth/profile", async (_, thunkAPI) => {
-  try {
-    const { accessToken } = (thunkAPI.getState() as RootState).auth;
-    return await authService.getProfile(accessToken!.payload);
-  } catch (error: unknown) {
-    let message: string = "";
-    if (error instanceof Error) {
-      message = error.message;
-    }
-    return thunkAPI.rejectWithValue(message);
-  }
-});
-
-export const logoutUser = createAsyncThunk("auth/logout", async (_, thunkAPI) => {
-  try {
-    const { accessToken, refreshToken } = (thunkAPI.getState() as RootState).auth;
-    const requestDto: DeleteTokenRequestDto = {
-      refreshToken: refreshToken || "",
-    };
-    return await authService.deleteRefreshToken(requestDto, accessToken!.payload);
-  } catch (error: unknown) {
-    let message: string = "";
-    if (error instanceof Error) {
-      message = error.message;
-    }
-    return thunkAPI.rejectWithValue(message);
-  }
-});
 
 export const registerCustomer = createAsyncThunk(
   "auth/register-customer",
@@ -201,38 +171,6 @@ export const authSlice = createSlice({
         };
         state.refreshToken = action.payload.refreshToken;
         localStorage.setItem("refreshToken", action.payload.refreshToken);
-      })
-      .addCase(getProfile.pending, (state) => {
-        state.status = StateStatus.Loading;
-      })
-      .addCase(getProfile.rejected, (state, action) => {
-        state.status = StateStatus.Error;
-        state.user = null;
-        state.accessToken = null;
-        state.refreshToken = null;
-        state.message = action.payload as string;
-      })
-      .addCase(getProfile.fulfilled, (state, action) => {
-        state.status = StateStatus.Success;
-        state.user = action.payload;
-      })
-      .addCase(logoutUser.pending, (state) => {
-        state.status = StateStatus.Loading;
-      })
-      .addCase(logoutUser.rejected, (state, action) => {
-        state.status = StateStatus.Error;
-        state.user = null;
-        state.accessToken = null;
-        state.refreshToken = null;
-        state.message = action.payload as string;
-        localStorage.removeItem("refreshToken");
-      })
-      .addCase(logoutUser.fulfilled, (state) => {
-        state.status = StateStatus.Success;
-        state.user = null;
-        state.accessToken = null;
-        state.refreshToken = null;
-        localStorage.removeItem("refreshToken");
       })
       .addCase(registerCustomer.pending, (state) => {
         state.status = StateStatus.Loading;

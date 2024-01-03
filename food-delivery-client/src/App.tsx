@@ -3,7 +3,7 @@ import { Container } from "react-bootstrap";
 import { Outlet } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import { useAppDispatch, useAppSelector } from "@/app/hooks";
-import { getProfile, generateToken, reset } from "@/features/auth/slices";
+import { generateToken } from "@/features/auth/slices";
 import { useEffect } from "react";
 import { CreateTokenRequestDto } from "@/features/auth/types/request";
 import { GrantType } from "@/features/auth/types/enums";
@@ -12,7 +12,7 @@ import { AuthUserProvider } from "@/features/auth/context";
 
 function App() {
   const dispatch = useAppDispatch();
-  const { user, accessToken, refreshToken } = useAppSelector((state) => state.auth);
+  const { accessToken, refreshToken } = useAppSelector((state) => state.auth);
 
   useEffect(() => {
     // Mechanism for refreshing access token before it expires
@@ -39,24 +39,6 @@ function App() {
       clearTimeout(expirationTimer);
     };
   }, [refreshToken, accessToken, dispatch]);
-
-  useEffect(() => {
-    if (refreshToken && !accessToken) {
-      const requestDto: CreateTokenRequestDto = {
-        grantType: GrantType.RefreshToken,
-        refreshToken: refreshToken,
-      };
-      dispatch(generateToken(requestDto));
-    }
-
-    if (refreshToken && accessToken && !user) {
-      dispatch(getProfile());
-    }
-
-    return () => {
-      dispatch(reset());
-    };
-  }, [accessToken, refreshToken, user, dispatch]);
 
   return (
     <AuthUserProvider>

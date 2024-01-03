@@ -45,6 +45,7 @@ import { OrderRequestDto } from "@/features/orders/types/request";
 import { CheckoutResponseDto } from "@/features/orders/types/response";
 import { ProductResponseDto } from "@/features/products/types/response";
 import { ProductRequestDto } from "@/features/products/types/request";
+import { useAuthUser } from "@/features/auth/hooks";
 
 interface ConfirmDeleteModalProps {
   isVisible: boolean;
@@ -56,7 +57,7 @@ export function StorePage() {
   const { id } = useParams();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const { user } = useAppSelector((state) => state.auth);
+  const { user } = useAuthUser();
   const { stores } = useAppSelector((state) => state.stores);
   const { products, status: productsStatus } = useAppSelector((state) => state.products);
   const { status: ordersStatus, message: ordersMessage } = useAppSelector((state) => state.orders);

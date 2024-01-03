@@ -17,10 +17,11 @@ import { Spinner } from "@/components";
 import { StoreTable } from "@/features/stores/components";
 import { PartnerResponseDto } from "@/features/partners/types/response";
 import { PartnerStatus } from "@/features/partners/types/enums";
+import { useAuthUser } from "@/features/auth/hooks";
 
 export function AdminDashboard() {
   const dispatch = useAppDispatch();
-  const { user } = useAppSelector((state) => state.auth);
+  const { user } = useAuthUser();
   const {
     stores,
     status: storesStatus,

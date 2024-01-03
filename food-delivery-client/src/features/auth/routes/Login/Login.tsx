@@ -1,28 +1,24 @@
 import { useEffect } from "react";
 import { Col, Row } from "react-bootstrap";
 import { LoginForm } from "@/features/auth/components";
-import { generateToken, reset } from "@/features/auth/slices";
+import { reset } from "@/features/auth/slices";
 import { useAppDispatch, useAppSelector } from "@/app/hooks";
 import { useNavigate } from "react-router-dom";
 import { StateStatus } from "@/types/state";
 import { Link } from "react-router-dom";
 import { Spinner } from "@/components";
-import { CreateTokenRequestDto, LoginRequestDto } from "@/features/auth/types/request";
-import { GrantType, UserType } from "@/features/auth/types/enums";
+import { LoginRequestDto } from "@/features/auth/types/request";
+import { UserType } from "@/features/auth/types/enums";
+import { useAuthUser } from "@/features/auth/hooks";
 
 export function Login() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const { user, status, message } = useAppSelector((state) => state.auth);
+  const { status, message } = useAppSelector((state) => state.auth);
+  const { user, login } = useAuthUser();
 
   const onSubmit = (data: LoginRequestDto) => {
-    const requestDto: CreateTokenRequestDto = {
-      grantType: GrantType.UsernamePassword,
-      username: data.username,
-      password: data.password,
-      userType: data.userType,
-    };
-    dispatch(generateToken(requestDto));
+    login(data);
   };
 
   useEffect(() => {

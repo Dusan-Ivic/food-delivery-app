@@ -10,10 +10,11 @@ import { StoreTable, StoreModal } from "@/features/stores/components";
 import { Spinner } from "@/components";
 import { PartnerStatus } from "@/features/partners/types/enums";
 import { PartnerResponseDto } from "@/features/partners/types/response";
+import { useAuthUser } from "@/features/auth/hooks";
 
 export function PartnerDashboard() {
   const dispatch = useAppDispatch();
-  const { user } = useAppSelector((state) => state.auth);
+  const { user } = useAuthUser();
   const {
     stores,
     status: storesStatus,

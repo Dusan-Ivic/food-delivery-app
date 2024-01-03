@@ -10,10 +10,11 @@ import { useDeliveryLocation } from "@/features/delivery/hooks";
 import categoryIcons from "@/features/stores/data/categoryIcons";
 import { UserType } from "@/features/auth/types/enums";
 import { StoreCategory } from "@/features/stores/types/category";
+import { useAuthUser } from "@/features/auth/hooks";
 
 export function Stores() {
   const dispatch = useAppDispatch();
-  const { user } = useAppSelector((state) => state.auth);
+  const { user } = useAuthUser();
   const { stores, status } = useAppSelector((state) => state.stores);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const { deliveryLocation, openLocationModal } = useDeliveryLocation();
