@@ -1,4 +1,4 @@
-import { getStores, createStore, reset as resetStoresState } from "@/features/stores/slices";
+import { createStore } from "@/features/stores/slices";
 import { useAppDispatch, useAppSelector } from "@/app/hooks";
 import { useEffect, useState } from "react";
 import { BsHouseAddFill } from "react-icons/bs";
@@ -11,15 +11,14 @@ import { Spinner } from "@/components";
 import { PartnerStatus } from "@/features/partners/types/enums";
 import { PartnerResponseDto } from "@/features/partners/types/response";
 import { useAuthUser } from "@/features/auth/hooks";
+import { useStores } from "@/features/stores/hooks";
 
 export function PartnerDashboard() {
   const dispatch = useAppDispatch();
   const { user } = useAuthUser();
-  const {
-    stores,
-    status: storesStatus,
-    message: storesMessage,
-  } = useAppSelector((state) => state.stores);
+  const { stores } = useStores({
+    partnerId: user?.id,
+  });
   const {
     orders,
     status: ordersStatus,
@@ -29,21 +28,13 @@ export function PartnerDashboard() {
 
   useEffect(() => {
     if (user) {
-      dispatch(getStores({ partnerId: user.id }));
       dispatch(getOrders());
     }
 
     return () => {
-      dispatch(resetStoresState());
       dispatch(clearOrders());
     };
   }, [dispatch, user]);
-
-  useEffect(() => {
-    return () => {
-      dispatch(resetStoresState());
-    };
-  }, [storesStatus, storesMessage, dispatch]);
 
   useEffect(() => {
     return () => {
@@ -102,16 +93,10 @@ export function PartnerDashboard() {
           </Button>
         </div>
 
-        {storesStatus === StateStatus.Loading ? (
-          <Spinner />
+        {stores.length > 0 ? (
+          <StoreTable stores={stores} />
         ) : (
-          <>
-            {stores.length > 0 ? (
-              <StoreTable stores={stores} />
-            ) : (
-              <p className="text-center mt-4"> You don't have any registered stores</p>
-            )}
-          </>
+          <p className="text-center mt-4"> You don't have any registered stores</p>
         )}
       </Row>
 

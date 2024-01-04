@@ -4,7 +4,7 @@ import { RootState } from "@/app/store";
 import { UserType } from "@/features/auth/types/enums";
 import storesService from "@/features/stores/api";
 import { StoresState } from "@/features/stores/types/state";
-import { GetStoresRequestDto, StoreRequestDto } from "@/features/stores/types/request";
+import { StoreRequestDto } from "@/features/stores/types/request";
 import { PartnerResponseDto } from "@/features/partners/types/response";
 import { PartnerStatus } from "@/features/partners/types/enums";
 
@@ -13,27 +13,6 @@ const initialState: StoresState = {
   status: StateStatus.None,
   message: "",
 };
-
-export const getStores = createAsyncThunk(
-  "stores/get-stores",
-  async (requestDto: GetStoresRequestDto | undefined, thunkAPI) => {
-    try {
-      if (requestDto && requestDto.partnerId) {
-        return await storesService.getStoresByPartner(requestDto.partnerId);
-      } else if (requestDto && requestDto.coordinate) {
-        return await storesService.getStoresInArea(requestDto.coordinate);
-      } else {
-        return await storesService.getStores();
-      }
-    } catch (error: unknown) {
-      let message: string = "";
-      if (error instanceof Error) {
-        message = error.message;
-      }
-      return thunkAPI.rejectWithValue(message);
-    }
-  }
-);
 
 export const createStore = createAsyncThunk(
   "stores/create",
@@ -120,17 +99,6 @@ export const storesSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(getStores.pending, (state) => {
-        state.status = StateStatus.Loading;
-      })
-      .addCase(getStores.rejected, (state, action) => {
-        state.status = StateStatus.Error;
-        state.message = action.payload as string;
-      })
-      .addCase(getStores.fulfilled, (state, action) => {
-        state.status = StateStatus.Success;
-        state.stores = action.payload;
-      })
       .addCase(createStore.pending, (state) => {
         state.status = StateStatus.Loading;
       })

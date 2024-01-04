@@ -1,4 +1,3 @@
-import { getStores, reset as resetStores } from "@/features/stores/slices";
 import {
   getPartners,
   clearPartners,
@@ -18,15 +17,12 @@ import { StoreTable } from "@/features/stores/components";
 import { PartnerResponseDto } from "@/features/partners/types/response";
 import { PartnerStatus } from "@/features/partners/types/enums";
 import { useAuthUser } from "@/features/auth/hooks";
+import { useStores } from "@/features/stores/hooks";
 
 export function AdminDashboard() {
   const dispatch = useAppDispatch();
   const { user } = useAuthUser();
-  const {
-    stores,
-    status: storesStatus,
-    message: storesMessage,
-  } = useAppSelector((state) => state.stores);
+  const { stores } = useStores();
   const {
     partners,
     status: partnersStatus,
@@ -40,23 +36,15 @@ export function AdminDashboard() {
 
   useEffect(() => {
     if (user) {
-      dispatch(getStores());
       dispatch(getPartners());
       dispatch(getOrders());
     }
 
     return () => {
-      dispatch(resetStores());
       dispatch(clearPartners());
       dispatch(clearOrders());
     };
   }, [user, dispatch]);
-
-  useEffect(() => {
-    return () => {
-      dispatch(resetStores());
-    };
-  }, [storesStatus, storesMessage, dispatch]);
 
   useEffect(() => {
     return () => {
@@ -105,16 +93,10 @@ export function AdminDashboard() {
           <h1 className="text-center mt-3 mb-3">Registered Stores</h1>
         </div>
 
-        {storesStatus === StateStatus.Loading ? (
-          <Spinner />
+        {stores.length > 0 ? (
+          <StoreTable stores={stores} />
         ) : (
-          <>
-            {stores.length > 0 ? (
-              <StoreTable stores={stores} />
-            ) : (
-              <p className="text-center mt-4">There are currently no registered stores</p>
-            )}
-          </>
+          <p className="text-center mt-4">There are currently no registered stores</p>
         )}
       </Row>
 
