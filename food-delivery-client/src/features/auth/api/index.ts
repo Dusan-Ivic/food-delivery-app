@@ -5,7 +5,6 @@ import {
   CreateTokenRequestDto,
   DeleteTokenRequestDto,
   ChangePasswordRequestDto,
-  RegisterRequestDto,
   UserRequestDto,
 } from "@/features/auth/types/request";
 import { TokenResponseDto, UserResponseDto } from "@/features/auth/types/response";
@@ -62,65 +61,13 @@ const deleteRefreshToken = async (
   }
 };
 
-const registerCustomer = async (requestDto: RegisterRequestDto): Promise<UserResponseDto> => {
-  try {
-    const response = await apiClient.post<UserResponseDto>("/api/customers", requestDto);
-    return response.data;
-  } catch (error) {
-    if (axios.isAxiosError(error)) {
-      throw new Error(error.response?.data.message);
-    } else {
-      throw new Error("Unknown error occurred.");
-    }
-  }
-};
-
-const registerPartner = async (requestDto: RegisterRequestDto): Promise<PartnerResponseDto> => {
-  try {
-    const response = await apiClient.post<PartnerResponseDto>("/api/partners", requestDto);
-    return response.data;
-  } catch (error) {
-    if (axios.isAxiosError(error)) {
-      throw new Error(error.response?.data.message);
-    } else {
-      throw new Error("Unknown error occurred.");
-    }
-  }
-};
-
-const updateCustomer = async (
-  customerId: number,
+const updateProfile = async (
   requestDto: UserRequestDto,
   token: string | null
-): Promise<UserResponseDto> => {
+): Promise<UserResponseDto | PartnerResponseDto> => {
   try {
-    const response = await apiClient.put<UserResponseDto>(
-      `/api/customers/${customerId}`,
-      requestDto,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
-    return response.data;
-  } catch (error) {
-    if (axios.isAxiosError(error)) {
-      throw new Error(error.response?.data.message);
-    } else {
-      throw new Error("Unknown error occurred.");
-    }
-  }
-};
-
-const updatePartner = async (
-  partnerId: number,
-  requestDto: UserRequestDto,
-  token: string | null
-): Promise<PartnerResponseDto> => {
-  try {
-    const response = await apiClient.put<PartnerResponseDto>(
-      `/api/partners/${partnerId}`,
+    const response = await apiClient.put<UserResponseDto | PartnerResponseDto>(
+      "/api/auth/profile",
       requestDto,
       {
         headers: {
@@ -156,7 +103,7 @@ const uploadImage = async (formData: FormData, token: string | null): Promise<Im
   }
 };
 
-const removeImage = async (token: string | null): Promise<void> => {
+const deleteImage = async (token: string | null): Promise<void> => {
   try {
     const response = await apiClient.delete("/api/auth/image", {
       headers: {
@@ -197,12 +144,9 @@ const authService = {
   generateToken,
   getProfile,
   deleteRefreshToken,
-  registerCustomer,
-  registerPartner,
-  updateCustomer,
-  updatePartner,
+  updateProfile,
   uploadImage,
-  removeImage,
+  deleteImage,
   changePassword,
 };
 

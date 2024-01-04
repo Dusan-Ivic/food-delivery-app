@@ -1,96 +1,24 @@
-import { getStores, createStore, reset as resetStoresState } from "@/features/stores/slices";
-import { useAppDispatch, useAppSelector } from "@/app/hooks";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { BsHouseAddFill } from "react-icons/bs";
-import { Alert, Button, Col, Row } from "react-bootstrap";
-import { StateStatus } from "@/types/state";
-import { getOrders, clearOrders, reset as resetOrdersState } from "@/features/orders/slices";
+import { Button, Col, Row } from "react-bootstrap";
 import { OrderHistory } from "@/features/orders/components";
 import { StoreTable, StoreModal } from "@/features/stores/components";
-import { Spinner } from "@/components";
-import { PartnerStatus } from "@/features/partners/types/enums";
 import { PartnerResponseDto } from "@/features/partners/types/response";
+import { useAuthUser } from "@/features/auth/hooks";
+import { useStores } from "@/features/stores/hooks";
+import { useOrders } from "@/features/orders/hooks";
+import { StatusAlert } from "@/features/dashboard/components";
 
 export function PartnerDashboard() {
-  const dispatch = useAppDispatch();
-  const { user } = useAppSelector((state) => state.auth);
-  const {
-    stores,
-    status: storesStatus,
-    message: storesMessage,
-  } = useAppSelector((state) => state.stores);
-  const {
-    orders,
-    status: ordersStatus,
-    message: ordersMessage,
-  } = useAppSelector((state) => state.orders);
   const [isModalVisible, setModalVisible] = useState<boolean>(false);
-
-  useEffect(() => {
-    if (user) {
-      dispatch(getStores({ partnerId: user.id }));
-      dispatch(getOrders());
-    }
-
-    return () => {
-      dispatch(resetStoresState());
-      dispatch(clearOrders());
-    };
-  }, [dispatch, user]);
-
-  useEffect(() => {
-    return () => {
-      dispatch(resetStoresState());
-    };
-  }, [storesStatus, storesMessage, dispatch]);
-
-  useEffect(() => {
-    return () => {
-      dispatch(resetOrdersState());
-    };
-  }, [ordersStatus, ordersMessage, dispatch]);
-
-  const AlertComponent = ({
-    status,
-    children,
-  }: {
-    status: PartnerStatus;
-    children: JSX.Element;
-  }) => {
-    switch (status) {
-      case PartnerStatus.Pending:
-        return (
-          <Alert variant="warning">
-            {children} You may be restricted from performing certain actions.
-          </Alert>
-        );
-      case PartnerStatus.Rejected:
-        return (
-          <Alert variant="danger">
-            {children} You may be restricted from performing certain actions.
-          </Alert>
-        );
-      case PartnerStatus.Suspended:
-        return (
-          <Alert variant="danger">
-            {children} You may be restricted from performing certain actions.
-          </Alert>
-        );
-      case PartnerStatus.Accepted:
-        return (
-          <Alert variant="success">
-            {children} You can now perform all store and product related actions.
-          </Alert>
-        );
-    }
-  };
+  const { user } = useAuthUser();
+  const { orders } = useOrders();
+  const { stores, createStore } = useStores({ partnerId: user?.id });
 
   return (
     <Col>
       <Row>
-        <AlertComponent status={(user as PartnerResponseDto).status}>
-          <>Your current status is: {PartnerStatus[(user as PartnerResponseDto).status]}.</>
-        </AlertComponent>
+        <StatusAlert status={(user as PartnerResponseDto).status} />
       </Row>
 
       <Row>
@@ -101,16 +29,10 @@ export function PartnerDashboard() {
           </Button>
         </div>
 
-        {storesStatus === StateStatus.Loading ? (
-          <Spinner />
+        {stores.length > 0 ? (
+          <StoreTable stores={stores} />
         ) : (
-          <>
-            {stores.length > 0 ? (
-              <StoreTable stores={stores} />
-            ) : (
-              <p className="text-center mt-4"> You don't have any registered stores</p>
-            )}
-          </>
+          <p className="text-center mt-4"> You don't have any registered stores</p>
         )}
       </Row>
 
@@ -121,23 +43,19 @@ export function PartnerDashboard() {
           <h1 className="text-center mt-3 mb-3">Orders</h1>
         </div>
 
-        {ordersStatus === StateStatus.Loading ? (
-          <Spinner />
-        ) : (
-          <>
-            {orders.length > 0 ? (
-              <OrderHistory orders={orders} canManageOrders={false} />
-            ) : (
-              <p className="text-center mt-4">There are currently no orders</p>
-            )}
-          </>
-        )}
+        <>
+          {orders.length > 0 ? (
+            <OrderHistory orders={orders} canManageOrders={false} />
+          ) : (
+            <p className="text-center mt-4">There are currently no orders</p>
+          )}
+        </>
       </Row>
 
       <StoreModal
         isVisible={isModalVisible}
         title="Add new store"
-        onSubmit={(data) => dispatch(createStore(data))}
+        onSubmit={createStore}
         onClose={() => setModalVisible(false)}
       />
     </Col>

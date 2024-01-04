@@ -57,6 +57,21 @@ namespace FoodDeliveryServer.Api.Controllers
             return NoContent();
         }
 
+        [HttpPut("profile")]
+        [Authorize]
+        public async Task<IActionResult> UpdateProfile([FromBody] UpdateUserRequestDto requestDto)
+        {
+            Claim? idClaim = User.Claims.FirstOrDefault(x => x.Type == "UserId");
+            long userId = long.Parse(idClaim!.Value);
+
+            Claim? roleClaim = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Role);
+            UserType userType = (UserType)Enum.Parse(typeof(UserType), roleClaim!.Value);
+
+            UserResponseDto responseDto = await _authService.UpdateProfile(userId, userType, requestDto);
+
+            return Ok(responseDto);
+        }
+
         [HttpPut("password")]
         [Authorize]
         public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordRequestDto requestDto)

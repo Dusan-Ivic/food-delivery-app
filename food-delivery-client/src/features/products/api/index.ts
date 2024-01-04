@@ -4,7 +4,7 @@ import apiClient from "@/config/apiClient";
 import { ProductResponseDto } from "@/features/products/types/response";
 import { ProductRequestDto } from "@/features/products/types/request";
 
-const getProductsByStore = async (storeId: number): Promise<ProductResponseDto[]> => {
+const getProducts = async (storeId: string): Promise<ProductResponseDto[]> => {
   try {
     const response = await apiClient.get<ProductResponseDto[]>(`/api/products?storeId=${storeId}`);
     return response.data;
@@ -106,7 +106,7 @@ const uploadImage = async (
 };
 
 const productsService = {
-  getProductsByStore,
+  getProducts,
   createProduct,
   updateProduct,
   deleteProduct,

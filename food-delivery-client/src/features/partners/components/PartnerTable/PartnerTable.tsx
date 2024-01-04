@@ -3,13 +3,14 @@ import { LuShieldCheck, LuShieldClose, LuShieldQuestion } from "react-icons/lu";
 import { HiOutlineX, HiOutlineCheck } from "react-icons/hi";
 import { PartnerStatus } from "@/features/partners/types/enums";
 import { PartnerResponseDto } from "@/features/partners/types/response";
+import { VerifyPartnerRequestDto } from "@/features/partners/types/request";
 
 interface PartnerTableProps {
   partners: PartnerResponseDto[];
-  onVerify: (partner: PartnerResponseDto, status: PartnerStatus) => void;
+  handleVerifyPartner: (partnerId: number, data: VerifyPartnerRequestDto) => void;
 }
 
-export function PartnerTable({ partners, onVerify }: PartnerTableProps) {
+export function PartnerTable({ partners, handleVerifyPartner }: PartnerTableProps) {
   const statusToIconMap = {
     [PartnerStatus.Pending]: <LuShieldQuestion className="fs-4" style={{ color: "orange" }} />,
     [PartnerStatus.Rejected]: <LuShieldClose className="fs-4" style={{ color: "red" }} />,
@@ -53,14 +54,18 @@ export function PartnerTable({ partners, onVerify }: PartnerTableProps) {
                     <HiOutlineCheck
                       className="fs-4"
                       style={{ color: "darkblue" }}
-                      onClick={() => onVerify(partner, PartnerStatus.Accepted)}
+                      onClick={() =>
+                        handleVerifyPartner(partner.id, { status: PartnerStatus.Accepted })
+                      }
                     />
                   </div>
                   <div style={{ cursor: "pointer" }}>
                     <HiOutlineX
                       className="fs-4"
                       style={{ color: "darkred" }}
-                      onClick={() => onVerify(partner, PartnerStatus.Rejected)}
+                      onClick={() =>
+                        handleVerifyPartner(partner.id, { status: PartnerStatus.Rejected })
+                      }
                     />
                   </div>
                 </div>

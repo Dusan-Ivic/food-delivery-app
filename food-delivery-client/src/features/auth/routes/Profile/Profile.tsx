@@ -1,46 +1,12 @@
 import { Button, Col, Form, Row } from "react-bootstrap";
-import { useAppSelector, useAppDispatch } from "@/app/hooks";
 import { UserDetails, UserAvatar, ChangePassword } from "@/features/auth/components";
-import {
-  updateUser,
-  reset,
-  uploadImage,
-  removeImage,
-  changePassword,
-} from "@/features/auth/slices";
-import { useEffect, useRef } from "react";
-import { StateStatus } from "@/types/state";
-import { toast } from "react-toastify";
-import { ChangePasswordRequestDto, UserRequestDto } from "@/features/auth/types/request";
+import { useRef } from "react";
+import { UserRequestDto } from "@/features/auth/types/request";
+import { useAuthUser } from "@/features/auth/hooks";
 
 export function Profile() {
-  const { user, status, message } = useAppSelector((state) => state.auth);
+  const { user, updateProfile, changePassword, uploadImage, deleteImage } = useAuthUser();
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const dispatch = useAppDispatch();
-
-  useEffect(() => {
-    if (status === StateStatus.Success && message) {
-      toast.success(message);
-    }
-
-    return () => {
-      dispatch(reset());
-    };
-  }, [status, message, dispatch]);
-
-  const handleUpdateDetails = (data: UserRequestDto) => {
-    if (!user) {
-      return;
-    }
-
-    const updatedUser = {
-      userId: user.id,
-      userType: user.userType,
-      userData: { ...user, ...data },
-    };
-
-    dispatch(updateUser(updatedUser));
-  };
 
   const handleImageClick = () => {
     if (fileInputRef.current) {
@@ -53,18 +19,8 @@ export function Profile() {
     if (imageFile) {
       const formData = new FormData();
       formData.append("image", imageFile);
-      dispatch(uploadImage(formData));
+      uploadImage(formData);
     }
-  };
-
-  const handleImageRemove = () => {
-    if (user && user.image) {
-      dispatch(removeImage());
-    }
-  };
-
-  const handlePasswordChange = (data: ChangePasswordRequestDto) => {
-    dispatch(changePassword(data));
   };
 
   return (
@@ -85,7 +41,7 @@ export function Profile() {
                 />
                 Upload
               </Button>
-              <Button variant="secondary" className="w-50" onClick={handleImageRemove}>
+              <Button variant="secondary" className="w-50" onClick={deleteImage}>
                 Remove
               </Button>
             </div>
@@ -95,17 +51,14 @@ export function Profile() {
 
           <div className="mt-3">
             <h1 className="text-center mt-3 mb-4">User Details</h1>
-            <UserDetails
-              data={user as UserRequestDto}
-              onSubmit={(data) => handleUpdateDetails(data)}
-            />
+            <UserDetails data={user as UserRequestDto} onSubmit={updateProfile} />
           </div>
 
           <hr />
 
           <div className="mt-3">
             <h1 className="text-center mt-3 mb-4">Change Password</h1>
-            <ChangePassword onSubmit={(data) => handlePasswordChange(data)} />
+            <ChangePassword onSubmit={changePassword} />
           </div>
         </Col>
       </Row>

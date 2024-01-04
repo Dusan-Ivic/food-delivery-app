@@ -1,4 +1,4 @@
-import { useAppSelector } from "@/app/hooks";
+import { useAuthUser } from "@/features/auth/hooks";
 import { Navigate } from "react-router-dom";
 
 interface PrivateRouteProps {
@@ -6,7 +6,7 @@ interface PrivateRouteProps {
 }
 
 export function PrivateRoute({ children }: PrivateRouteProps) {
-  const { user } = useAppSelector((state) => state.auth);
+  const { user } = useAuthUser();
 
   return user != null ? children : <Navigate to="/login" />;
 }

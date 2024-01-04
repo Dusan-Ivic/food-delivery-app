@@ -1,8 +1,4 @@
 import { useEffect, useMemo, useState } from "react";
-import { useAppDispatch, useAppSelector } from "@/app/hooks";
-import { getStores, reset } from "@/features/stores/slices";
-import { StateStatus } from "@/types/state";
-import { Spinner } from "@/components";
 import { StoreList } from "@/features/stores/components";
 import { FaLocationDot } from "react-icons/fa6";
 import { Col, ListGroup, ListGroupItem, Row } from "react-bootstrap";
@@ -10,29 +6,24 @@ import { useDeliveryLocation } from "@/features/delivery/hooks";
 import categoryIcons from "@/features/stores/data/categoryIcons";
 import { UserType } from "@/features/auth/types/enums";
 import { StoreCategory } from "@/features/stores/types/category";
+import { useAuthUser } from "@/features/auth/hooks";
+import { useStores } from "@/features/stores/hooks";
 
 export function Stores() {
-  const dispatch = useAppDispatch();
-  const { user } = useAppSelector((state) => state.auth);
-  const { stores, status } = useAppSelector((state) => state.stores);
+  const { user } = useAuthUser();
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const { deliveryLocation, openLocationModal } = useDeliveryLocation();
+  const { stores, setFilters } = useStores({
+    coordinate: deliveryLocation ? deliveryLocation.coordinate : undefined,
+  });
 
   useEffect(() => {
-    return () => {
-      dispatch(reset());
-    };
-  }, [dispatch]);
-
-  useEffect(() => {
-    if (deliveryLocation) {
-      dispatch(getStores({ coordinate: deliveryLocation.coordinate }));
-    } else if (!user || user?.userType === UserType.Customer) {
-      dispatch(getStores());
-    } else {
-      dispatch(getStores());
+    if (deliveryLocation?.coordinate) {
+      setFilters({
+        coordinate: deliveryLocation.coordinate,
+      });
     }
-  }, [deliveryLocation, dispatch, user]);
+  }, [deliveryLocation, setFilters]);
 
   const filteredStores = useMemo(() => {
     if (selectedCategory) {
@@ -156,16 +147,10 @@ export function Stores() {
         {selectedCategory ? (
           <Col>
             <h1 className="text-center mt-3 mb-4 display-4">Filtered Stores</h1>
-            {status === StateStatus.Loading ? (
-              <Spinner />
+            {filteredStores.length > 0 ? (
+              <StoreList stores={filteredStores} />
             ) : (
-              <>
-                {filteredStores.length > 0 ? (
-                  <StoreList stores={filteredStores} />
-                ) : (
-                  <p className="text-center mt-4">There are no stores found for this criteria</p>
-                )}
-              </>
+              <p className="text-center mt-4">There are no stores found for this criteria</p>
             )}
           </Col>
         ) : (
@@ -173,20 +158,14 @@ export function Stores() {
             <h1 className="text-center mt-3 mb-4 display-4">
               {deliveryLocation ? "Stores delivering to your location" : "All available Stores"}
             </h1>
-            {status === StateStatus.Loading ? (
-              <Spinner />
+            {stores.length > 0 ? (
+              <StoreList stores={stores} />
             ) : (
-              <>
-                {stores.length > 0 ? (
-                  <StoreList stores={stores} />
-                ) : (
-                  <p className="text-center mt-4">
-                    {deliveryLocation
-                      ? "There are currently no stores delivering to your location"
-                      : "There are currently no registered stores"}
-                  </p>
-                )}
-              </>
+              <p className="text-center mt-4">
+                {deliveryLocation
+                  ? "There are currently no stores delivering to your location"
+                  : "There are currently no registered stores"}
+              </p>
             )}
           </Col>
         )}

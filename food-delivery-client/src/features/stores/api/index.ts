@@ -1,13 +1,13 @@
 import axios from "axios";
 import { ImageResponseDto } from "@/types/image";
 import apiClient from "@/config/apiClient";
-import { Coordinate } from "@/types/geolocation";
 import { StoreRequestDto } from "@/features/stores/types/request";
 import { StoreResponseDto } from "@/features/stores/types/response";
+import { StoreFilters } from "@/features/stores/types/search";
 
-const getStores = async (): Promise<StoreResponseDto[]> => {
+const getStore = async (storeId: string): Promise<StoreResponseDto> => {
   try {
-    const response = await apiClient.get<StoreResponseDto[]>("/api/stores");
+    const response = await apiClient.get<StoreResponseDto>(`/api/stores/${storeId}`);
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
@@ -18,23 +18,12 @@ const getStores = async (): Promise<StoreResponseDto[]> => {
   }
 };
 
-const getStoresByPartner = async (partnerId: number): Promise<StoreResponseDto[]> => {
-  try {
-    const response = await apiClient.get<StoreResponseDto[]>(`/api/stores?partnerId=${partnerId}`);
-    return response.data;
-  } catch (error) {
-    if (axios.isAxiosError(error)) {
-      throw new Error(error.response?.data.message);
-    } else {
-      throw new Error("Unknown error occurred.");
-    }
-  }
-};
-
-const getStoresInArea = async (coordinate: Coordinate): Promise<StoreResponseDto[]> => {
+const getStores = async (filters: StoreFilters): Promise<StoreResponseDto[]> => {
   try {
     const response = await apiClient.get<StoreResponseDto[]>(
-      `/api/stores?latitude=${coordinate.y}&longitude=${coordinate.x}`
+      `/api/stores?partnerId=${filters.partnerId || ""}&latitude=${
+        filters.coordinate?.y || ""
+      }&longitude=${filters.coordinate?.x || ""}`
     );
     return response.data;
   } catch (error) {
@@ -114,9 +103,8 @@ const updateStore = async (
 };
 
 const storesService = {
+  getStore,
   getStores,
-  getStoresByPartner,
-  getStoresInArea,
   createStore,
   uploadImage,
   updateStore,
