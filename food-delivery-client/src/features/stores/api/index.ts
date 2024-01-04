@@ -5,6 +5,19 @@ import { StoreRequestDto } from "@/features/stores/types/request";
 import { StoreResponseDto } from "@/features/stores/types/response";
 import { StoreFilters } from "@/features/stores/types/search";
 
+const getStore = async (storeId: string): Promise<StoreResponseDto> => {
+  try {
+    const response = await apiClient.get<StoreResponseDto>(`/api/stores/${storeId}`);
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw new Error(error.response?.data.message);
+    } else {
+      throw new Error("Unknown error occurred.");
+    }
+  }
+};
+
 const getStores = async (filters: StoreFilters): Promise<StoreResponseDto[]> => {
   try {
     const response = await apiClient.get<StoreResponseDto[]>(
@@ -90,6 +103,7 @@ const updateStore = async (
 };
 
 const storesService = {
+  getStore,
   getStores,
   createStore,
   uploadImage,

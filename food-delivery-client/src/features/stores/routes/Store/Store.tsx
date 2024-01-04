@@ -1,8 +1,6 @@
 import { useState, useEffect, useMemo } from "react";
 import { Link, useParams } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
 import {
-  getProductsByStore,
   createProduct,
   updateProduct,
   reset as resetProductsState,
@@ -20,7 +18,6 @@ import { ProductList, ProductForm } from "@/features/products/components";
 import { Button, Col, Row } from "react-bootstrap";
 import { ShoppingCart } from "@/features/cart/components";
 import {
-  openCart,
   closeCart,
   clearCartItems,
   addToCart,
@@ -28,11 +25,6 @@ import {
   decreaseQuantity,
 } from "@/features/cart/slices";
 import { createCheckout, reset as resetOrdersState } from "@/features/orders/slices";
-import {
-  uploadImage as uploadStoreImage,
-  updateStore,
-  reset as resetStoresState,
-} from "@/features/stores/slices";
 import { CartItem } from "@/features/cart/types/request";
 import { StateStatus } from "@/types/state";
 import { toast } from "react-toastify";
@@ -46,6 +38,7 @@ import { CheckoutResponseDto } from "@/features/orders/types/response";
 import { ProductResponseDto } from "@/features/products/types/response";
 import { ProductRequestDto } from "@/features/products/types/request";
 import { useAuthUser } from "@/features/auth/hooks";
+import { useStore } from "@/features/stores/hooks";
 
 interface ConfirmDeleteModalProps {
   isVisible: boolean;
@@ -55,10 +48,9 @@ interface ConfirmDeleteModalProps {
 
 export function StorePage() {
   const { id } = useParams();
-  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { user } = useAuthUser();
-  const { stores } = useAppSelector((state) => state.stores);
+  const { store, updateStore, uploadImage } = useStore(id);
   const { products, status: productsStatus } = useAppSelector((state) => state.products);
   const { status: ordersStatus, message: ordersMessage } = useAppSelector((state) => state.orders);
   const { items } = useAppSelector((state) => state.cart);
@@ -76,33 +68,9 @@ export function StorePage() {
   const [isProductModalVisible, setProductModalVisible] = useState<boolean>(false);
   const { deliveryLocation } = useDeliveryLocation();
 
-  const store = useMemo<StoreResponseDto | null>(() => {
-    const numberId = Number(id);
-    if (!numberId) {
-      return null;
-    }
-
-    const storeData = stores?.find((x) => x.id === numberId);
-
-    if (!storeData) {
-      return null;
-    }
-
-    return storeData;
-  }, [id, stores]);
-
   useEffect(() => {
     setProductModalVisible(selectedProduct != null);
   }, [selectedProduct]);
-
-  useEffect(() => {
-    if (store) {
-      dispatch(getProductsByStore(store.id));
-      dispatch(openCart(store.id));
-    } else {
-      navigate("/");
-    }
-  }, [store, dispatch, navigate]);
 
   useEffect(() => {
     if (ordersStatus == StateStatus.Success) {
@@ -115,7 +83,6 @@ export function StorePage() {
     return () => {
       dispatch(resetOrdersState());
       dispatch(resetProductsState());
-      dispatch(resetStoresState());
       dispatch(closeCart());
       dispatch(clearProducts());
     };
@@ -194,7 +161,7 @@ export function StorePage() {
     if (imageFile) {
       const formData = new FormData();
       formData.append("image", imageFile);
-      dispatch(uploadStoreImage({ storeId: store!.id, formData: formData }));
+      uploadImage(formData);
     }
   };
 
@@ -351,7 +318,7 @@ export function StorePage() {
           isVisible={isStoreModalVisible}
           title="Update store"
           data={store}
-          onSubmit={(data) => dispatch(updateStore({ storeId: store.id, requestDto: data }))}
+          onSubmit={updateStore}
           onClose={() => setStoreModalVisible(false)}
         />
       </>
