@@ -1,7 +1,7 @@
 import axios from "axios";
 import apiClient from "@/config/apiClient";
 import { PartnerResponseDto } from "@/features/partners/types/response";
-import { VerifyPartnerRequestDto } from "@/features/partners/types/request";
+import { PartnerRequestDto, VerifyPartnerRequestDto } from "@/features/partners/types/request";
 
 const getPartners = async (token: string | null): Promise<PartnerResponseDto[]> => {
   try {
@@ -10,6 +10,19 @@ const getPartners = async (token: string | null): Promise<PartnerResponseDto[]> 
         Authorization: `Bearer ${token}`,
       },
     });
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw new Error(error.response?.data.message);
+    } else {
+      throw new Error("Unknown error occurred.");
+    }
+  }
+};
+
+const registerPartner = async (requestDto: PartnerRequestDto): Promise<PartnerResponseDto> => {
+  try {
+    const response = await apiClient.post<PartnerResponseDto>("/api/partners", requestDto);
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
@@ -47,6 +60,7 @@ const verifyPartner = async (
 
 const partnersService = {
   getPartners,
+  registerPartner,
   verifyPartner,
 };
 

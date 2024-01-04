@@ -28,21 +28,6 @@ export const registerCustomer = createAsyncThunk(
   }
 );
 
-export const registerPartner = createAsyncThunk(
-  "auth/register-partner",
-  async (registerData: RegisterRequestDto, thunkAPI) => {
-    try {
-      return await authService.registerPartner(registerData);
-    } catch (error: unknown) {
-      let message: string = "";
-      if (error instanceof Error) {
-        message = error.message;
-      }
-      return thunkAPI.rejectWithValue(message);
-    }
-  }
-);
-
 export const authSlice = createSlice({
   name: "auth",
   initialState,
@@ -64,17 +49,6 @@ export const authSlice = createSlice({
       .addCase(registerCustomer.fulfilled, (state, action) => {
         state.status = StateStatus.Success;
         state.message = `Customer ${action.payload.username} successfully registered`;
-      })
-      .addCase(registerPartner.pending, (state) => {
-        state.status = StateStatus.Loading;
-      })
-      .addCase(registerPartner.rejected, (state, action) => {
-        state.status = StateStatus.Error;
-        state.message = action.payload as string;
-      })
-      .addCase(registerPartner.fulfilled, (state, action) => {
-        state.status = StateStatus.Success;
-        state.message = `Partner ${action.payload.username} successfully registered`;
       });
   },
 });
