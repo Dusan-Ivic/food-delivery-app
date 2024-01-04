@@ -1,13 +1,13 @@
 import { useState } from "react";
 import { BsHouseAddFill } from "react-icons/bs";
-import { Alert, Button, Col, Row } from "react-bootstrap";
+import { Button, Col, Row } from "react-bootstrap";
 import { OrderHistory } from "@/features/orders/components";
 import { StoreTable, StoreModal } from "@/features/stores/components";
-import { PartnerStatus } from "@/features/partners/types/enums";
 import { PartnerResponseDto } from "@/features/partners/types/response";
 import { useAuthUser } from "@/features/auth/hooks";
 import { useStores } from "@/features/stores/hooks";
 import { useOrders } from "@/features/orders/hooks";
+import { StatusAlert } from "@/features/dashboard/components";
 
 export function PartnerDashboard() {
   const [isModalVisible, setModalVisible] = useState<boolean>(false);
@@ -15,47 +15,10 @@ export function PartnerDashboard() {
   const { orders } = useOrders();
   const { stores, createStore } = useStores({ partnerId: user?.id });
 
-  const AlertComponent = ({
-    status,
-    children,
-  }: {
-    status: PartnerStatus;
-    children: JSX.Element;
-  }) => {
-    switch (status) {
-      case PartnerStatus.Pending:
-        return (
-          <Alert variant="warning">
-            {children} You may be restricted from performing certain actions.
-          </Alert>
-        );
-      case PartnerStatus.Rejected:
-        return (
-          <Alert variant="danger">
-            {children} You may be restricted from performing certain actions.
-          </Alert>
-        );
-      case PartnerStatus.Suspended:
-        return (
-          <Alert variant="danger">
-            {children} You may be restricted from performing certain actions.
-          </Alert>
-        );
-      case PartnerStatus.Accepted:
-        return (
-          <Alert variant="success">
-            {children} You can now perform all store and product related actions.
-          </Alert>
-        );
-    }
-  };
-
   return (
     <Col>
       <Row>
-        <AlertComponent status={(user as PartnerResponseDto).status}>
-          <>Your current status is: {PartnerStatus[(user as PartnerResponseDto).status]}.</>
-        </AlertComponent>
+        <StatusAlert status={(user as PartnerResponseDto).status} />
       </Row>
 
       <Row>
