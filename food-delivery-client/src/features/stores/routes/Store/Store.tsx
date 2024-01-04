@@ -1,13 +1,5 @@
 import { useState, useEffect, useMemo } from "react";
 import { Link, useParams } from "react-router-dom";
-import {
-  createProduct,
-  updateProduct,
-  reset as resetProductsState,
-  clearProducts,
-  deleteProduct,
-  uploadImage as uploadProductImage,
-} from "@/features/products/slices";
 import { useAppDispatch, useAppSelector } from "@/app/hooks";
 import { StoreInfo, StoreModal } from "@/features/stores/components";
 import { IoArrowBack } from "react-icons/io5";
@@ -28,7 +20,7 @@ import { createCheckout, reset as resetOrdersState } from "@/features/orders/sli
 import { CartItem } from "@/features/cart/types/request";
 import { StateStatus } from "@/types/state";
 import { toast } from "react-toastify";
-import { ConfirmationModal, FormModal, FormProps, Spinner } from "@/components";
+import { ConfirmationModal, FormModal, FormProps } from "@/components";
 import { FaLocationDot } from "react-icons/fa6";
 import { useDeliveryLocation } from "@/features/delivery/hooks";
 import { UserType } from "@/features/auth/types/enums";
@@ -39,6 +31,8 @@ import { ProductResponseDto } from "@/features/products/types/response";
 import { ProductRequestDto } from "@/features/products/types/request";
 import { useAuthUser } from "@/features/auth/hooks";
 import { useStore } from "@/features/stores/hooks";
+import { useProducts } from "@/features/products/hooks";
+import { UserState } from "@/features/auth/types/state";
 
 interface ConfirmDeleteModalProps {
   isVisible: boolean;
@@ -50,8 +44,14 @@ export function StorePage() {
   const { id } = useParams();
   const dispatch = useAppDispatch();
   const { user } = useAuthUser();
-  const { store, updateStore, uploadImage } = useStore(id);
-  const { products, status: productsStatus } = useAppSelector((state) => state.products);
+  const { store, updateStore, uploadImage: uploadStoreImage } = useStore(id);
+  const {
+    products,
+    createProduct,
+    updateProduct,
+    uploadImage: uploadProductImage,
+    deleteProduct,
+  } = useProducts(id);
   const { status: ordersStatus, message: ordersMessage } = useAppSelector((state) => state.orders);
   const { items } = useAppSelector((state) => state.cart);
   const [isCartVisible, setCartVisible] = useState<boolean>(false);
@@ -82,9 +82,7 @@ export function StorePage() {
   useEffect(() => {
     return () => {
       dispatch(resetOrdersState());
-      dispatch(resetProductsState());
       dispatch(closeCart());
-      dispatch(clearProducts());
     };
   }, [dispatch]);
 
@@ -110,27 +108,15 @@ export function StorePage() {
     }
   };
 
-  const canManageCart = useMemo(() => {
-    if (!user) {
-      return false;
-    }
+  const canManageCart = (user: UserState | null) => {
+    return !user || user.userType === UserType.Customer;
+  };
 
-    return user.userType == UserType.Customer;
-  }, [user]);
+  const canManageStore = (user: UserState | null, store: StoreResponseDto) => {
+    return user?.userType === UserType.Partner && store.partnerId === user?.id;
+  };
 
-  const canManageStore = useMemo(() => {
-    if (!user) {
-      return false;
-    }
-
-    if (user.userType != UserType.Partner) {
-      return false;
-    }
-
-    return store?.partnerId === user.id;
-  }, [user, store]);
-
-  const handleDeleteProduct = (product: ProductResponseDto) => {
+  const handleSetDeleteProduct = (product: ProductResponseDto) => {
     setConfirmModal({
       isVisible: true,
       content: `You are about to delete product '${product.name}'`,
@@ -138,10 +124,9 @@ export function StorePage() {
     });
   };
 
-  const handleConfirm = () => {
-    const { payload } = confirmModal;
-    if (payload) {
-      dispatch(deleteProduct(payload));
+  const handleConfirmDeleteProduct = () => {
+    if (confirmModal.payload) {
+      deleteProduct(confirmModal.payload);
     }
 
     setConfirmModal({
@@ -150,7 +135,7 @@ export function StorePage() {
     });
   };
 
-  const handleCancel = () => {
+  const handleCancelDeleteProduct = () => {
     setConfirmModal({
       isVisible: false,
       content: "",
@@ -161,7 +146,7 @@ export function StorePage() {
     if (imageFile) {
       const formData = new FormData();
       formData.append("image", imageFile);
-      uploadImage(formData);
+      uploadStoreImage(formData);
     }
   };
 
@@ -169,8 +154,20 @@ export function StorePage() {
     if (imageFile) {
       const formData = new FormData();
       formData.append("image", imageFile);
-      dispatch(uploadProductImage({ productId, formData }));
+      uploadProductImage(productId, formData);
     }
+  };
+
+  const handleSubmitProduct = (data: ProductRequestDto) => {
+    if (store) {
+      if (selectedProduct) {
+        updateProduct(selectedProduct.id, { ...data, storeId: store.id });
+      } else {
+        createProduct({ ...data, storeId: store.id });
+      }
+    }
+    setSelectedProduct(null);
+    setProductModalVisible(false);
   };
 
   const ProductFormComponent = ({ data, onSubmit }: FormProps<ProductRequestDto>) => {
@@ -204,7 +201,7 @@ export function StorePage() {
             )}
 
             <Col className="d-flex justify-content-end">
-              {canManageCart && (
+              {canManageCart(user) && (
                 <Button onClick={() => setCartVisible(true)} className="position-relative">
                   <HiOutlineShoppingCart className="fs-4" />
                   <div
@@ -223,7 +220,7 @@ export function StorePage() {
                   </div>
                 </Button>
               )}
-              {canManageStore && (
+              {canManageStore(user, store) && (
                 <div>
                   <Button
                     variant="warning"
@@ -246,31 +243,23 @@ export function StorePage() {
 
           <StoreInfo
             store={store}
-            canManageStore={canManageStore}
+            canManageStore={canManageStore(user, store)}
             onImageChange={handleStoreImageChange}
           />
         </div>
 
-        {productsStatus === StateStatus.Loading ? (
-          <Spinner />
+        {products.length > 0 ? (
+          <ProductList
+            products={products}
+            canAddToCart={canManageCart(user)}
+            addToCart={(product) => dispatch(addToCart(product))}
+            canManageProduct={canManageStore(user, store)}
+            editProduct={(product) => setSelectedProduct(product)}
+            deleteProduct={handleSetDeleteProduct}
+            onImageChange={handleProductImageChange}
+          />
         ) : (
-          <>
-            {products.length > 0 ? (
-              <ProductList
-                products={products}
-                canAddToCart={canManageCart}
-                addToCart={(product) => dispatch(addToCart(product))}
-                canManageProduct={canManageStore}
-                editProduct={(product) => setSelectedProduct(product)}
-                deleteProduct={(product) => handleDeleteProduct(product)}
-                onImageChange={(productId, imageFile) =>
-                  handleProductImageChange(productId, imageFile)
-                }
-              />
-            ) : (
-              <p className="text-center mt-4">There are currently no products in this store</p>
-            )}
-          </>
+          <p className="text-center mt-4">There are currently no products in this store</p>
         )}
 
         <ShoppingCart
@@ -287,8 +276,8 @@ export function StorePage() {
         <ConfirmationModal
           isVisible={confirmModal.isVisible}
           content={confirmModal.content}
-          onConfirm={handleConfirm}
-          onCancel={handleCancel}
+          onConfirm={handleConfirmDeleteProduct}
+          onCancel={handleCancelDeleteProduct}
         />
 
         <FormModal
@@ -296,18 +285,7 @@ export function StorePage() {
           title={selectedProduct ? "Update product" : "Add new product"}
           FormComponent={ProductFormComponent}
           data={selectedProduct as ProductRequestDto}
-          onSubmit={(data) => {
-            selectedProduct
-              ? dispatch(
-                  updateProduct({
-                    productId: selectedProduct.id,
-                    requestDto: { ...data, storeId: store.id },
-                  })
-                )
-              : dispatch(createProduct({ ...data, storeId: store.id }));
-            setSelectedProduct(null);
-            setProductModalVisible(false);
-          }}
+          onSubmit={handleSubmitProduct}
           onClose={() => {
             setSelectedProduct(null);
             setProductModalVisible(false);
