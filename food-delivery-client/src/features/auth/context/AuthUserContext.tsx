@@ -12,6 +12,7 @@ import { toast } from "react-toastify";
 
 type AuthUserContextType = {
   user: UserState | null;
+  accessToken: AccessTokenState | null;
   login: (data: LoginRequestDto) => void;
   logout: () => void;
   updateProfile: (data: UserRequestDto) => void;
@@ -150,7 +151,16 @@ export function AuthUserProvider({ children }: AuthUserProviderProps) {
 
   return (
     <AuthUserContext.Provider
-      value={{ user, login, logout, updateProfile, changePassword, uploadImage, deleteImage }}
+      value={{
+        user,
+        accessToken,
+        login,
+        logout,
+        updateProfile,
+        changePassword,
+        uploadImage,
+        deleteImage,
+      }}
     >
       {children}
     </AuthUserContext.Provider>

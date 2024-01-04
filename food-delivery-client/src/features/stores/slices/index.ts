@@ -14,29 +14,6 @@ const initialState: StoresState = {
   message: "",
 };
 
-export const createStore = createAsyncThunk(
-  "stores/create",
-  async (storeData: StoreRequestDto, thunkAPI) => {
-    try {
-      const { user } = (thunkAPI.getState() as RootState).auth;
-      if (user?.userType === UserType.Partner) {
-        const partner = user as PartnerResponseDto;
-        if (partner.status === PartnerStatus.Accepted) {
-          const { accessToken } = (thunkAPI.getState() as RootState).auth;
-          return await storesService.createStore(storeData, accessToken!.payload);
-        }
-      }
-      return thunkAPI.rejectWithValue("You are not verified to perform this action!");
-    } catch (error: unknown) {
-      let message: string = "";
-      if (error instanceof Error) {
-        message = error.message;
-      }
-      return thunkAPI.rejectWithValue(message);
-    }
-  }
-);
-
 export const uploadImage = createAsyncThunk(
   "stores/upload-image",
   async ({ storeId, formData }: { storeId: number; formData: FormData }, thunkAPI) => {
@@ -99,17 +76,6 @@ export const storesSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(createStore.pending, (state) => {
-        state.status = StateStatus.Loading;
-      })
-      .addCase(createStore.rejected, (state, action) => {
-        state.status = StateStatus.Error;
-        state.message = action.payload as string;
-      })
-      .addCase(createStore.fulfilled, (state, action) => {
-        state.status = StateStatus.Success;
-        state.stores.push(action.payload);
-      })
       .addCase(updateStore.pending, (state) => {
         state.status = StateStatus.Loading;
       })

@@ -1,4 +1,3 @@
-import { createStore } from "@/features/stores/slices";
 import { useAppDispatch, useAppSelector } from "@/app/hooks";
 import { useEffect, useState } from "react";
 import { BsHouseAddFill } from "react-icons/bs";
@@ -16,7 +15,7 @@ import { useStores } from "@/features/stores/hooks";
 export function PartnerDashboard() {
   const dispatch = useAppDispatch();
   const { user } = useAuthUser();
-  const { stores } = useStores({
+  const { stores, createStore } = useStores({
     partnerId: user?.id,
   });
   const {
@@ -123,7 +122,7 @@ export function PartnerDashboard() {
       <StoreModal
         isVisible={isModalVisible}
         title="Add new store"
-        onSubmit={(data) => dispatch(createStore(data))}
+        onSubmit={createStore}
         onClose={() => setModalVisible(false)}
       />
     </Col>
