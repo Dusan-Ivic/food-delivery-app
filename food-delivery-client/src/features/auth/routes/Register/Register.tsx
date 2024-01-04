@@ -1,54 +1,31 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Button, Col, Row } from "react-bootstrap";
-import { Link } from "react-router-dom";
-import { StateStatus } from "@/types/state";
-import { registerCustomer, reset } from "@/features/auth/slices";
-import { useAppDispatch, useAppSelector } from "@/app/hooks";
-import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
+import { Link, useNavigate } from "react-router-dom";
 import { IoArrowBack } from "react-icons/io5";
-import { Spinner } from "@/components";
 import { FaRegHandshake } from "react-icons/fa";
 import { AiOutlineUser } from "react-icons/ai";
 import { AllowedUserType } from "@/features/auth/types/enums";
 import { RegisterRequestDto } from "@/features/auth/types/request";
 import { RegisterForm } from "@/features/auth/components";
 import { usePartners } from "@/features/partners/hooks";
+import { useCustomers } from "@/features/customers/hooks";
 
 export function Register() {
   const navigate = useNavigate();
-  const dispatch = useAppDispatch();
-  const { status, message } = useAppSelector((state) => state.auth);
   const [registerType, setRegisterType] = useState<AllowedUserType | null>(null);
   const { registerPartner } = usePartners();
-
-  useEffect(() => {
-    if (status == StateStatus.Success) {
-      toast.success(message);
-      navigate("/login");
-    }
-  }, [status, message, navigate]);
-
-  useEffect(() => {
-    return () => {
-      dispatch(reset());
-    };
-  }, [dispatch]);
+  const { registerCustomer } = useCustomers();
 
   const handleRegister = (data: RegisterRequestDto) => {
     switch (registerType) {
       case AllowedUserType.Customer:
-        dispatch(registerCustomer(data));
+        registerCustomer(data).then(() => navigate("/login"));
         break;
       case AllowedUserType.Partner:
-        registerPartner(data);
+        registerPartner(data).then(() => navigate("/login"));
         break;
     }
   };
-
-  if (status === StateStatus.Loading) {
-    return <Spinner />;
-  }
 
   return (
     <Row className="d-flex justify-content-center">

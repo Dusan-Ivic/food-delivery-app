@@ -5,7 +5,6 @@ import {
   CreateTokenRequestDto,
   DeleteTokenRequestDto,
   ChangePasswordRequestDto,
-  RegisterRequestDto,
   UserRequestDto,
 } from "@/features/auth/types/request";
 import { TokenResponseDto, UserResponseDto } from "@/features/auth/types/response";
@@ -52,32 +51,6 @@ const deleteRefreshToken = async (
         Authorization: `Bearer ${token}`,
       },
     });
-    return response.data;
-  } catch (error) {
-    if (axios.isAxiosError(error)) {
-      throw new Error(error.response?.data.message);
-    } else {
-      throw new Error("Unknown error occurred.");
-    }
-  }
-};
-
-const registerCustomer = async (requestDto: RegisterRequestDto): Promise<UserResponseDto> => {
-  try {
-    const response = await apiClient.post<UserResponseDto>("/api/customers", requestDto);
-    return response.data;
-  } catch (error) {
-    if (axios.isAxiosError(error)) {
-      throw new Error(error.response?.data.message);
-    } else {
-      throw new Error("Unknown error occurred.");
-    }
-  }
-};
-
-const registerPartner = async (requestDto: RegisterRequestDto): Promise<PartnerResponseDto> => {
-  try {
-    const response = await apiClient.post<PartnerResponseDto>("/api/partners", requestDto);
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
@@ -171,8 +144,6 @@ const authService = {
   generateToken,
   getProfile,
   deleteRefreshToken,
-  registerCustomer,
-  registerPartner,
   updateProfile,
   uploadImage,
   deleteImage,
