@@ -1,6 +1,5 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
-import { useAppDispatch, useAppSelector } from "@/app/hooks";
 import { StoreInfo, StoreModal } from "@/features/stores/components";
 import { IoArrowBack } from "react-icons/io5";
 import { HiOutlineShoppingCart } from "react-icons/hi";
@@ -9,13 +8,6 @@ import { BiEdit } from "react-icons/bi";
 import { ProductList, ProductForm } from "@/features/products/components";
 import { Button, Col, Row } from "react-bootstrap";
 import { ShoppingCart } from "@/features/cart/components";
-import {
-  closeCart,
-  clearCartItems,
-  addToCart,
-  removeFromCart,
-  decreaseQuantity,
-} from "@/features/cart/slices";
 import { CartItem } from "@/features/cart/types/request";
 import { toast } from "react-toastify";
 import { ConfirmationModal, FormModal, FormProps } from "@/components";
@@ -29,7 +21,7 @@ import { useAuthUser } from "@/features/auth/hooks";
 import { useStore } from "@/features/stores/hooks";
 import { useProducts } from "@/features/products/hooks";
 import { UserState } from "@/features/auth/types/state";
-import { useOrders } from "@/features/orders/hooks";
+import { useCart } from "@/features/cart/hooks";
 
 interface ConfirmDeleteModalProps {
   isVisible: boolean;
@@ -39,10 +31,9 @@ interface ConfirmDeleteModalProps {
 
 export function StorePage() {
   const { id } = useParams();
-  const dispatch = useAppDispatch();
   const { user } = useAuthUser();
   const { store, updateStore, uploadImage: uploadStoreImage } = useStore(id);
-  const { createCheckout } = useOrders();
+  const { items, addToCart, removeFromCart, decreaseQuantity, createCheckout } = useCart(id);
   const {
     products,
     createProduct,
@@ -50,12 +41,7 @@ export function StorePage() {
     uploadImage: uploadProductImage,
     deleteProduct,
   } = useProducts(id);
-  const { items } = useAppSelector((state) => state.cart);
   const [isCartVisible, setCartVisible] = useState<boolean>(false);
-  const totalCartItems = useMemo(
-    () => items.reduce((quantity, item) => item.quantity + quantity, 0),
-    [items]
-  );
   const [selectedProduct, setSelectedProduct] = useState<ProductResponseDto | null>(null);
   const [confirmModal, setConfirmModal] = useState<ConfirmDeleteModalProps>({
     isVisible: false,
@@ -69,12 +55,6 @@ export function StorePage() {
     setProductModalVisible(selectedProduct != null);
   }, [selectedProduct]);
 
-  useEffect(() => {
-    return () => {
-      dispatch(closeCart());
-    };
-  }, [dispatch]);
-
   const submitOrder = (store: StoreResponseDto, items: CartItem[]) => {
     if (deliveryLocation?.coordinate && deliveryLocation?.address) {
       createCheckout({
@@ -86,7 +66,6 @@ export function StorePage() {
         coordinate: deliveryLocation.coordinate,
         address: deliveryLocation.address,
       });
-      clearCartItems();
     } else {
       toast.warn("Please go back and set your location");
     }
@@ -200,7 +179,7 @@ export function StorePage() {
                       transform: "translate(40%, 40%)",
                     }}
                   >
-                    {totalCartItems}
+                    {items.reduce((quantity, item) => item.quantity + quantity, 0)}
                   </div>
                 </Button>
               )}
@@ -236,7 +215,7 @@ export function StorePage() {
           <ProductList
             products={products}
             canAddToCart={canManageCart(user)}
-            addToCart={(product) => dispatch(addToCart(product))}
+            addToCart={addToCart}
             canManageProduct={canManageStore(user, store)}
             editProduct={(product) => setSelectedProduct(product)}
             deleteProduct={handleSetDeleteProduct}
@@ -251,8 +230,8 @@ export function StorePage() {
           items={items}
           isOpen={isCartVisible}
           closeCart={() => setCartVisible(false)}
-          removeFromCart={(itemId) => dispatch(removeFromCart(itemId))}
-          decreaseQuantity={(itemId) => dispatch(decreaseQuantity(itemId))}
+          removeFromCart={removeFromCart}
+          decreaseQuantity={decreaseQuantity}
           submitOrder={(store, items) => submitOrder(store, items)}
         />
 
