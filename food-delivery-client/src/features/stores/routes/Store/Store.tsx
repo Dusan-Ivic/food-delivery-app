@@ -16,23 +16,20 @@ import {
   removeFromCart,
   decreaseQuantity,
 } from "@/features/cart/slices";
-import { createCheckout, reset as resetOrdersState } from "@/features/orders/slices";
 import { CartItem } from "@/features/cart/types/request";
-import { StateStatus } from "@/types/state";
 import { toast } from "react-toastify";
 import { ConfirmationModal, FormModal, FormProps } from "@/components";
 import { FaLocationDot } from "react-icons/fa6";
 import { useDeliveryLocation } from "@/features/delivery/hooks";
 import { UserType } from "@/features/auth/types/enums";
 import { StoreResponseDto } from "@/features/stores/types/response";
-import { OrderRequestDto } from "@/features/orders/types/request";
-import { CheckoutResponseDto } from "@/features/orders/types/response";
 import { ProductResponseDto } from "@/features/products/types/response";
 import { ProductRequestDto } from "@/features/products/types/request";
 import { useAuthUser } from "@/features/auth/hooks";
 import { useStore } from "@/features/stores/hooks";
 import { useProducts } from "@/features/products/hooks";
 import { UserState } from "@/features/auth/types/state";
+import { useOrders } from "@/features/orders/hooks";
 
 interface ConfirmDeleteModalProps {
   isVisible: boolean;
@@ -45,6 +42,7 @@ export function StorePage() {
   const dispatch = useAppDispatch();
   const { user } = useAuthUser();
   const { store, updateStore, uploadImage: uploadStoreImage } = useStore(id);
+  const { createCheckout } = useOrders();
   const {
     products,
     createProduct,
@@ -52,7 +50,6 @@ export function StorePage() {
     uploadImage: uploadProductImage,
     deleteProduct,
   } = useProducts(id);
-  const { status: ordersStatus, message: ordersMessage } = useAppSelector((state) => state.orders);
   const { items } = useAppSelector((state) => state.cart);
   const [isCartVisible, setCartVisible] = useState<boolean>(false);
   const totalCartItems = useMemo(
@@ -73,22 +70,14 @@ export function StorePage() {
   }, [selectedProduct]);
 
   useEffect(() => {
-    if (ordersStatus == StateStatus.Success) {
-      dispatch(clearCartItems());
-      setCartVisible(false);
-    }
-  }, [ordersStatus, ordersMessage, dispatch]);
-
-  useEffect(() => {
     return () => {
-      dispatch(resetOrdersState());
       dispatch(closeCart());
     };
   }, [dispatch]);
 
   const submitOrder = (store: StoreResponseDto, items: CartItem[]) => {
     if (deliveryLocation?.coordinate && deliveryLocation?.address) {
-      const requestDto: OrderRequestDto = {
+      createCheckout({
         storeId: store.id,
         items: items.map((item) => ({
           productId: item.id,
@@ -96,13 +85,8 @@ export function StorePage() {
         })),
         coordinate: deliveryLocation.coordinate,
         address: deliveryLocation.address,
-      };
-
-      dispatch(createCheckout(requestDto)).then((value) => {
-        console.log(value);
-        const payload = value.payload as CheckoutResponseDto;
-        window.location.href = payload.sessionUrl;
       });
+      clearCartItems();
     } else {
       toast.warn("Please go back and set your location");
     }
@@ -266,7 +250,6 @@ export function StorePage() {
           store={store}
           items={items}
           isOpen={isCartVisible}
-          isLoading={ordersStatus === StateStatus.Loading}
           closeCart={() => setCartVisible(false)}
           removeFromCart={(itemId) => dispatch(removeFromCart(itemId))}
           decreaseQuantity={(itemId) => dispatch(decreaseQuantity(itemId))}

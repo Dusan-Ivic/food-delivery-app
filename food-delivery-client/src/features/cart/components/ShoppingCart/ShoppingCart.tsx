@@ -1,7 +1,6 @@
 import { useMemo } from "react";
 import { Button, Offcanvas, Stack } from "react-bootstrap";
 import { formatCurrency } from "@/utils";
-import { Spinner } from "@/components";
 import { StoreResponseDto } from "@/features/stores/types/response";
 import { CartItem } from "@/features/cart/types/request";
 import { ShoppingCartItem } from "@/features/cart/components";
@@ -10,7 +9,6 @@ interface ShoppingCartProps {
   store: StoreResponseDto;
   items: CartItem[];
   isOpen: boolean;
-  isLoading: boolean;
   closeCart: () => void;
   removeFromCart: (itemId: number) => void;
   decreaseQuantity: (itemId: number) => void;
@@ -25,7 +23,6 @@ export function ShoppingCart({
   removeFromCart,
   decreaseQuantity,
   submitOrder,
-  isLoading,
 }: ShoppingCartProps) {
   const totalPrice = useMemo(
     () =>
@@ -63,13 +60,9 @@ export function ShoppingCart({
             <div className="ms-auto fw-bold fs-5">
               Total price: {formatCurrency(totalPrice + store.deliveryFee)}
             </div>
-            {isLoading ? (
-              <Spinner />
-            ) : (
-              <Button onClick={() => submitOrder(store, items)} className="w-100 mt-2 mb-5">
-                Place an order
-              </Button>
-            )}
+            <Button onClick={() => submitOrder(store, items)} className="w-100 mt-2 mb-5">
+              Place an order
+            </Button>
           </Stack>
         ) : (
           <p>Your shopping cart is empty. Add some items...</p>

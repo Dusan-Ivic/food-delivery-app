@@ -1,45 +1,19 @@
-import { useAppDispatch, useAppSelector } from "@/app/hooks";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { BsHouseAddFill } from "react-icons/bs";
 import { Alert, Button, Col, Row } from "react-bootstrap";
-import { StateStatus } from "@/types/state";
-import { getOrders, clearOrders, reset as resetOrdersState } from "@/features/orders/slices";
 import { OrderHistory } from "@/features/orders/components";
 import { StoreTable, StoreModal } from "@/features/stores/components";
-import { Spinner } from "@/components";
 import { PartnerStatus } from "@/features/partners/types/enums";
 import { PartnerResponseDto } from "@/features/partners/types/response";
 import { useAuthUser } from "@/features/auth/hooks";
 import { useStores } from "@/features/stores/hooks";
+import { useOrders } from "@/features/orders/hooks";
 
 export function PartnerDashboard() {
-  const dispatch = useAppDispatch();
-  const { user } = useAuthUser();
-  const { stores, createStore } = useStores({
-    partnerId: user?.id,
-  });
-  const {
-    orders,
-    status: ordersStatus,
-    message: ordersMessage,
-  } = useAppSelector((state) => state.orders);
   const [isModalVisible, setModalVisible] = useState<boolean>(false);
-
-  useEffect(() => {
-    if (user) {
-      dispatch(getOrders());
-    }
-
-    return () => {
-      dispatch(clearOrders());
-    };
-  }, [dispatch, user]);
-
-  useEffect(() => {
-    return () => {
-      dispatch(resetOrdersState());
-    };
-  }, [ordersStatus, ordersMessage, dispatch]);
+  const { user } = useAuthUser();
+  const { orders } = useOrders();
+  const { stores, createStore } = useStores({ partnerId: user?.id });
 
   const AlertComponent = ({
     status,
@@ -106,17 +80,13 @@ export function PartnerDashboard() {
           <h1 className="text-center mt-3 mb-3">Orders</h1>
         </div>
 
-        {ordersStatus === StateStatus.Loading ? (
-          <Spinner />
-        ) : (
-          <>
-            {orders.length > 0 ? (
-              <OrderHistory orders={orders} canManageOrders={false} />
-            ) : (
-              <p className="text-center mt-4">There are currently no orders</p>
-            )}
-          </>
-        )}
+        <>
+          {orders.length > 0 ? (
+            <OrderHistory orders={orders} canManageOrders={false} />
+          ) : (
+            <p className="text-center mt-4">There are currently no orders</p>
+          )}
+        </>
       </Row>
 
       <StoreModal
