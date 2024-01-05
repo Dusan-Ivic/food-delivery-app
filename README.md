@@ -1,6 +1,9 @@
 # food-delivery-app
 
-Full-stack food delivery platform built with ASP.NET Core Web API and React
+Full-stack food delivery platform built with ASP.NET Core Web API and React.
+
+>[!NOTE]
+>This is my earlier university project that I am currently working on (upgrading) to use as a base for my final thesis. You are free to fork the repository and change the application however you want, but at this moment I'm not accepting any direct contributions to this repository.
 
 ---
 
